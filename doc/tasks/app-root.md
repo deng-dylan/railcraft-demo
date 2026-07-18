@@ -31,12 +31,12 @@
 - [ ] **AR-018 配置格式、lint 和 pre-commit。** 固定检查范围并排除插件生成文件的合理部分。验证：全仓 `gdformat --check`、`gdlint`、pre-commit 通过。
 - [ ] **AR-019 创建 quality.yml。** 按设计执行 uv、格式、lint、Godot 导入、主场景加载、GUT 和测试结果上传，第三方 Action 固定版本或 SHA。验证：分支推送与 PR 工作流通过。
 - [ ] **AR-020 配置 Windows 导出。** 创建 `export_presets.cfg` 和 `build-windows.yml`，支持手动及 `v*` 标签生成 x64 zip。验证：下载产物后可启动。
-- [ ] **AR-021 配置 Git 与 LFS。** 创建 `.gitignore`、`.gitattributes` 和模型 LFS 规则，不提交缓存、构建和凭据。验证：`git check-ignore` 与 `git lfs track` 输出符合设计。
+- [x] **AR-021 配置 Git 与 LFS。** 创建 `.gitignore`、`.gitattributes` 和模型 LFS 规则，不提交缓存、构建和凭据。验证：`git check-ignore` 与 `git lfs track` 输出符合设计。
 - [ ] **AR-022 创建私有远程仓库。** 初始化本地 `main`，在当前已认证个人账号创建私有 `railcraft-demo`，添加 `origin` 并推送。验证：仓库可见性、默认分支和远程地址正确。
 - [ ] **AR-023 完成 README。** 编写项目简介、截图、快速开始、体验流程和当前状态。验证：新用户按快速开始可找到运行入口。
 - [ ] **AR-024 完成运行说明。** 编写 `doc/running.md`，覆盖解压、启动、退出和常见问题。验证：普通用户步骤不依赖开发工具。
 - [ ] **AR-025 完成开发说明。** 编写 `doc/development.md`，记录固定版本、安装、验证、测试、导出和目录。验证：在新环境按命令可复现依赖。
-- [ ] **AR-026 完成来源清单。** 编写 `doc/sources.md`，列出 9 题来源、字体、GUT、工具和资产许可。验证：每项第三方内容都有来源和许可状态。
+- [x] **AR-026 完成来源清单。** 编写 `doc/sources.md`，列出 9 题来源、字体、GUT、工具和资产许可。验证：每项第三方内容都有来源和许可状态。
 - [ ] **AR-027 执行 Windows 人工验收。** 在发布候选 x64 构建逐项执行详细设计第 21 节清单并记录结果。验证：20 项全部通过，无阻塞缺陷。
 - [ ] **AR-028 完成最终交付。** 推送最终提交，确认质量与构建 Actions 通过，并提供 Windows zip 产物。验证：源码、文档、提交历史和可运行构建均可访问。
 
