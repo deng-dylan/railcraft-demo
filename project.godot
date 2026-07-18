@@ -1,0 +1,31 @@
+; Engine configuration file.
+; Edit through the Godot editor when possible.
+;
+; Format:
+;   [section]
+;   param=value
+
+config_version=5
+
+config/features=PackedStringArray("4.6", "GL Compatibility")
+
+[application]
+
+config/name="RailCraft Demo"
+config/version="0.1.0-demo"
+
+[display]
+
+window/size/viewport_width=960
+window/size/viewport_height=540
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/size/mode=0
+window/size/resizable=true
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
