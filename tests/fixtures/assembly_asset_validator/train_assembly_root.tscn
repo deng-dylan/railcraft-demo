@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[node name="TrainAssemblyRoot" type="Node3D"]
+
+[node name="SnapTargets" type="Node3D" parent="."]
+
+[node name="ValidTarget" type="Marker3D" parent="SnapTargets"]
+
+[node name="WrongTarget" type="Node3D" parent="SnapTargets"]
