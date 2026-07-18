@@ -27,9 +27,9 @@
 - [x] [`ContentValidator`](content-validator.md)（10/10）
 - [x] [`ContentRepository`](content-repository.md)（11/11）
 - [ ] [`AssemblyAssetValidator`](assembly-asset-validator.md)（0/8）
-- [ ] [`QuizManager`](quiz-manager.md)（0/9）
-- [ ] [`InventoryManager`](inventory-manager.md)（0/7）
-- [ ] [`AssemblyManager`](assembly-manager.md)（0/12）
+- [x] [`QuizManager`](quiz-manager.md)（9/9）
+- [x] [`InventoryManager`](inventory-manager.md)（7/7）
+- [x] [`AssemblyManager`](assembly-manager.md)（12/12）
 - [ ] [`GameFlowManager`](game-flow-manager.md)（0/15）
 - [ ] [`AssemblyView`](assembly-view.md)（0/21，含 `PartActor` 和 9 个零件场景）
 - [ ] [`AnimationCoordinator`](animation-coordinator.md)（0/11）
