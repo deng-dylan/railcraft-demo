@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/part_actor.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="Material_preview"]
+albedo_color = Color(0.72, 0.82, 0.9, 1)
+metallic = 0.15
+roughness = 0.42
+
+[sub_resource type="BoxMesh" id="Mesh_preview"]
+material = SubResource("Material_preview")
+size = Vector3(1.6, 0.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="Shape_preview"]
+size = Vector3(1.8, 1, 1)
+
+[node name="PartActor" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="ContractPreview" type="MeshInstance3D" parent="VisualRoot"]
+mesh = SubResource("Mesh_preview")
+
+[node name="ClickArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 0
+input_ray_pickable = false
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ClickArea"]
+shape = SubResource("Shape_preview")
+disabled = true
+
+[node name="AnimationNodes" type="Node3D" parent="."]

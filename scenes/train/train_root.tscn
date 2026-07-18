@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[node name="TrainAssemblyRoot" type="Node3D"]
+
+[node name="Components" type="Node3D" parent="."]
+
+[node name="CarbodyConnection" type="Node3D" parent="Components"]
+
+[node name="RunningBraking" type="Node3D" parent="Components"]
+
+[node name="TractionPower" type="Node3D" parent="Components"]
+
+[node name="SnapTargets" type="Node3D" parent="."]
+
+[node name="BodyShellTarget" type="Marker3D" parent="SnapTargets"]
+position = Vector3(0, 1.8, 0)
+
+[node name="PassengerDoorTarget" type="Marker3D" parent="SnapTargets"]
+position = Vector3(-1.6, 1.8, -0.94)
+
+[node name="CouplerBufferTarget" type="Marker3D" parent="SnapTargets"]
+position = Vector3(6.15, 1.15, 0)
+
+[node name="BogieFrameTarget" type="Marker3D" parent="SnapTargets"]
+position = Vector3(-2.7, 0.65, 0)
+
+[node name="WheelsetTarget" type="Marker3D" parent="SnapTargets"]
+position = Vector3(-2.7, 0.28, 0)
+
+[node name="BrakeUnitTarget" type="Marker3D" parent="SnapTargets"]
+position = Vector3(-2.7, 0.34, -0.78)
+
+[node name="PantographTarget" type="Marker3D" parent="SnapTargets"]
+position = Vector3(0.8, 3.28, 0)
+
+[node name="TractionConverterTarget" type="Marker3D" parent="SnapTargets"]
+position = Vector3(1.8, 0.58, 0)
+
+[node name="TractionMotorTarget" type="Marker3D" parent="SnapTargets"]
+position = Vector3(-1.8, 0.5, 0.42)
+
+[node name="Headlights" type="Node3D" parent="."]
+
+[node name="LeftLight" type="SpotLight3D" parent="Headlights"]
+position = Vector3(6.02, 1.65, -0.55)
+rotation_degrees = Vector3(0, -90, 0)
+light_color = Color(0.75, 0.9, 1, 1)
+light_energy = 5.0
+spot_range = 8.0
+visible = false
+
+[node name="RightLight" type="SpotLight3D" parent="Headlights"]
+position = Vector3(6.02, 1.65, 0.55)
+rotation_degrees = Vector3(0, -90, 0)
+light_color = Color(0.75, 0.9, 1, 1)
+light_energy = 5.0
+spot_range = 8.0
+visible = false
+
+[node name="FinalAnimationAnchors" type="Node3D" parent="."]
+
+[node name="HeadlightReveal" type="Marker3D" parent="FinalAnimationAnchors"]
+position = Vector3(6, 1.65, 0)
+
+[node name="PantographLift" type="Marker3D" parent="FinalAnimationAnchors"]
+position = Vector3(0.8, 3.28, 0)
+
+[node name="WheelRotation" type="Marker3D" parent="FinalAnimationAnchors"]
+position = Vector3(-2.7, 0.28, 0)
+
+[node name="TrainReveal" type="Marker3D" parent="FinalAnimationAnchors"]
+position = Vector3(0, 1.5, 0)
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -32, 0)
+light_color = Color(0.92, 0.96, 1, 1)
+light_energy = 1.25
+shadow_enabled = true
+
+[node name="FillLight" type="OmniLight3D" parent="."]
+position = Vector3(-1, 5, 4)
+light_color = Color(0.42, 0.7, 1, 1)
+light_energy = 1.4
+omni_range = 12.0
+shadow_enabled = false
