@@ -24,7 +24,7 @@
 
 ## 总体进度
 
-- [ ] [`ContentValidator`](content-validator.md)（0/10）
+- [x] [`ContentValidator`](content-validator.md)（10/10）
 - [ ] [`ContentRepository`](content-repository.md)（0/11）
 - [ ] [`AssemblyAssetValidator`](assembly-asset-validator.md)（0/8）
 - [ ] [`QuizManager`](quiz-manager.md)（0/9）

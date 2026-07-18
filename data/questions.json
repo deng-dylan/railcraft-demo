@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "questions": [
+    {
+      "question_id": "q01",
+      "order": 1,
+      "prompt": "动车组车体的主要作用是什么？",
+      "options": [
+        "承载乘客和车载设备，并形成车内空间",
+        "从接触网获取电能",
+        "直接驱动车轮旋转",
+        "控制铁路信号机"
+      ],
+      "correct_option_index": 0,
+      "explanation": "车体是车辆的重要承载结构，为乘客、设备和车内设施提供安装与使用空间。不同动车组的车体材料、尺寸和结构会有差异。",
+      "source": {
+        "organization": "中国中车",
+        "title": "和谐号CRH6型城际动车组",
+        "url": "https://www.crrcgc.cc/pz/2013-12/28/article_0C37D1973CFB4C6382B32FD53F5A40B5.html"
+      },
+      "reward_part_id": "body_shell"
+    },
+    {
+      "question_id": "q02",
+      "order": 2,
+      "prompt": "动车组的列车网络控制系统通常可以监视和控制下列哪类设备？",
+      "options": [
+        "客室车门",
+        "钢轨轨距",
+        "站台长度",
+        "隧道衬砌"
+      ],
+      "correct_option_index": 0,
+      "explanation": "列车网络控制系统可以对牵引、制动、供电、空调和门控等车载子系统进行监视与控制。",
+      "source": {
+        "organization": "中国中车",
+        "title": "列车网络控制系统",
+        "url": "https://crrcgc.cc/sfs/2016-05/06/article_CB1A64A1964A46308E720DD62DE69E00.html"
+      },
+      "reward_part_id": "passenger_door"
+    },
+    {
+      "question_id": "q03",
+      "order": 3,
+      "prompt": "车钩缓冲装置的主要作用是什么？",
+      "options": [
+        "连接车辆并传递、缓和纵向作用力",
+        "调节车厢照明亮度",
+        "从接触网取得电流",
+        "测量列车运行速度"
+      ],
+      "correct_option_index": 0,
+      "explanation": "车钩用于车辆连接和牵引力、制动力传递，缓冲装置可以吸收连挂及运行中的部分纵向冲击。",
+      "source": {
+        "organization": "中国中车",
+        "title": "通用机电",
+        "url": "https://crrcgc.cc/eportal/ui?pageId=715104"
+      },
+      "reward_part_id": "coupler_buffer"
+    },
+    {
+      "question_id": "q04",
+      "order": 4,
+      "prompt": "位于车体下方，用于安装轮对、悬挂以及部分驱动和制动设备的结构是什么？",
+      "options": [
+        "转向架",
+        "受电弓",
+        "客室车门",
+        "接触网支柱"
+      ],
+      "correct_option_index": 0,
+      "explanation": "转向架位于车体下方，与车体和轮对等部件形成接口，并承担走行、支承、导向和减振等任务。",
+      "source": {
+        "organization": "国家铁路局",
+        "title": "城际铁路动车组铁路装备技术规范",
+        "url": "https://www.nra.gov.cn/jglz/sbjg/jsgf/202602/P020260227614771043169.pdf"
+      },
+      "reward_part_id": "bogie_frame"
+    },
+    {
+      "question_id": "q05",
+      "order": 5,
+      "prompt": "动车组中直接在两条钢轨上滚动的成组部件是什么？",
+      "options": [
+        "轮对",
+        "车门",
+        "空调机组",
+        "受电弓"
+      ],
+      "correct_option_index": 0,
+      "explanation": "轮对由车轮、车轴等部分组成，是车辆走行系统的重要组成部分；具体结构和材料需满足相应车型与速度等级要求。",
+      "source": {
+        "organization": "国家铁路局",
+        "title": "城际铁路动车组铁路装备技术规范",
+        "url": "https://www.nra.gov.cn/jglz/sbjg/jsgf/202602/P020260227614771043169.pdf"
+      },
+      "reward_part_id": "wheelset"
+    },
+    {
+      "question_id": "q06",
+      "order": 6,
+      "prompt": "保障列车按要求减速和停车的关键系统是什么？",
+      "options": [
+        "制动系统",
+        "旅客信息系统",
+        "空调系统",
+        "照明系统"
+      ],
+      "correct_option_index": 0,
+      "explanation": "制动系统是列车安全运行的重要系统，需要按照控制指令稳定完成减速和停车。",
+      "source": {
+        "organization": "中国中车",
+        "title": "CRH2型制动机",
+        "url": "https://crrcgc.cc/pz/2013-12/12/article_E928263DDE7244DBBF84BAE4443DAC71.html"
+      },
+      "reward_part_id": "brake_unit"
+    },
+    {
+      "question_id": "q07",
+      "order": 7,
+      "prompt": "电力动车组车顶受电弓的主要作用是什么？",
+      "options": [
+        "与接触网接触并获取电能",
+        "测量车厢温度",
+        "连接相邻两节车厢",
+        "改变车轮方向"
+      ],
+      "correct_option_index": 0,
+      "explanation": "电力牵引列车通过车顶受电弓与线路上方接触网保持接触，从接触网获取运行所需电能。",
+      "source": {
+        "organization": "国家铁路局",
+        "title": "基于耦合动力学的高速铁路接触网/受电弓系统技术创新及应用",
+        "url": "https://www.nra.gov.cn/ztzl/hy/kjcx/kjxm/201802/t20180212_198465.shtml"
+      },
+      "reward_part_id": "pantograph"
+    },
+    {
+      "question_id": "q08",
+      "order": 8,
+      "prompt": "下列哪组设备属于电力列车牵引传动系统的典型组成？",
+      "options": [
+        "主变压器、牵引变流器、牵引电机",
+        "车门、座椅、行李架",
+        "钢轨、轨枕、道砟",
+        "站台、雨棚、检票闸机"
+      ],
+      "correct_option_index": 0,
+      "explanation": "牵引设备通常包括高压电器、主变压器、牵引变流器、牵引电机及相关控制系统。Demo将变压和变流设备合并为一个抽象零件。",
+      "source": {
+        "organization": "中国中车",
+        "title": "通用机电",
+        "url": "https://crrcgc.cc/eportal/ui?pageId=715104"
+      },
+      "reward_part_id": "traction_converter_unit"
+    },
+    {
+      "question_id": "q09",
+      "order": 9,
+      "prompt": "牵引电机在列车运行中的主要作用是什么？",
+      "options": [
+        "将电能转化为驱动车轮所需的机械动力",
+        "为乘客提供座椅加热",
+        "控制站台广播",
+        "固定接触网支柱"
+      ],
+      "correct_option_index": 0,
+      "explanation": "牵引电机是牵引传动系统中的关键设备，通过传动装置向轮对提供驱动力。",
+      "source": {
+        "organization": "中国中车",
+        "title": "通用机电",
+        "url": "https://crrcgc.cc/eportal/ui?pageId=715104"
+      },
+      "reward_part_id": "traction_motor"
+    }
+  ]
+}

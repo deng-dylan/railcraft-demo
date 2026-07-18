@@ -11,6 +11,7 @@ __pycache__/
 
 # Local pinned tool downloads used for verification
 .tools/
+.godot-templates/
 
 # Local build and test artifacts
 builds/
