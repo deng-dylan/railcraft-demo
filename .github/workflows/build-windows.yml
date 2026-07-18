@@ -1,0 +1,84 @@
+name: Build Windows
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  GODOT_RELEASE: "4.6.3-stable"
+  GODOT_ARCHIVE_SHA256: "e39986a178d585ce7ac198fb8de6ea436366dc0cc00e594810c2e3e104c04b90"
+  GODOT_TEMPLATES_SHA256: "3fbe2c0e2dec9d537ab9ec97bcf8da91dcf23357fc51f67092dd068d839290a8"
+
+jobs:
+  quality:
+    uses: ./.github/workflows/quality.yml
+
+  build:
+    needs: quality
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install fixed Godot and export templates
+        shell: pwsh
+        run: |
+          $godotArchive = Join-Path $env:RUNNER_TEMP "godot.zip"
+          $godotDirectory = Join-Path $env:RUNNER_TEMP "godot"
+          Invoke-WebRequest "https://github.com/godotengine/godot/releases/download/$env:GODOT_RELEASE/Godot_v$env:GODOT_RELEASE`_win64.exe.zip" -OutFile $godotArchive
+          $godotHash = (Get-FileHash $godotArchive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($godotHash -ne $env:GODOT_ARCHIVE_SHA256) { throw "Godot archive checksum mismatch: $godotHash" }
+          Expand-Archive -LiteralPath $godotArchive -DestinationPath $godotDirectory
+          $godot = Get-ChildItem $godotDirectory -Recurse -Filter "Godot_*_win64_console.exe" | Select-Object -First 1
+          if ($null -eq $godot) { throw "Godot console executable was not found" }
+          "GODOT_BIN=$($godot.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          $templateArchive = Join-Path $env:RUNNER_TEMP "templates.tpz"
+          $templateZip = Join-Path $env:RUNNER_TEMP "templates.zip"
+          $templateExtract = Join-Path $env:RUNNER_TEMP "templates"
+          Invoke-WebRequest "https://github.com/godotengine/godot/releases/download/$env:GODOT_RELEASE/Godot_v$env:GODOT_RELEASE`_export_templates.tpz" -OutFile $templateArchive
+          $templateHash = (Get-FileHash $templateArchive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($templateHash -ne $env:GODOT_TEMPLATES_SHA256) { throw "Export template checksum mismatch: $templateHash" }
+          Copy-Item -LiteralPath $templateArchive -Destination $templateZip
+          Expand-Archive -LiteralPath $templateZip -DestinationPath $templateExtract
+          $templateSource = Get-ChildItem $templateExtract -Directory -Recurse | Where-Object Name -eq "templates" | Select-Object -First 1
+          if ($null -eq $templateSource) { throw "Export template directory was not found" }
+          $templateDestination = Join-Path $env:APPDATA "Godot\export_templates\4.6.3.stable"
+          New-Item -ItemType Directory -Force $templateDestination | Out-Null
+          Copy-Item -Path (Join-Path $templateSource.FullName "*") -Destination $templateDestination -Recurse -Force
+
+      - name: Export Windows x64
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force builds\windows | Out-Null
+          & $env:GODOT_BIN --headless --path . --export-release "Windows Desktop" builds\windows\RailCraft-Demo.exe
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Compress-Archive -Path builds\windows\* -DestinationPath builds\RailCraft-Demo-windows-x64.zip -Force
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: RailCraft-Demo-windows-x64
+          path: builds/RailCraft-Demo-windows-x64.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Attach tagged build to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view $env:GITHUB_REF_NAME *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $env:GITHUB_REF_NAME builds\RailCraft-Demo-windows-x64.zip --clobber
+          } else {
+            gh release create $env:GITHUB_REF_NAME builds\RailCraft-Demo-windows-x64.zip --title $env:GITHUB_REF_NAME --generate-notes
+          }
