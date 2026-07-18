@@ -1,6 +1,8 @@
 extends GutTest
 
 const FIXTURE_DIR: String = AssemblyAssetValidatorFixture.FIXTURE_DIR
+const REAL_TRAIN_ROOT_PATH: String = "res://scenes/train/train_root.tscn"
+const REAL_PARTS_DIR: String = "res://scenes/train/parts/"
 
 
 func test_empty_part_collection_returns_no_issues_without_a_train_root() -> void:
@@ -224,6 +226,46 @@ func test_repeated_validation_does_not_add_or_retain_scene_tree_nodes() -> void:
 		)
 		assert_true(issues.is_empty(), "Iteration %d: %s" % [iteration, _issue_summary(issues)])
 
+	assert_eq(_count_tree_nodes(get_tree().root), tree_node_count_before)
+
+
+func test_real_catalog_nine_part_scenes_and_snap_targets_pass_repeated_validation() -> void:
+	var load_result: ContentLoadResult = ContentRepository.new().load_catalog()
+	assert_true(load_result.is_success, _issue_summary(load_result.issues))
+	assert_not_null(load_result.catalog)
+	if not load_result.is_success or load_result.catalog == null:
+		return
+
+	var parts: Array[PartData] = load_result.catalog.get_parts()
+	assert_eq(parts.size(), 9)
+	var train_scene: PackedScene = load(REAL_TRAIN_ROOT_PATH) as PackedScene
+	assert_not_null(train_scene)
+	if train_scene == null:
+		return
+	var train_root: Node3D = train_scene.instantiate() as Node3D
+	assert_not_null(train_root)
+	if train_root == null:
+		return
+	add_child_autofree(train_root)
+
+	var model_paths: Dictionary[String, bool] = {}
+	var target_paths: Dictionary[String, bool] = {}
+	for part: PartData in parts:
+		assert_true(part.model_scene_path.begins_with(REAL_PARTS_DIR), part.part_id)
+		assert_true(ResourceLoader.exists(part.model_scene_path), part.model_scene_path)
+		var target: Node = train_root.get_node_or_null(NodePath(part.snap_target_path))
+		assert_true(target is Marker3D, part.snap_target_path)
+		model_paths[part.model_scene_path] = true
+		target_paths[part.snap_target_path] = true
+	assert_eq(model_paths.size(), 9)
+	assert_eq(target_paths.size(), 9)
+
+	var tree_node_count_before: int = _count_tree_nodes(get_tree().root)
+	for iteration: int in 3:
+		var issues: Array[ValidationIssue] = AssemblyAssetValidator.new().validate(
+			load_result.catalog, train_root
+		)
+		assert_true(issues.is_empty(), "Iteration %d: %s" % [iteration, _issue_summary(issues)])
 	assert_eq(_count_tree_nodes(get_tree().root), tree_node_count_before)
 
 

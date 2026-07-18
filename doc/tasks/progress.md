@@ -26,7 +26,7 @@
 
 - [x] [`ContentValidator`](content-validator.md)（10/10）
 - [x] [`ContentRepository`](content-repository.md)（11/11）
-- [ ] [`AssemblyAssetValidator`](assembly-asset-validator.md)（7/8）
+- [x] [`AssemblyAssetValidator`](assembly-asset-validator.md)（8/8）
 - [x] [`QuizManager`](quiz-manager.md)（9/9）
 - [x] [`InventoryManager`](inventory-manager.md)（7/7）
 - [x] [`AssemblyManager`](assembly-manager.md)（12/12）
