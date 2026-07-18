@@ -34,7 +34,7 @@
 - [ ] [`AssemblyView`](assembly-view.md)（0/21，含 `PartActor` 和 9 个零件场景）
 - [ ] [`AnimationCoordinator`](animation-coordinator.md)（0/11）
 - [ ] [`ScreenCoordinator`](screen-coordinator.md)（0/13，含各 UI 页面）
-- [ ] [`AppRoot`](app-root.md)（10/28，含工程集成与交付检查）
+- [ ] [`AppRoot`](app-root.md)（12/28，含工程集成与交付检查）
 
 ## 模块依赖
 
