@@ -30,7 +30,7 @@
 - [x] [`QuizManager`](quiz-manager.md)（9/9）
 - [x] [`InventoryManager`](inventory-manager.md)（7/7）
 - [x] [`AssemblyManager`](assembly-manager.md)（12/12）
-- [ ] [`GameFlowManager`](game-flow-manager.md)（0/15）
+- [x] [`GameFlowManager`](game-flow-manager.md)（15/15）
 - [ ] [`AssemblyView`](assembly-view.md)（0/21，含 `PartActor` 和 9 个零件场景）
 - [ ] [`AnimationCoordinator`](animation-coordinator.md)（0/11）
 - [ ] [`ScreenCoordinator`](screen-coordinator.md)（0/13，含各 UI 页面）
