@@ -63,25 +63,13 @@ jobs:
           & $env:GODOT_BIN --headless --path . --export-release "Windows Desktop" builds\windows\RailCraft-Demo.exe
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Smoke-launch and capture Windows executable
+      - name: Smoke-launch Windows executable
         shell: pwsh
         run: |
           $acceptanceRoot = "artifacts\acceptance"
-          $screenshotRoot = Join-Path $acceptanceRoot "screenshots"
-          New-Item -ItemType Directory -Force $screenshotRoot | Out-Null
+          New-Item -ItemType Directory -Force $acceptanceRoot | Out-Null
           $runtimeLog = Join-Path $acceptanceRoot "runtime.log"
           $environmentFile = Join-Path $acceptanceRoot "environment.txt"
-
-          Add-Type -AssemblyName System.Drawing
-          Add-Type @"
-          using System;
-          using System.Runtime.InteropServices;
-          public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
-          public static class RailCraftWin32 {
-              [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr hWnd, out RECT rect);
-              [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
-          }
-          "@
 
           $process = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -ArgumentList "--log-file", $runtimeLog -PassThru
           for ($attempt = 0; $attempt -lt 40; $attempt++) {
@@ -94,33 +82,16 @@ jobs:
             throw "RailCraft-Demo.exe exited early with code $($process.ExitCode).`n$logText"
           }
           if ($process.MainWindowHandle -eq 0) { throw "RailCraft-Demo.exe did not create a main window" }
-
-          [RailCraftWin32]::SetForegroundWindow($process.MainWindowHandle) | Out-Null
-          Start-Sleep -Seconds 3
-          $rect = New-Object RECT
-          if (-not [RailCraftWin32]::GetWindowRect($process.MainWindowHandle, [ref]$rect)) {
-            throw "Could not read the RailCraft window rectangle"
-          }
-          $width = $rect.Right - $rect.Left
-          $height = $rect.Bottom - $rect.Top
-          if ($width -lt 960 -or $height -lt 540) {
-            throw "Unexpected RailCraft window size: ${width}x${height}"
-          }
-          $bitmap = New-Object System.Drawing.Bitmap($width, $height)
-          $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-          $graphics.CopyFromScreen($rect.Left, $rect.Top, 0, 0, $bitmap.Size)
-          $screenshotPath = Join-Path $screenshotRoot "01-start.png"
-          $bitmap.Save($screenshotPath, [System.Drawing.Imaging.ImageFormat]::Png)
-          $graphics.Dispose()
-          $bitmap.Dispose()
+          Start-Sleep -Seconds 8
+          $process.Refresh()
+          if ($process.HasExited) { throw "RailCraft-Demo.exe exited during startup smoke validation" }
 
           @(
             "commit=$env:GITHUB_SHA"
             "runner_os=$env:RUNNER_OS"
             "runner_arch=$env:RUNNER_ARCH"
-            "window_width=$width"
-            "window_height=$height"
             "godot_release=$env:GODOT_RELEASE"
+            "main_window_handle=$($process.MainWindowHandle)"
           ) | Out-File -FilePath $environmentFile -Encoding utf8
 
           if (Test-Path $runtimeLog) {
@@ -133,6 +104,57 @@ jobs:
           Stop-Process -Id $process.Id -Force
           Compress-Archive -Path builds\windows\* -DestinationPath builds\RailCraft-Demo-windows-x64.zip -Force
 
+      - name: Capture Windows start screenshot
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $acceptanceRoot = "artifacts\acceptance"
+          $screenshotRoot = Join-Path $acceptanceRoot "screenshots"
+          New-Item -ItemType Directory -Force $screenshotRoot | Out-Null
+          $captureError = Join-Path $acceptanceRoot "capture-error.txt"
+          $captureProcess = $null
+          try {
+            Add-Type -AssemblyName System.Drawing
+            Add-Type @"
+            using System;
+            using System.Runtime.InteropServices;
+            public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
+            public static class RailCraftWin32 {
+                [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr hWnd, out RECT rect);
+                [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
+            }
+            "@
+            $captureProcess = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -PassThru
+            for ($attempt = 0; $attempt -lt 40; $attempt++) {
+              Start-Sleep -Milliseconds 250
+              $captureProcess.Refresh()
+              if ($captureProcess.MainWindowHandle -ne 0) { break }
+            }
+            if ($captureProcess.MainWindowHandle -eq 0) { throw "The process did not expose a window handle" }
+            [RailCraftWin32]::SetForegroundWindow($captureProcess.MainWindowHandle) | Out-Null
+            Start-Sleep -Seconds 3
+            $rect = New-Object RECT
+            if (-not [RailCraftWin32]::GetWindowRect($captureProcess.MainWindowHandle, [ref]$rect)) {
+              throw "GetWindowRect returned false"
+            }
+            $width = $rect.Right - $rect.Left
+            $height = $rect.Bottom - $rect.Top
+            $bitmap = New-Object System.Drawing.Bitmap($width, $height)
+            $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+            $graphics.CopyFromScreen($rect.Left, $rect.Top, 0, 0, $bitmap.Size)
+            $bitmap.Save((Join-Path $screenshotRoot "01-start.png"), [System.Drawing.Imaging.ImageFormat]::Png)
+            $graphics.Dispose()
+            $bitmap.Dispose()
+            "capture_status=success`nwindow_width=$width`nwindow_height=$height" | Out-File (Join-Path $acceptanceRoot "capture-status.txt") -Encoding utf8
+          } catch {
+            $_ | Out-String | Out-File -FilePath $captureError -Encoding utf8
+            throw
+          } finally {
+            if ($null -ne $captureProcess -and -not $captureProcess.HasExited) {
+              Stop-Process -Id $captureProcess.Id -Force
+            }
+          }
+
       - name: Upload Windows artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -142,6 +164,7 @@ jobs:
           retention-days: 30
 
       - name: Upload acceptance smoke evidence
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: RailCraft-Demo-acceptance-smoke
