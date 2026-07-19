@@ -2,9 +2,9 @@
 
 - 验收日期：2026-07-19
 - 验收对象：RailCraft Demo `v0.1.0-demo`
-- 合并提交：`47f55f5755d28de5b925437f20a1a1be0ae1c41f`
-- 对应功能内容：PR #1 头提交 `8c129a3382b3fe08c1a00648331a8707fdc22e7b`
-- 自动化基线：Quality run `29676812007`、Build Windows run `29676812156`
+- 功能合并提交：`47f55f5755d28de5b925437f20a1a1be0ae1c41f`
+- 发布分支提交：`4098c5be78591c89320960303f94ca8d45d2f010`
+- 自动化基线：Quality run `29680837181`、Build Windows run `29680837294`
 - 人工确认：项目负责人于 2026-07-19 确认发布候选已可正式运行
 
 ## 结论
@@ -38,7 +38,7 @@
 
 ## 自动化结果
 
-Quality run `29676812007`：
+Quality run `29680837181`：
 
 - 固定 Python、uv、gdtoolkit、pre-commit 和 Godot 工具链安装成功；
 - `gdformat` 与 `gdlint` 通过；
@@ -46,20 +46,22 @@ Quality run `29676812007`：
 - 107 个 GUT 测试通过；
 - 测试结果 artifact 上传成功。
 
-Build Windows run `29676812156`：
+Build Windows run `29680837294`：
 
 - Godot 4.6.3 与导出模板摘要校验通过；
 - Windows x64 导出通过；
 - EXE 的 PE `MZ` 头、文件大小、SHA-256 和 ZIP 打包检查通过；
 - Windows artifact 与验收诊断 artifact 上传成功。
 
-## 发布候选摘要
+## 最终交付摘要
 
-- Actions artifact SHA-256：`be8d66a16896827bb9802415247572f0804ffa74c9b3e2ebd7d86bf13c4da039`
-- 内层 Windows ZIP SHA-256：`f9cd1f226ac6e6709e96ef0219c83036d0356687223e72bdfe02fb968f49be1d`
-- `RailCraft-Demo.exe` SHA-256：`846e20935e32c76ae86e94a314c8132a44f11dc12b2d0c88ee3da9543466aeb7`
-- EXE 大小：`119428616` 字节
+- Windows artifact ID：`8440530015`
+- Actions artifact SHA-256：`4219532461d317aab78b996d656d822dc78a1e196aa3735b0084372d21ae7be1`
+- 内层 Windows ZIP SHA-256：`64536d74501643bbb193eee911939c23c854ddc0cb02f304e5a7d112d2245f41`
+- `RailCraft-Demo.exe` SHA-256：`b96aa532a24c4c9d683485a0b3f95e1c2bcdf9e042a5d6f6fabf3e42da482721`
+- EXE 大小：`119428664` 字节
 - 文件类型：Windows x86-64 GUI PE32+
+- Artifact 保留至：2026-08-18
 
 ## 已知限制
 
