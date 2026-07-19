@@ -87,14 +87,15 @@ func test_component_overlay_is_visible_and_contains_teaching_note() -> void:
 	screen.show_component_complete(component)
 	assert_has(screen.get_visible_page_names(), ScreenCoordinator.PAGE_COMPONENT)
 	var page: Control = screen.get_node(ScreenCoordinator.PAGE_COMPONENT) as Control
-	var message: RichTextLabel = page.find_child("", true, false) as RichTextLabel
-	assert_not_null(message)
+	var message_nodes: Array[Node] = page.find_children("*", "RichTextLabel", true, false)
+	assert_eq(message_nodes.size(), 1)
+	var message: RichTextLabel = message_nodes[0] as RichTextLabel
 	assert_true(message.text.contains(component.teaching_note))
 
 
 func test_all_eight_states_have_deterministic_page_mapping() -> void:
 	var screen: ScreenCoordinator = await _add_screen()
-	var expected: Dictionary[int, Array] = {
+	var expected: Dictionary = {
 		GameFlowManager.GameState.START: [ScreenCoordinator.PAGE_START],
 		GameFlowManager.GameState.QUIZ: [ScreenCoordinator.PAGE_QUIZ],
 		GameFlowManager.GameState.WRONG_FEEDBACK: [ScreenCoordinator.PAGE_QUIZ],
@@ -107,11 +108,14 @@ func test_all_eight_states_have_deterministic_page_mapping() -> void:
 		GameFlowManager.GameState.FINAL_ASSEMBLY: [],
 		GameFlowManager.GameState.END: [ScreenCoordinator.PAGE_END],
 	}
-	for state: int in expected:
+	for state_value: Variant in expected:
+		var state: int = state_value as int
 		screen.show_state(state)
 		var visible: Array[StringName] = screen.get_visible_page_names()
-		assert_eq(visible.size(), expected[state].size(), GameFlowManager.GameState.keys()[state])
-		for page_name: StringName in expected[state]:
+		var expected_pages: Array = expected[state]
+		assert_eq(visible.size(), expected_pages.size(), GameFlowManager.GameState.keys()[state])
+		for page_name_value: Variant in expected_pages:
+			var page_name := StringName(page_name_value)
 			assert_has(visible, page_name, GameFlowManager.GameState.keys()[state])
 
 
