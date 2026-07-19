@@ -77,6 +77,79 @@ func test_component_without_view_completes_deterministically() -> void:
 	assert_false(coordinator.is_busy())
 
 
+func test_component_animation_restores_component_position_and_lock() -> void:
+	var coordinator := AnimationCoordinator.new()
+	add_child_autofree(coordinator)
+	coordinator.component_hold_duration = 0.03
+	var view: AssemblyView = _add_view()
+	for index: int in 3:
+		var part: PartData = AssemblyFixture.part(index)
+		assert_true(view.prepare_part(part), view.last_error)
+		view.finalize_visual_install(part.part_id)
+	assert_true(coordinator.inject_view(view))
+	var component_node: Node3D = (
+		view.get_node(^"TrainAssemblyRoot/Components/CarbodyConnection") as Node3D
+	)
+	var start_position: Vector3 = component_node.position
+	var component := (
+		ComponentRecipe
+		. new(
+			"carbody_connection",
+			"车体与连接组件",
+			1,
+			["body_shell", "passenger_door", "coupler_buffer"],
+			"组件完成",
+			"",
+		)
+	)
+	watch_signals(coordinator)
+
+	coordinator.play_component_complete(component)
+	assert_true(coordinator.is_busy())
+	await wait_seconds(0.07)
+
+	assert_signal_emitted_with_parameters(
+		coordinator,
+		"component_animation_finished",
+		[component.component_id],
+	)
+	assert_false(coordinator.is_busy())
+	assert_true(component_node.position.is_equal_approx(start_position))
+
+
+func test_final_animation_sets_train_feedback_nodes() -> void:
+	var load_result: ContentLoadResult = ContentRepository.new().load_catalog()
+	assert_true(load_result.is_success)
+	var coordinator := AnimationCoordinator.new()
+	add_child_autofree(coordinator)
+	coordinator.final_step_duration = 0.005
+	var view: AssemblyView = _add_view()
+	for part: PartData in load_result.catalog.get_parts():
+		assert_true(view.prepare_part(part), view.last_error)
+		view.finalize_visual_install(part.part_id)
+	assert_true(coordinator.inject_view(view))
+	watch_signals(coordinator)
+	var train_root: Node3D = view.get_node(^"TrainAssemblyRoot") as Node3D
+	var pantograph_root: Node3D = (
+		view.get_part_actor("pantograph").get_node(^"VisualRoot/PantographLiftRoot") as Node3D
+	)
+	var wheel_root: Node3D = (
+		view.get_part_actor("wheelset").get_node(^"VisualRoot/WheelRotationRoot") as Node3D
+	)
+	var pantograph_start_y: float = pantograph_root.position.y
+	var wheel_start_x: float = wheel_root.rotation.x
+
+	coordinator.play_final_assembly(load_result.catalog.get_train_recipe())
+	await wait_seconds(0.08)
+
+	assert_signal_emitted(coordinator, "final_animation_finished")
+	assert_true((train_root.get_node(^"Headlights/LeftLight") as Light3D).visible)
+	assert_true((train_root.get_node(^"Headlights/RightLight") as Light3D).visible)
+	assert_gt(pantograph_root.position.y, pantograph_start_y)
+	assert_gt(wheel_root.rotation.x, wheel_start_x)
+	assert_false(coordinator.is_busy())
+
+
 func test_cancel_releases_busy_lock_and_disables_pending_interaction() -> void:
 	var coordinator := AnimationCoordinator.new()
 	add_child_autofree(coordinator)
