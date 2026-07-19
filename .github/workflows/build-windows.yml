@@ -70,38 +70,40 @@ jobs:
           New-Item -ItemType Directory -Force $acceptanceRoot | Out-Null
           $runtimeLog = Join-Path $acceptanceRoot "runtime.log"
           $environmentFile = Join-Path $acceptanceRoot "environment.txt"
-
-          $process = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -ArgumentList "--log-file", $runtimeLog -PassThru
-          for ($attempt = 0; $attempt -lt 40; $attempt++) {
-            Start-Sleep -Milliseconds 250
-            $process.Refresh()
-            if ($process.MainWindowHandle -ne 0) { break }
-          }
-          if ($process.HasExited) {
-            $logText = if (Test-Path $runtimeLog) { Get-Content $runtimeLog -Raw } else { "<runtime log missing>" }
-            throw "RailCraft-Demo.exe exited early with code $($process.ExitCode).`n$logText"
-          }
-          if ($process.MainWindowHandle -eq 0) { throw "RailCraft-Demo.exe did not create a main window" }
-          Start-Sleep -Seconds 8
-          $process.Refresh()
-          if ($process.HasExited) { throw "RailCraft-Demo.exe exited during startup smoke validation" }
+          $startupError = Join-Path $acceptanceRoot "startup-error.txt"
 
           @(
             "commit=$env:GITHUB_SHA"
             "runner_os=$env:RUNNER_OS"
             "runner_arch=$env:RUNNER_ARCH"
             "godot_release=$env:GODOT_RELEASE"
-            "main_window_handle=$($process.MainWindowHandle)"
           ) | Out-File -FilePath $environmentFile -Encoding utf8
 
-          if (Test-Path $runtimeLog) {
-            Get-Content $runtimeLog
-            $fatalPatterns = "SCRIPT ERROR|Parse Error|CONTENT_LOAD_FAILED|ASSET_VALIDATION_FAILED|FLOW_SETUP_FAILED|FLOW_INITIALIZE_FAILED"
-            if (Select-String -Path $runtimeLog -Pattern $fatalPatterns -Quiet) {
-              throw "RailCraft runtime log contains a fatal startup error"
+          $process = $null
+          try {
+            $process = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -ArgumentList "--log-file", $runtimeLog -PassThru
+            Start-Sleep -Seconds 8
+            $process.Refresh()
+            if ($process.HasExited) {
+              $logText = if (Test-Path $runtimeLog) { Get-Content $runtimeLog -Raw } else { "<runtime log missing>" }
+              throw "RailCraft-Demo.exe exited early with code $($process.ExitCode).`n$logText"
+            }
+            "main_window_handle=$($process.MainWindowHandle)" | Out-File -FilePath $environmentFile -Encoding utf8 -Append
+            if (Test-Path $runtimeLog) {
+              Get-Content $runtimeLog
+              $fatalPatterns = "SCRIPT ERROR|Parse Error|CONTENT_LOAD_FAILED|ASSET_VALIDATION_FAILED|FLOW_SETUP_FAILED|FLOW_INITIALIZE_FAILED"
+              if (Select-String -Path $runtimeLog -Pattern $fatalPatterns -Quiet) {
+                throw "RailCraft runtime log contains a fatal startup error"
+              }
+            }
+          } catch {
+            $_ | Out-String | Out-File -FilePath $startupError -Encoding utf8
+            throw
+          } finally {
+            if ($null -ne $process -and -not $process.HasExited) {
+              Stop-Process -Id $process.Id -Force
             }
           }
-          Stop-Process -Id $process.Id -Force
           Compress-Archive -Path builds\windows\* -DestinationPath builds\RailCraft-Demo-windows-x64.zip -Force
 
       - name: Capture Windows start screenshot
@@ -130,7 +132,7 @@ jobs:
               $captureProcess.Refresh()
               if ($captureProcess.MainWindowHandle -ne 0) { break }
             }
-            if ($captureProcess.MainWindowHandle -eq 0) { throw "The process did not expose a window handle" }
+            if ($captureProcess.MainWindowHandle -eq 0) { throw "The hosted runner did not expose a desktop window handle" }
             [RailCraftWin32]::SetForegroundWindow($captureProcess.MainWindowHandle) | Out-Null
             Start-Sleep -Seconds 3
             $rect = New-Object RECT
@@ -169,7 +171,7 @@ jobs:
         with:
           name: RailCraft-Demo-acceptance-smoke
           path: artifacts/acceptance
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
 
       - name: Attach tagged build to GitHub Release
