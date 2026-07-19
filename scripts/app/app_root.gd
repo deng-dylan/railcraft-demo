@@ -1,6 +1,10 @@
 class_name AppRoot
 extends Node
 
+signal shutdown_requested
+
+@export var quit_on_shutdown: bool = true
+
 var _catalog: ContentCatalog
 var _initialized: bool = false
 var _fatal_active: bool = false
@@ -22,6 +26,10 @@ func _ready() -> void:
 
 func is_initialized() -> bool:
 	return _initialized
+
+
+func is_shutdown_started() -> bool:
+	return _shutdown_started
 
 
 func get_flow_manager() -> GameFlowManager:
@@ -195,4 +203,6 @@ func _shutdown() -> void:
 	_shutdown_started = true
 	_animation.cancel_all_for_shutdown()
 	_assembly_view.cleanup_pending_part()
-	get_tree().quit()
+	shutdown_requested.emit()
+	if quit_on_shutdown:
+		get_tree().quit()
