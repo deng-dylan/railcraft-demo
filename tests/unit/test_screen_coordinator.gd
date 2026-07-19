@@ -48,6 +48,28 @@ func test_correct_feedback_locks_options_and_component_overlay_is_visible() -> v
 	)
 
 
+func test_quiz_controls_fit_minimum_and_default_viewports() -> void:
+	var load_result: ContentLoadResult = ContentRepository.new().load_catalog()
+	assert_true(load_result.is_success)
+	var question: QuestionData = load_result.catalog.get_questions()[0]
+	for viewport_size: Vector2 in [Vector2(960, 540), Vector2(1280, 720)]:
+		var screen: ScreenCoordinator = await _add_screen(viewport_size)
+		screen.present_question(question, 1, 9)
+		screen.show_correct_feedback(question)
+		await get_tree().process_frame
+		var screen_rect: Rect2 = screen.get_global_rect()
+		var quiz_page: Control = screen.get_node(ScreenCoordinator.PAGE_QUIZ) as Control
+		for node: Node in quiz_page.find_children("*", "Control", true, false):
+			var control: Control = node as Control
+			if not control.visible:
+				continue
+			var control_rect: Rect2 = control.get_global_rect()
+			assert_gte(control_rect.position.x, screen_rect.position.x - 1.0)
+			assert_gte(control_rect.position.y, screen_rect.position.y - 1.0)
+			assert_lte(control_rect.end.x, screen_rect.end.x + 1.0)
+			assert_lte(control_rect.end.y, screen_rect.end.y + 1.0)
+
+
 func test_fatal_page_replaces_all_other_pages() -> void:
 	var screen: ScreenCoordinator = await _add_screen()
 	screen.show_fatal("TEST_FAILURE", "测试错误")
@@ -56,9 +78,10 @@ func test_fatal_page_replaces_all_other_pages() -> void:
 	assert_eq(screen.get_visible_page_names(), [ScreenCoordinator.PAGE_FATAL])
 
 
-func _add_screen() -> ScreenCoordinator:
+func _add_screen(viewport_size: Vector2 = Vector2(960, 540)) -> ScreenCoordinator:
 	var scene: PackedScene = load("res://scenes/ui/screen_coordinator.tscn") as PackedScene
 	var screen: ScreenCoordinator = scene.instantiate() as ScreenCoordinator
+	screen.size = viewport_size
 	add_child_autofree(screen)
 	await get_tree().process_frame
 	return screen
