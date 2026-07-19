@@ -1,3 +1,4 @@
+# gdlint: disable = max-file-lines
 class_name ContentValidator
 extends RefCounted
 
@@ -9,6 +10,7 @@ const ID_FORMAT_INVALID: String = "ID_FORMAT_INVALID"
 const ID_DUPLICATE: String = "ID_DUPLICATE"
 const REFERENCE_NOT_FOUND: String = "REFERENCE_NOT_FOUND"
 const ORDER_INVALID: String = "ORDER_INVALID"
+const DEPENDENCY_CHAIN_INVALID: String = "DEPENDENCY_CHAIN_INVALID"
 const DEPENDENCY_CYCLE: String = "DEPENDENCY_CYCLE"
 const CONTENT_COVERAGE_INVALID: String = "CONTENT_COVERAGE_INVALID"
 
@@ -78,6 +80,7 @@ func validate(
 	_validate_references_and_coverage(questions, parts, components, train_recipe, issues)
 	_validate_orders(questions, parts, components, issues)
 	_validate_question_reward_order(questions, parts, issues)
+	_validate_dependency_chain(parts, issues)
 	_validate_dependency_cycles(parts, issues)
 
 	return issues
@@ -700,6 +703,93 @@ func _validate_question_reward_order(
 				(
 					"Question order %d does not match reward part order %d."
 					% [question_order, part_orders[reward_part_id]]
+				),
+			)
+
+
+## Ensures the dependency chain follows explicit part order, independent of array layout.
+func _validate_dependency_chain(parts: Array, issues: Array[ValidationIssue]) -> void:
+	var id_counts: Dictionary[String, int] = _build_id_counts(parts, "part_id")
+	var order_counts: Dictionary[int, int] = {}
+	var part_id_by_order: Dictionary[int, String] = {}
+
+	for value: Variant in parts:
+		if not value is Dictionary:
+			continue
+		var part: Dictionary = value as Dictionary
+		if not _has_non_empty_string(part, "part_id"):
+			continue
+		var part_id: String = part["part_id"] as String
+		if not _is_valid_id(part_id) or id_counts.get(part_id, 0) != 1:
+			continue
+		if typeof(part.get("order")) != TYPE_INT:
+			continue
+		var order: int = part["order"] as int
+		if order < 1:
+			continue
+		order_counts[order] = order_counts.get(order, 0) + 1
+		if not part_id_by_order.has(order):
+			part_id_by_order[order] = part_id
+
+	for index: int in parts.size():
+		var value: Variant = parts[index]
+		if not value is Dictionary:
+			continue
+		var part: Dictionary = value as Dictionary
+		if not _has_non_empty_string(part, "part_id"):
+			continue
+		var part_id: String = part["part_id"] as String
+		if not _is_valid_id(part_id) or id_counts.get(part_id, 0) != 1:
+			continue
+		if typeof(part.get("order")) != TYPE_INT:
+			continue
+		var order: int = part["order"] as int
+		if order < 1 or order_counts.get(order, 0) != 1:
+			continue
+		if not part.has("required_previous_part_id"):
+			continue
+
+		var dependency: Variant = part["required_previous_part_id"]
+		var dependency_path: String = _field_path(
+			_item_path("parts", index), "required_previous_part_id"
+		)
+		if order == 1:
+			if typeof(dependency) == TYPE_STRING:
+				_add_issue(
+					issues,
+					DEPENDENCY_CHAIN_INVALID,
+					dependency_path,
+					"The order-1 part must have required_previous_part_id set to null.",
+				)
+			continue
+
+		if typeof(dependency) == TYPE_NIL:
+			_add_issue(
+				issues,
+				DEPENDENCY_CHAIN_INVALID,
+				dependency_path,
+				"Part order %d must reference the part at order %d." % [order, order - 1],
+			)
+			continue
+		if typeof(dependency) != TYPE_STRING:
+			continue
+		var dependency_id: String = dependency as String
+		if dependency_id.is_empty() or not _is_valid_id(dependency_id):
+			continue
+		var previous_order: int = order - 1
+		if order_counts.get(previous_order, 0) != 1:
+			continue
+		if not part_id_by_order.has(previous_order):
+			continue
+		var expected_dependency_id: String = part_id_by_order[previous_order]
+		if dependency_id != expected_dependency_id:
+			_add_issue(
+				issues,
+				DEPENDENCY_CHAIN_INVALID,
+				dependency_path,
+				(
+					"Part order %d must depend on '%s', found '%s'."
+					% [order, expected_dependency_id, dependency_id]
 				),
 			)
 

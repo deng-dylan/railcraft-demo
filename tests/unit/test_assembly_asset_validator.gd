@@ -78,7 +78,7 @@ func test_scene_root_must_inherit_node3d() -> void:
 	root.free()
 
 
-func test_part_actor_root_requires_script_and_public_capabilities() -> void:
+func test_part_actor_root_requires_script_and_runtime_type() -> void:
 	var root: Node3D = AssemblyAssetValidatorFixture.instantiate_train_root()
 	var no_script_path: String = FIXTURE_DIR + "missing_script.tscn"
 	var no_capability_path: String = FIXTURE_DIR + "missing_capability.tscn"
@@ -95,7 +95,11 @@ func test_part_actor_root_requires_script_and_public_capabilities() -> void:
 		_issue_summary(no_script_issues),
 	)
 	assert_true(
-		_has_code(no_capability_issues, AssemblyAssetValidator.PART_ACTOR_CAPABILITY_MISSING),
+		_has_issue(
+			no_capability_issues,
+			AssemblyAssetValidator.PART_ACTOR_CAPABILITY_MISSING,
+			no_capability_path + "::.",
+		),
 		_issue_summary(no_capability_issues),
 	)
 	root.free()

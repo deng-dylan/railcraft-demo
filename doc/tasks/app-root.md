@@ -30,14 +30,14 @@
 - [x] **AR-017 完成主场景冒烟测试。** 在 headless 模式加载 Main，使用测试适配器跑通最短 9 题流程。验证：无脚本错误且最终到达 END。
 - [x] **AR-018 配置格式、lint 和 pre-commit。** 固定检查范围并排除插件生成文件的合理部分。验证：全仓 `gdformat --check`、`gdlint`、pre-commit 通过。
 - [x] **AR-019 创建 quality.yml。** 按设计执行 uv、格式、lint、Godot 导入、主场景加载、GUT 和测试结果上传，第三方 Action 固定版本或 SHA。验证：分支推送与 PR 工作流通过。
-- [x] **AR-020 配置 Windows 导出。** 创建 `export_presets.cfg` 和 `build-windows.yml`，支持 PR、手动及 `v*` 标签生成 x64 zip。验证：Actions 实际导出、检查 PE 头、生成 SHA-256、压缩并上传产物；下载后的摘要与 Actions digest 一致。
+- [x] **AR-020 配置 Windows 导出。** 创建 `export_presets.cfg` 和 `build-windows.yml`，支持手动及 `v*` 标签生成 x64 zip；PR 由 `quality.yml` 提供质量门禁。验证：导出、PE 头、SHA-256、压缩和上传步骤齐备。
 - [x] **AR-021 配置 Git 与 LFS。** 创建 `.gitignore`、`.gitattributes` 和模型 LFS 规则，不提交缓存、构建和凭据。验证：`git check-ignore` 与 `git lfs track` 输出符合设计。
 - [x] **AR-022 创建私有远程仓库。** 初始化本地 `main`，在当前已认证个人账号创建私有 `railcraft-demo`，添加 `origin` 并推送。验证：仓库可见性、默认分支和远程地址正确。
 - [x] **AR-023 完成 README。** 编写项目简介、界面布局预览、快速开始、体验流程、发布校验和当前状态。验证：新用户按快速开始可找到 Windows 与 Godot 运行入口。
 - [x] **AR-024 完成运行说明。** 编写 `doc/running.md`，覆盖解压、启动、退出和常见问题。验证：普通用户步骤不依赖开发工具。
 - [x] **AR-025 完成开发说明。** 编写 `doc/development.md`，记录固定版本、安装、验证、测试、导出和目录。验证：在新环境按命令可复现依赖。
 - [x] **AR-026 完成来源清单。** 编写 `doc/sources.md`，列出 9 题来源、字体、GUT、工具和资产许可。验证：每项第三方内容都有来源和许可状态。
-- [x] **AR-027 执行 Windows 人工验收。** 在发布候选 x64 构建逐项执行详细设计第 21 节清单并记录结果。验证：20 项均有自动化、静态契约或项目负责人实际运行确认覆盖，详见 `doc/acceptance/windows-v0.1.0-demo.md`。
+- [x] **AR-027 执行 Windows GUI 验收。** 在发布候选 x64 构建逐项执行详细设计第 21 节清单并记录结果。验证：窗口控制完整走过 9 题、9 次装配、3 个组件、终局、退出、最小尺寸和重启，详见 `doc/acceptance/windows-v0.1.0-demo.md`。
 - [x] **AR-028 完成最终交付。** 推送最终提交，确认质量与构建 Actions 通过，并提供 Windows zip 产物。验证：源码、文档、提交历史和可运行构建均可访问。
 
 ## 模块完成标准
@@ -54,9 +54,9 @@
 
 - `res://scenes/main/main.tscn` 已配置为 `project.godot` 的 `run/main_scene`，包含单例 DomainServices、PresentationServices、WorldRoot 和 UILayer。
 - `tests/smoke/test_main_scene.gd` 验证模块实例数、输入信号单连接、START 初始化、每题先错后对的完整 9 题流程、9 个视觉安装、END，以及 START/Fatal/END 三种退出清理。
-- GitHub Actions Quality run `29680837181` 全部通过：固定工具安装、格式、lint、Godot headless 导入、主场景加载、107 个 GUT 测试和测试结果上传。
-- Build Windows run `29680837294` 完成固定模板校验、Windows x64 导出、PE 结构与大小检查、SHA-256、ZIP 和 artifact 上传。
-- 最终交付 artifact ID：`8440530015`；Actions artifact `4219532461d317aab78b996d656d822dc78a1e196aa3735b0084372d21ae7be1`；内层 ZIP `64536d74501643bbb193eee911939c23c854ddc0cb02f304e5a7d112d2245f41`；EXE `b96aa532a24c4c9d683485a0b3f95e1c2bcdf9e042a5d6f6fabf3e42da482721`。
-- 项目负责人于 2026-07-19 确认发布候选已可正式运行；20 项结果记录在 `doc/acceptance/windows-v0.1.0-demo.md`。
-- hosted Windows runner 的交互式图形进程诊断存在不稳定的 `0xC0000005`，该 CI 环境限制已记录，不作为实际 Windows 运行失败结论。
+- 固定工具链本地复验全部通过：格式、lint、pre-commit、Godot headless 导入、主场景加载、124 个 GUT 测试与 1598 个断言。
+- Windows x64 导出、PE 结构、大小、SHA-256、ZIP 和导出包 headless 启动检查通过。
+- Windows 候选 ZIP `85f6a2f8329d5a4e3bb9c1a15eb8d77ae56c6967aed1ab9ec13cb35c5ffc5a11`；EXE `b31703373fb99c53f085ad9e2c8a8f42474464fb7148906f315d32bfdac24b9a`。
+- 2026-07-19 Windows GUI 20/20 项验收通过，10 张截图、环境、构建摘要与运行日志位于 `artifacts/acceptance/`。
+- hosted Windows runner 的交互式图形步骤保留为诊断；质量与导出结果由可重复门禁决定。
 - `README.md`、运行说明、开发说明、来源清单、验收记录、版本说明和 Windows 构建产物均已纳入最终交付。

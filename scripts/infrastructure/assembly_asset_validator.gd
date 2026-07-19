@@ -99,6 +99,13 @@ func _validate_part_actor_contract(
 			_asset_node_path(model_path, "."),
 			"PartActor root must have an interaction script.",
 		)
+	elif not actor is PartActor:
+		_add_issue(
+			issues,
+			PART_ACTOR_CAPABILITY_MISSING,
+			_asset_node_path(model_path, "."),
+			"PartActor root script must extend PartActor.",
+		)
 	else:
 		var missing_capabilities: Array[String] = []
 		if not _has_property(actor, PART_ID_PROPERTY):
