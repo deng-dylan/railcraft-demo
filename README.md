@@ -1,39 +1,48 @@
 # RailCraft Demo
 
-RailCraft Demo 是一个使用 Godot 4.6.3 制作的铁路知识答题与列车装配玩法原型。玩家依次完成 9 道铁路知识单选题，每题答对后获得一个零件，并在固定 3D 视角中完成一次点击吸附装配。9 个零件组成 3 个系统级组件，最终形成一列原创通用高速电力动车组教学模型。
+RailCraft Demo 是一个使用 Godot 4.6.3 制作的铁路知识答题与列车装配教学 Demo。玩家依次完成 9 道铁路知识单选题，每题答对后获得一个零件，并在固定 3D 视角中完成点击吸附装配。9 个零件组成 3 个系统级组件，最终形成一列原创通用高速电力动车组教学模型。
 
-## 当前状态
+## 发布状态
 
-当前功能分支已包含：
+`v0.1.0-demo` 首版功能与交付内容已经完成：
 
 - 数据驱动的 9 道题、9 个零件、3 个组件和整车配方；
 - 错误重试、正确答案解析及来源显示；
 - 答题、奖励、顺序安装和完整状态机；
-- 9 个可替换的 Godot 原生低多边形占位零件；
+- 9 个可替换的 Godot 原生低多边形零件；
 - 零件吸附、组件反馈和整车完成动画；
 - 开始页、答题页、装配 HUD、组件覆盖层、结束页和致命错误页；
-- 内容校验、资产契约校验、单元测试、集成测试和主场景冒烟测试；
-- 固定版本的格式检查、lint、GitHub Actions 与 Windows x64 导出配置。
+- 内容校验、资产契约校验、107 个自动化测试和主场景冒烟测试；
+- 固定版本的格式检查、lint、GitHub Actions 与 Windows x64 导出流程；
+- Windows 20 项验收记录与发布候选摘要。
 
-完整交付状态以 [`doc/tasks/progress.md`](doc/tasks/progress.md) 和 GitHub Actions 为准。
+完整验收结果见 [`doc/acceptance/windows-v0.1.0-demo.md`](doc/acceptance/windows-v0.1.0-demo.md)。
+
+## 界面预览
+
+![RailCraft Demo 开始页界面布局预览](doc/media/start-screen.svg)
+
+> 上图根据实际 `ScreenCoordinator` 尺寸、颜色、文案和控件层级生成，用于仓库文档预览。正式运行画面以 Windows 构建为准。
 
 ## 快速开始
+
+### 使用 Windows 构建
+
+1. 从 `v0.1.0-demo` Release 下载 `RailCraft-Demo-windows-x64.zip`。
+2. 将压缩包完整解压到本地目录。
+3. 双击运行：
+
+```text
+RailCraft-Demo.exe
+```
+
+程序完全离线运行，不需要账号、网络、数据库或额外运行时。详细步骤与故障排查见 [`doc/running.md`](doc/running.md)。
 
 ### 使用 Godot 编辑器
 
 1. 安装 Godot Standard `4.6.3-stable`。
 2. 使用 Godot 导入仓库根目录中的 `project.godot`。
 3. 运行项目。主场景为 `res://scenes/main/main.tscn`。
-
-### 使用 Windows 构建
-
-发布版本解压后运行：
-
-```text
-RailCraft-Demo.exe
-```
-
-程序完全离线运行，不需要账号、网络、数据库或额外运行时。详细步骤见 [`doc/running.md`](doc/running.md)。
 
 ## 体验流程
 
@@ -50,6 +59,16 @@ RailCraft-Demo.exe
 ```
 
 体验过程中没有失败结局。当前题目必须答对后才能继续。
+
+## Windows 发布候选校验
+
+对应 Build Windows run `29676812156`：
+
+- Actions artifact SHA-256：`be8d66a16896827bb9802415247572f0804ffa74c9b3e2ebd7d86bf13c4da039`
+- 内层 Windows ZIP SHA-256：`f9cd1f226ac6e6709e96ef0219c83036d0356687223e72bdfe02fb968f49be1d`
+- `RailCraft-Demo.exe` SHA-256：`846e20935e32c76ae86e94a314c8132a44f11dc12b2d0c88ee3da9543466aeb7`
+- EXE 大小：`119428616` 字节
+- 文件类型：Windows x86-64 GUI PE32+
 
 ## 开发验证
 
@@ -76,23 +95,25 @@ Godot headless、GUT 和 Windows 导出命令见 [`doc/development.md`](doc/deve
 ## 主要目录
 
 ```text
-data/                 题目、零件和配方数据
-scenes/main/          主场景
-scenes/assembly/      装配视图和 PartActor 基础场景
-scenes/train/         列车根节点及 9 个零件场景
-scenes/ui/            界面组合场景
-scripts/domain/       答题、库存和装配领域逻辑
-scripts/flow/         游戏流程状态机
+data/                   题目、零件和配方数据
+scenes/main/            主场景
+scenes/assembly/        装配视图和 PartActor 基础场景
+scenes/train/           列车根节点及 9 个零件场景
+scenes/ui/              界面组合场景
+scripts/domain/         答题、库存和装配领域逻辑
+scripts/flow/           游戏流程状态机
 scripts/infrastructure/ 内容和资产校验
-scripts/presentation/ UI、3D 表现和动画协调
-tests/                单元、集成、夹具和冒烟测试
-doc/                  需求、设计、运行、开发和来源文档
+scripts/presentation/   UI、3D 表现和动画协调
+tests/                  单元、集成、夹具和冒烟测试
+doc/                    需求、设计、验收、运行、开发和来源文档
 ```
 
 ## 内容与许可
 
 题库来源、字体、测试框架、开发工具和资产许可记录在 [`doc/sources.md`](doc/sources.md)。项目不使用真实动车组 Logo、企业标志、车型编号或受限涂装。
 
-## 范围限制
+## 已知限制
 
-当前版本用于玩法与工程结构验证。它不包含账号、服务器、存档、排行榜、多人、自由镜头、拖拽物理、暂停、跳题、重开和音频，也不代表特定真实动车组型号的精确结构。
+- 当前模型为可替换的原创低多边形教学资产，不对应特定真实动车组型号的精确结构；
+- GitHub hosted Windows runner 的交互式桌面和图形驱动行为不稳定，因此 GUI 截图不作为稳定 CI 门禁；
+- 首版不包含账号、服务器、存档、排行榜、多人、自由镜头、拖拽物理、暂停、跳题、重开和音频。
