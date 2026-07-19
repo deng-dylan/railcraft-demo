@@ -67,7 +67,7 @@ func test_part_snap_finishes_once_and_commits_visual_install() -> void:
 	coordinator.play_part_snap(part.part_id)
 	coordinator.play_part_snap(part.part_id)
 	assert_true(coordinator.is_busy())
-	await wait_seconds(0.08)
+	await _wait_until_idle(coordinator)
 
 	assert_signal_emit_count(coordinator, "part_snap_finished", 1)
 	assert_signal_emitted_with_parameters(coordinator, "part_snap_finished", [part.part_id])
@@ -131,7 +131,7 @@ func test_component_animation_restores_component_position_and_lock() -> void:
 
 	coordinator.play_component_complete(component)
 	assert_true(coordinator.is_busy())
-	await wait_seconds(0.07)
+	await _wait_until_idle(coordinator)
 
 	assert_signal_emitted_with_parameters(
 		coordinator,
@@ -164,7 +164,7 @@ func test_teaching_component_uses_longer_hold_duration() -> void:
 	coordinator.play_component_complete(component)
 	await wait_seconds(0.03)
 	assert_true(coordinator.is_busy())
-	await wait_seconds(0.08)
+	await _wait_until_idle(coordinator)
 	assert_false(coordinator.is_busy())
 
 
@@ -191,7 +191,7 @@ func test_final_animation_sets_train_feedback_nodes() -> void:
 	var wheel_start_x: float = wheel_root.rotation.x
 
 	coordinator.play_final_assembly(load_result.catalog.get_train_recipe())
-	await wait_seconds(0.25)
+	await _wait_until_idle(coordinator)
 
 	assert_signal_emitted(coordinator, "final_animation_finished")
 	assert_true((train_root.get_node(^"Headlights/LeftLight") as Light3D).visible)
@@ -218,6 +218,13 @@ func test_cancel_releases_busy_lock_and_disables_pending_interaction() -> void:
 
 	assert_false(coordinator.is_busy())
 	assert_false(view.get_part_actor(part.part_id).is_interaction_enabled())
+
+
+func _wait_until_idle(coordinator: AnimationCoordinator, timeout_msec: int = 2500) -> void:
+	var deadline: int = Time.get_ticks_msec() + timeout_msec
+	while coordinator.is_busy() and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	assert_false(coordinator.is_busy(), "Animation did not finish within the timeout")
 
 
 func _add_view() -> AssemblyView:
