@@ -12,7 +12,7 @@ RailCraft Demo 是一个使用 Godot 4.6.3 制作的铁路知识答题与列车�
 - 9 个可替换的 Godot 原生低多边形零件；
 - 零件吸附、组件反馈和整车完成动画；
 - 开始页、答题页、装配 HUD、组件覆盖层、结束页和致命错误页；
-- 内容校验、资产契约校验、107 个自动化测试和主场景冒烟测试；
+- 内容校验、资产契约校验、124 个自动化测试和主场景冒烟测试；
 - 固定版本的格式检查、lint、GitHub Actions 与 Windows x64 导出流程；
 - Windows 20 项验收记录与最终发布候选摘要。
 
@@ -20,9 +20,9 @@ RailCraft Demo 是一个使用 Godot 4.6.3 制作的铁路知识答题与列车�
 
 ## 界面预览
 
-![RailCraft Demo 开始页界面布局预览](doc/media/start-screen.svg)
+![RailCraft Demo Windows 实际开始页](artifacts/acceptance/screenshots/01-start.png)
 
-> 上图根据实际 `ScreenCoordinator` 尺寸、颜色、文案和控件层级生成，用于仓库文档预览。正式运行画面以 Windows 构建为准。
+> 上图来自 2026-07-19 Windows 发布候选的真实运行验收。完整流程截图位于 [`artifacts/acceptance/screenshots`](artifacts/acceptance/screenshots/)。
 
 ## 快速开始
 
@@ -60,17 +60,17 @@ RailCraft-Demo.exe
 
 体验过程中没有失败结局。当前题目必须答对后才能继续。
 
-## 最终 Windows 构建校验
+## Windows 发布候选校验
 
-对应 Quality run `29680837181` 与 Build Windows run `29680837294`：
-
-- Windows artifact ID：`8440530015`
-- Actions artifact SHA-256：`4219532461d317aab78b996d656d822dc78a1e196aa3735b0084372d21ae7be1`
-- 内层 Windows ZIP SHA-256：`64536d74501643bbb193eee911939c23c854ddc0cb02f304e5a7d112d2245f41`
-- `RailCraft-Demo.exe` SHA-256：`b96aa532a24c4c9d683485a0b3f95e1c2bcdf9e042a5d6f6fabf3e42da482721`
-- EXE 大小：`119428664` 字节
+- `RailCraft-Demo.exe` SHA-256：`b31703373fb99c53f085ad9e2c8a8f42474464fb7148906f315d32bfdac24b9a`
+- EXE 大小：`118069960` 字节
+- `RailCraft-Demo-windows-x64.zip` SHA-256：`85f6a2f8329d5a4e3bb9c1a15eb8d77ae56c6967aed1ab9ec13cb35c5ffc5a11`
+- ZIP 大小：`49498195` 字节
 - 文件类型：Windows x86-64 GUI PE32+
-- Artifact 保留至：2026-08-18
+- 导出包 headless 启动：退出码 0
+- Windows GUI：20/20 项验收通过
+
+GitHub Actions 的标记构建会把最终 ZIP 附加到 `v0.1.0-demo` 预发布页面。
 
 ## 开发验证
 
@@ -108,6 +108,7 @@ scripts/infrastructure/ 内容和资产校验
 scripts/presentation/   UI、3D 表现和动画协调
 tests/                  单元、集成、夹具和冒烟测试
 doc/                    需求、设计、验收、运行、开发和来源文档
+artifacts/acceptance/   Windows GUI 截图、日志、环境与摘要证据
 ```
 
 ## 内容与许可

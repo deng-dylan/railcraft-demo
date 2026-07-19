@@ -36,4 +36,4 @@
 
 - `tests/integration/test_animation_coordinator.gd` 覆盖吸附前置失败、第一阶段中间变换、重复请求、最终视觉提交、普通及教学组件停留、组件位置恢复、车灯、受电弓、轮对和取消清理。
 - 主场景完整 9 题冒烟使用可覆盖的短动画时长，从 START 到 END 执行三次组件动画和一次整车动画。
-- GitHub Actions Quality run 56：`gdformat`、`gdlint`、Godot headless 导入、主场景加载和全量 GUT 均通过。
+- 本地固定工具链复验：`gdformat`、`gdlint`、Godot headless 导入、主场景加载和全量 GUT 均通过。

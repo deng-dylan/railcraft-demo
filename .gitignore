@@ -16,8 +16,11 @@ __pycache__/
 
 # Local build and test artifacts
 builds/
-artifacts/
+artifacts/*
+!artifacts/acceptance/
+!artifacts/acceptance/**
 *.log
+!artifacts/acceptance/*.log
 
 # Local editor and environment files
 .idea/

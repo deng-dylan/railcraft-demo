@@ -39,4 +39,4 @@
 - `tests/unit/test_screen_coordinator.gd` 覆盖开始、答案、进入装配和三处退出意图信号，错误后按钮状态，正确反馈的解析及来源三字段，第三组件教学说明和致命错误页。
 - 8 个 `GameState` 的页面映射逐项断言；`FINAL_ASSEMBLY` 仅保留 3D 世界，`COMPONENT_COMPLETE` 同时显示装配 HUD 和覆盖层。
 - 960×540 与 1280×720 下递归检查可见控件边界；答题页使用双栏布局以控制最低高度。
-- GitHub Actions Quality run 56：格式、lint、Godot headless 和全量 GUT 均通过。
+- 本地固定工具链复验：格式、lint、Godot headless 和全量 GUT 均通过。

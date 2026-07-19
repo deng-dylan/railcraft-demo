@@ -1,0 +1,13 @@
+uv sync --frozen: PASS
+gdformat --check scripts tests: PASS (47 files)
+gdlint scripts tests: PASS
+pre-commit run --all-files: PASS
+Godot headless import: PASS
+Godot main scene load: PASS
+GUT: PASS (13 scripts, 124 tests, 1598 assertions)
+Windows x64 export: PASS
+PE header: MZ
+Executable bytes: 118069960
+Archive bytes: 49498195
+Exported package headless startup: PASS (exit code 0)
+Windows GUI acceptance: PASS (20/20)

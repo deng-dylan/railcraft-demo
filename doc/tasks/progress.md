@@ -31,7 +31,7 @@
 - [x] [`InventoryManager`](inventory-manager.md)（7/7）
 - [x] [`AssemblyManager`](assembly-manager.md)（12/12）
 - [x] [`GameFlowManager`](game-flow-manager.md)（15/15）
-- [x] [`AssemblyView`](assembly-view.md)（21/21，含 `PartActor`、9 个零件场景和已确认 GUI 视口验收）
+- [x] [`AssemblyView`](assembly-view.md)（21/21，含 `PartActor`、9 个零件场景和 Windows GUI 视口验收）
 - [x] [`AnimationCoordinator`](animation-coordinator.md)（11/11）
 - [x] [`ScreenCoordinator`](screen-coordinator.md)（13/13，含全部页面、8 状态映射和双分辨率布局测试）
 - [x] [`AppRoot`](app-root.md)（28/28，完成组合、验证、Windows 构建、验收和交付）
@@ -89,19 +89,16 @@ flowchart LR
 
 ## 最终证据
 
-- PR #1 已 squash 合并到 `main`，功能合并提交：`47f55f5755d28de5b925437f20a1a1be0ae1c41f`；
-- 发布分支最终验证提交：`4098c5be78591c89320960303f94ca8d45d2f010`；
-- Quality run `29680837181`：固定工具链、格式、lint、Godot 导入、主场景加载和 107 个 GUT 测试全部通过；
-- Build Windows run `29680837294`：导出、PE 校验、文件大小、SHA-256、ZIP 与 artifact 上传通过；
-- Windows artifact ID：`8440530015`；
-- Actions artifact：`4219532461d317aab78b996d656d822dc78a1e196aa3735b0084372d21ae7be1`；
-- 内层 ZIP：`64536d74501643bbb193eee911939c23c854ddc0cb02f304e5a7d112d2245f41`；
-- EXE：`b96aa532a24c4c9d683485a0b3f95e1c2bcdf9e042a5d6f6fabf3e42da482721`；
+- 固定工具链、格式、lint、pre-commit、Godot 导入和主场景加载全部通过；
+- GUT：13 个测试脚本、124 个测试、1598 个断言全部通过；
+- Windows x64 导出、PE、大小、SHA-256、ZIP 和导出包 headless 启动检查通过；
+- EXE：`b31703373fb99c53f085ad9e2c8a8f42474464fb7148906f315d32bfdac24b9a`；
+- ZIP：`85f6a2f8329d5a4e3bb9c1a15eb8d77ae56c6967aed1ab9ec13cb35c5ffc5a11`；
+- Windows GUI 20/20 项验收通过，10 张实际运行截图与日志位于 [`../../artifacts/acceptance`](../../artifacts/acceptance/)；
 - 20 项验收记录：[`../acceptance/windows-v0.1.0-demo.md`](../acceptance/windows-v0.1.0-demo.md)；
 - 版本说明：[`../releases/v0.1.0-demo.md`](../releases/v0.1.0-demo.md)。
 
 ## 后续建议
 
-- 用实际运行 PNG 替换 README 中的矢量布局预览；
-- 创建 `v0.1.0-demo` GitHub Release，并将最终 Windows ZIP 作为长期下载附件；
-- 后续迭代替换正式工业设计模型、增加音效与讲解旁白。
+- 后续迭代可替换正式工业设计模型、增加音效与讲解旁白；
+- 继续保持题库、装配配方和模型资产的数据驱动边界。

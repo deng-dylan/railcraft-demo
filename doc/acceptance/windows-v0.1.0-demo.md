@@ -1,70 +1,58 @@
 # Windows v0.1.0-demo 验收记录
 
 - 验收日期：2026-07-19
-- 验收对象：RailCraft Demo `v0.1.0-demo`
-- 功能合并提交：`47f55f5755d28de5b925437f20a1a1be0ae1c41f`
-- 发布分支提交：`4098c5be78591c89320960303f94ca8d45d2f010`
-- 自动化基线：Quality run `29680837181`、Build Windows run `29680837294`
-- 人工确认：项目负责人于 2026-07-19 确认发布候选已可正式运行
+- 验收对象：本仓库 `feat/release-integration` 发布候选
+- 运行环境：Windows NT 10.0.26200.0 x64、NVIDIA GeForce RTX 5070 Ti Laptop GPU
+- 引擎：Godot 4.6.3-stable
+- 自动化结果：13 个测试脚本、124 个测试、1598 个断言全部通过
+- GUI 方法：在导出的 `RailCraft-Demo.exe` 上通过 Windows 窗口控制逐步点击、观察并截图
 
 ## 结论
 
-详细设计第 21 节的 20 项检查均有自动化、静态契约或项目负责人运行确认覆盖，未发现阻塞首版 Demo 交付的问题。Windows hosted runner 的交互式桌面进程偶发在 Godot 日志初始化前以 `0xC0000005` 退出；该现象仅出现在 CI 托管桌面环境，项目负责人已在实际 Windows 环境确认正式运行，因此记录为 CI 环境限制，不列为产品阻塞。
+详细设计第 21 节的 20 项检查全部通过。验收完整走过“开始 → 错误重试 → 9 题正确反馈 → 9 次装配 → 3 个组件完成页 → 整车终局 → 退出”，随后尝试缩小窗口并重新启动。三个运行日志均未出现脚本错误、警告或崩溃信息；自动化主流程另覆盖每题先错后对。
 
 ## 20 项验收结果
 
 | # | 检查项 | 结果 | 主要证据 |
 |---:|---|---|---|
-| 1 | Windows 10/11 x64 解压并启动 | 通过 | 项目负责人实际运行确认；Windows x64 PE 构建与压缩包校验通过 |
-| 2 | 默认 1280×720，可调整且不小于 960×540 | 通过 | `project.godot` 尺寸配置；双分辨率 UI 边界测试 |
-| 3 | 开始页标题、说明、开始与退出按钮正确 | 通过 | `ScreenCoordinator` UI 契约测试；项目负责人运行确认 |
-| 4 | 中文无乱码、缺字或方框 | 通过 | 离线 Noto Sans SC 字体内置；项目负责人运行确认 |
-| 5 | 9 道题顺序和文案符合基线 | 通过 | 内容校验、仓储测试及完整流程测试 |
-| 6 | 错误答案后保留原题并可重试 | 通过 | Quiz 与 GameFlow“每题先错后对”路径 |
-| 7 | 正确后显示解析、来源机构、标题和 URL | 通过 | ScreenCoordinator 绑定测试和 9 题内容数据 |
-| 8 | 每题只发放一个对应零件 | 通过 | InventoryManager 幂等测试和完整流程断言 |
-| 9 | 装配位置发光提示易理解 | 通过 | AssemblyView 目标契约、提示文案及项目负责人运行确认 |
-| 10 | 单击零件后自动移动、旋转和吸附 | 通过 | AnimationCoordinator 吸附阶段与最终变换测试 |
-| 11 | 动画期间重复点击不重复安装 | 通过 | 动画忙碌锁、领域提交幂等及重复输入测试 |
-| 12 | 第 3、6、9 个零件后显示组件反馈 | 通过 | 3 个组件配方、GameFlow 组件状态和 UI 映射测试 |
-| 13 | 第 9 个零件后播放第三组件与整车动画 | 通过 | 完整 9 题主场景冒烟与最终动画回调测试 |
-| 14 | 最终列车可辨认为原创通用高速动车组 | 通过 | 9 个原创低多边形零件场景及项目负责人运行确认 |
-| 15 | 最终动画包含组件强调、车灯、受电弓和车轮反馈 | 通过 | 最终动画节点终态测试 |
-| 16 | 完成页显示祝贺文字和退出按钮 | 通过 | END 状态映射和 ScreenCoordinator 测试 |
-| 17 | 开始页与完成页退出均能关闭程序 | 通过 | START/END 退出连接和清理测试；项目负责人运行确认 |
-| 18 | 全流程无需网络 | 通过 | 数据、字体、模型和逻辑均随包提供；无网络服务依赖 |
-| 19 | 无明显卡顿、穿模、闪烁或控制台错误 | 通过 | 固定时长 Tween、资产契约、全量 GUT 与项目负责人运行确认 |
-| 20 | 关闭重开后从开始页进入，无旧进度 | 通过 | 无存档设计；AppRoot 初始化与 START 状态测试 |
+| 1 | Windows 10/11 x64 解压并启动 | 通过 | 导出包 headless 启动退出码 0；真实窗口启动成功 |
+| 2 | 默认 1280×720，可调整且不小于 960×540 | 通过 | `AppRoot.MINIMUM_WINDOW_SIZE`、双分辨率测试；GUI 缩小拖动后窗口未继续收缩 |
+| 3 | 开始页标题、说明、开始与退出按钮正确 | 通过 | [`01-start.png`](../../artifacts/acceptance/screenshots/01-start.png) |
+| 4 | 中文无乱码、缺字或方框 | 通过 | 内置 Noto Sans SC；10 张实际运行截图 |
+| 5 | 9 道题顺序和文案符合基线 | 通过 | 完整 GUI 路径；`expected_question_baseline.json` 逐字段回归 |
+| 6 | 错误答案后保留原题并可重试 | 通过 | [`02-wrong-feedback.png`](../../artifacts/acceptance/screenshots/02-wrong-feedback.png) |
+| 7 | 正确后显示解析、来源机构、标题和 URL | 通过 | [`03-correct-feedback-source.png`](../../artifacts/acceptance/screenshots/03-correct-feedback-source.png) |
+| 8 | 每题只发放一个对应零件 | 通过 | 完整 GUI 路径、库存幂等测试和流程断言 |
+| 9 | 装配位置发光提示易理解 | 通过 | [`04-assembly-highlight.png`](../../artifacts/acceptance/screenshots/04-assembly-highlight.png) |
+| 10 | 单击零件后自动移动、旋转和吸附 | 通过 | 9 次实际点击；0.15/0.60/0.15 秒阶段测试 |
+| 11 | 动画期间重复点击不重复安装 | 通过 | 交互锁、安装幂等和重复输入测试 |
+| 12 | 第 3、6、9 个零件后显示组件反馈 | 通过 | [`05-component-1.png`](../../artifacts/acceptance/screenshots/05-component-1.png)、[`06-component-2.png`](../../artifacts/acceptance/screenshots/06-component-2.png)、[`07-component-3.png`](../../artifacts/acceptance/screenshots/07-component-3.png) |
+| 13 | 第 9 个零件后播放第三组件与整车动画 | 通过 | 实际终局路径、动画时序与终态测试 |
+| 14 | 最终列车可辨认为原创通用高速动车组 | 通过 | [`09-end.png`](../../artifacts/acceptance/screenshots/09-end.png) |
+| 15 | 最终动画包含组件强调、车灯、受电弓和车轮反馈 | 通过 | [`08-final-animation.png`](../../artifacts/acceptance/screenshots/08-final-animation.png)；最终节点状态测试 |
+| 16 | 完成页显示祝贺文字和退出按钮 | 通过 | [`09-end.png`](../../artifacts/acceptance/screenshots/09-end.png) |
+| 17 | 开始页与完成页退出均能关闭程序 | 通过 | 终局退出后窗口列表为空；退出/清理测试 |
+| 18 | 全流程无需网络 | 通过 | 题库、字体、场景和逻辑均随包提供 |
+| 19 | 无明显卡顿、穿模、闪烁或控制台错误 | 通过 | 完整 GUI 路径；三个 GUI 日志仅含引擎与图形设备信息 |
+| 20 | 关闭重开后从开始页进入，无旧进度 | 通过 | [`10-restart.png`](../../artifacts/acceptance/screenshots/10-restart.png) |
 
-## 自动化结果
+## 自动化与构建摘要
 
-Quality run `29680837181`：
+- `uv sync --frozen`：通过；
+- `gdformat --check scripts tests`：47 个文件通过；
+- `gdlint scripts tests`：通过；
+- `pre-commit run --all-files`：通过；
+- Godot headless 导入及主场景加载：通过；
+- GUT：124/124 通过，1598 个断言；
+- Windows x64 导出：通过；
+- 导出包 headless 启动：退出码 0；
+- `RailCraft-Demo.exe`：118069960 字节，SHA-256 `b31703373fb99c53f085ad9e2c8a8f42474464fb7148906f315d32bfdac24b9a`；
+- `RailCraft-Demo-windows-x64.zip`：49498195 字节，SHA-256 `85f6a2f8329d5a4e3bb9c1a15eb8d77ae56c6967aed1ab9ec13cb35c5ffc5a11`。
 
-- 固定 Python、uv、gdtoolkit、pre-commit 和 Godot 工具链安装成功；
-- `gdformat` 与 `gdlint` 通过；
-- Godot 导入和主场景加载通过；
-- 107 个 GUT 测试通过；
-- 测试结果 artifact 上传成功。
-
-Build Windows run `29680837294`：
-
-- Godot 4.6.3 与导出模板摘要校验通过；
-- Windows x64 导出通过；
-- EXE 的 PE `MZ` 头、文件大小、SHA-256 和 ZIP 打包检查通过；
-- Windows artifact 与验收诊断 artifact 上传成功。
-
-## 最终交付摘要
-
-- Windows artifact ID：`8440530015`
-- Actions artifact SHA-256：`4219532461d317aab78b996d656d822dc78a1e196aa3735b0084372d21ae7be1`
-- 内层 Windows ZIP SHA-256：`64536d74501643bbb193eee911939c23c854ddc0cb02f304e5a7d112d2245f41`
-- `RailCraft-Demo.exe` SHA-256：`b96aa532a24c4c9d683485a0b3f95e1c2bcdf9e042a5d6f6fabf3e42da482721`
-- EXE 大小：`119428664` 字节
-- 文件类型：Windows x86-64 GUI PE32+
-- Artifact 保留至：2026-08-18
+原始证据位于 [`artifacts/acceptance`](../../artifacts/acceptance/)。GitHub Actions 与 Release 的最终链接在远端整理完成后以仓库页面为准。
 
 ## 已知限制
 
-- GitHub hosted Windows runner 的交互式桌面与图形驱动行为不稳定，GUI 截图不能作为稳定 CI 门禁；实际 Windows 运行确认优先于该托管环境诊断。
-- 当前模型为可替换的原创低多边形教学占位资产，不对应特定真实车型的精确结构。
+- 当前模型是可替换的原创低多边形教学资产，不对应特定真实车型的精确结构。
 - 首版不包含存档、音频、账号、网络服务、自由镜头、多人或排行榜。
+- GitHub hosted Windows runner 的交互式桌面和图形驱动可能波动，真实 Windows GUI 证据随仓库保存，CI 负责可重复的质量与导出门禁。
