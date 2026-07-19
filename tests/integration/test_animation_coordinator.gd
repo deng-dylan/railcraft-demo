@@ -54,13 +54,16 @@ func test_part_snap_finishes_once_and_commits_visual_install() -> void:
 func test_component_without_view_completes_deterministically() -> void:
 	var coordinator := AnimationCoordinator.new()
 	add_child_autofree(coordinator)
-	var component := ComponentRecipe.new(
-		"carbody_connection",
-		"车体与连接组件",
-		1,
-		["body_shell", "passenger_door", "coupler_buffer"],
-		"组件完成",
-		"",
+	var component := (
+		ComponentRecipe
+		. new(
+			"carbody_connection",
+			"车体与连接组件",
+			1,
+			["body_shell", "passenger_door", "coupler_buffer"],
+			"组件完成",
+			"",
+		)
 	)
 	watch_signals(coordinator)
 
