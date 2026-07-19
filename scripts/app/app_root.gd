@@ -3,12 +3,18 @@ extends Node
 
 signal shutdown_requested
 
+const MINIMUM_WINDOW_SIZE := Vector2i(960, 540)
+
 @export var quit_on_shutdown: bool = true
+@export_file("*.json") var questions_path: String = ContentRepository.QUESTIONS_PATH
+@export_file("*.json") var parts_path: String = ContentRepository.PARTS_PATH
+@export_file("*.json") var recipes_path: String = ContentRepository.RECIPES_PATH
 
 var _catalog: ContentCatalog
 var _initialized: bool = false
 var _fatal_active: bool = false
 var _shutdown_started: bool = false
+var _runtime_cleaned: bool = false
 
 @onready var _flow: GameFlowManager = $DomainServices/GameFlowManager
 @onready var _animation: AnimationCoordinator = (
@@ -20,8 +26,13 @@ var _shutdown_started: bool = false
 
 
 func _ready() -> void:
-	_connect_signals()
+	get_window().min_size = MINIMUM_WINDOW_SIZE
+	_screen.exit_requested.connect(_on_exit_requested)
 	_start_application()
+
+
+func _exit_tree() -> void:
+	_cleanup_runtime()
 
 
 func is_initialized() -> bool:
@@ -45,11 +56,9 @@ func get_catalog() -> ContentCatalog:
 
 
 func _start_application() -> void:
-	if not _animation.inject_view(_assembly_view):
-		_show_fatal("ANIMATION_SETUP_FAILED", "动画协调器无法连接装配视图。")
-		return
-
-	var load_result: ContentLoadResult = ContentRepository.new().load_catalog()
+	var load_result: ContentLoadResult = (
+		ContentRepository.new(questions_path, parts_path, recipes_path).load_catalog()
+	)
 	if not load_result.is_success or load_result.catalog == null:
 		_show_issues("CONTENT_LOAD_FAILED", load_result.issues)
 		return
@@ -61,6 +70,9 @@ func _start_application() -> void:
 	)
 	if not asset_issues.is_empty():
 		_show_issues("ASSET_VALIDATION_FAILED", asset_issues)
+		return
+	if not _animation.inject_view(_assembly_view):
+		_show_fatal("ANIMATION_SETUP_FAILED", "动画协调器无法连接装配视图。")
 		return
 
 	var dependencies_ready: bool = (
@@ -75,6 +87,7 @@ func _start_application() -> void:
 	if not dependencies_ready:
 		_show_fatal("FLOW_SETUP_FAILED", "核心流程依赖注入失败。")
 		return
+	_connect_runtime_signals()
 	if not _flow.initialize(_catalog):
 		_show_fatal("FLOW_INITIALIZE_FAILED", "核心流程初始化失败。")
 		return
@@ -84,11 +97,10 @@ func _start_application() -> void:
 	_apply_world_visibility(GameFlowManager.GameState.START)
 
 
-func _connect_signals() -> void:
+func _connect_runtime_signals() -> void:
 	_screen.start_requested.connect(_flow.request_start)
 	_screen.answer_selected.connect(_flow.select_answer)
 	_screen.assembly_requested.connect(_flow.request_assembly)
-	_screen.exit_requested.connect(_on_exit_requested)
 	_assembly_view.part_clicked.connect(_flow.click_part)
 
 	_flow.state_changed.connect(_on_state_changed)
@@ -201,8 +213,15 @@ func _shutdown() -> void:
 	if _shutdown_started:
 		return
 	_shutdown_started = true
-	_animation.cancel_all_for_shutdown()
-	_assembly_view.cleanup_pending_part()
+	_cleanup_runtime()
 	shutdown_requested.emit()
 	if quit_on_shutdown:
 		get_tree().quit()
+
+
+func _cleanup_runtime() -> void:
+	if _runtime_cleaned:
+		return
+	_runtime_cleaned = true
+	_animation.cancel_all_for_shutdown()
+	_assembly_view.cleanup_pending_part()

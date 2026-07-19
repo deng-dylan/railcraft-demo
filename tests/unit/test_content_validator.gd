@@ -260,6 +260,65 @@ func test_train_recipe_must_cover_each_component_exactly_once() -> void:
 	assert_true(_count_code(issues, "CONTENT_COVERAGE_INVALID") >= 2)
 
 
+func test_dependency_chain_aggregates_first_null_and_skipped_edge_errors() -> void:
+	var parts: Dictionary = Fixture.valid_parts()
+	parts["parts"][0]["required_previous_part_id"] = "part_two"
+	parts["parts"][1]["required_previous_part_id"] = null
+	parts["parts"][2]["required_previous_part_id"] = "part_one"
+
+	var issues: Array[ValidationIssue] = _validator.validate(
+		Fixture.valid_questions(), parts, Fixture.valid_recipes()
+	)
+
+	assert_eq(_count_code(issues, "DEPENDENCY_CHAIN_INVALID"), 3)
+	assert_true(
+		_has_issue(
+			issues,
+			"DEPENDENCY_CHAIN_INVALID",
+			"$.parts[0].required_previous_part_id",
+		)
+	)
+	assert_true(
+		_has_issue(
+			issues,
+			"DEPENDENCY_CHAIN_INVALID",
+			"$.parts[1].required_previous_part_id",
+		)
+	)
+	assert_true(
+		_has_issue(
+			issues,
+			"DEPENDENCY_CHAIN_INVALID",
+			"$.parts[2].required_previous_part_id",
+		)
+	)
+
+
+func test_dependency_chain_uses_order_fields_when_part_array_is_reordered() -> void:
+	var parts: Dictionary = Fixture.valid_parts()
+	var part_items: Array = parts["parts"]
+	var first_part: Variant = part_items[0]
+	part_items[0] = part_items[1]
+	part_items[1] = first_part
+
+	var valid_chain_issues: Array[ValidationIssue] = _validator.validate(
+		Fixture.valid_questions(), parts, Fixture.valid_recipes()
+	)
+	assert_eq(_count_code(valid_chain_issues, "DEPENDENCY_CHAIN_INVALID"), 0)
+
+	part_items[0]["required_previous_part_id"] = "part_three"
+	var invalid_chain_issues: Array[ValidationIssue] = _validator.validate(
+		Fixture.valid_questions(), parts, Fixture.valid_recipes()
+	)
+	assert_true(
+		_has_issue(
+			invalid_chain_issues,
+			"DEPENDENCY_CHAIN_INVALID",
+			"$.parts[0].required_previous_part_id",
+		)
+	)
+
+
 func test_dependency_self_cycle_is_reported_at_stable_path() -> void:
 	var parts: Dictionary = Fixture.valid_parts()
 	parts["parts"][0]["required_previous_part_id"] = "part_one"

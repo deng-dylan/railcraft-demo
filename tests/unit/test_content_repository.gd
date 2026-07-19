@@ -7,6 +7,7 @@ const EMPTY_PATH: String = FIXTURE_DIR + "content_repository_empty.json"
 const MULTI_ISSUE_QUESTIONS_PATH: String = (
 	FIXTURE_DIR + "content_repository_multi_issue_questions.json"
 )
+const EXPECTED_QUESTION_BASELINE_PATH: String = FIXTURE_DIR + "expected_question_baseline.json"
 const MISSING_PATH: String = FIXTURE_DIR + "content_repository_missing.json"
 
 
@@ -161,6 +162,82 @@ func test_real_first_release_json_loads_complete_typed_catalog() -> void:
 	assert_eq(result.catalog.get_train_recipe().train_id, "generic_high_speed_emu")
 
 
+func test_first_release_questions_match_the_complete_requirement_baseline() -> void:
+	var result: ContentLoadResult = ContentRepository.new().load_catalog()
+	assert_true(result.is_success, _issue_summary(result.issues))
+	if not result.is_success:
+		return
+
+	var baseline_document: Dictionary = _load_json_dictionary(EXPECTED_QUESTION_BASELINE_PATH)
+	assert_true(baseline_document.has("questions"))
+	if not baseline_document.has("questions"):
+		return
+	var expected_questions: Array = baseline_document["questions"] as Array
+	var actual_questions: Array[QuestionData] = result.catalog.get_questions()
+	assert_eq(actual_questions.size(), expected_questions.size())
+
+	for index: int in expected_questions.size():
+		var expected: Dictionary = expected_questions[index] as Dictionary
+		var actual: QuestionData = actual_questions[index]
+		var expected_source: Dictionary = expected["source"] as Dictionary
+		assert_eq(actual.question_id, expected["question_id"])
+		assert_eq(actual.order, int(expected["order"]))
+		assert_eq(actual.prompt, expected["prompt"])
+		assert_eq(actual.options, expected["options"])
+		assert_eq(actual.correct_option_index, int(expected["correct_option_index"]))
+		assert_eq(actual.explanation, expected["explanation"])
+		assert_eq(actual.source.organization, expected_source["organization"])
+		assert_eq(actual.source.title, expected_source["title"])
+		assert_eq(actual.source.url, expected_source["url"])
+		assert_eq(actual.reward_part_id, expected["reward_part_id"])
+
+
+func test_first_release_parts_and_recipes_preserve_every_json_field() -> void:
+	var result: ContentLoadResult = ContentRepository.new().load_catalog()
+	assert_true(result.is_success, _issue_summary(result.issues))
+	if not result.is_success:
+		return
+
+	var raw_parts: Array = _load_json_dictionary(ContentRepository.PARTS_PATH)["parts"] as Array
+	var actual_parts: Array[PartData] = result.catalog.get_parts()
+	assert_eq(actual_parts.size(), raw_parts.size())
+	for index: int in raw_parts.size():
+		var expected: Dictionary = raw_parts[index] as Dictionary
+		var actual: PartData = actual_parts[index]
+		assert_eq(actual.part_id, expected["part_id"])
+		assert_eq(actual.display_name, expected["display_name"])
+		assert_eq(actual.order, int(expected["order"]))
+		assert_eq(actual.component_id, expected["component_id"])
+		assert_eq(actual.model_scene_path, expected["model_scene_path"])
+		assert_eq(actual.snap_target_path, expected["snap_target_path"])
+		_assert_transform_matches(actual.target_transform, expected["target_transform"])
+		_assert_transform_matches(actual.preview_transform, expected["preview_transform"])
+		var expected_dependency: String = ""
+		if expected["required_previous_part_id"] != null:
+			expected_dependency = expected["required_previous_part_id"] as String
+		assert_eq(actual.required_previous_part_id, expected_dependency)
+
+	var raw_recipes: Dictionary = _load_json_dictionary(ContentRepository.RECIPES_PATH)
+	var raw_components: Array = raw_recipes["components"] as Array
+	var actual_components: Array[ComponentRecipe] = result.catalog.get_components()
+	assert_eq(actual_components.size(), raw_components.size())
+	for index: int in raw_components.size():
+		var expected: Dictionary = raw_components[index] as Dictionary
+		var actual: ComponentRecipe = actual_components[index]
+		assert_eq(actual.component_id, expected["component_id"])
+		assert_eq(actual.display_name, expected["display_name"])
+		assert_eq(actual.order, int(expected["order"]))
+		assert_eq(actual.part_ids, expected["part_ids"])
+		assert_eq(actual.completion_message, expected["completion_message"])
+		assert_eq(actual.teaching_note, expected["teaching_note"])
+
+	var expected_train: Dictionary = raw_recipes["train_recipe"] as Dictionary
+	var actual_train: TrainRecipe = result.catalog.get_train_recipe()
+	assert_eq(actual_train.train_id, expected_train["train_id"])
+	assert_eq(actual_train.display_name, expected_train["display_name"])
+	assert_eq(actual_train.component_ids, expected_train["component_ids"])
+
+
 func test_repository_rejects_non_resource_paths_without_partial_catalog() -> void:
 	var result: ContentLoadResult = (
 		ContentRepository
@@ -285,6 +362,27 @@ func _part(part_id: String, order: int, dependency: String = "") -> PartData:
 			dependency,
 		)
 	)
+
+
+func _load_json_dictionary(path: String) -> Dictionary:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	assert_true(parsed is Dictionary, "Expected a JSON object fixture at %s." % path)
+	if parsed is Dictionary:
+		return parsed as Dictionary
+	return {}
+
+
+func _assert_transform_matches(actual: TransformData, expected: Dictionary) -> void:
+	assert_eq(actual.position, _vector3_from_json(expected["position"] as Array))
+	assert_eq(
+		actual.rotation_degrees,
+		_vector3_from_json(expected["rotation_degrees"] as Array),
+	)
+	assert_eq(actual.scale, _vector3_from_json(expected["scale"] as Array))
+
+
+func _vector3_from_json(values: Array) -> Vector3:
+	return Vector3(float(values[0]), float(values[1]), float(values[2]))
 
 
 func _has_issue(issues: Array[ValidationIssue], code: String, json_path: String) -> bool:

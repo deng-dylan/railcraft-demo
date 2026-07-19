@@ -6,6 +6,7 @@ func test_main_scene_loads_enters_start_and_connects_each_signal_once() -> void:
 
 	assert_true(app.is_initialized())
 	assert_not_null(app.get_catalog())
+	assert_eq(app.get_window().min_size, AppRoot.MINIMUM_WINDOW_SIZE)
 	assert_eq(app.get_flow_manager().get_state(), GameFlowManager.GameState.START)
 	assert_has(
 		app.get_screen_coordinator().get_visible_page_names(),
@@ -34,10 +35,16 @@ func test_start_exit_cleans_up_once_without_quitting_test_tree() -> void:
 
 
 func test_fatal_exit_cleans_up_once_without_domain_transition() -> void:
-	var app: AppRoot = await _add_app()
+	var app: AppRoot = await _add_app("res://tests/fixtures/does-not-exist.json")
 	watch_signals(app)
-	app._fatal_active = true
-	app.get_screen_coordinator().show_fatal("TEST_FATAL", "测试致命错误")
+
+	assert_push_error("CONTENT_LOAD_FAILED")
+	assert_false(app.is_initialized())
+	assert_true(app.get_screen_coordinator().is_fatal())
+	assert_eq(
+		app.get_screen_coordinator().get_visible_page_names(),
+		[ScreenCoordinator.PAGE_FATAL],
+	)
 
 	app.get_screen_coordinator().exit_requested.emit()
 
@@ -90,7 +97,7 @@ func test_main_scene_completes_wrong_then_correct_nine_question_path() -> void:
 	assert_signal_emit_count(app, "shutdown_requested", 1)
 
 
-func _add_app() -> AppRoot:
+func _add_app(questions_path: String = ContentRepository.QUESTIONS_PATH) -> AppRoot:
 	var scene: PackedScene = load("res://scenes/main/main.tscn") as PackedScene
 	assert_not_null(scene)
 	if scene == null:
@@ -100,6 +107,7 @@ func _add_app() -> AppRoot:
 	if app == null:
 		return null
 	app.quit_on_shutdown = false
+	app.questions_path = questions_path
 	add_child_autofree(app)
 	await get_tree().process_frame
 	return app
