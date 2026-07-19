@@ -17,6 +17,8 @@ var _view: AssemblyView
 var _busy: bool = false
 var _active_tween: Tween
 var _active_component_id: String = ""
+var _active_component_node: Node3D
+var _active_component_start_position: Vector3
 
 
 func inject_view(view: AssemblyView) -> bool:
@@ -75,8 +77,32 @@ func play_component_complete(component: ComponentRecipe) -> void:
 		if not component.teaching_note.is_empty()
 		else component_hold_duration
 	)
+	_active_component_node = _get_component_node(component.component_id)
 	_active_tween = create_tween()
-	_active_tween.tween_interval(hold)
+	if _active_component_node != null:
+		_active_component_start_position = _active_component_node.position
+		var movement_duration: float = minf(0.15, hold / 3.0)
+		(
+			_active_tween
+			. tween_property(
+				_active_component_node,
+				"position:y",
+				_active_component_start_position.y + 0.18,
+				movement_duration,
+			)
+		)
+		(
+			_active_tween
+			. tween_property(
+				_active_component_node,
+				"position:y",
+				_active_component_start_position.y,
+				movement_duration,
+			)
+		)
+		_active_tween.tween_interval(maxf(0.0, hold - movement_duration * 2.0))
+	else:
+		_active_tween.tween_interval(hold)
 	_active_tween.finished.connect(_finish_component.bind(component.component_id))
 
 
@@ -137,6 +163,7 @@ func cancel_all_for_shutdown() -> void:
 		_view.set_part_interaction_enabled(false)
 		if not _active_component_id.is_empty():
 			_view.clear_component_highlight(_active_component_id)
+	_reset_component_position()
 	_active_component_id = ""
 	_busy = false
 
@@ -171,9 +198,27 @@ func _fail_snap(part_id: String, reason: String) -> void:
 func _finish_component(component_id: String) -> void:
 	if _view != null:
 		_view.clear_component_highlight(component_id)
+	_reset_component_position()
 	_active_component_id = ""
 	_finish_operation()
 	component_animation_finished.emit(component_id)
+
+
+func _get_component_node(component_id: String) -> Node3D:
+	if _view == null or not AssemblyView.COMPONENT_CONTAINER_PATHS.has(component_id):
+		return null
+	var train_root: Node = _view.get_node_or_null(_view.train_assembly_root_path)
+	if train_root == null:
+		return null
+	var component_path: NodePath = AssemblyView.COMPONENT_CONTAINER_PATHS[component_id]
+	return train_root.get_node_or_null(component_path) as Node3D
+
+
+func _reset_component_position() -> void:
+	if _active_component_node != null:
+		_active_component_node.position = _active_component_start_position
+	_active_component_node = null
+	_active_component_start_position = Vector3.ZERO
 
 
 func _finish_final() -> void:
