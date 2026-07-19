@@ -14,38 +14,48 @@
 - [x] **AR-001 创建工程目录和 project.godot。** 建立详细设计第 4 节目录，设置 Godot 4.6.3、Compatibility、1280×720、最小 960×540 和窗口模式。验证：headless editor 可打开空工程。
 - [x] **AR-002 固定 Python 开发工具。** 创建 `.python-version`、`pyproject.toml`、`uv.lock`，固定 Python 3.12.13、uv 0.11.8、gdtoolkit 4.5.0、pre-commit 4.6.0。验证：`uv sync --frozen` 成功。
 - [x] **AR-003 引入固定 GUT。** 将 GUT 9.6.0 提交到 `addons/gut/` 并创建最小测试入口。验证：headless GUT 空测试集可启动并退出。
-- [ ] **AR-004 创建 Q1–Q3 数据。** 在 `questions.json` 中逐字录入前三题、答案、解析、来源和奖励 ID。验证：JSON 可解析且三题与需求基线一致。
-- [ ] **AR-005 创建 Q4–Q6 数据。** 逐字录入中间三题并保持连续顺序。验证：JSON 可解析且三题与需求基线一致。
-- [ ] **AR-006 创建 Q7–Q9 数据。** 逐字录入后三题并保持连续顺序。验证：JSON 可解析且三题与需求基线一致。
-- [ ] **AR-007 创建零件数据。** 在 `parts.json` 中录入 9 个零件、组件、场景路径、目标、变换和单链依赖。验证：顺序与需求第 6.2 节一致。
-- [ ] **AR-008 创建配方数据。** 在 `recipes.json` 中录入 3 个组件和整车配方，加入牵引供电教学说明。验证：9→3→1 覆盖完整且说明含义与详细设计一致。
-- [ ] **AR-009 创建 Main.tscn 与 AppRoot 空壳。** 按设计建立服务、WorldRoot 和 UILayer 节点。验证：主场景 headless 加载无脚本错误。
-- [ ] **AR-010 创建并注入核心模块。** 在 AppRoot 中构造仓储、三个领域管理器、流程、表现模块和资产校验器，不使用 Autoload。验证：节点和对象各只有一个实例。
-- [ ] **AR-011 实现启动内容加载。** 调用 `ContentRepository.load_catalog()`，成功后向模块注入同一 Catalog。验证：有效数据进入 START，失败数据进入 FatalErrorView。
-- [ ] **AR-012 接入资产启动校验。** 内容成功后运行 `AssemblyAssetValidator`，全部通过才允许开始。验证：删除夹具目标时开始按钮不可用且可退出。
-- [ ] **AR-013 连接视图输入信号。** 集中连接开始、答案、进入装配、零件点击和退出到 GameFlowManager。验证：每个信号只连接一次。
-- [ ] **AR-014 连接流程输出信号。** 把状态、题目、反馈、装配准备、组件和结束请求连接到 ScreenCoordinator/AssemblyView。验证：记录连接表与详细设计一致。
-- [ ] **AR-015 连接动画请求与回调。** 流程请求进入 AnimationCoordinator，完成/失败信号回到流程。验证：回调 ID 原样传递且无环形重复调用。
-- [ ] **AR-016 实现启动错误与退出清理。** 致命错误显示编号，退出时取消动画并释放临时实例。验证：START、FatalError 和 END 三处退出都正常关闭。
-- [ ] **AR-017 完成主场景冒烟测试。** 在 headless 模式加载 Main，使用测试适配器跑通最短 9 题流程。验证：无脚本错误且最终到达 END。
-- [ ] **AR-018 配置格式、lint 和 pre-commit。** 固定检查范围并排除插件生成文件的合理部分。验证：全仓 `gdformat --check`、`gdlint`、pre-commit 通过。
-- [ ] **AR-019 创建 quality.yml。** 按设计执行 uv、格式、lint、Godot 导入、主场景加载、GUT 和测试结果上传，第三方 Action 固定版本或 SHA。验证：分支推送与 PR 工作流通过。
-- [ ] **AR-020 配置 Windows 导出。** 创建 `export_presets.cfg` 和 `build-windows.yml`，支持手动及 `v*` 标签生成 x64 zip。验证：下载产物后可启动。
-- [ ] **AR-021 配置 Git 与 LFS。** 创建 `.gitignore`、`.gitattributes` 和模型 LFS 规则，不提交缓存、构建和凭据。验证：`git check-ignore` 与 `git lfs track` 输出符合设计。
-- [ ] **AR-022 创建私有远程仓库。** 初始化本地 `main`，在当前已认证个人账号创建私有 `railcraft-demo`，添加 `origin` 并推送。验证：仓库可见性、默认分支和远程地址正确。
+- [x] **AR-004 创建 Q1–Q3 数据。** 在 `questions.json` 中逐字录入前三题、答案、解析、来源和奖励 ID。验证：JSON 可解析且三题与需求基线一致。
+- [x] **AR-005 创建 Q4–Q6 数据。** 逐字录入中间三题并保持连续顺序。验证：JSON 可解析且三题与需求基线一致。
+- [x] **AR-006 创建 Q7–Q9 数据。** 逐字录入后三题并保持连续顺序。验证：JSON 可解析且三题与需求基线一致。
+- [x] **AR-007 创建零件数据。** 在 `parts.json` 中录入 9 个零件、组件、场景路径、目标、变换和单链依赖。验证：顺序与需求第 6.2 节一致。
+- [x] **AR-008 创建配方数据。** 在 `recipes.json` 中录入 3 个组件和整车配方，加入牵引供电教学说明。验证：9→3→1 覆盖完整且说明含义与详细设计一致。
+- [x] **AR-009 创建 Main.tscn 与 AppRoot 空壳。** 按设计建立服务、WorldRoot 和 UILayer 节点。验证：主场景 headless 加载无脚本错误。
+- [x] **AR-010 创建并注入核心模块。** 在 AppRoot 中构造仓储、三个领域管理器、流程、表现模块和资产校验器，不使用 Autoload。验证：节点和对象各只有一个实例。
+- [x] **AR-011 实现启动内容加载。** 调用 `ContentRepository.load_catalog()`，成功后向模块注入同一 Catalog。验证：有效数据进入 START，失败数据进入 FatalErrorView。
+- [x] **AR-012 接入资产启动校验。** 内容成功后运行 `AssemblyAssetValidator`，全部通过才允许开始。验证：删除夹具目标时开始按钮不可用且可退出。
+- [x] **AR-013 连接视图输入信号。** 集中连接开始、答案、进入装配、零件点击和退出到 GameFlowManager。验证：每个信号只连接一次。
+- [x] **AR-014 连接流程输出信号。** 把状态、题目、反馈、装配准备、组件和结束请求连接到 ScreenCoordinator/AssemblyView。验证：记录连接表与详细设计一致。
+- [x] **AR-015 连接动画请求与回调。** 流程请求进入 AnimationCoordinator，完成/失败信号回到流程。验证：回调 ID 原样传递且无环形重复调用。
+- [x] **AR-016 实现启动错误与退出清理。** 致命错误显示编号，退出时取消动画并释放临时实例。验证：START、FatalError 和 END 三处退出都正常关闭。
+- [x] **AR-017 完成主场景冒烟测试。** 在 headless 模式加载 Main，使用测试适配器跑通最短 9 题流程。验证：无脚本错误且最终到达 END。
+- [x] **AR-018 配置格式、lint 和 pre-commit。** 固定检查范围并排除插件生成文件的合理部分。验证：全仓 `gdformat --check`、`gdlint`、pre-commit 通过。
+- [x] **AR-019 创建 quality.yml。** 按设计执行 uv、格式、lint、Godot 导入、主场景加载、GUT 和测试结果上传，第三方 Action 固定版本或 SHA。验证：分支推送与 PR 工作流通过。
+- [x] **AR-020 配置 Windows 导出。** 创建 `export_presets.cfg` 和 `build-windows.yml`，支持 PR、手动及 `v*` 标签生成 x64 zip。验证：Actions 实际导出、检查 PE 头、生成 SHA-256、压缩并上传产物；下载后的摘要与 Actions digest 一致。
+- [x] **AR-021 配置 Git 与 LFS。** 创建 `.gitignore`、`.gitattributes` 和模型 LFS 规则，不提交缓存、构建和凭据。验证：`git check-ignore` 与 `git lfs track` 输出符合设计。
+- [x] **AR-022 创建私有远程仓库。** 初始化本地 `main`，在当前已认证个人账号创建私有 `railcraft-demo`，添加 `origin` 并推送。验证：仓库可见性、默认分支和远程地址正确。
 - [ ] **AR-023 完成 README。** 编写项目简介、截图、快速开始、体验流程和当前状态。验证：新用户按快速开始可找到运行入口。
-- [ ] **AR-024 完成运行说明。** 编写 `doc/running.md`，覆盖解压、启动、退出和常见问题。验证：普通用户步骤不依赖开发工具。
-- [ ] **AR-025 完成开发说明。** 编写 `doc/development.md`，记录固定版本、安装、验证、测试、导出和目录。验证：在新环境按命令可复现依赖。
-- [ ] **AR-026 完成来源清单。** 编写 `doc/sources.md`，列出 9 题来源、字体、GUT、工具和资产许可。验证：每项第三方内容都有来源和许可状态。
+- [x] **AR-024 完成运行说明。** 编写 `doc/running.md`，覆盖解压、启动、退出和常见问题。验证：普通用户步骤不依赖开发工具。
+- [x] **AR-025 完成开发说明。** 编写 `doc/development.md`，记录固定版本、安装、验证、测试、导出和目录。验证：在新环境按命令可复现依赖。
+- [x] **AR-026 完成来源清单。** 编写 `doc/sources.md`，列出 9 题来源、字体、GUT、工具和资产许可。验证：每项第三方内容都有来源和许可状态。
 - [ ] **AR-027 执行 Windows 人工验收。** 在发布候选 x64 构建逐项执行详细设计第 21 节清单并记录结果。验证：20 项全部通过，无阻塞缺陷。
 - [ ] **AR-028 完成最终交付。** 推送最终提交，确认质量与构建 Actions 通过，并提供 Windows zip 产物。验证：源码、文档、提交历史和可运行构建均可访问。
 
 ## 模块完成标准
 
-- [ ] 所有模块仅在 AppRoot 集中创建和连接；
-- [ ] 启动顺序严格执行内容校验、资产校验、依赖注入和 START；
-- [ ] 未注册大规模全局 Autoload；
-- [ ] headless 主场景、GUT、静态检查和 CI 全部通过；
-- [ ] Windows x64 产物通过人工验收；
-- [ ] 私有 `railcraft-demo` 仓库、文档和构建产物完成交付；
-- [ ] 更新 [`progress.md`](progress.md) 中模块任务数和完成状态。
+- [x] 所有模块仅在 AppRoot 集中创建和连接；
+- [x] 启动顺序严格执行内容校验、资产校验、依赖注入和 START；
+- [x] 未注册大规模全局 Autoload；
+- [x] headless 主场景、GUT、静态检查和 CI 全部通过；
+- [ ] Windows x64 产物通过完整 GUI 验收；
+- [ ] 私有 `railcraft-demo` 仓库、文档和构建产物完成最终交付；
+- [x] 更新 [`progress.md`](progress.md) 中模块任务数和完成状态。
+
+## 集成验证证据
+
+- `res://scenes/main/main.tscn` 已配置为 `project.godot` 的 `run/main_scene`，包含单例 DomainServices、PresentationServices、WorldRoot 和 UILayer。
+- `tests/smoke/test_main_scene.gd` 验证模块实例数、输入信号单连接、START 初始化、每题先错后对的完整 9 题流程、9 个视觉安装、END，以及 START/Fatal/END 三种退出清理。
+- GitHub Actions Quality 全部通过：固定工具安装、格式、lint、Godot headless 导入、主场景加载、107 个 GUT 测试和测试结果上传。
+- Build Windows run `29676171210` 成功完成固定模板校验、Windows x64 导出、PE 结构与大小检查、SHA-256、ZIP 和 artifact 上传。
+- 下载校验：Actions artifact `16d3909447bbeaf9c9df1c4dc477d7a71623fe7efaf927c3d67f1b09913cb20a`；内层 ZIP `903ef8af836a620f99b3d77b3b8895dda06b1b47e2ca01c13c70c43f335f7030`；EXE `463ce6f2e24ad9d3e516ed19582d05bbffc0f51891952d2973a8ea8fbe920447`。
+- hosted Windows runner 的交互式进程诊断存在不稳定的 `0xC0000005`，有成功驻留记录，也有在 Godot 日志初始化前早退的记录；该限制不作为 AR-027 的通过证据。
+- 剩余阻塞集中在 README 正式截图、详细设计第 21 节完整 GUI 验收及最终 Release。

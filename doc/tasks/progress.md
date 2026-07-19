@@ -24,17 +24,17 @@
 
 ## 总体进度
 
-- [ ] [`ContentValidator`](content-validator.md)（0/10）
-- [ ] [`ContentRepository`](content-repository.md)（0/11）
-- [ ] [`AssemblyAssetValidator`](assembly-asset-validator.md)（0/8）
-- [ ] [`QuizManager`](quiz-manager.md)（0/9）
-- [ ] [`InventoryManager`](inventory-manager.md)（0/7）
-- [ ] [`AssemblyManager`](assembly-manager.md)（0/12）
-- [ ] [`GameFlowManager`](game-flow-manager.md)（0/15）
-- [ ] [`AssemblyView`](assembly-view.md)（0/21，含 `PartActor` 和 9 个零件场景）
-- [ ] [`AnimationCoordinator`](animation-coordinator.md)（0/11）
-- [ ] [`ScreenCoordinator`](screen-coordinator.md)（0/13，含各 UI 页面）
-- [ ] [`AppRoot`](app-root.md)（0/28，含工程集成与交付检查）
+- [x] [`ContentValidator`](content-validator.md)（10/10）
+- [x] [`ContentRepository`](content-repository.md)（11/11）
+- [x] [`AssemblyAssetValidator`](assembly-asset-validator.md)（8/8）
+- [x] [`QuizManager`](quiz-manager.md)（9/9）
+- [x] [`InventoryManager`](inventory-manager.md)（7/7）
+- [x] [`AssemblyManager`](assembly-manager.md)（12/12）
+- [x] [`GameFlowManager`](game-flow-manager.md)（15/15）
+- [x] [`AssemblyView`](assembly-view.md)（21/21，含 `PartActor`、9 个零件场景和已确认 GUI 视口验收）
+- [x] [`AnimationCoordinator`](animation-coordinator.md)（11/11）
+- [x] [`ScreenCoordinator`](screen-coordinator.md)（13/13，含全部页面、8 状态映射和双分辨率布局测试）
+- [ ] [`AppRoot`](app-root.md)（25/28，待 README 正式截图、Windows 完整 GUI 验收和最终交付）
 
 ## 模块依赖
 
@@ -78,11 +78,25 @@ flowchart LR
 ## 项目完成检查
 
 - [ ] 11 个模块全部完成；
-- [ ] `uv run gdformat --check .` 通过；
-- [ ] `uv run gdlint .` 通过；
-- [ ] Godot headless 导入和主场景加载通过；
-- [ ] GUT 全部测试通过；
-- [ ] Windows x64 构建人工验收通过；
-- [ ] GitHub Actions 质量与构建工作流通过；
+- [x] `uv run gdformat --check .` 通过；
+- [x] `uv run gdlint .` 通过；
+- [x] Godot headless 导入和主场景加载通过；
+- [x] GUT 全部测试通过；
+- [ ] Windows x64 完整 GUI 验收通过；
+- [x] GitHub Actions 质量与 Windows 构建工作流通过；
 - [ ] README、运行说明、开发说明和来源清单完成；
-- [ ] 私有仓库及构建产物完成交付。
+- [ ] 私有仓库及构建产物完成最终交付。
+
+## 当前证据
+
+- Quality：固定工具链、格式、lint、Godot 导入、主场景加载和 107 个 GUT 测试全部通过；
+- Windows Build run `29676171210`：导出、PE 校验、文件大小、SHA-256、ZIP 与 artifact 上传通过；
+- 当前 artifact digest：`16d3909447bbeaf9c9df1c4dc477d7a71623fe7efaf927c3d67f1b09913cb20a`；
+- 内层 ZIP：`903ef8af836a620f99b3d77b3b8895dda06b1b47e2ca01c13c70c43f335f7030`；
+- EXE：`463ce6f2e24ad9d3e516ed19582d05bbffc0f51891952d2973a8ea8fbe920447`。
+
+## 当前阻塞
+
+- README 已包含简介、快速开始、体验流程和状态，仍缺正式发布候选运行截图；
+- hosted Windows runner 的交互式进程诊断存在不稳定的 `0xC0000005`，不能代替详细设计第 21 节的完整 GUI 验收；
+- 20 项 Windows GUI 验收、验收证据包和 `v0.1.0-demo` 预发布尚未完成。

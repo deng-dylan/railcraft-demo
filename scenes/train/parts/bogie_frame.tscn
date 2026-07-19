@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/part_actor.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="Material_frame"]
+albedo_color = Color(0.095, 0.12, 0.14, 1)
+metallic = 0.5
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="Material_spring"]
+albedo_color = Color(0.84, 0.35, 0.04, 1)
+metallic = 0.25
+roughness = 0.32
+
+[sub_resource type="BoxMesh" id="Mesh_beam"]
+material = SubResource("Material_frame")
+size = Vector3(3.1, 0.3, 0.28)
+
+[sub_resource type="BoxMesh" id="Mesh_cross"]
+material = SubResource("Material_frame")
+size = Vector3(0.36, 0.34, 1.55)
+
+[sub_resource type="CylinderMesh" id="Mesh_spring"]
+material = SubResource("Material_spring")
+top_radius = 0.18
+bottom_radius = 0.18
+height = 0.45
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="Mesh_center"]
+material = SubResource("Material_frame")
+size = Vector3(0.82, 0.22, 1.2)
+
+[sub_resource type="BoxShape3D" id="Shape_bogie"]
+size = Vector3(3.4, 0.9, 1.9)
+
+[node name="PartActor" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="LeftLongBeam" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 0, -0.68)
+mesh = SubResource("Mesh_beam")
+
+[node name="RightLongBeam" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 0, 0.68)
+mesh = SubResource("Mesh_beam")
+
+[node name="FrontCrossBeam" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(1.25, 0, 0)
+mesh = SubResource("Mesh_cross")
+
+[node name="RearCrossBeam" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(-1.25, 0, 0)
+mesh = SubResource("Mesh_cross")
+
+[node name="CenterBolster" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 0.18, 0)
+mesh = SubResource("Mesh_center")
+
+[node name="LeftSpring" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 0.36, -0.55)
+mesh = SubResource("Mesh_spring")
+
+[node name="RightSpring" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 0.36, 0.55)
+mesh = SubResource("Mesh_spring")
+
+[node name="ClickArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 0
+input_ray_pickable = false
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ClickArea"]
+shape = SubResource("Shape_bogie")
+disabled = true
+
+[node name="AnimationNodes" type="Node3D" parent="."]

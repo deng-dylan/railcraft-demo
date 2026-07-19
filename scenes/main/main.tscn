@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/app/app_root.gd" id="1_app"]
+[ext_resource type="Script" path="res://scripts/flow/game_flow_manager.gd" id="2_flow"]
+[ext_resource type="Script" path="res://scripts/presentation/animation_coordinator.gd" id="3_animation"]
+[ext_resource type="PackedScene" path="res://scenes/assembly/assembly_view.tscn" id="4_assembly"]
+[ext_resource type="PackedScene" path="res://scenes/ui/screen_coordinator.tscn" id="5_screen"]
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 1
+background_color = Color(0.018, 0.035, 0.055, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.55, 0.68, 0.86, 1)
+ambient_light_energy = 0.65
+
+[sub_resource type="PlaneMesh" id="Plane_floor"]
+size = Vector2(28, 20)
+
+[node name="AppRoot" type="Node"]
+script = ExtResource("1_app")
+
+[node name="DomainServices" type="Node" parent="."]
+
+[node name="GameFlowManager" type="Node" parent="DomainServices"]
+script = ExtResource("2_flow")
+
+[node name="PresentationServices" type="Node" parent="."]
+
+[node name="AnimationCoordinator" type="Node" parent="PresentationServices"]
+script = ExtResource("3_animation")
+
+[node name="WorldRoot" type="Node3D" parent="."]
+
+[node name="Environment" type="WorldEnvironment" parent="WorldRoot"]
+environment = SubResource("Environment_main")
+
+[node name="FixedCamera" type="Camera3D" parent="WorldRoot"]
+position = Vector3(12, 7, 12)
+rotation_degrees = Vector3(-20, 45, 0)
+current = true
+fov = 48.0
+
+[node name="Floor" type="MeshInstance3D" parent="WorldRoot"]
+position = Vector3(0, -0.05, 0)
+mesh = SubResource("Plane_floor")
+
+[node name="AssemblyView" parent="WorldRoot" instance=ExtResource("4_assembly")]
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="ScreenCoordinator" parent="UILayer" instance=ExtResource("5_screen")]

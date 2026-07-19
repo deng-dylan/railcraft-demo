@@ -1,0 +1,83 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/part_actor.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="Material_body"]
+albedo_color = Color(0.84, 0.88, 0.91, 1)
+metallic = 0.22
+roughness = 0.32
+
+[sub_resource type="StandardMaterial3D" id="Material_blue"]
+albedo_color = Color(0.03, 0.3, 0.62, 1)
+metallic = 0.15
+roughness = 0.28
+
+[sub_resource type="StandardMaterial3D" id="Material_window"]
+albedo_color = Color(0.018, 0.07, 0.12, 1)
+metallic = 0.35
+roughness = 0.16
+
+[sub_resource type="BoxMesh" id="Mesh_body"]
+material = SubResource("Material_body")
+size = Vector3(10.2, 1.65, 1.8)
+
+[sub_resource type="CapsuleMesh" id="Mesh_nose"]
+material = SubResource("Material_body")
+radius = 0.9
+height = 2.0
+radial_segments = 16
+rings = 8
+
+[sub_resource type="BoxMesh" id="Mesh_band"]
+material = SubResource("Material_blue")
+size = Vector3(9.4, 0.18, 1.86)
+
+[sub_resource type="BoxMesh" id="Mesh_window"]
+material = SubResource("Material_window")
+size = Vector3(7.8, 0.48, 1.9)
+
+[sub_resource type="BoxMesh" id="Mesh_windshield"]
+material = SubResource("Material_window")
+size = Vector3(0.14, 0.65, 1.25)
+
+[sub_resource type="BoxShape3D" id="Shape_body"]
+size = Vector3(12.1, 2, 2.15)
+
+[node name="PartActor" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="LongCarbody" type="MeshInstance3D" parent="VisualRoot"]
+mesh = SubResource("Mesh_body")
+
+[node name="StreamlinedNose" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(5.05, -0.02, 0)
+rotation = Vector3(0, 0, 1.5708)
+scale = Vector3(1, 1.25, 1)
+mesh = SubResource("Mesh_nose")
+
+[node name="BlueBelt" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(-0.2, -0.45, 0)
+mesh = SubResource("Mesh_band")
+
+[node name="WindowBand" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(-0.65, 0.28, 0)
+mesh = SubResource("Mesh_window")
+
+[node name="Windshield" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(5.88, 0.28, 0)
+mesh = SubResource("Mesh_windshield")
+
+[node name="ClickArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 0
+input_ray_pickable = false
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ClickArea"]
+shape = SubResource("Shape_body")
+disabled = true
+
+[node name="AnimationNodes" type="Node3D" parent="."]

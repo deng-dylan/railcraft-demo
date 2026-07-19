@@ -1,0 +1,17 @@
+minimum_pre_commit_version: "4.6.0"
+
+repos:
+  - repo: local
+    hooks:
+      - id: gdformat-check
+        name: gdformat check
+        entry: uv run --frozen gdformat --check scripts tests
+        language: system
+        pass_filenames: false
+        files: ^(scripts|tests)/.*\.gd$
+      - id: gdlint
+        name: gdlint
+        entry: uv run --frozen gdlint scripts tests
+        language: system
+        pass_filenames: false
+        files: ^(scripts|tests)/.*\.gd$

@@ -1,0 +1,104 @@
+name: Quality
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+env:
+  UV_VERSION: "0.11.8"
+  UV_ARCHIVE_SHA256: "c84629a56e0706b69a47ea35862208af827cb6fbfa1d0ca763c52c67594637e8"
+  GODOT_VERSION: "4.6.3"
+  GODOT_RELEASE: "4.6.3-stable"
+  GODOT_ARCHIVE_SHA256: "e39986a178d585ce7ac198fb8de6ea436366dc0cc00e594810c2e3e104c04b90"
+
+jobs:
+  quality:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install fixed uv
+        shell: pwsh
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP "uv.zip"
+          $destination = Join-Path $env:RUNNER_TEMP "uv"
+          Invoke-WebRequest "https://releases.astral.sh/github/uv/releases/download/$env:UV_VERSION/uv-x86_64-pc-windows-msvc.zip" -OutFile $archive
+          $actual = (Get-FileHash $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne $env:UV_ARCHIVE_SHA256) { throw "uv archive checksum mismatch: $actual" }
+          Expand-Archive -LiteralPath $archive -DestinationPath $destination
+          $uv = Get-ChildItem $destination -Recurse -Filter uv.exe | Select-Object -First 1
+          if ($null -eq $uv) { throw "uv.exe was not found in the fixed archive" }
+          $uv.DirectoryName | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Sync fixed Python tools
+        shell: pwsh
+        env:
+          UV_CACHE_DIR: ${{ runner.temp }}\uv-cache
+          UV_PYTHON_INSTALL_DIR: ${{ runner.temp }}\uv-python
+        run: |
+          uv --version
+          uv python install 3.12.13
+          uv sync --frozen
+
+      - name: Check GDScript format and lint
+        shell: pwsh
+        env:
+          UV_CACHE_DIR: ${{ runner.temp }}\uv-cache
+          UV_PYTHON_INSTALL_DIR: ${{ runner.temp }}\uv-python
+          PRE_COMMIT_HOME: ${{ runner.temp }}\pre-commit
+        run: |
+          uv run --frozen gdformat --check scripts tests
+          uv run --frozen gdlint scripts tests
+          uv run --frozen pre-commit run --all-files
+
+      - name: Install fixed Godot
+        shell: pwsh
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP "godot.zip"
+          $destination = Join-Path $env:RUNNER_TEMP "godot"
+          Invoke-WebRequest "https://github.com/godotengine/godot/releases/download/$env:GODOT_RELEASE/Godot_v$env:GODOT_RELEASE`_win64.exe.zip" -OutFile $archive
+          $actual = (Get-FileHash $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne $env:GODOT_ARCHIVE_SHA256) { throw "Godot archive checksum mismatch: $actual" }
+          Expand-Archive -LiteralPath $archive -DestinationPath $destination
+          $godot = Get-ChildItem $destination -Recurse -Filter "Godot_*_win64_console.exe" | Select-Object -First 1
+          if ($null -eq $godot) { throw "Godot console executable was not found" }
+          "GODOT_BIN=$($godot.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Import project and load main scene
+        shell: pwsh
+        env:
+          APPDATA: ${{ runner.temp }}\godot-user
+          LOCALAPPDATA: ${{ runner.temp }}\godot-user
+        run: |
+          & $env:GODOT_BIN --headless --editor --path . --quit
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & $env:GODOT_BIN --headless --path . --quit-after 5
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Run all GUT tests
+        shell: pwsh
+        env:
+          APPDATA: ${{ runner.temp }}\godot-user
+          LOCALAPPDATA: ${{ runner.temp }}\godot-user
+        run: |
+          New-Item -ItemType Directory -Force artifacts | Out-Null
+          & $env:GODOT_BIN --headless --path . --script res://addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gjunit_xml_file=res://artifacts/gut.xml -gexit
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: gut-results
+          path: artifacts/gut.xml
+          if-no-files-found: warn
+          retention-days: 14
