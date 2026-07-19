@@ -27,6 +27,31 @@ func test_inject_view_rejects_null_and_accepts_ready_view() -> void:
 	assert_true(coordinator.inject_view(view))
 
 
+func test_snap_first_stage_lifts_and_scales_actor() -> void:
+	var coordinator := AnimationCoordinator.new()
+	add_child_autofree(coordinator)
+	coordinator.snap_lift_duration = 0.30
+	coordinator.snap_move_duration = 0.30
+	coordinator.snap_settle_duration = 0.30
+	var view: AssemblyView = _add_view()
+	var part: PartData = AssemblyFixture.part(0)
+	assert_true(view.prepare_part(part), view.last_error)
+	assert_true(coordinator.inject_view(view))
+	var actor: PartActor = view.get_part_actor(part.part_id)
+	var start_transform: Transform3D = actor.global_transform
+
+	coordinator.play_part_snap(part.part_id)
+	await wait_seconds(0.12)
+
+	assert_true(coordinator.is_busy())
+	assert_gt(actor.global_transform.origin.y, start_transform.origin.y)
+	assert_gt(
+		actor.global_transform.basis.get_scale().length(),
+		start_transform.basis.get_scale().length(),
+	)
+	coordinator.cancel_all_for_shutdown()
+
+
 func test_part_snap_finishes_once_and_commits_visual_install() -> void:
 	var coordinator := AnimationCoordinator.new()
 	add_child_autofree(coordinator)
@@ -115,6 +140,32 @@ func test_component_animation_restores_component_position_and_lock() -> void:
 	)
 	assert_false(coordinator.is_busy())
 	assert_true(component_node.position.is_equal_approx(start_position))
+
+
+func test_teaching_component_uses_longer_hold_duration() -> void:
+	var coordinator := AnimationCoordinator.new()
+	add_child_autofree(coordinator)
+	coordinator.component_hold_duration = 0.01
+	coordinator.teaching_hold_duration = 0.08
+	var view: AssemblyView = _add_view()
+	assert_true(coordinator.inject_view(view))
+	var component := (
+		ComponentRecipe
+		. new(
+			"traction_power",
+			"牵引供电组件",
+			3,
+			[],
+			"组件完成",
+			"教学说明",
+		)
+	)
+
+	coordinator.play_component_complete(component)
+	await wait_seconds(0.03)
+	assert_true(coordinator.is_busy())
+	await wait_seconds(0.08)
+	assert_false(coordinator.is_busy())
 
 
 func test_final_animation_sets_train_feedback_nodes() -> void:
