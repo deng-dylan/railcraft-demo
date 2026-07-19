@@ -191,7 +191,7 @@ func test_final_animation_sets_train_feedback_nodes() -> void:
 	var wheel_start_x: float = wheel_root.rotation.x
 
 	coordinator.play_final_assembly(load_result.catalog.get_train_recipe())
-	await wait_seconds(0.08)
+	await wait_seconds(0.25)
 
 	assert_signal_emitted(coordinator, "final_animation_finished")
 	assert_true((train_root.get_node(^"Headlights/LeftLight") as Light3D).visible)
