@@ -65,7 +65,9 @@ func test_correct_feedback_locks_options_and_displays_all_source_fields() -> voi
 	for button_index: int in 4:
 		assert_true(screen.get_answer_button(button_index).disabled)
 	var quiz_page: Control = screen.get_node(ScreenCoordinator.PAGE_QUIZ) as Control
-	var feedback: RichTextLabel = quiz_page.find_child("FeedbackLabel", true, false) as RichTextLabel
+	var feedback: RichTextLabel = (
+		quiz_page.find_child("FeedbackLabel", true, false) as RichTextLabel
+	)
 	assert_true(feedback.text.contains(question.explanation))
 	assert_true(feedback.text.contains(question.source.organization))
 	assert_true(feedback.text.contains(question.source.title))
@@ -101,7 +103,8 @@ func test_all_eight_states_have_deterministic_page_mapping() -> void:
 		GameFlowManager.GameState.WRONG_FEEDBACK: [ScreenCoordinator.PAGE_QUIZ],
 		GameFlowManager.GameState.CORRECT_FEEDBACK: [ScreenCoordinator.PAGE_QUIZ],
 		GameFlowManager.GameState.ASSEMBLY: [ScreenCoordinator.PAGE_ASSEMBLY],
-		GameFlowManager.GameState.COMPONENT_COMPLETE: [
+		GameFlowManager.GameState.COMPONENT_COMPLETE:
+		[
 			ScreenCoordinator.PAGE_ASSEMBLY,
 			ScreenCoordinator.PAGE_COMPONENT,
 		],
