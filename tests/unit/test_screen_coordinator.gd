@@ -122,6 +122,14 @@ func test_all_eight_states_have_deterministic_page_mapping() -> void:
 			assert_has(visible, page_name, GameFlowManager.GameState.keys()[state])
 
 
+func test_assembly_hud_allows_mouse_input_to_reach_world() -> void:
+	var screen: ScreenCoordinator = await _add_screen()
+	var assembly_page: Control = screen.get_node(ScreenCoordinator.PAGE_ASSEMBLY) as Control
+
+	assert_eq(screen.mouse_filter, Control.MOUSE_FILTER_IGNORE)
+	assert_eq(assembly_page.mouse_filter, Control.MOUSE_FILTER_IGNORE)
+
+
 func test_quiz_controls_fit_minimum_and_default_viewports() -> void:
 	var load_result: ContentLoadResult = ContentRepository.new().load_catalog()
 	assert_true(load_result.is_success)
