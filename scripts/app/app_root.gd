@@ -1,6 +1,11 @@
 class_name AppRoot
 extends Node
 
+var _catalog: ContentCatalog
+var _initialized: bool = false
+var _fatal_active: bool = false
+var _shutdown_started: bool = false
+
 @onready var _flow: GameFlowManager = $DomainServices/GameFlowManager
 @onready var _animation: AnimationCoordinator = (
 	$PresentationServices/AnimationCoordinator as AnimationCoordinator
@@ -8,11 +13,6 @@ extends Node
 @onready var _world_root: Node3D = $WorldRoot
 @onready var _assembly_view: AssemblyView = $WorldRoot/AssemblyView
 @onready var _screen: ScreenCoordinator = $UILayer/ScreenCoordinator
-
-var _catalog: ContentCatalog
-var _initialized: bool = false
-var _fatal_active: bool = false
-var _shutdown_started: bool = false
 
 
 func _ready() -> void:
