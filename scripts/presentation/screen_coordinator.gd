@@ -233,46 +233,60 @@ func _build_quiz_page() -> void:
 	var page: Control = _make_full_page(PAGE_QUIZ)
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	margin.add_theme_constant_override("margin_left", 70)
-	margin.add_theme_constant_override("margin_top", 42)
-	margin.add_theme_constant_override("margin_right", 70)
-	margin.add_theme_constant_override("margin_bottom", 42)
+	margin.add_theme_constant_override("margin_left", 36)
+	margin.add_theme_constant_override("margin_top", 24)
+	margin.add_theme_constant_override("margin_right", 36)
+	margin.add_theme_constant_override("margin_bottom", 24)
 	page.add_child(margin)
 	var panel: PanelContainer = _make_panel(Vector2.ZERO)
 	margin.add_child(panel)
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 12)
-	panel.add_child(column)
+	var body := HBoxContainer.new()
+	body.add_theme_constant_override("separation", 20)
+	panel.add_child(body)
+	var question_column := VBoxContainer.new()
+	question_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	question_column.add_theme_constant_override("separation", 8)
+	body.add_child(question_column)
+	var feedback_column := VBoxContainer.new()
+	feedback_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	feedback_column.add_theme_constant_override("separation", 10)
+	body.add_child(feedback_column)
+
 	_progress_label = Label.new()
 	_progress_label.name = "ProgressLabel"
-	column.add_child(_progress_label)
-	_question_label = _make_title("", 28)
+	question_column.add_child(_progress_label)
+	_question_label = _make_title("", 27)
 	_question_label.name = "QuestionLabel"
 	_question_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_question_label.custom_minimum_size = Vector2(0, 90)
-	column.add_child(_question_label)
+	_question_label.custom_minimum_size = Vector2(0, 76)
+	question_column.add_child(_question_label)
 	for index: int in 4:
 		var button := Button.new()
 		button.name = "Option%d" % (index + 1)
-		button.custom_minimum_size = Vector2(0, 52)
+		button.custom_minimum_size = Vector2(0, 44)
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.pressed.connect(_on_answer_pressed.bind(index))
-		column.add_child(button)
+		question_column.add_child(button)
 		_answer_buttons.append(button)
+
+	var feedback_title := Label.new()
+	feedback_title.text = "知识解析与资料来源"
+	feedback_title.add_theme_font_size_override("font_size", 23)
+	feedback_column.add_child(feedback_title)
 	_feedback_label = RichTextLabel.new()
 	_feedback_label.name = "FeedbackLabel"
 	_feedback_label.bbcode_enabled = true
 	_feedback_label.fit_content = false
 	_feedback_label.scroll_active = true
-	_feedback_label.custom_minimum_size = Vector2(0, 170)
+	_feedback_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	column.add_child(_feedback_label)
+	feedback_column.add_child(_feedback_label)
 	_assembly_button = Button.new()
 	_assembly_button.name = "AssemblyButton"
 	_assembly_button.text = "进入装配"
-	_assembly_button.custom_minimum_size = Vector2(0, 54)
+	_assembly_button.custom_minimum_size = Vector2(0, 48)
 	_assembly_button.pressed.connect(assembly_requested.emit)
-	column.add_child(_assembly_button)
+	feedback_column.add_child(_assembly_button)
 
 
 func _build_assembly_hud() -> void:
