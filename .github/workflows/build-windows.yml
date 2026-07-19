@@ -63,50 +63,69 @@ jobs:
           & $env:GODOT_BIN --headless --path . --export-release "Windows Desktop" builds\windows\RailCraft-Demo.exe
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Smoke-launch Windows executable
+      - name: Smoke-load exported Windows package
         shell: pwsh
         run: |
           $acceptanceRoot = "artifacts\acceptance"
           New-Item -ItemType Directory -Force $acceptanceRoot | Out-Null
-          $runtimeLog = Join-Path $acceptanceRoot "runtime.log"
+          $runtimeLog = Join-Path $acceptanceRoot "runtime-headless.log"
           $environmentFile = Join-Path $acceptanceRoot "environment.txt"
-          $startupError = Join-Path $acceptanceRoot "startup-error.txt"
+          $startupError = Join-Path $acceptanceRoot "headless-startup-error.txt"
 
           @(
             "commit=$env:GITHUB_SHA"
             "runner_os=$env:RUNNER_OS"
             "runner_arch=$env:RUNNER_ARCH"
             "godot_release=$env:GODOT_RELEASE"
+            "exported_package_smoke=headless"
           ) | Out-File -FilePath $environmentFile -Encoding utf8
 
-          $process = $null
           try {
-            $process = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -ArgumentList "--log-file", $runtimeLog -PassThru
-            Start-Sleep -Seconds 8
-            $process.Refresh()
-            if ($process.HasExited) {
+            $process = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -ArgumentList @("--headless", "--quit-after", "5", "--log-file", $runtimeLog) -Wait -PassThru
+            if ($process.ExitCode -ne 0) {
               $logText = if (Test-Path $runtimeLog) { Get-Content $runtimeLog -Raw } else { "<runtime log missing>" }
-              throw "RailCraft-Demo.exe exited early with code $($process.ExitCode).`n$logText"
+              throw "Exported package smoke failed with code $($process.ExitCode).`n$logText"
             }
-            "main_window_handle=$($process.MainWindowHandle)" | Out-File -FilePath $environmentFile -Encoding utf8 -Append
-            if (Test-Path $runtimeLog) {
-              Get-Content $runtimeLog
-              $fatalPatterns = "SCRIPT ERROR|Parse Error|CONTENT_LOAD_FAILED|ASSET_VALIDATION_FAILED|FLOW_SETUP_FAILED|FLOW_INITIALIZE_FAILED"
-              if (Select-String -Path $runtimeLog -Pattern $fatalPatterns -Quiet) {
-                throw "RailCraft runtime log contains a fatal startup error"
-              }
+            if (-not (Test-Path $runtimeLog)) { throw "Exported package did not produce a runtime log" }
+            Get-Content $runtimeLog
+            $fatalPatterns = "SCRIPT ERROR|Parse Error|CONTENT_LOAD_FAILED|ASSET_VALIDATION_FAILED|FLOW_SETUP_FAILED|FLOW_INITIALIZE_FAILED"
+            if (Select-String -Path $runtimeLog -Pattern $fatalPatterns -Quiet) {
+              throw "Exported package runtime log contains a fatal startup error"
             }
           } catch {
             $_ | Out-String | Out-File -FilePath $startupError -Encoding utf8
+            throw
+          }
+          Compress-Archive -Path builds\windows\* -DestinationPath builds\RailCraft-Demo-windows-x64.zip -Force
+
+      - name: Attempt GUI startup
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $acceptanceRoot = "artifacts\acceptance"
+          $guiLog = Join-Path $acceptanceRoot "runtime-gui.log"
+          $guiError = Join-Path $acceptanceRoot "gui-startup-error.txt"
+          $process = $null
+          try {
+            $process = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -ArgumentList "--log-file", $guiLog -PassThru
+            Start-Sleep -Seconds 8
+            $process.Refresh()
+            if ($process.HasExited) {
+              $logText = if (Test-Path $guiLog) { Get-Content $guiLog -Raw } else { "<runtime log missing>" }
+              throw "GUI process exited with code $($process.ExitCode).`n$logText"
+            }
+            "gui_startup_status=process_alive`nmain_window_handle=$($process.MainWindowHandle)" | Out-File (Join-Path $acceptanceRoot "gui-startup-status.txt") -Encoding utf8
+          } catch {
+            $_ | Out-String | Out-File -FilePath $guiError -Encoding utf8
             throw
           } finally {
             if ($null -ne $process -and -not $process.HasExited) {
               Stop-Process -Id $process.Id -Force
             }
           }
-          Compress-Archive -Path builds\windows\* -DestinationPath builds\RailCraft-Demo-windows-x64.zip -Force
 
       - name: Capture Windows start screenshot
+        if: always()
         continue-on-error: true
         shell: pwsh
         run: |
@@ -158,6 +177,7 @@ jobs:
           }
 
       - name: Upload Windows artifact
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: RailCraft-Demo-windows-x64
