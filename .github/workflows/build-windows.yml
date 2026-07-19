@@ -62,6 +62,25 @@ jobs:
           New-Item -ItemType Directory -Force builds\windows | Out-Null
           & $env:GODOT_BIN --headless --path . --export-release "Windows Desktop" builds\windows\RailCraft-Demo.exe
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Smoke-launch Windows executable
+        shell: pwsh
+        run: |
+          $runtimeLog = Join-Path $env:RUNNER_TEMP "railcraft-runtime.log"
+          $process = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -ArgumentList "--log-file", $runtimeLog -PassThru
+          Start-Sleep -Seconds 8
+          if ($process.HasExited) {
+            $logText = if (Test-Path $runtimeLog) { Get-Content $runtimeLog -Raw } else { "<runtime log missing>" }
+            throw "RailCraft-Demo.exe exited early with code $($process.ExitCode).`n$logText"
+          }
+          Stop-Process -Id $process.Id -Force
+          if (Test-Path $runtimeLog) {
+            Get-Content $runtimeLog
+            $fatalPatterns = "SCRIPT ERROR|Parse Error|CONTENT_LOAD_FAILED|ASSET_VALIDATION_FAILED|FLOW_SETUP_FAILED|FLOW_INITIALIZE_FAILED"
+            if (Select-String -Path $runtimeLog -Pattern $fatalPatterns -Quiet) {
+              throw "RailCraft runtime log contains a fatal startup error"
+            }
+          }
           Compress-Archive -Path builds\windows\* -DestinationPath builds\RailCraft-Demo-windows-x64.zip -Force
 
       - name: Upload Windows artifact
