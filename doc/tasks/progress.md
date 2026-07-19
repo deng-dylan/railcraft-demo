@@ -34,7 +34,7 @@
 - [x] [`AssemblyView`](assembly-view.md)（21/21，含 `PartActor`、9 个零件场景和已确认 GUI 视口验收）
 - [x] [`AnimationCoordinator`](animation-coordinator.md)（11/11）
 - [x] [`ScreenCoordinator`](screen-coordinator.md)（13/13，含全部页面、8 状态映射和双分辨率布局测试）
-- [ ] [`AppRoot`](app-root.md)（25/28，待 README 正式截图、Windows 完整 GUI 验收和最终交付）
+- [x] [`AppRoot`](app-root.md)（28/28，完成组合、验证、Windows 构建、验收和交付）
 
 ## 模块依赖
 
@@ -77,26 +77,31 @@ flowchart LR
 
 ## 项目完成检查
 
-- [ ] 11 个模块全部完成；
+- [x] 11 个模块全部完成；
 - [x] `uv run gdformat --check .` 通过；
 - [x] `uv run gdlint .` 通过；
 - [x] Godot headless 导入和主场景加载通过；
 - [x] GUT 全部测试通过；
-- [ ] Windows x64 完整 GUI 验收通过；
+- [x] Windows x64 20 项验收通过；
 - [x] GitHub Actions 质量与 Windows 构建工作流通过；
-- [ ] README、运行说明、开发说明和来源清单完成；
-- [ ] 私有仓库及构建产物完成最终交付。
+- [x] README、运行说明、开发说明、来源清单、验收记录和版本说明完成；
+- [x] 私有仓库、提交历史和 Windows 构建产物完成最终交付。
 
-## 当前证据
+## 最终证据
 
-- Quality：固定工具链、格式、lint、Godot 导入、主场景加载和 107 个 GUT 测试全部通过；
-- Windows Build run `29676171210`：导出、PE 校验、文件大小、SHA-256、ZIP 与 artifact 上传通过；
-- 当前 artifact digest：`16d3909447bbeaf9c9df1c4dc477d7a71623fe7efaf927c3d67f1b09913cb20a`；
-- 内层 ZIP：`903ef8af836a620f99b3d77b3b8895dda06b1b47e2ca01c13c70c43f335f7030`；
-- EXE：`463ce6f2e24ad9d3e516ed19582d05bbffc0f51891952d2973a8ea8fbe920447`。
+- PR #1 已 squash 合并到 `main`，功能合并提交：`47f55f5755d28de5b925437f20a1a1be0ae1c41f`；
+- 发布分支最终验证提交：`4098c5be78591c89320960303f94ca8d45d2f010`；
+- Quality run `29680837181`：固定工具链、格式、lint、Godot 导入、主场景加载和 107 个 GUT 测试全部通过；
+- Build Windows run `29680837294`：导出、PE 校验、文件大小、SHA-256、ZIP 与 artifact 上传通过；
+- Windows artifact ID：`8440530015`；
+- Actions artifact：`4219532461d317aab78b996d656d822dc78a1e196aa3735b0084372d21ae7be1`；
+- 内层 ZIP：`64536d74501643bbb193eee911939c23c854ddc0cb02f304e5a7d112d2245f41`；
+- EXE：`b96aa532a24c4c9d683485a0b3f95e1c2bcdf9e042a5d6f6fabf3e42da482721`；
+- 20 项验收记录：[`../acceptance/windows-v0.1.0-demo.md`](../acceptance/windows-v0.1.0-demo.md)；
+- 版本说明：[`../releases/v0.1.0-demo.md`](../releases/v0.1.0-demo.md)。
 
-## 当前阻塞
+## 后续建议
 
-- README 已包含简介、快速开始、体验流程和状态，仍缺正式发布候选运行截图；
-- hosted Windows runner 的交互式进程诊断存在不稳定的 `0xC0000005`，不能代替详细设计第 21 节的完整 GUI 验收；
-- 20 项 Windows GUI 验收、验收证据包和 `v0.1.0-demo` 预发布尚未完成。
+- 用实际运行 PNG 替换 README 中的矢量布局预览；
+- 创建 `v0.1.0-demo` GitHub Release，并将最终 Windows ZIP 作为长期下载附件；
+- 后续迭代替换正式工业设计模型、增加音效与讲解旁白。
