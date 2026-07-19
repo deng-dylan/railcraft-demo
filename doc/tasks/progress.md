@@ -31,10 +31,10 @@
 - [x] [`InventoryManager`](inventory-manager.md)（7/7）
 - [x] [`AssemblyManager`](assembly-manager.md)（12/12）
 - [x] [`GameFlowManager`](game-flow-manager.md)（15/15）
-- [ ] [`AssemblyView`](assembly-view.md)（21/21，含 `PartActor` 和 9 个零件场景；待 GUI 视口验收）
-- [ ] [`AnimationCoordinator`](animation-coordinator.md)（0/11）
-- [ ] [`ScreenCoordinator`](screen-coordinator.md)（0/13，含各 UI 页面）
-- [ ] [`AppRoot`](app-root.md)（12/28，含工程集成与交付检查）
+- [x] [`AssemblyView`](assembly-view.md)（21/21，含 `PartActor`、9 个零件场景和已确认 GUI 视口验收）
+- [x] [`AnimationCoordinator`](animation-coordinator.md)（11/11）
+- [x] [`ScreenCoordinator`](screen-coordinator.md)（13/13，含全部页面、8 状态映射和双分辨率布局测试）
+- [ ] [`AppRoot`](app-root.md)（24/28，待 Windows 构建、README 截图、Windows GUI 验收和最终交付）
 
 ## 模块依赖
 
@@ -78,11 +78,17 @@ flowchart LR
 ## 项目完成检查
 
 - [ ] 11 个模块全部完成；
-- [ ] `uv run gdformat --check .` 通过；
-- [ ] `uv run gdlint .` 通过；
-- [ ] Godot headless 导入和主场景加载通过；
-- [ ] GUT 全部测试通过；
+- [x] `uv run gdformat --check .` 通过；
+- [x] `uv run gdlint .` 通过；
+- [x] Godot headless 导入和主场景加载通过；
+- [x] GUT 全部测试通过；
 - [ ] Windows x64 构建人工验收通过；
 - [ ] GitHub Actions 质量与构建工作流通过；
 - [ ] README、运行说明、开发说明和来源清单完成；
 - [ ] 私有仓库及构建产物完成交付。
+
+## 当前阻塞
+
+- Windows x64 导出工作流尚未实际生成并验证 `RailCraft-Demo-windows-x64.zip`；
+- README 已包含简介、快速开始、体验流程和状态，仍缺正式运行截图；
+- 完整 Windows GUI 验收、验收证据包和 `v0.1.0-demo` 预发布尚未完成。
