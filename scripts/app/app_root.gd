@@ -47,21 +47,22 @@ func _start_application() -> void:
 		return
 	_catalog = load_result.catalog
 
-	var train_root: Node = _assembly_view.get_node_or_null(
-		_assembly_view.train_assembly_root_path
-	)
-	var asset_issues: Array[ValidationIssue] = (
-		AssemblyAssetValidator.new().validate(_catalog, train_root)
+	var train_root: Node = _assembly_view.get_node_or_null(_assembly_view.train_assembly_root_path)
+	var asset_issues: Array[ValidationIssue] = AssemblyAssetValidator.new().validate(
+		_catalog, train_root
 	)
 	if not asset_issues.is_empty():
 		_show_issues("ASSET_VALIDATION_FAILED", asset_issues)
 		return
 
-	var dependencies_ready: bool = _flow.inject_dependencies(
-		QuizManager.new(),
-		InventoryManager.new(),
-		AssemblyManager.new(),
-		Callable(self, "_shutdown"),
+	var dependencies_ready: bool = (
+		_flow
+		. inject_dependencies(
+			QuizManager.new(),
+			InventoryManager.new(),
+			AssemblyManager.new(),
+			Callable(self, "_shutdown"),
+		)
 	)
 	if not dependencies_ready:
 		_show_fatal("FLOW_SETUP_FAILED", "核心流程依赖注入失败。")
@@ -95,9 +96,7 @@ func _connect_signals() -> void:
 
 	_animation.part_snap_finished.connect(_on_part_snap_finished)
 	_animation.part_snap_failed.connect(_on_part_snap_failed)
-	_animation.component_animation_finished.connect(
-		_flow.notify_component_animation_finished
-	)
+	_animation.component_animation_finished.connect(_flow.notify_component_animation_finished)
 	_animation.final_animation_finished.connect(_flow.notify_final_animation_finished)
 
 
@@ -155,12 +154,15 @@ func _on_exit_requested() -> void:
 
 
 func _apply_world_visibility(state: int) -> void:
-	var world_visible: bool = state in [
-		GameFlowManager.GameState.ASSEMBLY,
-		GameFlowManager.GameState.COMPONENT_COMPLETE,
-		GameFlowManager.GameState.FINAL_ASSEMBLY,
-		GameFlowManager.GameState.END,
-	]
+	var world_visible: bool = (
+		state
+		in [
+			GameFlowManager.GameState.ASSEMBLY,
+			GameFlowManager.GameState.COMPONENT_COMPLETE,
+			GameFlowManager.GameState.FINAL_ASSEMBLY,
+			GameFlowManager.GameState.END,
+		]
+	)
 	_world_root.visible = world_visible
 	var background: CanvasItem = _screen.get_node_or_null(^"Background") as CanvasItem
 	if background != null:
