@@ -41,18 +41,24 @@ func show_state(state: int) -> void:
 	_set_page_visible(PAGE_START, state == GameFlowManager.GameState.START)
 	_set_page_visible(
 		PAGE_QUIZ,
-		state in [
-			GameFlowManager.GameState.QUIZ,
-			GameFlowManager.GameState.WRONG_FEEDBACK,
-			GameFlowManager.GameState.CORRECT_FEEDBACK,
-		],
+		(
+			state
+			in [
+				GameFlowManager.GameState.QUIZ,
+				GameFlowManager.GameState.WRONG_FEEDBACK,
+				GameFlowManager.GameState.CORRECT_FEEDBACK,
+			]
+		),
 	)
 	_set_page_visible(
 		PAGE_ASSEMBLY,
-		state in [
-			GameFlowManager.GameState.ASSEMBLY,
-			GameFlowManager.GameState.COMPONENT_COMPLETE,
-		],
+		(
+			state
+			in [
+				GameFlowManager.GameState.ASSEMBLY,
+				GameFlowManager.GameState.COMPONENT_COMPLETE,
+			]
+		),
 	)
 	_set_page_visible(
 		PAGE_COMPONENT,
@@ -100,8 +106,7 @@ func show_correct_feedback(question: QuestionData) -> void:
 			]
 		)
 	_feedback_label.text = (
-		"[color=#8ff0a4]回答正确[/color]\n\n%s\n\n%s"
-		% [question.explanation, source_text]
+		"[color=#8ff0a4]回答正确[/color]\n\n%s\n\n%s" % [question.explanation, source_text]
 	)
 	_feedback_label.visible = true
 	_assembly_button.visible = true
@@ -117,9 +122,7 @@ func prepare_assembly(part: PartData, current_number: int, total: int) -> void:
 
 
 func set_assembly_busy(busy: bool) -> void:
-	_assembly_hint_label.text = (
-		"正在安装，请稍候……" if busy else "点击零件，将其吸附到发光安装位置"
-	)
+	_assembly_hint_label.text = ("正在安装，请稍候……" if busy else "点击零件，将其吸附到发光安装位置")
 
 
 func show_component_complete(component: ComponentRecipe) -> void:
@@ -209,10 +212,7 @@ func _build_start_page() -> void:
 	panel.add_child(column)
 	column.add_child(_make_title("RailCraft Demo", 40))
 	var description := Label.new()
-	description.text = (
-		"回答 9 道铁路知识题，获得零件并按顺序完成高速动车组装配。\n"
-		+ "答错可以继续尝试；答对后会显示解析和资料来源。"
-	)
+	description.text = ("回答 9 道铁路知识题，获得零件并按顺序完成高速动车组装配。\n" + "答错可以继续尝试；答对后会显示解析和资料来源。")
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(description)
