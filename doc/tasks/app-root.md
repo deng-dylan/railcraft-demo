@@ -38,7 +38,7 @@
 - [x] **AR-025 完成开发说明。** 编写 `doc/development.md`，记录固定版本、安装、验证、测试、导出和目录。验证：在新环境按命令可复现依赖。
 - [x] **AR-026 完成来源清单。** 编写 `doc/sources.md`，列出 9 题来源、字体、GUT、工具和资产许可。验证：每项第三方内容都有来源和许可状态。
 - [x] **AR-027 执行 Windows 人工验收。** 在发布候选 x64 构建逐项执行详细设计第 21 节清单并记录结果。验证：20 项均有自动化、静态契约或项目负责人实际运行确认覆盖，详见 `doc/acceptance/windows-v0.1.0-demo.md`。
-- [ ] **AR-028 完成最终交付。** 推送最终提交，确认质量与构建 Actions 通过，并提供 Windows zip 产物。验证：源码、文档、提交历史和可运行构建均可访问。
+- [x] **AR-028 完成最终交付。** 推送最终提交，确认质量与构建 Actions 通过，并提供 Windows zip 产物。验证：源码、文档、提交历史和可运行构建均可访问。
 
 ## 模块完成标准
 
@@ -47,16 +47,16 @@
 - [x] 未注册大规模全局 Autoload；
 - [x] headless 主场景、GUT、静态检查和 CI 全部通过；
 - [x] Windows x64 产物通过 20 项验收记录；
-- [ ] 私有 `railcraft-demo` 仓库、文档和构建产物完成最终交付；
+- [x] 私有 `railcraft-demo` 仓库、文档和构建产物完成最终交付；
 - [x] 更新 [`progress.md`](progress.md) 中模块任务数和完成状态。
 
 ## 集成验证证据
 
 - `res://scenes/main/main.tscn` 已配置为 `project.godot` 的 `run/main_scene`，包含单例 DomainServices、PresentationServices、WorldRoot 和 UILayer。
 - `tests/smoke/test_main_scene.gd` 验证模块实例数、输入信号单连接、START 初始化、每题先错后对的完整 9 题流程、9 个视觉安装、END，以及 START/Fatal/END 三种退出清理。
-- GitHub Actions Quality run `29676812007` 全部通过：固定工具安装、格式、lint、Godot headless 导入、主场景加载、107 个 GUT 测试和测试结果上传。
-- Build Windows run `29676812156` 完成固定模板校验、Windows x64 导出、PE 结构与大小检查、SHA-256、ZIP 和 artifact 上传。
-- 下载校验：Actions artifact `be8d66a16896827bb9802415247572f0804ffa74c9b3e2ebd7d86bf13c4da039`；内层 ZIP `f9cd1f226ac6e6709e96ef0219c83036d0356687223e72bdfe02fb968f49be1d`；EXE `846e20935e32c76ae86e94a314c8132a44f11dc12b2d0c88ee3da9543466aeb7`。
+- GitHub Actions Quality run `29680837181` 全部通过：固定工具安装、格式、lint、Godot headless 导入、主场景加载、107 个 GUT 测试和测试结果上传。
+- Build Windows run `29680837294` 完成固定模板校验、Windows x64 导出、PE 结构与大小检查、SHA-256、ZIP 和 artifact 上传。
+- 最终交付 artifact ID：`8440530015`；Actions artifact `4219532461d317aab78b996d656d822dc78a1e196aa3735b0084372d21ae7be1`；内层 ZIP `64536d74501643bbb193eee911939c23c854ddc0cb02f304e5a7d112d2245f41`；EXE `b96aa532a24c4c9d683485a0b3f95e1c2bcdf9e042a5d6f6fabf3e42da482721`。
 - 项目负责人于 2026-07-19 确认发布候选已可正式运行；20 项结果记录在 `doc/acceptance/windows-v0.1.0-demo.md`。
 - hosted Windows runner 的交互式图形进程诊断存在不稳定的 `0xC0000005`，该 CI 环境限制已记录，不作为实际 Windows 运行失败结论。
-- 剩余工作仅为发布分支最终 Actions 验证、合并及交付引用确认。
+- `README.md`、运行说明、开发说明、来源清单、验收记录、版本说明和 Windows 构建产物均已纳入最终交付。
