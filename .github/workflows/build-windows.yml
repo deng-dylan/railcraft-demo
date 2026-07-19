@@ -56,20 +56,39 @@ jobs:
           New-Item -ItemType Directory -Force $templateDestination | Out-Null
           Copy-Item -Path (Join-Path $templateSource.FullName "*") -Destination $templateDestination -Recurse -Force
 
-          $angleEgl = Get-ChildItem $godotDirectory -Recurse -Filter "libEGL.dll" | Select-Object -First 1
-          $angleGles = Get-ChildItem $godotDirectory -Recurse -Filter "libGLESv2.dll" | Select-Object -First 1
+          $angleEgl = Get-ChildItem $godotDirectory -Recurse -Filter "libEGL.dll" -ErrorAction SilentlyContinue | Where-Object { Test-Path (Join-Path $_.DirectoryName "libGLESv2.dll") } | Select-Object -First 1
+          $angleSource = "godot-editor"
           if ($null -eq $angleEgl) {
-            $angleEgl = Get-ChildItem $templateExtract -Recurse -Filter "libEGL.x86_64.dll" | Select-Object -First 1
+            $angleEgl = Get-ChildItem $templateExtract -Recurse -Filter "libEGL.x86_64.dll" -ErrorAction SilentlyContinue | Where-Object { Test-Path (Join-Path $_.DirectoryName "libGLESv2.x86_64.dll") } | Select-Object -First 1
+            $angleSource = "godot-template"
           }
-          if ($null -eq $angleGles) {
-            $angleGles = Get-ChildItem $templateExtract -Recurse -Filter "libGLESv2.x86_64.dll" | Select-Object -First 1
+          if ($null -eq $angleEgl) {
+            $browserRoots = @(
+              (Join-Path $env:ProgramFiles "Google\Chrome\Application"),
+              (Join-Path ${env:ProgramFiles(x86)} "Google\Chrome\Application"),
+              (Join-Path $env:ProgramFiles "Microsoft\Edge\Application"),
+              (Join-Path ${env:ProgramFiles(x86)} "Microsoft\Edge\Application")
+            ) | Where-Object { Test-Path $_ }
+            foreach ($browserRoot in $browserRoots) {
+              $candidate = Get-ChildItem $browserRoot -Recurse -Filter "libEGL.dll" -ErrorAction SilentlyContinue | Where-Object { Test-Path (Join-Path $_.DirectoryName "libGLESv2.dll") } | Select-Object -First 1
+              if ($null -ne $candidate) {
+                $angleEgl = $candidate
+                $angleSource = if ($browserRoot -like "*Chrome*") { "runner-chrome" } else { "runner-edge" }
+                break
+              }
+            }
           }
-          if ($null -ne $angleEgl -and $null -ne $angleGles) {
+
+          if ($null -ne $angleEgl) {
+            $glesName = if ($angleEgl.Name -eq "libEGL.x86_64.dll") { "libGLESv2.x86_64.dll" } else { "libGLESv2.dll" }
+            $angleGles = Get-Item (Join-Path $angleEgl.DirectoryName $glesName)
             "ANGLE_EGL=$($angleEgl.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             "ANGLE_GLES=$($angleGles.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             "ANGLE_AVAILABLE=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            "ANGLE_SOURCE=$angleSource" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           } else {
             "ANGLE_AVAILABLE=false" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            "ANGLE_SOURCE=unavailable" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           }
 
       - name: Export Windows x64
@@ -78,10 +97,6 @@ jobs:
           New-Item -ItemType Directory -Force builds\windows | Out-Null
           & $env:GODOT_BIN --headless --path . --export-release "Windows Desktop" builds\windows\RailCraft-Demo.exe
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          if ($env:ANGLE_AVAILABLE -eq "true") {
-            Copy-Item -LiteralPath $env:ANGLE_EGL -Destination builds\windows\libEGL.dll -Force
-            Copy-Item -LiteralPath $env:ANGLE_GLES -Destination builds\windows\libGLESv2.dll -Force
-          }
 
       - name: Validate and package Windows export
         shell: pwsh
@@ -112,6 +127,7 @@ jobs:
             "godot_release=$env:GODOT_RELEASE"
             "exe_size=$($exe.Length)"
             "angle_available=$env:ANGLE_AVAILABLE"
+            "angle_source=$env:ANGLE_SOURCE"
           ) | Out-File -FilePath $environmentFile -Encoding utf8
           @(
             "$exeHash  RailCraft-Demo.exe"
@@ -153,21 +169,29 @@ jobs:
           $acceptanceRoot = "artifacts\acceptance"
           $guiLog = Join-Path $acceptanceRoot "runtime-gui.log"
           $guiError = Join-Path $acceptanceRoot "gui-startup-error.txt"
+          $guiRuntime = Join-Path $env:RUNNER_TEMP "railcraft-gui-runtime"
+          Remove-Item $guiRuntime -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force $guiRuntime | Out-Null
+          Copy-Item builds\windows\* -Destination $guiRuntime -Force
+          if ($env:ANGLE_AVAILABLE -eq "true") {
+            Copy-Item -LiteralPath $env:ANGLE_EGL -Destination (Join-Path $guiRuntime "libEGL.dll") -Force
+            Copy-Item -LiteralPath $env:ANGLE_GLES -Destination (Join-Path $guiRuntime "libGLESv2.dll") -Force
+          }
           $process = $null
-          "gui_startup_status=started`nangle_available=$env:ANGLE_AVAILABLE" | Out-File (Join-Path $acceptanceRoot "gui-startup-status.txt") -Encoding utf8
+          "gui_startup_status=started`nangle_available=$env:ANGLE_AVAILABLE`nangle_source=$env:ANGLE_SOURCE" | Out-File (Join-Path $acceptanceRoot "gui-startup-status.txt") -Encoding utf8
           try {
             $arguments = @("--log-file", $guiLog)
             if ($env:ANGLE_AVAILABLE -eq "true") {
               $arguments += @("--rendering-driver", "opengl3_angle")
             }
-            $process = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -ArgumentList $arguments -PassThru
+            $process = Start-Process -FilePath (Join-Path $guiRuntime "RailCraft-Demo.exe") -WorkingDirectory $guiRuntime -ArgumentList $arguments -PassThru
             Start-Sleep -Seconds 8
             $process.Refresh()
             if ($process.HasExited) {
               $logText = if (Test-Path $guiLog) { Get-Content $guiLog -Raw } else { "<runtime log missing>" }
               throw "GUI process exited with code $($process.ExitCode).`n$logText"
             }
-            "gui_startup_status=process_alive`nmain_window_handle=$($process.MainWindowHandle)`nangle_available=$env:ANGLE_AVAILABLE" | Out-File (Join-Path $acceptanceRoot "gui-startup-status.txt") -Encoding utf8
+            "gui_startup_status=process_alive`nmain_window_handle=$($process.MainWindowHandle)`nangle_available=$env:ANGLE_AVAILABLE`nangle_source=$env:ANGLE_SOURCE" | Out-File (Join-Path $acceptanceRoot "gui-startup-status.txt") -Encoding utf8
           } catch {
             $_ | Out-String | Out-File -FilePath $guiError -Encoding utf8
             throw
@@ -187,8 +211,16 @@ jobs:
           New-Item -ItemType Directory -Force $screenshotRoot | Out-Null
           $captureError = Join-Path $acceptanceRoot "capture-error.txt"
           $captureStatus = Join-Path $acceptanceRoot "capture-status.txt"
+          $guiRuntime = Join-Path $env:RUNNER_TEMP "railcraft-gui-runtime-capture"
+          Remove-Item $guiRuntime -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force $guiRuntime | Out-Null
+          Copy-Item builds\windows\* -Destination $guiRuntime -Force
+          if ($env:ANGLE_AVAILABLE -eq "true") {
+            Copy-Item -LiteralPath $env:ANGLE_EGL -Destination (Join-Path $guiRuntime "libEGL.dll") -Force
+            Copy-Item -LiteralPath $env:ANGLE_GLES -Destination (Join-Path $guiRuntime "libGLESv2.dll") -Force
+          }
           $captureProcess = $null
-          "capture_status=started`nangle_available=$env:ANGLE_AVAILABLE" | Out-File $captureStatus -Encoding utf8
+          "capture_status=started`nangle_available=$env:ANGLE_AVAILABLE`nangle_source=$env:ANGLE_SOURCE" | Out-File $captureStatus -Encoding utf8
           try {
             Add-Type -AssemblyName System.Drawing
             Add-Type @"
@@ -204,7 +236,7 @@ jobs:
             if ($env:ANGLE_AVAILABLE -eq "true") {
               $arguments = @("--rendering-driver", "opengl3_angle")
             }
-            $captureProcess = Start-Process -FilePath "builds\windows\RailCraft-Demo.exe" -ArgumentList $arguments -PassThru
+            $captureProcess = Start-Process -FilePath (Join-Path $guiRuntime "RailCraft-Demo.exe") -WorkingDirectory $guiRuntime -ArgumentList $arguments -PassThru
             for ($attempt = 0; $attempt -lt 40; $attempt++) {
               Start-Sleep -Milliseconds 250
               $captureProcess.Refresh()
@@ -225,7 +257,7 @@ jobs:
             $bitmap.Save((Join-Path $screenshotRoot "01-start.png"), [System.Drawing.Imaging.ImageFormat]::Png)
             $graphics.Dispose()
             $bitmap.Dispose()
-            "capture_status=success`nwindow_width=$width`nwindow_height=$height`nangle_available=$env:ANGLE_AVAILABLE" | Out-File $captureStatus -Encoding utf8
+            "capture_status=success`nwindow_width=$width`nwindow_height=$height`nangle_available=$env:ANGLE_AVAILABLE`nangle_source=$env:ANGLE_SOURCE" | Out-File $captureStatus -Encoding utf8
           } catch {
             $_ | Out-String | Out-File -FilePath $captureError -Encoding utf8
             throw
