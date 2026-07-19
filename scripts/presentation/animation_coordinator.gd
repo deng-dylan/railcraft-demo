@@ -70,7 +70,11 @@ func play_component_complete(component: ComponentRecipe) -> void:
 		return
 	_active_component_id = component.component_id
 	_view.show_component_highlight(component.component_id)
-	var hold: float = teaching_hold_duration if not component.teaching_note.is_empty() else component_hold_duration
+	var hold: float = (
+		teaching_hold_duration
+		if not component.teaching_note.is_empty()
+		else component_hold_duration
+	)
 	_active_tween = create_tween()
 	_active_tween.tween_interval(hold)
 	_active_tween.finished.connect(_finish_component.bind(component.component_id))
@@ -104,15 +108,23 @@ func play_final_assembly(train_recipe: TrainRecipe) -> void:
 
 	var pantograph: PartActor = _view.get_part_actor("pantograph")
 	if pantograph != null:
-		var lift_root: Node3D = pantograph.get_node_or_null(^"VisualRoot/PantographLiftRoot") as Node3D
+		var lift_root: Node3D = (
+			pantograph.get_node_or_null(^"VisualRoot/PantographLiftRoot") as Node3D
+		)
 		if lift_root != null:
-			_active_tween.tween_property(lift_root, "position:y", lift_root.position.y + 0.35, final_step_duration)
+			_active_tween.tween_property(
+				lift_root, "position:y", lift_root.position.y + 0.35, final_step_duration
+			)
 
 	var wheelset: PartActor = _view.get_part_actor("wheelset")
 	if wheelset != null:
-		var wheel_root: Node3D = wheelset.get_node_or_null(^"VisualRoot/WheelRotationRoot") as Node3D
+		var wheel_root: Node3D = (
+			wheelset.get_node_or_null(^"VisualRoot/WheelRotationRoot") as Node3D
+		)
 		if wheel_root != null:
-			_active_tween.tween_property(wheel_root, "rotation:x", wheel_root.rotation.x + TAU, final_step_duration)
+			_active_tween.tween_property(
+				wheel_root, "rotation:x", wheel_root.rotation.x + TAU, final_step_duration
+			)
 
 	_active_tween.finished.connect(_finish_final)
 
