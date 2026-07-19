@@ -30,7 +30,7 @@
 - [x] **AR-017 完成主场景冒烟测试。** 在 headless 模式加载 Main，使用测试适配器跑通最短 9 题流程。验证：无脚本错误且最终到达 END。
 - [x] **AR-018 配置格式、lint 和 pre-commit。** 固定检查范围并排除插件生成文件的合理部分。验证：全仓 `gdformat --check`、`gdlint`、pre-commit 通过。
 - [x] **AR-019 创建 quality.yml。** 按设计执行 uv、格式、lint、Godot 导入、主场景加载、GUT 和测试结果上传，第三方 Action 固定版本或 SHA。验证：分支推送与 PR 工作流通过。
-- [ ] **AR-020 配置 Windows 导出。** 创建 `export_presets.cfg` 和 `build-windows.yml`，支持手动及 `v*` 标签生成 x64 zip。验证：下载产物后可启动。
+- [x] **AR-020 配置 Windows 导出。** 创建 `export_presets.cfg` 和 `build-windows.yml`，支持 PR、手动及 `v*` 标签生成 x64 zip。验证：Actions 实际导出、检查 PE 头、生成 SHA-256、压缩并上传产物；下载后的摘要与 Actions digest 一致。
 - [x] **AR-021 配置 Git 与 LFS。** 创建 `.gitignore`、`.gitattributes` 和模型 LFS 规则，不提交缓存、构建和凭据。验证：`git check-ignore` 与 `git lfs track` 输出符合设计。
 - [x] **AR-022 创建私有远程仓库。** 初始化本地 `main`，在当前已认证个人账号创建私有 `railcraft-demo`，添加 `origin` 并推送。验证：仓库可见性、默认分支和远程地址正确。
 - [ ] **AR-023 完成 README。** 编写项目简介、截图、快速开始、体验流程和当前状态。验证：新用户按快速开始可找到运行入口。
@@ -46,13 +46,16 @@
 - [x] 启动顺序严格执行内容校验、资产校验、依赖注入和 START；
 - [x] 未注册大规模全局 Autoload；
 - [x] headless 主场景、GUT、静态检查和 CI 全部通过；
-- [ ] Windows x64 产物通过人工验收；
-- [ ] 私有 `railcraft-demo` 仓库、文档和构建产物完成交付；
+- [ ] Windows x64 产物通过完整 GUI 验收；
+- [ ] 私有 `railcraft-demo` 仓库、文档和构建产物完成最终交付；
 - [x] 更新 [`progress.md`](progress.md) 中模块任务数和完成状态。
 
 ## 集成验证证据
 
 - `res://scenes/main/main.tscn` 已配置为 `project.godot` 的 `run/main_scene`，包含单例 DomainServices、PresentationServices、WorldRoot 和 UILayer。
 - `tests/smoke/test_main_scene.gd` 验证模块实例数、输入信号单连接、START 初始化、每题先错后对的完整 9 题流程、9 个视觉安装、END，以及 START/Fatal/END 三种退出清理。
-- GitHub Actions Quality run 56 完成固定工具安装、格式、lint、Godot headless 导入、主场景加载、全量 GUT 和测试结果上传，全部成功。
-- 剩余阻塞集中在 Windows x64 实际导出与启动验证、README 正式截图、完整 Windows GUI 验收及最终 Release。
+- GitHub Actions Quality 全部通过：固定工具安装、格式、lint、Godot headless 导入、主场景加载、107 个 GUT 测试和测试结果上传。
+- Build Windows run `29676171210` 成功完成固定模板校验、Windows x64 导出、PE 结构与大小检查、SHA-256、ZIP 和 artifact 上传。
+- 下载校验：Actions artifact `16d3909447bbeaf9c9df1c4dc477d7a71623fe7efaf927c3d67f1b09913cb20a`；内层 ZIP `903ef8af836a620f99b3d77b3b8895dda06b1b47e2ca01c13c70c43f335f7030`；EXE `463ce6f2e24ad9d3e516ed19582d05bbffc0f51891952d2973a8ea8fbe920447`。
+- hosted Windows runner 的交互式进程诊断存在不稳定的 `0xC0000005`，有成功驻留记录，也有在 Godot 日志初始化前早退的记录；该限制不作为 AR-027 的通过证据。
+- 剩余阻塞集中在 README 正式截图、详细设计第 21 节完整 GUI 验收及最终 Release。
