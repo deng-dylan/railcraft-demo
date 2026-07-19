@@ -1,7 +1,7 @@
 extends GutTest
 
 
-func test_main_scene_loads_and_enters_start_state() -> void:
+func test_main_scene_loads_enters_start_and_connects_each_signal_once() -> void:
 	var app: AppRoot = await _add_app()
 
 	assert_true(app.is_initialized())
@@ -11,6 +11,38 @@ func test_main_scene_loads_and_enters_start_state() -> void:
 		app.get_screen_coordinator().get_visible_page_names(),
 		ScreenCoordinator.PAGE_START,
 	)
+	assert_eq(app.get_node(^"DomainServices").get_child_count(), 1)
+	assert_eq(app.get_node(^"PresentationServices").get_child_count(), 1)
+	var screen: ScreenCoordinator = app.get_screen_coordinator()
+	var assembly_view: AssemblyView = app.get_node(^"WorldRoot/AssemblyView") as AssemblyView
+	assert_eq(screen.start_requested.get_connections().size(), 1)
+	assert_eq(screen.answer_selected.get_connections().size(), 1)
+	assert_eq(screen.assembly_requested.get_connections().size(), 1)
+	assert_eq(screen.exit_requested.get_connections().size(), 1)
+	assert_eq(assembly_view.part_clicked.get_connections().size(), 1)
+
+
+func test_start_exit_cleans_up_once_without_quitting_test_tree() -> void:
+	var app: AppRoot = await _add_app()
+	watch_signals(app)
+
+	app.get_screen_coordinator().exit_requested.emit()
+	app.get_screen_coordinator().exit_requested.emit()
+
+	assert_true(app.is_shutdown_started())
+	assert_signal_emit_count(app, "shutdown_requested", 1)
+
+
+func test_fatal_exit_cleans_up_once_without_domain_transition() -> void:
+	var app: AppRoot = await _add_app()
+	watch_signals(app)
+	app._fatal_active = true
+	app.get_screen_coordinator().show_fatal("TEST_FATAL", "测试致命错误")
+
+	app.get_screen_coordinator().exit_requested.emit()
+
+	assert_true(app.is_shutdown_started())
+	assert_signal_emit_count(app, "shutdown_requested", 1)
 
 
 func test_main_scene_completes_wrong_then_correct_nine_question_path() -> void:
@@ -18,6 +50,7 @@ func test_main_scene_completes_wrong_then_correct_nine_question_path() -> void:
 	assert_true(app.is_initialized())
 	if not app.is_initialized():
 		return
+	watch_signals(app)
 	var flow: GameFlowManager = app.get_flow_manager()
 	var catalog: ContentCatalog = app.get_catalog()
 	var animation: AnimationCoordinator = (
@@ -52,6 +85,9 @@ func test_main_scene_completes_wrong_then_correct_nine_question_path() -> void:
 		app.get_screen_coordinator().get_visible_page_names(),
 		ScreenCoordinator.PAGE_END,
 	)
+	app.get_screen_coordinator().exit_requested.emit()
+	assert_true(app.is_shutdown_started())
+	assert_signal_emit_count(app, "shutdown_requested", 1)
 
 
 func _add_app() -> AppRoot:
@@ -63,6 +99,7 @@ func _add_app() -> AppRoot:
 	assert_not_null(app)
 	if app == null:
 		return null
+	app.quit_on_shutdown = false
 	add_child_autofree(app)
 	await get_tree().process_frame
 	return app
