@@ -17,7 +17,7 @@
 
 1. 安装 [Godot 4.6.3 Standard Windows x64](https://godotengine.org/download/archive/4.6.3-stable/) 和同版本 Export Templates。
 2. 从 [uv 0.11.8 Release](https://github.com/astral-sh/uv/releases/tag/0.11.8) 获取 Windows x64 程序，并确认 `uv --version` 输出 `0.11.8`。
-3. 在仓库根目录执行：
+3. 在 `apps/railcraft-godot` 目录执行：
 
 ```powershell
 uv python install 3.12.13
@@ -31,7 +31,7 @@ uv sync --frozen
 ```powershell
 uv run --frozen gdformat --check scripts tests
 uv run --frozen gdlint scripts tests
-uv run --frozen pre-commit run --all-files
+uv run --frozen pre-commit run --all-files --config ../../.pre-commit-config.yaml
 ```
 
 在受限环境中可将缓存放在仓库的忽略目录：
@@ -83,7 +83,7 @@ Compress-Archive -Path builds\windows\* `
 - `scripts/presentation/`：UI、3D 装配和动画协调；
 - `scenes/`：主场景、UI、列车根与零件场景；
 - `tests/`：单元、集成、冒烟和夹具；
-- `.github/workflows/`：可复用质量工作流和 Windows 标签构建。
+- 仓库根目录 `.github/workflows/`：可复用质量工作流和 Windows 标签构建。
 
 ## 内容与模型替换
 

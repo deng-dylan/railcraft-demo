@@ -5,13 +5,13 @@ repos:
     hooks:
       - id: gdformat-check
         name: gdformat check
-        entry: uv run --frozen gdformat --check scripts tests
+        entry: uv --directory apps/railcraft-godot run --frozen gdformat --check scripts tests
         language: system
         pass_filenames: false
-        files: ^(scripts|tests)/.*\.gd$
+        files: ^apps/railcraft-godot/(scripts|tests)/.*\.gd$
       - id: gdlint
         name: gdlint
-        entry: uv run --frozen gdlint scripts tests
+        entry: uv --directory apps/railcraft-godot run --frozen gdlint scripts tests
         language: system
         pass_filenames: false
-        files: ^(scripts|tests)/.*\.gd$
+        files: ^apps/railcraft-godot/(scripts|tests)/.*\.gd$

@@ -2,8 +2,16 @@ name: Quality
 
 on:
   push:
+    paths:
+      - "apps/railcraft-godot/**"
+      - ".github/workflows/quality.yml"
+      - ".pre-commit-config.yaml"
   pull_request:
     branches: [main]
+    paths:
+      - "apps/railcraft-godot/**"
+      - ".github/workflows/quality.yml"
+      - ".pre-commit-config.yaml"
   workflow_dispatch:
   workflow_call:
 
@@ -21,6 +29,9 @@ jobs:
   quality:
     runs-on: windows-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: apps/railcraft-godot
 
     steps:
       - name: Check out source
@@ -99,6 +110,6 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: gut-results
-          path: artifacts/gut.xml
+          path: apps/railcraft-godot/artifacts/gut.xml
           if-no-files-found: warn
           retention-days: 14

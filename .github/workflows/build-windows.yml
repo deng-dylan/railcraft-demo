@@ -22,6 +22,9 @@ jobs:
     needs: quality
     runs-on: windows-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: apps/railcraft-godot
 
     steps:
       - name: Check out source
@@ -270,7 +273,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: RailCraft-Demo-windows-x64
-          path: builds/RailCraft-Demo-windows-x64.zip
+          path: apps/railcraft-godot/builds/RailCraft-Demo-windows-x64.zip
           if-no-files-found: error
           retention-days: 30
 
@@ -279,7 +282,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: RailCraft-Demo-acceptance-smoke
-          path: artifacts/acceptance
+          path: apps/railcraft-godot/artifacts/acceptance
           if-no-files-found: warn
           retention-days: 30
 

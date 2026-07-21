@@ -1,29 +1,12 @@
-# Godot generated files
-.godot/
-.godot-user/
+# Agent and local working files
+.agents/
+tmp/
 
-# Python development environment
-.venv/
-__pycache__/
-*.py[cod]
-.uv-cache/
-.uv-python/
-.pre-commit-cache/
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# Local pinned tool downloads used for verification
-.tools/
-.godot-templates/
-
-# Local build and test artifacts
-builds/
-artifacts/*
-!artifacts/acceptance/
-!artifacts/acceptance/**
-*.log
-!artifacts/acceptance/*.log
-
-# Local editor and environment files
-.idea/
-.vscode/
-.env
-.env.*
+# Original delivery packages are retained locally or in release storage.
+# The repository tracks their manifests and reviewed source snapshots only.
+deliveries/**/release/**
