@@ -1,0 +1,12 @@
+# Agent and local working files
+.agents/
+tmp/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Original delivery packages are retained locally or in release storage.
+# The repository tracks their manifests and reviewed source snapshots only.
+deliveries/**/release/**
