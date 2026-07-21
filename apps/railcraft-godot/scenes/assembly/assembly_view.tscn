@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/assembly_view.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/train/train_root.tscn" id="2_train"]
+
+[node name="AssemblyView" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="PartPreviewAnchor" type="Node3D" parent="."]
+position = Vector3(0, 2, 3.8)
+
+[node name="TrainAssemblyRoot" parent="." instance=ExtResource("2_train")]
+
+[node name="TargetHints" type="Node3D" parent="."]

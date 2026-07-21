@@ -1,0 +1,9 @@
+date=2026-07-19
+os=Microsoft Windows NT 10.0.26200.0
+architecture=AMD64
+godot=4.6.3-stable.official.7d41c59c4
+renderer=OpenGL 3.3 Compatibility
+gpu=NVIDIA GeForce RTX 5070 Ti Laptop GPU
+window_title=RailCraft Demo
+minimum_window=960x540
+network_required=false

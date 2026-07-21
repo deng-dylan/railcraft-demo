@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "components": [
+    {
+      "component_id": "carbody_connection",
+      "display_name": "车体与连接组件",
+      "order": 1,
+      "part_ids": [
+        "body_shell",
+        "passenger_door",
+        "coupler_buffer"
+      ],
+      "completion_message": "车体与连接组件已完成",
+      "teaching_note": "车体、车门和车钩缓冲装置共同形成车辆承载、乘用和连接功能的教学抽象。"
+    },
+    {
+      "component_id": "running_braking",
+      "display_name": "走行与制动组件",
+      "order": 2,
+      "part_ids": [
+        "bogie_frame",
+        "wheelset",
+        "brake_unit"
+      ],
+      "completion_message": "走行与制动组件已完成",
+      "teaching_note": "转向架构架、轮对和制动装置共同形成车辆走行、支承、导向和制动功能的教学抽象。"
+    },
+    {
+      "component_id": "traction_power",
+      "display_name": "牵引供电组件",
+      "order": 3,
+      "part_ids": [
+        "pantograph",
+        "traction_converter_unit",
+        "traction_motor"
+      ],
+      "completion_message": "牵引供电组件已完成",
+      "teaching_note": "本 Demo 将受电弓、主变压器/牵引变流器和牵引电机归入一个教学组件。真实车辆中这些设备通常分布在不同位置，具体布置因车型而异。"
+    }
+  ],
+  "train_recipe": {
+    "train_id": "generic_high_speed_emu",
+    "display_name": "通用高速电力动车组",
+    "component_ids": [
+      "carbody_connection",
+      "running_braking",
+      "traction_power"
+    ]
+  }
+}

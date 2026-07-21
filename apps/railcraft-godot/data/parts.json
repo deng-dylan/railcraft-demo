@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "parts": [
+    {
+      "part_id": "body_shell",
+      "display_name": "车体外壳",
+      "order": 1,
+      "component_id": "carbody_connection",
+      "model_scene_path": "res://scenes/train/parts/body_shell.tscn",
+      "snap_target_path": "SnapTargets/BodyShellTarget",
+      "target_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "preview_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 20.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "required_previous_part_id": null
+    },
+    {
+      "part_id": "passenger_door",
+      "display_name": "客室车门",
+      "order": 2,
+      "component_id": "carbody_connection",
+      "model_scene_path": "res://scenes/train/parts/passenger_door.tscn",
+      "snap_target_path": "SnapTargets/PassengerDoorTarget",
+      "target_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "preview_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 20.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "required_previous_part_id": "body_shell"
+    },
+    {
+      "part_id": "coupler_buffer",
+      "display_name": "车钩缓冲装置",
+      "order": 3,
+      "component_id": "carbody_connection",
+      "model_scene_path": "res://scenes/train/parts/coupler_buffer.tscn",
+      "snap_target_path": "SnapTargets/CouplerBufferTarget",
+      "target_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "preview_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 20.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "required_previous_part_id": "passenger_door"
+    },
+    {
+      "part_id": "bogie_frame",
+      "display_name": "转向架构架",
+      "order": 4,
+      "component_id": "running_braking",
+      "model_scene_path": "res://scenes/train/parts/bogie_frame.tscn",
+      "snap_target_path": "SnapTargets/BogieFrameTarget",
+      "target_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "preview_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 20.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "required_previous_part_id": "coupler_buffer"
+    },
+    {
+      "part_id": "wheelset",
+      "display_name": "轮对",
+      "order": 5,
+      "component_id": "running_braking",
+      "model_scene_path": "res://scenes/train/parts/wheelset.tscn",
+      "snap_target_path": "SnapTargets/WheelsetTarget",
+      "target_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "preview_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 20.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "required_previous_part_id": "bogie_frame"
+    },
+    {
+      "part_id": "brake_unit",
+      "display_name": "制动装置",
+      "order": 6,
+      "component_id": "running_braking",
+      "model_scene_path": "res://scenes/train/parts/brake_unit.tscn",
+      "snap_target_path": "SnapTargets/BrakeUnitTarget",
+      "target_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "preview_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 20.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "required_previous_part_id": "wheelset"
+    },
+    {
+      "part_id": "pantograph",
+      "display_name": "受电弓",
+      "order": 7,
+      "component_id": "traction_power",
+      "model_scene_path": "res://scenes/train/parts/pantograph.tscn",
+      "snap_target_path": "SnapTargets/PantographTarget",
+      "target_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "preview_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 20.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "required_previous_part_id": "brake_unit"
+    },
+    {
+      "part_id": "traction_converter_unit",
+      "display_name": "牵引变压变流单元",
+      "order": 8,
+      "component_id": "traction_power",
+      "model_scene_path": "res://scenes/train/parts/traction_converter_unit.tscn",
+      "snap_target_path": "SnapTargets/TractionConverterTarget",
+      "target_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "preview_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 20.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "required_previous_part_id": "pantograph"
+    },
+    {
+      "part_id": "traction_motor",
+      "display_name": "牵引电机",
+      "order": 9,
+      "component_id": "traction_power",
+      "model_scene_path": "res://scenes/train/parts/traction_motor.tscn",
+      "snap_target_path": "SnapTargets/TractionMotorTarget",
+      "target_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "preview_transform": {
+        "position": [0.0, 0.0, 0.0],
+        "rotation_degrees": [0.0, 20.0, 0.0],
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "required_previous_part_id": "traction_converter_unit"
+    }
+  ]
+}

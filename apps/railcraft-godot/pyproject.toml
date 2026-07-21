@@ -1,0 +1,16 @@
+[project]
+name = "railcraft-demo"
+version = "0.1.0"
+requires-python = "==3.12.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "gdtoolkit==4.5.0",
+  "pre-commit==4.6.0",
+]
+
+[tool.uv]
+package = false
+required-version = "==0.11.8"
+

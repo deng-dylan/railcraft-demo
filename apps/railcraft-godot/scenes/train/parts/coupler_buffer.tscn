@@ -1,0 +1,78 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/part_actor.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="Material_dark"]
+albedo_color = Color(0.12, 0.15, 0.18, 1)
+metallic = 0.55
+roughness = 0.28
+
+[sub_resource type="StandardMaterial3D" id="Material_red"]
+albedo_color = Color(0.72, 0.06, 0.05, 1)
+metallic = 0.25
+roughness = 0.34
+
+[sub_resource type="CylinderMesh" id="Mesh_shaft"]
+material = SubResource("Material_dark")
+top_radius = 0.16
+bottom_radius = 0.16
+height = 1.2
+radial_segments = 12
+
+[sub_resource type="BoxMesh" id="Mesh_head"]
+material = SubResource("Material_dark")
+size = Vector3(0.5, 0.38, 0.58)
+
+[sub_resource type="CylinderMesh" id="Mesh_buffer"]
+material = SubResource("Material_red")
+top_radius = 0.24
+bottom_radius = 0.24
+height = 0.24
+radial_segments = 12
+
+[sub_resource type="BoxMesh" id="Mesh_mount"]
+material = SubResource("Material_dark")
+size = Vector3(0.24, 0.75, 1.2)
+
+[sub_resource type="BoxShape3D" id="Shape_coupler"]
+size = Vector3(1.7, 1, 1.5)
+
+[node name="PartActor" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="Mount" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(-0.55, 0, 0)
+mesh = SubResource("Mesh_mount")
+
+[node name="CouplerShaft" type="MeshInstance3D" parent="VisualRoot"]
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_shaft")
+
+[node name="CouplerHead" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0.68, 0, 0)
+mesh = SubResource("Mesh_head")
+
+[node name="LeftBuffer" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(-0.15, 0, -0.55)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_buffer")
+
+[node name="RightBuffer" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(-0.15, 0, 0.55)
+rotation = Vector3(1.5708, 0, 0)
+mesh = SubResource("Mesh_buffer")
+
+[node name="ClickArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 0
+input_ray_pickable = false
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ClickArea"]
+shape = SubResource("Shape_coupler")
+disabled = true
+
+[node name="AnimationNodes" type="Node3D" parent="."]

@@ -1,0 +1,29 @@
+# Godot generated files
+.godot/
+.godot-user/
+
+# Python development environment
+.venv/
+__pycache__/
+*.py[cod]
+.uv-cache/
+.uv-python/
+.pre-commit-cache/
+
+# Local pinned tool downloads used for verification
+.tools/
+.godot-templates/
+
+# Local build and test artifacts
+builds/
+artifacts/*
+!artifacts/acceptance/
+!artifacts/acceptance/**
+*.log
+!artifacts/acceptance/*.log
+
+# Local editor and environment files
+.idea/
+.vscode/
+.env
+.env.*
