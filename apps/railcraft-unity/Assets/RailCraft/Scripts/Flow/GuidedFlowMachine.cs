@@ -88,9 +88,15 @@ namespace RailCraft.Flow
             if (stepId == "commissioning")
             {
                 commissioningAttempt++;
-                phase = content.Flow.failFirstCommissioning && commissioningAttempt == 1
-                    ? FlowPhase.Rework
-                    : FlowPhase.SecondCommissioning;
+                if (content.Flow.failFirstCommissioning && commissioningAttempt == 1)
+                {
+                    phase = FlowPhase.Rework;
+                    return;
+                }
+
+                stepIndex += 2;
+                questionIndex = 0;
+                phase = FlowPhase.KnowledgeGate;
                 return;
             }
 

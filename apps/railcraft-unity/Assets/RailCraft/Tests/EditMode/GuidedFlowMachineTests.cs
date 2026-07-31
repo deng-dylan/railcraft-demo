@@ -70,6 +70,21 @@ namespace RailCraft.Tests.EditMode
         }
 
         [Test]
+        public void SuccessfulFirstCommissioningOpensReleaseKnowledgeGate()
+        {
+            var content = FlowFixtureContent();
+            content.Flow.failFirstCommissioning = false;
+            var machine = ReachInitialCommissioning(content);
+
+            machine.ConfirmDrop("commissioning");
+            machine.ConfirmSnapAnimation();
+
+            Assert.That(machine.Snapshot.Phase, Is.EqualTo(FlowPhase.KnowledgeGate));
+            Assert.That(machine.Snapshot.CurrentStepId, Is.EqualTo("release"));
+            Assert.That(machine.Snapshot.CommissioningAttempt, Is.EqualTo(1));
+        }
+
+        [Test]
         public void ReleaseSnapCompletesTheRun()
         {
             var machine = ReachReleaseKnowledgeGate();
@@ -125,6 +140,23 @@ namespace RailCraft.Tests.EditMode
             machine.ConfirmDrop("inspection");
             machine.ConfirmSnapAnimation();
             machine.CompleteSecondCommissioning();
+            return machine;
+        }
+
+        private static GuidedFlowMachine ReachInitialCommissioning(
+            RailCraft.Content.ContentBundle content)
+        {
+            var machine = new GuidedFlowMachine(content);
+            machine.StartNewRun();
+            machine.ConfirmGuidance();
+            while (machine.Snapshot.CurrentStepId != "commissioning")
+            {
+                FlowFixture.AnswerCurrentStepCorrectly(machine);
+                machine.ConfirmDrop(machine.Snapshot.CurrentStepId);
+                machine.ConfirmSnapAnimation();
+            }
+
+            FlowFixture.AnswerCurrentStepCorrectly(machine);
             return machine;
         }
     }
