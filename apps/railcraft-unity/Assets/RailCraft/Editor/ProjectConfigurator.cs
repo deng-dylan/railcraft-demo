@@ -11,6 +11,10 @@ namespace RailCraft.Editor
             PlayerSettings.companyName = "RailCraft Team";
             PlayerSettings.productName = "RailCraft";
             PlayerSettings.colorSpace = ColorSpace.Linear;
+            var audioManager = Unsupported.GetSerializedAssetInterfaceSingleton("AudioManager");
+            var serializedAudioManager = new SerializedObject(audioManager);
+            serializedAudioManager.FindProperty("m_DisableAudio").boolValue = true;
+            serializedAudioManager.ApplyModifiedPropertiesWithoutUndo();
             PlayerSettings.defaultScreenWidth = 1920;
             PlayerSettings.defaultScreenHeight = 1080;
             PlayerSettings.fullScreenMode = FullScreenMode.Windowed;

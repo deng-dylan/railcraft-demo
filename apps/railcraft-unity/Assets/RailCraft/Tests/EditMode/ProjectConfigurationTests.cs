@@ -1,6 +1,8 @@
+using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace RailCraft.Tests.EditMode
 {
@@ -14,6 +16,37 @@ namespace RailCraft.Tests.EditMode
                 Is.EqualTo(BuildTarget.StandaloneWindows64));
             Assert.That(PlayerSettings.productName, Is.EqualTo("RailCraft"));
             Assert.That(PlayerSettings.companyName, Is.EqualTo("RailCraft Team"));
+        }
+
+        [Test]
+        public void ProjectHasNoAnalyticsMultiplayerOrXrPackages()
+        {
+            var packageNames = UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages()
+                .Select(packageInfo => packageInfo.name)
+                .ToArray();
+
+            Assert.That(packageNames, Does.Not.Contain("com.unity.analytics"));
+            Assert.That(packageNames, Does.Not.Contain("com.unity.multiplayer.center"));
+            Assert.That(packageNames, Does.Not.Contain("com.unity.xr.legacyinputhelpers"));
+        }
+
+        [Test]
+        public void ProjectDoesNotUseTemplateInputActions()
+        {
+            Assert.That(AssetDatabase.LoadAssetAtPath<InputActionAsset>(
+                "Assets/InputSystem_Actions.inputactions"), Is.Null);
+            Assert.That(EditorBuildSettings.TryGetConfigObject(
+                "com.unity.input.settings.actions", out InputActionAsset _), Is.False);
+        }
+
+        [Test]
+        public void ProjectDisablesUnityAudio()
+        {
+            var audioManager = Unsupported.GetSerializedAssetInterfaceSingleton("AudioManager");
+            var serializedAudioManager = new SerializedObject(audioManager);
+
+            Assert.That(serializedAudioManager.FindProperty("m_DisableAudio").boolValue,
+                Is.True);
         }
     }
 }
