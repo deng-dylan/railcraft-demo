@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "swm400e1-guided-flow-2026-08-v1",
+  "failFirstCommissioning": true,
+  "steps": [
+    {
+      "id": "frame_module",
+      "order": 1,
+      "displayName": "构架模块就位",
+      "phase": "bogie_assembly",
+      "assetKey": "module.frame",
+      "dropTargetId": "target.frame",
+      "questionIds": ["q001", "q002", "q003", "q004"]
+    },
+    {
+      "id": "wheelset_axlebox_a",
+      "order": 2,
+      "displayName": "A端轮对轴箱模块",
+      "phase": "bogie_assembly",
+      "assetKey": "module.wheelset_axlebox_a",
+      "dropTargetId": "target.wheelset_axlebox_a",
+      "questionIds": ["q005", "q006", "q007"]
+    },
+    {
+      "id": "wheelset_axlebox_b",
+      "order": 3,
+      "displayName": "B端轮对轴箱模块",
+      "phase": "bogie_assembly",
+      "assetKey": "module.wheelset_axlebox_b",
+      "dropTargetId": "target.wheelset_axlebox_b",
+      "questionIds": ["q008", "q009", "q010"]
+    },
+    {
+      "id": "primary_suspension",
+      "order": 4,
+      "displayName": "一系悬挂模块",
+      "phase": "bogie_assembly",
+      "assetKey": "module.primary_suspension",
+      "dropTargetId": "target.primary_suspension",
+      "questionIds": ["q011", "q012", "q013"]
+    },
+    {
+      "id": "brake_module",
+      "order": 5,
+      "displayName": "制动模块",
+      "phase": "bogie_assembly",
+      "assetKey": "module.brake",
+      "dropTargetId": "target.brake",
+      "questionIds": ["q014", "q015", "q016"]
+    },
+    {
+      "id": "traction_drive_a",
+      "order": 6,
+      "displayName": "A端牵引驱动模块",
+      "phase": "bogie_assembly",
+      "assetKey": "module.traction_drive_a",
+      "dropTargetId": "target.traction_drive_a",
+      "questionIds": ["q017", "q018", "q019"]
+    },
+    {
+      "id": "traction_drive_b",
+      "order": 7,
+      "displayName": "B端牵引驱动模块",
+      "phase": "bogie_assembly",
+      "assetKey": "module.traction_drive_b",
+      "dropTargetId": "target.traction_drive_b",
+      "questionIds": ["q020", "q021", "q022"]
+    },
+    {
+      "id": "central_traction",
+      "order": 8,
+      "displayName": "中央牵引装置",
+      "phase": "bogie_assembly",
+      "assetKey": "module.central_traction",
+      "dropTargetId": "target.central_traction",
+      "questionIds": ["q023", "q024", "q025"]
+    },
+    {
+      "id": "secondary_suspension",
+      "order": 9,
+      "displayName": "二系悬挂模块",
+      "phase": "bogie_assembly",
+      "assetKey": "module.secondary_suspension",
+      "dropTargetId": "target.secondary_suspension",
+      "questionIds": ["q026", "q027", "q028"]
+    },
+    {
+      "id": "height_damping",
+      "order": 10,
+      "displayName": "高度控制与减振模块",
+      "phase": "bogie_assembly",
+      "assetKey": "module.height_damping",
+      "dropTargetId": "target.height_damping",
+      "questionIds": ["q029", "q030", "q031"]
+    },
+    {
+      "id": "sensor_module",
+      "order": 11,
+      "displayName": "传感器模块",
+      "phase": "bogie_assembly",
+      "assetKey": "module.sensor",
+      "dropTargetId": "target.sensor",
+      "questionIds": ["q032", "q033", "q034"]
+    },
+    {
+      "id": "carbody_lowering",
+      "order": 12,
+      "displayName": "车体落车",
+      "phase": "carbody_lowering",
+      "assetKey": "module.carbody",
+      "dropTargetId": "target.completed_bogie",
+      "questionIds": ["q035", "q036", "q037"]
+    },
+    {
+      "id": "commissioning",
+      "order": 13,
+      "displayName": "初次调试",
+      "phase": "commissioning",
+      "assetKey": "module.commissioning_card",
+      "dropTargetId": "target.commissioning_console",
+      "questionIds": ["q038", "q039", "q040", "q041"]
+    },
+    {
+      "id": "inspection",
+      "order": 14,
+      "displayName": "整改与检验",
+      "phase": "inspection",
+      "assetKey": "module.inspection_card",
+      "dropTargetId": "target.inspection_station",
+      "questionIds": ["q042", "q043", "q044", "q045"]
+    },
+    {
+      "id": "release",
+      "order": 15,
+      "displayName": "投入使用",
+      "phase": "release",
+      "assetKey": "module.release_card",
+      "dropTargetId": "target.release_board",
+      "questionIds": ["q046", "q047", "q048"]
+    }
+  ]
+}
