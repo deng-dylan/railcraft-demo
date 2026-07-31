@@ -28,6 +28,9 @@ namespace RailCraft.Tests.EditMode
             Assert.That(packageNames, Does.Not.Contain("com.unity.analytics"));
             Assert.That(packageNames, Does.Not.Contain("com.unity.multiplayer.center"));
             Assert.That(packageNames, Does.Not.Contain("com.unity.xr.legacyinputhelpers"));
+            Assert.That(packageNames, Does.Not.Contain("com.unity.modules.unityanalytics"));
+            Assert.That(packageNames, Does.Not.Contain("com.unity.modules.vr"));
+            Assert.That(packageNames, Does.Not.Contain("com.unity.modules.xr"));
         }
 
         [Test]
