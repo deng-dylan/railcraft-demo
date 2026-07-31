@@ -107,7 +107,7 @@
       "order": 12,
       "displayName": "车体落车",
       "phase": "carbody_lowering",
-      "assetKey": "module.carbody",
+      "assetKey": "vehicle.powered_intermediate_car",
       "dropTargetId": "target.completed_bogie",
       "questionIds": ["q035", "q036", "q037"]
     },
@@ -116,7 +116,7 @@
       "order": 13,
       "displayName": "初次调试",
       "phase": "commissioning",
-      "assetKey": "module.commissioning_card",
+      "assetKey": "process.commissioning_card",
       "dropTargetId": "target.commissioning_console",
       "questionIds": ["q038", "q039", "q040", "q041"]
     },
@@ -125,7 +125,7 @@
       "order": 14,
       "displayName": "整改与检验",
       "phase": "inspection",
-      "assetKey": "module.inspection_card",
+      "assetKey": "process.inspection_card",
       "dropTargetId": "target.inspection_station",
       "questionIds": ["q042", "q043", "q044", "q045"]
     },
@@ -134,7 +134,7 @@
       "order": 15,
       "displayName": "投入使用",
       "phase": "release",
-      "assetKey": "module.release_card",
+      "assetKey": "process.release_card",
       "dropTargetId": "target.release_board",
       "questionIds": ["q046", "q047", "q048"]
     }

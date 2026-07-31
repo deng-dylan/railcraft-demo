@@ -99,8 +99,9 @@ namespace RailCraft.Content
             }
 
             var assignments = new Dictionary<string, int>(StringComparer.Ordinal);
-            foreach (var step in steps)
+            for (var stepIndex = 0; stepIndex < steps.Length; stepIndex++)
             {
+                var step = steps[stepIndex];
                 if (step?.questionIds == null)
                     continue;
 
@@ -108,7 +109,7 @@ namespace RailCraft.Content
                 {
                     if (string.IsNullOrWhiteSpace(questionId) || !questionIds.Contains(questionId))
                     {
-                        issues.Add($"step_question_missing:{StepLabel(step, 0)}:{questionId}");
+                        issues.Add($"step_question_missing:{StepLabel(step, stepIndex)}:{questionId}");
                         continue;
                     }
 

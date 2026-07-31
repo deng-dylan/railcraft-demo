@@ -112,8 +112,34 @@ namespace RailCraft.Tests.EditMode
                 "bogie_assembly", "bogie_assembly", "carbody_lowering",
                 "commissioning", "inspection", "release"
             }));
-            Assert.That(bundle.Flow.steps[14].assetKey, Is.EqualTo("module.release_card"));
-            Assert.That(bundle.Flow.steps[14].dropTargetId, Is.EqualTo("target.release_board"));
+            Assert.That(bundle.Flow.steps.Select(step => step.assetKey), Is.EqualTo(new[]
+            {
+                "module.frame", "module.wheelset_axlebox_a", "module.wheelset_axlebox_b",
+                "module.primary_suspension", "module.brake", "module.traction_drive_a",
+                "module.traction_drive_b", "module.central_traction", "module.secondary_suspension",
+                "module.height_damping", "module.sensor", "vehicle.powered_intermediate_car",
+                "process.commissioning_card", "process.inspection_card", "process.release_card"
+            }));
+            Assert.That(bundle.Flow.steps.Select(step => step.dropTargetId), Is.EqualTo(new[]
+            {
+                "target.frame", "target.wheelset_axlebox_a", "target.wheelset_axlebox_b",
+                "target.primary_suspension", "target.brake", "target.traction_drive_a",
+                "target.traction_drive_b", "target.central_traction", "target.secondary_suspension",
+                "target.height_damping", "target.sensor", "target.completed_bogie",
+                "target.commissioning_console", "target.inspection_station", "target.release_board"
+            }));
+        }
+
+        [Test]
+        public void MissingQuestionReferenceOnAnUnnamedLaterStepUsesThatStepsIndex()
+        {
+            var bundle = ContentFixture.CreateValid();
+            bundle.Flow.steps[6].id = "";
+            bundle.Flow.steps[6].questionIds[0] = "unknown-question";
+
+            var issues = ContentValidator.Validate(bundle);
+
+            Assert.That(issues, Does.Contain("step_question_missing:6:unknown-question"));
         }
 
         [Test]
