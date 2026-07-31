@@ -4,9 +4,15 @@
 
 ## 当前组成
 
+RailCraft 的 v0.1 测试版主线已迁移至 Unity：入口为
+[`apps/railcraft-unity`](apps/railcraft-unity)。历史 Godot Demo 保留在
+[`apps/railcraft-godot`](apps/railcraft-godot)，用于参考和回溯，不再作为 v0.1
+测试版主线。
+
 | 区域 | 用途 | 状态 |
 | --- | --- | --- |
-| [`apps/railcraft-godot`](apps/railcraft-godot) | Godot 铁路知识与列车装配应用源码 | 当前可运行主线 |
+| [`apps/railcraft-unity`](apps/railcraft-unity) | Unity v0.1 测试版主线 | 使用 Unity 6000.3.21f1 创建 |
+| [`apps/railcraft-godot`](apps/railcraft-godot) | 历史 Godot Demo/参考实现 | 保留参考 |
 | [`docs/project`](docs/project) | 原始需求、设计和实施任务资料 | 项目基线 |
 | [`docs/reviews`](docs/reviews) | 外部 Demo、交付物与技术方案评审 | 持续更新 |
 | [`docs/decisions`](docs/decisions) | 团队已确认的仓库和技术决策 | 持续更新 |
@@ -31,6 +37,7 @@ git clone https://github.com/deng-dylan/railcraft-demo.git
 
 ## 当前决策
 
-- Godot 版本是项目主线实现，源码直接在 `apps/railcraft-godot` 演进。
+- Unity v0.1 测试版是项目主线实现，入口为 `apps/railcraft-unity`。
+- Godot 版本作为历史 Demo/参考实现保留在 `apps/railcraft-godot`。
 - GOOD2 Ren'Py 版本以独立原型资料归档，详见 [`docs/reviews/good2-renpy-v1.md`](docs/reviews/good2-renpy-v1.md)。
 - 项目总仓库结构的依据见 [`docs/decisions/0001-project-repository-layout.md`](docs/decisions/0001-project-repository-layout.md)。

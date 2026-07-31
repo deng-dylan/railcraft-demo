@@ -1,6 +1,16 @@
 # Agent and local working files
 .agents/
 tmp/
+.tmp/
+
+# Unity generated files
+apps/railcraft-unity/[Ll]ibrary/
+apps/railcraft-unity/[Tt]emp/
+apps/railcraft-unity/[Oo]bj/
+apps/railcraft-unity/[Ll]ogs/
+apps/railcraft-unity/[Uu]ser[Ss]ettings/
+apps/railcraft-unity/TestResults/
+apps/railcraft-unity/Builds/
 
 # OS and editor files
 .DS_Store
