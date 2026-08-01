@@ -11,11 +11,13 @@ RailCraft 的 v0.1 测试版主线已迁移至 Unity：入口为
 
 | 区域 | 用途 | 状态 |
 | --- | --- | --- |
-| [`apps/railcraft-unity`](apps/railcraft-unity) | Unity v0.1 测试版主线 | 使用 Unity 6000.3.21f1 创建 |
+| [`apps/railcraft-unity`](apps/railcraft-unity) | Unity v0.1 测试版主线 | 已完成 Windows x86_64 验收 |
 | [`apps/railcraft-godot`](apps/railcraft-godot) | 历史 Godot Demo/参考实现 | 保留参考 |
 | [`docs/project`](docs/project) | 原始需求、设计和实施任务资料 | 项目基线 |
 | [`docs/reviews`](docs/reviews) | 外部 Demo、交付物与技术方案评审 | 持续更新 |
 | [`docs/decisions`](docs/decisions) | 团队已确认的仓库和技术决策 | 持续更新 |
+| [`docs/MAINTENANCE.md`](docs/MAINTENANCE.md) | 文件边界、缓存与归档维护规则 | 当前有效 |
+| [`apps/railcraft-unity/Artifacts/Acceptance`](apps/railcraft-unity/Artifacts/Acceptance) | Unity v0.1 可复核验收证据 | 已跟踪 |
 | [`prototypes`](prototypes) | 独立原型的可审计源快照与说明 | 参考用途 |
 | [`deliveries`](deliveries) | 外部交付登记和原始包的存放约定 | 原始包不进入 Git |
 | [`ideas`](ideas) | 待讨论的产品、内容和技术想法 | 待补充 |
@@ -26,7 +28,7 @@ RailCraft 的 v0.1 测试版主线已迁移至 Unity：入口为
 git clone https://github.com/deng-dylan/railcraft-demo.git
 ```
 
-克隆后即可获得项目资料、原型快照和完整 Godot 工程。Godot 应用的运行与开发说明见 [`apps/railcraft-godot/README.md`](apps/railcraft-godot/README.md)。
+克隆后即可获得项目资料、历史原型快照、Unity v0.1 源码与验收证据。Unity 应用的运行与开发说明见 [`apps/railcraft-unity/README.md`](apps/railcraft-unity/README.md)；Godot 参考实现的说明见 [`apps/railcraft-godot/README.md`](apps/railcraft-godot/README.md)。
 
 ## 原型管理原则
 
@@ -41,3 +43,4 @@ git clone https://github.com/deng-dylan/railcraft-demo.git
 - Godot 版本作为历史 Demo/参考实现保留在 `apps/railcraft-godot`。
 - GOOD2 Ren'Py 版本以独立原型资料归档，详见 [`docs/reviews/good2-renpy-v1.md`](docs/reviews/good2-renpy-v1.md)。
 - 项目总仓库结构的依据见 [`docs/decisions/0001-project-repository-layout.md`](docs/decisions/0001-project-repository-layout.md)。
+- 日常清理与归档边界见 [`docs/MAINTENANCE.md`](docs/MAINTENANCE.md)。

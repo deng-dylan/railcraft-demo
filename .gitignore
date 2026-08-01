@@ -1,5 +1,6 @@
 # Agent and local working files
 .agents/
+.superpowers/
 tmp/
 .tmp/
 
