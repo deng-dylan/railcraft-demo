@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,13 +15,17 @@ namespace RailCraft.Interaction
         [SerializeField] private float rejectedReturnDuration = 0.25f;
 
         private readonly InputAction pointerPositionAction = new InputAction(
-            "RailCraftPointerPosition", InputActionType.Value, "<Pointer>/position");
+            "RailCraftPointerPosition", InputActionType.Value, "<Mouse>/position");
         private readonly InputAction pointerPressAction = new InputAction(
-            "RailCraftPointerPress", InputActionType.Button, "<Pointer>/press");
+            "RailCraftPointerPress", InputActionType.Button, "<Mouse>/leftButton");
+        private readonly HashSet<DraggableModule> returningModules = new HashSet<DraggableModule>();
+        private readonly Dictionary<DraggableModule, DropTarget> snappingModules =
+            new Dictionary<DraggableModule, DropTarget>();
 
         private IDragAuthorization authorization;
         private DraggableModule activeModule;
         private Plane dragPlane;
+        private Vector3 dragOffset;
         private bool orbitWasEnabled;
 
         public event Action<string> DropCompleted;
@@ -40,8 +45,37 @@ namespace RailCraft.Interaction
             pointerPositionAction.Disable();
             pointerPressAction.Disable();
             StopAllCoroutines();
-            RestoreCameraOrbit();
+
+            var interruptedDrag = activeModule;
             activeModule = null;
+            if (interruptedDrag != null)
+            {
+                interruptedDrag.CancelDragAndRestoreStart();
+                PartDragStateChanged?.Invoke(false);
+            }
+
+            foreach (var module in returningModules)
+                module?.FinishReturn();
+            returningModules.Clear();
+
+            var interruptedSnaps = new List<KeyValuePair<DraggableModule, DropTarget>>(snappingModules);
+            snappingModules.Clear();
+            foreach (var entry in interruptedSnaps)
+            {
+                if (entry.Key == null)
+                    continue;
+
+                if (entry.Value == null || entry.Value.SnapAnchor == null)
+                {
+                    entry.Key.CancelDragAndRestoreStart();
+                    continue;
+                }
+
+                entry.Key.FinishSnap(entry.Value.SnapAnchor.position, entry.Value.SnapAnchor.rotation);
+                DropCompleted?.Invoke(entry.Key.StepId);
+            }
+
+            RestoreCameraOrbit();
         }
 
         private void OnDestroy()
@@ -126,6 +160,7 @@ namespace RailCraft.Interaction
 
             module.BeginSnap();
             var accepted = new DragDropResult(true, "accepted", module.StepId, target);
+            snappingModules[module] = target;
             StartCoroutine(SnapModule(module, target));
             return accepted;
         }
@@ -148,7 +183,10 @@ namespace RailCraft.Interaction
                 if (!TryBeginDrag(module))
                     return false;
 
-                dragPlane = new Plane(cameraForInteraction.transform.forward, hit.point);
+                dragPlane = new Plane(cameraForInteraction.transform.forward, module.StartPosition);
+                dragOffset = dragPlane.Raycast(ray, out var distance)
+                    ? module.StartPosition - ray.GetPoint(distance)
+                    : Vector3.zero;
                 return true;
             }
 
@@ -161,12 +199,13 @@ namespace RailCraft.Interaction
             if (cameraForInteraction == null || !dragPlane.Raycast(cameraForInteraction.ScreenPointToRay(screenPosition), out var distance))
                 return;
 
-            DragTo(cameraForInteraction.ScreenPointToRay(screenPosition).GetPoint(distance));
+            DragTo(cameraForInteraction.ScreenPointToRay(screenPosition).GetPoint(distance) + dragOffset);
         }
 
         private DragDropResult Reject(DraggableModule module, string code, DropTarget target)
         {
-            module.EndRejectedDrag();
+            module.BeginReturn();
+            returningModules.Add(module);
             var rejected = new DragDropResult(false, code, module.StepId, target);
             RaiseRejected(rejected);
             StartCoroutine(ReturnModule(module));
@@ -189,8 +228,11 @@ namespace RailCraft.Interaction
                 yield return null;
             }
 
-            module.FinishSnap(target.SnapAnchor.position, target.SnapAnchor.rotation);
-            DropCompleted?.Invoke(module.StepId);
+            if (snappingModules.Remove(module))
+            {
+                module.FinishSnap(target.SnapAnchor.position, target.SnapAnchor.rotation);
+                DropCompleted?.Invoke(module.StepId);
+            }
         }
 
         private IEnumerator ReturnModule(DraggableModule module)
@@ -210,7 +252,8 @@ namespace RailCraft.Interaction
                 yield return null;
             }
 
-            module.transform.SetPositionAndRotation(startPosition, lockedRotation);
+            if (returningModules.Remove(module))
+                module.FinishReturn();
         }
 
         private DropTarget FindTarget(Vector3 worldPosition)

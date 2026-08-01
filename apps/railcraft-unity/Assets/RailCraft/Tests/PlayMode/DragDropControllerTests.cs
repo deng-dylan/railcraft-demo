@@ -10,16 +10,46 @@ namespace RailCraft.Tests.PlayMode
     public sealed class DragDropControllerTests
     {
         [UnityTest]
-        public IEnumerator DraggingPreservesAuthoredRotation()
+        public IEnumerator PointerDragStartsAtTheModuleRootWithoutSurfaceJump()
+        {
+            var fixture = DragFixture.CreateUnlocked();
+
+            try
+            {
+                yield return null;
+                Physics.SyncTransforms();
+                var ray = fixture.Camera.ScreenPointToRay(fixture.ModuleScreenPosition);
+                Assert.That(fixture.Module.InteractionCollider.Raycast(
+                    ray, out _, float.PositiveInfinity), Is.True,
+                    "The real screen ray must hit the configured module collider.");
+                yield return fixture.BeginPointerDrag();
+
+                Assert.That(fixture.Mouse.leftButton.isPressed, Is.True,
+                    "The Input System test mouse must hold the left button.");
+                Assert.That(fixture.Controller.IsPartDragActive, Is.True);
+                Assert.That(fixture.Module.transform.position.z,
+                    Is.EqualTo(fixture.StartPosition.z).Within(0.001f));
+
+                yield return fixture.MovePointerTo(fixture.ModuleScreenPosition + new Vector2(6f, 0f));
+
+                Assert.That(fixture.Module.transform.position.z,
+                    Is.EqualTo(fixture.StartPosition.z).Within(0.001f));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator PointerDraggingPreservesAuthoredRotation()
         {
             var fixture = DragFixture.CreateUnlocked();
             var initial = fixture.Module.transform.rotation;
 
             try
             {
-                Assert.That(fixture.Controller.TryBeginDrag(fixture.Module), Is.True);
-                fixture.Controller.DragTo(new Vector3(3f, 4f, 5f));
-                yield return null;
+                yield return fixture.DragAcrossScreen(fixture.TargetScreenPosition);
 
                 Assert.That(Quaternion.Angle(initial, fixture.Module.transform.rotation), Is.LessThan(0.01f));
             }
@@ -30,7 +60,7 @@ namespace RailCraft.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator AcceptedDropRaisesCompletionOnlyAfterSnapFinishes()
+        public IEnumerator PointerAcceptedDropRaisesCompletionOnlyAfterSnapFinishes()
         {
             var fixture = DragFixture.CreateUnlocked();
             var completedCount = 0;
@@ -38,11 +68,9 @@ namespace RailCraft.Tests.PlayMode
 
             try
             {
-                fixture.Controller.TryBeginDrag(fixture.Module);
-                fixture.Controller.DragTo(fixture.Target.SnapAnchor.position);
-                var result = fixture.Controller.ReleaseAt(fixture.Target.SnapAnchor.position);
+                yield return fixture.DragAcrossScreen(fixture.TargetScreenPosition);
+                yield return fixture.ReleasePointer();
 
-                Assert.That(result.Accepted, Is.True);
                 Assert.That(completedCount, Is.EqualTo(0));
                 Assert.That(fixture.Module.InteractionCollider.enabled, Is.False);
 
@@ -62,27 +90,25 @@ namespace RailCraft.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator WrongTargetReturnsModuleWithoutChangingItsRotation()
+        public IEnumerator RejectedReturnLocksTheModuleUntilItReachesItsStartPose()
         {
             var fixture = DragFixture.CreateUnlocked("wheelset_axlebox_a");
-            var initialRotation = fixture.Module.transform.rotation;
-            DragDropResult rejected = null;
-            fixture.Controller.DropRejected += result => rejected = result;
 
             try
             {
-                fixture.Controller.TryBeginDrag(fixture.Module);
-                fixture.Controller.DragTo(fixture.Target.SnapAnchor.position);
-                var result = fixture.Controller.ReleaseAt(fixture.Target.SnapAnchor.position);
+                yield return fixture.DragAcrossScreen(fixture.TargetScreenPosition);
+                yield return fixture.ReleasePointer();
+                yield return fixture.BeginPointerDrag();
 
-                Assert.That(result.Code, Is.EqualTo("wrong_target"));
-                Assert.That(rejected, Is.SameAs(result));
+                Assert.That(fixture.Controller.IsPartDragActive, Is.False);
+                Assert.That(fixture.OrbitController.enabled, Is.True);
+                Assert.That(Vector3.Distance(fixture.Module.transform.position, fixture.StartPosition),
+                    Is.GreaterThan(0.001f));
+
                 yield return new WaitForSeconds(0.3f);
 
                 Assert.That(Vector3.Distance(fixture.Module.transform.position, fixture.StartPosition),
                     Is.LessThan(0.001f));
-                Assert.That(Quaternion.Angle(initialRotation, fixture.Module.transform.rotation), Is.LessThan(0.01f));
-                Assert.That(fixture.Module.InteractionCollider.enabled, Is.True);
             }
             finally
             {
@@ -91,23 +117,101 @@ namespace RailCraft.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator ReleasingTwiceDuringSnapDoesNotDuplicateCompletion()
+        public IEnumerator DisablingDuringActiveDragRestoresPoseAndEmitsOneEndSignal()
         {
             var fixture = DragFixture.CreateUnlocked();
-            var completedCount = 0;
-            fixture.Controller.DropCompleted += _ => completedCount++;
+            var endSignals = 0;
+            fixture.Controller.PartDragStateChanged += isDragging =>
+            {
+                if (!isDragging)
+                    endSignals++;
+            };
 
             try
             {
-                fixture.Controller.TryBeginDrag(fixture.Module);
-                fixture.Controller.DragTo(fixture.Target.SnapAnchor.position);
-                fixture.Controller.ReleaseAt(fixture.Target.SnapAnchor.position);
+                yield return fixture.BeginPointerDrag();
+                fixture.Controller.enabled = false;
+                yield return null;
 
-                Assert.That(fixture.Controller.ReleaseAt(fixture.Target.SnapAnchor.position).Code,
-                    Is.EqualTo("not_dragging"));
-                yield return new WaitForSeconds(0.08f);
+                Assert.That(Vector3.Distance(fixture.Module.transform.position, fixture.StartPosition),
+                    Is.LessThan(0.001f));
+                Assert.That(fixture.Module.IsDragging, Is.False);
+                Assert.That(fixture.Module.IsSnapping, Is.False);
+                Assert.That(fixture.OrbitController.enabled, Is.True);
+                Assert.That(endSignals, Is.EqualTo(1));
+
+                fixture.Controller.enabled = true;
+                yield return null;
+                Assert.That(fixture.Module.IsDragging || fixture.Module.IsSnapping, Is.False);
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator DisablingDuringRejectedReturnRestoresStartPoseWithoutDuplicateEndSignal()
+        {
+            var fixture = DragFixture.CreateUnlocked("wheelset_axlebox_a");
+            var endSignals = 0;
+            fixture.Controller.PartDragStateChanged += isDragging =>
+            {
+                if (!isDragging)
+                    endSignals++;
+            };
+
+            try
+            {
+                yield return fixture.DragAcrossScreen(fixture.TargetScreenPosition);
+                yield return fixture.ReleasePointer();
+                yield return null;
+                fixture.Controller.enabled = false;
+                yield return null;
+
+                Assert.That(Vector3.Distance(fixture.Module.transform.position, fixture.StartPosition),
+                    Is.LessThan(0.001f));
+                Assert.That(fixture.Module.IsDragging || fixture.Module.IsSnapping, Is.False);
+                Assert.That(fixture.OrbitController.enabled, Is.True);
+                Assert.That(endSignals, Is.EqualTo(1));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator DisablingDuringSnapCompletesOnceAndLeavesTheModuleReusable()
+        {
+            var fixture = DragFixture.CreateUnlocked();
+            var completedCount = 0;
+            var endSignals = 0;
+            fixture.Controller.DropCompleted += _ => completedCount++;
+            fixture.Controller.PartDragStateChanged += isDragging =>
+            {
+                if (!isDragging)
+                    endSignals++;
+            };
+
+            try
+            {
+                yield return fixture.DragAcrossScreen(fixture.TargetScreenPosition);
+                yield return fixture.ReleasePointer();
+                yield return null;
+                fixture.Controller.enabled = false;
+                yield return null;
 
                 Assert.That(completedCount, Is.EqualTo(1));
+                Assert.That(endSignals, Is.EqualTo(1));
+                Assert.That(Vector3.Distance(fixture.Module.transform.position, fixture.Target.SnapAnchor.position),
+                    Is.LessThan(0.001f));
+                Assert.That(fixture.Module.InteractionCollider.enabled, Is.False);
+                Assert.That(fixture.Module.IsDragging || fixture.Module.IsSnapping, Is.False);
+
+                fixture.Controller.enabled = true;
+                yield return null;
+                Assert.That(fixture.Module.IsDragging || fixture.Module.IsSnapping, Is.False);
             }
             finally
             {

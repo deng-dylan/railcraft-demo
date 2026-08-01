@@ -3,7 +3,8 @@
   "rootNamespace": "RailCraft.Tests.PlayMode",
   "references": [
     "RailCraft.Runtime",
-    "Unity.InputSystem"
+    "Unity.InputSystem",
+    "Unity.InputSystem.TestFramework"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
