@@ -27,6 +27,8 @@ namespace RailCraft.Interaction
         private Plane dragPlane;
         private Vector3 dragOffset;
         private bool orbitWasEnabled;
+        private bool isDisabling;
+        private bool isEndingDrag;
 
         public event Action<string> DropCompleted;
         public event Action<DragDropResult> DropRejected;
@@ -36,12 +38,14 @@ namespace RailCraft.Interaction
 
         private void OnEnable()
         {
+            isDisabling = false;
             pointerPositionAction.Enable();
             pointerPressAction.Enable();
         }
 
         private void OnDisable()
         {
+            isDisabling = true;
             pointerPositionAction.Disable();
             pointerPressAction.Disable();
             StopAllCoroutines();
@@ -115,7 +119,8 @@ namespace RailCraft.Interaction
 
         public bool TryBeginDrag(DraggableModule module)
         {
-            if (module == null || activeModule != null)
+            if (!isActiveAndEnabled || isDisabling || isEndingDrag
+                || module == null || activeModule != null)
                 return false;
 
             if (authorization == null || !authorization.CanDrag(module.StepId))
@@ -146,23 +151,31 @@ namespace RailCraft.Interaction
             var module = activeModule;
             activeModule = null;
             RestoreCameraOrbit();
-            PartDragStateChanged?.Invoke(false);
+            isEndingDrag = true;
+            try
+            {
+                if (authorization == null || !authorization.CanDrag(module.StepId))
+                    return Reject(module, "step_locked", null);
 
-            if (authorization == null || !authorization.CanDrag(module.StepId))
-                return Reject(module, "step_locked", null);
+                var target = FindTarget(worldPosition);
+                if (target == null)
+                    return Reject(module, "outside_target", null);
 
-            var target = FindTarget(worldPosition);
-            if (target == null)
-                return Reject(module, "outside_target", null);
+                if (!target.CanAccept(module.StepId))
+                    return Reject(module, "wrong_target", target);
 
-            if (!target.CanAccept(module.StepId))
-                return Reject(module, "wrong_target", target);
-
-            module.BeginSnap();
-            var accepted = new DragDropResult(true, "accepted", module.StepId, target);
-            snappingModules[module] = target;
-            StartCoroutine(SnapModule(module, target));
-            return accepted;
+                module.BeginSnap();
+                var accepted = new DragDropResult(true, "accepted", module.StepId, target);
+                snappingModules[module] = target;
+                PartDragStateChanged?.Invoke(false);
+                if (isActiveAndEnabled && !isDisabling && snappingModules.ContainsKey(module))
+                    StartCoroutine(SnapModule(module, target));
+                return accepted;
+            }
+            finally
+            {
+                isEndingDrag = false;
+            }
         }
 
         private bool TryBeginDragAtScreenPosition(Vector2 screenPosition)
@@ -207,8 +220,10 @@ namespace RailCraft.Interaction
             module.BeginReturn();
             returningModules.Add(module);
             var rejected = new DragDropResult(false, code, module.StepId, target);
+            PartDragStateChanged?.Invoke(false);
             RaiseRejected(rejected);
-            StartCoroutine(ReturnModule(module));
+            if (isActiveAndEnabled && !isDisabling && returningModules.Contains(module))
+                StartCoroutine(ReturnModule(module));
             return rejected;
         }
 

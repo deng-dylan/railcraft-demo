@@ -151,6 +151,37 @@ namespace RailCraft.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator DisablingFromDragEndCannotReenterTheController()
+        {
+            var fixture = DragFixture.CreateUnlocked();
+            var reentryAccepted = false;
+            fixture.Controller.PartDragStateChanged += isDragging =>
+            {
+                if (!isDragging)
+                {
+                    fixture.Controller.enabled = false;
+                    reentryAccepted = fixture.Controller.TryBeginDrag(fixture.Module);
+                }
+            };
+
+            try
+            {
+                yield return fixture.BeginPointerDrag();
+                fixture.Controller.enabled = false;
+                yield return null;
+
+                Assert.That(reentryAccepted, Is.False);
+                Assert.That(fixture.Controller.IsPartDragActive, Is.False);
+                Assert.That(fixture.Module.IsDragging || fixture.Module.IsSnapping || fixture.Module.IsReturning,
+                    Is.False);
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
         public IEnumerator DisablingDuringRejectedReturnRestoresStartPoseWithoutDuplicateEndSignal()
         {
             var fixture = DragFixture.CreateUnlocked("wheelset_axlebox_a");
@@ -212,6 +243,36 @@ namespace RailCraft.Tests.PlayMode
                 fixture.Controller.enabled = true;
                 yield return null;
                 Assert.That(fixture.Module.IsDragging || fixture.Module.IsSnapping, Is.False);
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator DisablingFromDragEndStillFinalizesTheRegisteredSnap()
+        {
+            var fixture = DragFixture.CreateUnlocked();
+            var completedCount = 0;
+            fixture.Controller.DropCompleted += _ => completedCount++;
+            fixture.Controller.PartDragStateChanged += isDragging =>
+            {
+                if (!isDragging)
+                    fixture.Controller.enabled = false;
+            };
+
+            try
+            {
+                yield return fixture.DragAcrossScreen(fixture.TargetScreenPosition);
+                yield return fixture.ReleasePointer();
+                yield return null;
+
+                Assert.That(completedCount, Is.EqualTo(1));
+                Assert.That(Vector3.Distance(fixture.Module.transform.position,
+                    fixture.Target.SnapAnchor.position), Is.LessThan(0.001f));
+                Assert.That(fixture.Module.IsDragging || fixture.Module.IsSnapping || fixture.Module.IsReturning,
+                    Is.False);
             }
             finally
             {
