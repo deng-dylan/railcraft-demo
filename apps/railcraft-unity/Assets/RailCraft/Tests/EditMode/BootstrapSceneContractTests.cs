@@ -38,7 +38,8 @@ namespace RailCraft.Tests.EditMode
                 {
                     "questionsJson", "flowJson", "prefabCatalog", "quizPresenter",
                     "assemblyPresenter", "processPresenter", "completionPresenter",
-                    "stepHud", "feedbackView", "dragDropController"
+                    "stepHud", "feedbackView", "dragDropController", "mainMenuPresenter",
+                    "guidancePresenter", "settingsPresenter", "resetPresenter"
                 })
                 {
                     Assert.That(data.FindProperty(propertyName).objectReferenceValue, Is.Not.Null,
@@ -56,6 +57,14 @@ namespace RailCraft.Tests.EditMode
                     Has.Length.EqualTo(1));
                 Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<CompletionPresenter>(true)).ToArray(),
                     Has.Length.EqualTo(1));
+                Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<MainMenuPresenter>(true)).ToArray(),
+                    Has.Length.EqualTo(1));
+                Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<GuidancePresenter>(true)).ToArray(),
+                    Has.Length.EqualTo(1));
+                Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<SettingsPresenter>(true)).ToArray(),
+                    Has.Length.EqualTo(1));
+                Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<ResetPresenter>(true)).ToArray(),
+                    Has.Length.EqualTo(1));
                 Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<DragDropController>(true)).ToArray(),
                     Has.Length.EqualTo(1));
 
@@ -65,6 +74,21 @@ namespace RailCraft.Tests.EditMode
                     || name.Contains("分数") || name.Contains("得分")), Is.False);
                 Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<Text>(true))
                     .Select(text => text.text), Has.Some.EqualTo("退出"));
+                Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<Text>(true))
+                    .Select(text => text.text), Has.None.EqualTo("继续游戏"));
+
+                var reset = roots.SelectMany(root => root.GetComponentsInChildren<ResetPresenter>(true)).Single();
+                var resetData = new SerializedObject(reset);
+                foreach (var propertyName in new[]
+                {
+                    "confirmationPanel", "confirmationText", "requestButton", "confirmButton",
+                    "cancelButton", "flowController", "guidancePresenter", "mainMenuPresenter",
+                    "settingsPresenter"
+                })
+                {
+                    Assert.That(resetData.FindProperty(propertyName).objectReferenceValue, Is.Not.Null,
+                        "ResetPresenter." + propertyName);
+                }
             }
             finally
             {

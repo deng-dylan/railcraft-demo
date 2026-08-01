@@ -30,6 +30,10 @@ namespace RailCraft.Flow
         [SerializeField] private StepHudView stepHud;
         [SerializeField] private FeedbackView feedbackView;
         [SerializeField] private DragDropController dragDropController;
+        [SerializeField] private MainMenuPresenter mainMenuPresenter;
+        [SerializeField] private GuidancePresenter guidancePresenter;
+        [SerializeField] private SettingsPresenter settingsPresenter;
+        [SerializeField] private ResetPresenter resetPresenter;
 
         private readonly Dictionary<string, QuestionDefinition> questionsById =
             new Dictionary<string, QuestionDefinition>(StringComparer.Ordinal);
@@ -83,6 +87,16 @@ namespace RailCraft.Flow
                 ? configuredFactorySceneName
                 : configuredFactorySceneName.Trim();
             initializeOnStart = true;
+        }
+
+        public void ConfigureNavigation(MainMenuPresenter configuredMainMenu,
+            GuidancePresenter configuredGuidance, SettingsPresenter configuredSettings,
+            ResetPresenter configuredReset)
+        {
+            mainMenuPresenter = configuredMainMenu;
+            guidancePresenter = configuredGuidance;
+            settingsPresenter = configuredSettings;
+            resetPresenter = configuredReset;
         }
 
         public void Configure(ContentBundle configuredContent, PartPrefabCatalog configuredCatalog,
@@ -518,7 +532,15 @@ namespace RailCraft.Flow
         {
             FatalErrorCode = string.IsNullOrWhiteSpace(issueCode) ? "unknown" : issueCode;
             configured = false;
+            dragDropController?.CancelAllInteractions();
+            quizPresenter?.CancelAndHide();
+            processPresenter?.ResetView();
+            mainMenuPresenter?.Hide();
+            guidancePresenter?.Hide();
+            settingsPresenter?.Hide();
+            resetPresenter?.HideConfirmation();
             completionPresenter?.ShowFatal(FatalErrorCode);
+            RaiseStateChanged();
         }
 
         private static string ExtractIssueCode(Exception exception)

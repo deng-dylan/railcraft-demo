@@ -77,5 +77,44 @@ namespace RailCraft.Tests.EditMode
             Assert.That(feedbackData.FindProperty("panelRoot").objectReferenceValue, Is.SameAs(feedback));
             Assert.That(feedbackData.FindProperty("messageText").objectReferenceValue, Is.Not.Null);
         }
+
+        [Test]
+        public void NavigationPrefabsExposeExactV01Surface()
+        {
+            var mainMenu = AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/RailCraft/Art/Prefabs/UI/MainMenu.prefab");
+            var guidance = AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/RailCraft/Art/Prefabs/UI/GuidancePanel.prefab");
+            var settings = AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/RailCraft/Art/Prefabs/UI/SettingsPanel.prefab");
+
+            Assert.That(mainMenu, Is.Not.Null);
+            Assert.That(guidance, Is.Not.Null);
+            Assert.That(settings, Is.Not.Null);
+            Assert.That(mainMenu.GetComponent<MainMenuPresenter>(), Is.Not.Null);
+            Assert.That(guidance.GetComponent<GuidancePresenter>(), Is.Not.Null);
+            Assert.That(settings.GetComponent<SettingsPresenter>(), Is.Not.Null);
+
+            var menuLabels = mainMenu.GetComponentsInChildren<Button>(true)
+                .Select(button => button.GetComponentInChildren<Text>(true)?.text).ToArray();
+            Assert.That(menuLabels, Is.EquivalentTo(new[] { "开始体验", "操作说明", "设置", "退出" }));
+            Assert.That(menuLabels, Does.Not.Contain("继续游戏"));
+            Assert.That(guidance.GetComponentsInChildren<Text>(true)
+                .Select(text => text.text), Has.Some.EqualTo(GuidancePresenter.RequiredCopy));
+
+            var settingsLabels = settings.GetComponentsInChildren<Text>(true)
+                .Select(text => text.text).ToArray();
+            Assert.That(settingsLabels, Does.Contain("画质"));
+            Assert.That(settingsLabels, Does.Contain("窗口模式"));
+            Assert.That(settingsLabels, Does.Not.Contain("音乐"));
+            Assert.That(settingsLabels, Does.Not.Contain("音效"));
+            var dropdowns = settings.GetComponentsInChildren<Dropdown>(true);
+            Assert.That(dropdowns, Has.Length.EqualTo(2));
+            Assert.That(dropdowns.Single(item => item.name == "QualityDropdown").options,
+                Has.Count.EqualTo(3));
+            Assert.That(dropdowns.Single(item => item.name == "WindowModeDropdown").options,
+                Has.Count.EqualTo(2));
+            Assert.That(settings.GetComponentInChildren<AudioSource>(true), Is.Null);
+        }
     }
 }

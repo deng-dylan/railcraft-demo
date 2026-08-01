@@ -52,6 +52,9 @@ namespace RailCraft.Editor
             var quizPrefab = RequireAsset<GameObject>(UiRoot + "/QuizPanel.prefab");
             var hudPrefab = RequireAsset<GameObject>(UiRoot + "/StepHud.prefab");
             var feedbackPrefab = RequireAsset<GameObject>(UiRoot + "/FeedbackToast.prefab");
+            var mainMenuPrefab = RequireAsset<GameObject>(UiRoot + "/MainMenu.prefab");
+            var guidancePrefab = RequireAsset<GameObject>(UiRoot + "/GuidancePanel.prefab");
+            var settingsPrefab = RequireAsset<GameObject>(UiRoot + "/SettingsPanel.prefab");
             RequireAsset<SceneAsset>(FactoryPath);
 
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
@@ -69,31 +72,56 @@ namespace RailCraft.Editor
             var feedbackObject = InstantiateUiPrefab(feedbackPrefab, canvas.transform, "FeedbackToast");
             Anchor((RectTransform)feedbackObject.transform, new Vector2(0.5f, 0f),
                 new Vector2(0.5f, 0f), new Vector2(0f, 36f));
+            var mainMenuObject = InstantiateUiPrefab(mainMenuPrefab, canvas.transform, "MainMenu");
+            Anchor((RectTransform)mainMenuObject.transform, new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f), Vector2.zero);
+            var guidanceObject = InstantiateUiPrefab(guidancePrefab, canvas.transform, "GuidancePanel");
+            Anchor((RectTransform)guidanceObject.transform, new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f), Vector2.zero);
+            var settingsObject = InstantiateUiPrefab(settingsPrefab, canvas.transform, "SettingsPanel");
+            Anchor((RectTransform)settingsObject.transform, new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f), Vector2.zero);
 
             var processPanel = BuildProcessPanel(canvas.transform, out var processMessage,
                 out var inspectionMarker, out var passIndicator, out var processButton);
             var completionPanel = BuildCompletionPanel(canvas.transform, out var completionMessage,
                 out var restartButton, out var exitButton);
+            var resetPanel = BuildResetSurface(canvas.transform, out var resetMessage,
+                out var resetRequest, out var resetConfirm, out var resetCancel);
 
             var quiz = quizObject.GetComponent<QuizPresenter>();
             var hud = hudObject.GetComponent<StepHudView>();
             var feedback = feedbackObject.GetComponent<FeedbackView>();
+            var mainMenu = mainMenuObject.GetComponent<MainMenuPresenter>();
+            var guidance = guidanceObject.GetComponent<GuidancePresenter>();
+            var settings = settingsObject.GetComponent<SettingsPresenter>();
             var assembly = composition.AddComponent<AssemblyPresenter>();
             var process = composition.AddComponent<ProcessStagePresenter>();
             process.Configure(processPanel, processMessage, inspectionMarker,
                 passIndicator, processButton);
             var completion = composition.AddComponent<CompletionPresenter>();
             completion.Configure(completionPanel, completionMessage, restartButton, exitButton);
+            var reset = composition.AddComponent<ResetPresenter>();
+            reset.ConfigureView(resetPanel, resetMessage, resetRequest, resetConfirm, resetCancel);
             var drag = composition.AddComponent<DragDropController>();
             var controller = composition.AddComponent<GuidedFlowController>();
             controller.ConfigureStartup(questions, flow, catalog, quiz, assembly, process,
                 completion, hud, feedback, drag);
+            controller.ConfigureNavigation(mainMenu, guidance, settings, reset);
+            guidance.Bind(controller, mainMenu);
+            settings.Bind(mainMenu);
+            mainMenu.Bind(controller, guidance, settings);
+            reset.Bind(controller, guidance, mainMenu, settings);
 
             quizObject.SetActive(false);
             hudObject.SetActive(false);
             feedbackObject.SetActive(false);
             processPanel.SetActive(false);
             completionPanel.SetActive(false);
+            mainMenu.Show();
+            guidance.Hide();
+            settings.Hide();
+            reset.HideConfirmation();
 
             EditorSceneManager.MarkSceneDirty(scene);
             if (!EditorSceneManager.SaveScene(scene, BootstrapPath))
@@ -157,6 +185,30 @@ namespace RailCraft.Editor
                 new Vector2(118f, -215f), new Vector2(220f, 58f));
             exit = CreateButton(panel.transform, "ExitButton", "退出",
                 new Vector2(382f, -215f), new Vector2(220f, 58f));
+            return panel;
+        }
+
+        private static GameObject BuildResetSurface(Transform parent, out Text message,
+            out Button request, out Button confirm, out Button cancel)
+        {
+            request = CreateButton(parent, "ResetRequestButton", "重置流程",
+                new Vector2(-210f, -30f), new Vector2(178f, 54f));
+            var requestRect = (RectTransform)request.transform;
+            requestRect.anchorMin = Vector2.one;
+            requestRect.anchorMax = Vector2.one;
+            requestRect.pivot = new Vector2(0f, 1f);
+
+            var panel = CreatePanel(parent, "ResetConfirmationPanel", new Vector2(780f, 330f),
+                new Color(0.035f, 0.065f, 0.09f, 0.99f));
+            Anchor((RectTransform)panel.transform, new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f), Vector2.zero);
+            message = CreateText(panel.transform, "ResetConfirmationText",
+                ResetPresenter.RequiredConfirmationCopy, 25,
+                new Vector2(48f, -46f), new Vector2(684f, 130f), TextAnchor.MiddleCenter);
+            confirm = CreateButton(panel.transform, "ResetConfirmButton", "确认重置",
+                new Vector2(126f, -225f), new Vector2(230f, 60f));
+            cancel = CreateButton(panel.transform, "ResetCancelButton", "取消",
+                new Vector2(424f, -225f), new Vector2(230f, 60f));
             return panel;
         }
 

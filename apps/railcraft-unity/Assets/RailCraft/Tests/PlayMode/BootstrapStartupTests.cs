@@ -10,8 +10,10 @@ using RailCraft.Interaction;
 using RailCraft.Presentation;
 using RailCraft.Process;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using UnityEngine.UI;
 
 namespace RailCraft.Tests.PlayMode
 {
@@ -46,8 +48,40 @@ namespace RailCraft.Tests.PlayMode
             var quizView = bootstrap.GetRootGameObjects()
                 .SelectMany(root => root.GetComponentsInChildren<QuizView>(true)).Single();
             var cameraDirector = Object.FindFirstObjectByType<CameraShotDirector>();
-            controller.StartNewRun();
-            controller.ConfirmGuidance();
+            var mainMenu = bootstrap.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<MainMenuPresenter>(true)).Single();
+            var guidance = bootstrap.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<GuidancePresenter>(true)).Single();
+            var buttons = bootstrap.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<Button>(true)).ToArray();
+            Assert.That(mainMenu.IsVisible, Is.True);
+            Assert.That(buttons.Select(ButtonLabel), Does.Not.Contain("继续游戏"));
+            Click(buttons.Single(button => ButtonLabel(button) == "设置"));
+            yield return null;
+            var settings = bootstrap.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<SettingsPresenter>(true)).Single();
+            Assert.That(settings.IsVisible, Is.True);
+            var qualityDropdown = bootstrap.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<Dropdown>(true))
+                .Single(dropdown => dropdown.name == "QualityDropdown");
+            Click(qualityDropdown);
+            yield return null;
+            Assert.That(bootstrap.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<Transform>(true))
+                .Any(item => item.name == "Dropdown List"), Is.True);
+            qualityDropdown.Hide();
+            yield return null;
+            Click(buttons.Single(button => ButtonLabel(button) == "返回主菜单"));
+            yield return null;
+            Assert.That(mainMenu.IsVisible, Is.True);
+            Click(buttons.Single(button => ButtonLabel(button) == "开始体验"));
+            yield return null;
+            Assert.That(controller.Snapshot.Phase, Is.EqualTo(FlowPhase.Guidance));
+            Assert.That(mainMenu.IsVisible, Is.False);
+            Assert.That(guidance.IsVisible, Is.True);
+            Assert.That(guidance.Copy, Is.EqualTo(GuidancePresenter.RequiredCopy));
+            Click(buttons.Single(button => ButtonLabel(button) == "开始装配"));
+            yield return null;
             Assert.That(controller.Snapshot.CurrentStepId, Is.EqualTo("frame_module"));
             Assert.That(quizView.IsVisible, Is.True);
             Assert.That(assembly.CurrentModule, Is.Not.Null);
@@ -69,6 +103,18 @@ namespace RailCraft.Tests.PlayMode
             Assert.That(controller.Snapshot.CurrentStepId, Is.EqualTo("wheelset_axlebox_a"));
             Assert.That(cameraDirector.CurrentShotId, Is.EqualTo("wheelset_axlebox_a"));
 
+            Click(buttons.Single(button => ButtonLabel(button) == "重置流程"));
+            yield return null;
+            Assert.That(bootstrap.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<Text>(true))
+                .Select(text => text.text), Has.Some.EqualTo(ResetPresenter.RequiredConfirmationCopy));
+            Click(buttons.Single(button => ButtonLabel(button) == "确认重置"));
+            yield return null;
+            Assert.That(controller.Snapshot.Phase, Is.EqualTo(FlowPhase.Guidance));
+            Assert.That(assembly.InstalledVisualCount, Is.EqualTo(0));
+            Assert.That(guidance.IsVisible, Is.True);
+            Assert.That(cameraDirector.CurrentShotId, Is.EqualTo("overview"));
+
             yield return SceneManager.UnloadSceneAsync("Factory");
             yield return SceneManager.UnloadSceneAsync("Bootstrap");
         }
@@ -87,6 +133,26 @@ namespace RailCraft.Tests.PlayMode
             var completion = root.AddComponent<CompletionPresenter>();
             var drag = root.AddComponent<DragDropController>();
             var controller = root.AddComponent<GuidedFlowController>();
+            var mainPanel = CreateChild(root.transform, "fatal.main");
+            var mainMenu = mainPanel.AddComponent<MainMenuPresenter>();
+            mainMenu.ConfigureView(mainPanel, null, null, null, null);
+            var guidancePanel = CreateChild(root.transform, "fatal.guidance");
+            var guidance = guidancePanel.AddComponent<GuidancePresenter>();
+            guidance.ConfigureView(guidancePanel, null, null);
+            var settingsPanel = CreateChild(root.transform, "fatal.settings");
+            var settings = settingsPanel.AddComponent<SettingsPresenter>();
+            settings.ConfigureView(settingsPanel, null, null, null);
+            var resetPanel = CreateChild(root.transform, "fatal.reset");
+            var reset = root.AddComponent<ResetPresenter>();
+            reset.ConfigureView(resetPanel, null, null, null, null);
+            guidance.Bind(controller, mainMenu);
+            settings.Bind(mainMenu);
+            mainMenu.Bind(controller, guidance, settings);
+            reset.Bind(controller, guidance, mainMenu, settings);
+            controller.ConfigureNavigation(mainMenu, guidance, settings, reset);
+            mainMenu.Show();
+            guidance.ShowForInformation();
+            settings.Show();
             controller.ConfigureStartup(invalidQuestions, flow, catalog, quiz, assembly,
                 process, completion, null, null, drag);
 
@@ -97,6 +163,10 @@ namespace RailCraft.Tests.PlayMode
             Assert.That(controller.FatalErrorCode, Is.EqualTo("question_count"));
             Assert.That(completion.IsFatal, Is.True);
             Assert.That(completion.Message, Does.Contain("question_count"));
+            Assert.That(mainMenu.IsVisible, Is.False);
+            Assert.That(guidance.IsVisible, Is.False);
+            Assert.That(settings.IsVisible, Is.False);
+            Assert.That(reset.IsConfirmationVisible, Is.False);
 
             Object.Destroy(root);
             Object.Destroy(catalog);
@@ -144,6 +214,42 @@ namespace RailCraft.Tests.PlayMode
             Object.Destroy(catalog);
             Object.Destroy(questions);
             Object.Destroy(flow);
+        }
+
+        private static string ButtonLabel(Button button)
+        {
+            return button == null
+                ? string.Empty
+                : button.GetComponentInChildren<Text>(true)?.text ?? string.Empty;
+        }
+
+        private static void Click(Button button)
+        {
+            Assert.That(button, Is.Not.Null);
+            Assert.That(button.gameObject.activeInHierarchy, Is.True);
+            Assert.That(button.interactable, Is.True);
+            var eventSystem = EventSystem.current;
+            Assert.That(eventSystem, Is.Not.Null);
+            ExecuteEvents.Execute(button.gameObject, new PointerEventData(eventSystem),
+                ExecuteEvents.pointerClickHandler);
+        }
+
+        private static void Click(Dropdown dropdown)
+        {
+            Assert.That(dropdown, Is.Not.Null);
+            Assert.That(dropdown.gameObject.activeInHierarchy, Is.True);
+            Assert.That(dropdown.interactable, Is.True);
+            var eventSystem = EventSystem.current;
+            Assert.That(eventSystem, Is.Not.Null);
+            ExecuteEvents.Execute(dropdown.gameObject, new PointerEventData(eventSystem),
+                ExecuteEvents.pointerClickHandler);
+        }
+
+        private static GameObject CreateChild(Transform parent, string name)
+        {
+            var child = new GameObject(name);
+            child.transform.SetParent(parent, false);
+            return child;
         }
     }
 }
