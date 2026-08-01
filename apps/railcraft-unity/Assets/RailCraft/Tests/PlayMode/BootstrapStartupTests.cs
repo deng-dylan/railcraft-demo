@@ -88,6 +88,11 @@ namespace RailCraft.Tests.PlayMode
             Assert.That(assembly.CurrentModule, Is.Not.Null);
             Assert.That(assembly.IsTargetHighlighted, Is.True);
             Assert.That(cameraDirector.CurrentShotId, Is.EqualTo("frame_module"));
+            yield return new WaitForSecondsRealtime(0.9f);
+            AssertInViewport(Camera.main,
+                assembly.CurrentModule.InteractionCollider.bounds.center, "current module");
+            AssertInViewport(Camera.main,
+                assembly.CurrentTarget.SnapAnchor.position, "current target");
 
             for (var index = 0; index < 4; index++)
             {
@@ -103,6 +108,33 @@ namespace RailCraft.Tests.PlayMode
             Assert.That(assembly.InstalledVisualCount, Is.EqualTo(1));
             Assert.That(controller.Snapshot.CurrentStepId, Is.EqualTo("wheelset_axlebox_a"));
             Assert.That(cameraDirector.CurrentShotId, Is.EqualTo("wheelset_axlebox_a"));
+
+            var advanceSafety = 0;
+            while (controller.Snapshot.CurrentStepId != "carbody_lowering")
+            {
+                Assert.That(advanceSafety++, Is.LessThan(48),
+                    "The production flow must reach the carbody-lowering stage.");
+                if (controller.Snapshot.Phase == FlowPhase.KnowledgeGate)
+                {
+                    controller.SubmitAnswer(controller.CurrentQuestion.correctOptionIndex);
+                    yield return new WaitForSecondsRealtime(0.22f);
+                    continue;
+                }
+
+                Assert.That(controller.Snapshot.Phase, Is.EqualTo(FlowPhase.StepReady));
+                Assert.That(drag.TryBeginDrag(assembly.CurrentModule), Is.True);
+                drag.DragTo(assembly.CurrentTarget.SnapAnchor.position);
+                Assert.That(drag.ReleaseAt(assembly.CurrentModule.transform.position).Accepted, Is.True);
+                yield return new WaitForSecondsRealtime(0.5f);
+            }
+
+            yield return new WaitForSecondsRealtime(0.9f);
+            Assert.That(assembly.CurrentModule, Is.Not.Null);
+            Assert.That(assembly.CurrentTarget, Is.Not.Null);
+            AssertInViewport(Camera.main,
+                assembly.CurrentModule.InteractionCollider.bounds.center, "carbody-lowering module");
+            AssertInViewport(Camera.main,
+                assembly.CurrentTarget.SnapAnchor.position, "carbody-lowering target");
 
             Click(buttons.Single(button => ButtonLabel(button) == "重置流程"));
             yield return null;
@@ -244,6 +276,15 @@ namespace RailCraft.Tests.PlayMode
             Assert.That(eventSystem, Is.Not.Null);
             ExecuteEvents.Execute(dropdown.gameObject, new PointerEventData(eventSystem),
                 ExecuteEvents.pointerClickHandler);
+        }
+
+        private static void AssertInViewport(Camera camera, Vector3 worldPosition, string label)
+        {
+            Assert.That(camera, Is.Not.Null);
+            var viewport = camera.WorldToViewportPoint(worldPosition);
+            Assert.That(viewport.z, Is.GreaterThan(0f), $"{label} must be in front of the camera");
+            Assert.That(viewport.x, Is.InRange(0.05f, 0.95f), $"{label} viewport x");
+            Assert.That(viewport.y, Is.InRange(0.05f, 0.95f), $"{label} viewport y");
         }
 
         private static GameObject CreateChild(Transform parent, string name)

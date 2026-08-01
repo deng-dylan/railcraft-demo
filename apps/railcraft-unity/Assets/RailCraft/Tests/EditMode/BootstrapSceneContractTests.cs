@@ -53,6 +53,19 @@ namespace RailCraft.Tests.EditMode
                     Has.Length.EqualTo(1));
                 Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<FeedbackView>(true)).ToArray(),
                     Has.Length.EqualTo(1));
+                var stepHudRect = roots.SelectMany(root => root.GetComponentsInChildren<StepHudView>(true))
+                    .Single().GetComponent<RectTransform>();
+                Assert.That(stepHudRect.anchorMin, Is.EqualTo(new Vector2(0f, 1f)));
+                Assert.That(stepHudRect.anchorMax, Is.EqualTo(new Vector2(0f, 1f)));
+                Assert.That(stepHudRect.pivot, Is.EqualTo(new Vector2(0f, 1f)));
+                Assert.That(stepHudRect.anchoredPosition, Is.EqualTo(new Vector2(32f, -32f)));
+
+                var feedbackRect = roots.SelectMany(root => root.GetComponentsInChildren<FeedbackView>(true))
+                    .Single().GetComponent<RectTransform>();
+                Assert.That(feedbackRect.anchorMin, Is.EqualTo(new Vector2(0.5f, 0f)));
+                Assert.That(feedbackRect.anchorMax, Is.EqualTo(new Vector2(0.5f, 0f)));
+                Assert.That(feedbackRect.pivot, Is.EqualTo(new Vector2(0.5f, 0f)));
+                Assert.That(feedbackRect.anchoredPosition, Is.EqualTo(new Vector2(0f, 36f)));
                 Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<ProcessStagePresenter>(true)).ToArray(),
                     Has.Length.EqualTo(1));
                 Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<CompletionPresenter>(true)).ToArray(),

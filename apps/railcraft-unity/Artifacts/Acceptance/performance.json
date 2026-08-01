@@ -1,0 +1,73 @@
+{
+    "unityVersion": "6000.3.21f1",
+    "operatingSystem": "Windows 11  (10.0.26200)",
+    "processor": "Intel(R) Core(TM) Ultra 7 255HX",
+    "graphicsDevice": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    "graphicsDeviceType": "Direct3D12",
+    "graphicsMemoryMb": 11944,
+    "systemMemoryMb": 32213,
+    "width": 1920,
+    "height": 1080,
+    "quality": "High",
+    "fullScreenMode": "Windowed",
+    "batchMode": false,
+    "frameTimingStatsEnabled": true,
+    "initialFactoryLoadSeconds": 0.21144911646842957,
+    "captures": [
+        {
+            "state": "factory idle",
+            "averageFps": 805.5447998046875,
+            "onePercentLowFps": 342.1809997558594,
+            "peakDrawCalls": 218,
+            "peakTriangles": 12759,
+            "averageMainThreadMs": 0.7182337641716003,
+            "averageRenderThreadMs": 0.4657520353794098,
+            "peakAllocatedMemoryMb": 135.6129608154297,
+            "sampledFrames": 1209
+        },
+        {
+            "state": "all bogie modules installed",
+            "averageFps": 848.6245727539063,
+            "onePercentLowFps": 359.0397644042969,
+            "peakDrawCalls": 209,
+            "peakTriangles": 12973,
+            "averageMainThreadMs": 0.7020302414894104,
+            "averageRenderThreadMs": 0.44609197974205019,
+            "peakAllocatedMemoryMb": 136.75259399414063,
+            "sampledFrames": 1273
+        },
+        {
+            "state": "carbody lowering",
+            "averageFps": 787.0340576171875,
+            "onePercentLowFps": 321.8443298339844,
+            "peakDrawCalls": 196,
+            "peakTriangles": 10719,
+            "averageMainThreadMs": 0.74137282371521,
+            "averageRenderThreadMs": 0.48749449849128725,
+            "peakAllocatedMemoryMb": 136.56069946289063,
+            "sampledFrames": 1181
+        },
+        {
+            "state": "commissioning feedback",
+            "averageFps": 843.3783569335938,
+            "onePercentLowFps": 348.75634765625,
+            "peakDrawCalls": 184,
+            "peakTriangles": 7699,
+            "averageMainThreadMs": 0.7077884674072266,
+            "averageRenderThreadMs": 0.43083855509757998,
+            "peakAllocatedMemoryMb": 136.6165313720703,
+            "sampledFrames": 1266
+        },
+        {
+            "state": "final hero view",
+            "averageFps": 807.474853515625,
+            "onePercentLowFps": 326.79248046875,
+            "peakDrawCalls": 219,
+            "peakTriangles": 13371,
+            "averageMainThreadMs": 0.7265502214431763,
+            "averageRenderThreadMs": 0.4641074240207672,
+            "peakAllocatedMemoryMb": 136.6471405029297,
+            "sampledFrames": 1212
+        }
+    ]
+}

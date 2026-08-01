@@ -26,6 +26,8 @@ namespace RailCraft.Tests.EditMode
                 .ToArray();
 
             Assert.That(packageNames, Does.Not.Contain("com.unity.analytics"));
+            Assert.That(packageNames, Does.Not.Contain("com.unity.purchasing"));
+            Assert.That(packageNames, Does.Not.Contain("com.unity.services.core"));
             Assert.That(packageNames, Does.Not.Contain("com.unity.multiplayer.center"));
             Assert.That(packageNames, Does.Not.Contain("com.unity.xr.legacyinputhelpers"));
             Assert.That(packageNames, Does.Not.Contain("com.unity.modules.unityanalytics"));

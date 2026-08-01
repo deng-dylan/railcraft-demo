@@ -56,7 +56,8 @@ namespace RailCraft.Tests.PlayMode.Fixtures
             StartPosition = module.transform.position;
         }
 
-        public static DragFixture CreateUnlocked(string acceptedStepId = "frame_module")
+        public static DragFixture CreateUnlocked(string acceptedStepId = "frame_module",
+            float targetDepth = 5f)
         {
             var inputFixture = new InputTestFixture();
             inputFixture.Setup();
@@ -76,7 +77,7 @@ namespace RailCraft.Tests.PlayMode.Fixtures
 
             var targetObject = new GameObject("target");
             var anchorObject = new GameObject("snap.anchor");
-            anchorObject.transform.position = new Vector3(3f, 0f, 5f);
+            anchorObject.transform.position = new Vector3(3f, 0f, targetDepth);
             anchorObject.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
             var target = targetObject.AddComponent<DropTarget>();
             target.Configure("target.frame", acceptedStepId, anchorObject.transform, 0.05f, 0.8f);
@@ -131,8 +132,21 @@ namespace RailCraft.Tests.PlayMode.Fixtures
 
         public IEnumerator MovePointerTo(Vector2 position)
         {
-            inputFixture.Move(Mouse.position, position);
+            QueuePointerMove(position);
             yield return null;
+        }
+
+        public void QueuePointerMove(Vector2 position)
+        {
+            inputFixture.Move(Mouse.position, position);
+        }
+
+        public void QueueLeftButton(bool pressed)
+        {
+            if (pressed)
+                inputFixture.Press(Mouse.leftButton);
+            else
+                inputFixture.Release(Mouse.leftButton);
         }
 
         public Vector2 ModuleScreenPosition => Camera.WorldToScreenPoint(Module.transform.position);
@@ -157,13 +171,6 @@ namespace RailCraft.Tests.PlayMode.Fixtures
             field.SetValue(target, value);
         }
 
-        private void QueueLeftButton(bool pressed)
-        {
-            if (pressed)
-                inputFixture.Press(Mouse.leftButton);
-            else
-                inputFixture.Release(Mouse.leftButton);
-        }
     }
 
     internal sealed class TestOrbitBehaviour : MonoBehaviour

@@ -1,0 +1,30 @@
+RailCraft Unity v0.1 — final acceptance environment
+
+Acceptance date: 2026-08-01
+Unity Editor: 6000.3.21f1 (revision c02631ffc030)
+Target: Windows x86_64 / StandaloneWindows64
+Resolution: 1920x1080, Windowed, High quality, VSync disabled
+
+Host operating system: Microsoft Windows 11 专业版 10.0.26200 (build 26200)
+CPU: Intel(R) Core(TM) Ultra 7 255HX
+System memory: 32,213 MiB (33,778,483,200 bytes reported by Win32_ComputerSystem)
+Current display adapter: GameViewer Virtual Display Adapter (driver 15.6.5.199)
+Additional physical GPU: NVIDIA GeForce RTX 5070 Ti Laptop GPU (driver 32.0.16.1062)
+Additional integrated GPU: Intel(R) Graphics (driver 32.0.101.6733)
+
+Standalone performance capture source: Artifacts/Acceptance/performance.json
+Runtime graphics device recorded by that capture: NVIDIA GeForce RTX 5070 Ti Laptop GPU / Direct3D12
+Runtime graphics memory recorded by Unity: 11,944 MiB
+Runtime system memory recorded by Unity: 32,213 MiB
+Frame Timing Stats: enabled
+Initial Factory load: 0.211449 seconds
+
+Final automated regression:
+- EditMode: 50 total, 50 passed, 0 failed, 0 skipped; duration 1.6343878 s.
+- PlayMode: 51 total, 50 passed, 0 failed, 1 skipped; duration 17.855958 s.
+- The skipped PlayMode case is the deliberate hardware performance-capture gate; its environment variable RAILCRAFT_CAPTURE_PERFORMANCE was not set.
+- Standalone performance gate: 1 total, 1 passed, 0 failed, 0 skipped (Task 12 baseline retained as performance-player.xml).
+
+Final Windows build:
+- 2 enabled scenes; 109,337,215 bytes total build size; 22,457 ms; 0 warnings; 0 errors.
+- RailCraft.exe: 667,136 bytes; SHA-256 recorded in checksums.txt.

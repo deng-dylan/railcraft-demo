@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="50" result="Passed" total="50" passed="50" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:12Z" duration="1.6343878">
+  <test-suite type="TestSuite" id="1000" name="RailCraft" fullname="RailCraft" runstate="Runnable" testcasecount="50" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:12Z" duration="1.634388" total="50" passed="50" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1062" name="RailCraft.EditModeTests.dll" fullname="D:/documents/project/gingchuangsai/apps/railcraft-unity/Library/ScriptAssemblies/RailCraft.EditModeTests.dll" runstate="Runnable" testcasecount="50" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:12Z" duration="1.628882" total="50" passed="50" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="36928" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1063" name="RailCraft" fullname="RailCraft" runstate="Runnable" testcasecount="50" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:12Z" duration="1.628647" total="50" passed="50" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1064" name="Tests" fullname="RailCraft.Tests" runstate="Runnable" testcasecount="50" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:12Z" duration="1.628578" total="50" passed="50" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1065" name="EditMode" fullname="RailCraft.Tests.EditMode" runstate="Runnable" testcasecount="50" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:12Z" duration="1.628438" total="50" passed="50" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="BootstrapSceneContractTests" fullname="RailCraft.Tests.EditMode.BootstrapSceneContractTests" classname="RailCraft.Tests.EditMode.BootstrapSceneContractTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.084939" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1002" name="BootstrapSceneIsFirstAndOwnsOneFullyReferencedCompositionRoot" fullname="RailCraft.Tests.EditMode.BootstrapSceneContractTests.BootstrapSceneIsFirstAndOwnsOneFullyReferencedCompositionRoot" methodname="BootstrapSceneIsFirstAndOwnsOneFullyReferencedCompositionRoot" classname="RailCraft.Tests.EditMode.BootstrapSceneContractTests" runstate="Runnable" seed="709199334" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.074745" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1003" name="ContentValidatorTests" fullname="RailCraft.Tests.EditMode.ContentValidatorTests" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.013338" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1005" name="DuplicateQuestionAssignmentIsRejected" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.DuplicateQuestionAssignmentIsRejected" methodname="DuplicateQuestionAssignmentIsRejected" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="1476211368" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.003122" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1006" name="EveryStepRequiresAtLeastOneQuestion" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.EveryStepRequiresAtLeastOneQuestion" methodname="EveryStepRequiresAtLeastOneQuestion" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="983647952" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.000285" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="FlowContainsExactlyFifteenOrderedSteps" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.FlowContainsExactlyFifteenOrderedSteps" methodname="FlowContainsExactlyFifteenOrderedSteps" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="1461871398" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.000179" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="InvalidQuestionAndStepFieldsReportStableIssueCodesInRuleOrder" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.InvalidQuestionAndStepFieldsReportStableIssueCodesInRuleOrder" methodname="InvalidQuestionAndStepFieldsReportStableIssueCodesInRuleOrder" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="1161982501" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.000479" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="MissingQuestionReferenceOnAnUnnamedLaterStepUsesThatStepsIndex" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.MissingQuestionReferenceOnAnUnnamedLaterStepUsesThatStepsIndex" methodname="MissingQuestionReferenceOnAnUnnamedLaterStepUsesThatStepsIndex" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="999817066" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.000238" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="ProductionContentPassesEveryContract" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.ProductionContentPassesEveryContract" methodname="ProductionContentPassesEveryContract" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="1037027927" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.001832" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="ProductionFlowFreezesAllStagesAndTheTeachingCommissioningLoop" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.ProductionFlowFreezesAllStagesAndTheTeachingCommissioningLoop" methodname="ProductionFlowFreezesAllStagesAndTheTeachingCommissioningLoop" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="441920006" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.001920" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="RepositoryRejectsBlankJsonWithDiagnosableException" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.RepositoryRejectsBlankJsonWithDiagnosableException" methodname="RepositoryRejectsBlankJsonWithDiagnosableException" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="98041706" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.000768" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="TrueFalseQuestionRequiresExactlyTwoOptions" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.TrueFalseQuestionRequiresExactlyTwoOptions" methodname="TrueFalseQuestionRequiresExactlyTwoOptions" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="914626322" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.000189" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="ValidBundleUsesEveryQuestionExactlyOnce" fullname="RailCraft.Tests.EditMode.ContentValidatorTests.ValidBundleUsesEveryQuestionExactlyOnce" methodname="ValidBundleUsesEveryQuestionExactlyOnce" classname="RailCraft.Tests.EditMode.ContentValidatorTests" runstate="Runnable" seed="924532960" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.000136" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1014" name="DropTargetTests" fullname="RailCraft.Tests.EditMode.DropTargetTests" classname="RailCraft.Tests.EditMode.DropTargetTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.002574" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1015" name="TargetAcceptsOnlyMatchingUnlockedStep" fullname="RailCraft.Tests.EditMode.DropTargetTests.TargetAcceptsOnlyMatchingUnlockedStep" methodname="TargetAcceptsOnlyMatchingUnlockedStep" classname="RailCraft.Tests.EditMode.DropTargetTests" runstate="Runnable" seed="1237073454" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.001658" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1016" name="TargetRejectsMatchingStepWhenAuthorizationIsLocked" fullname="RailCraft.Tests.EditMode.DropTargetTests.TargetRejectsMatchingStepWhenAuthorizationIsLocked" methodname="TargetRejectsMatchingStepWhenAuthorizationIsLocked" classname="RailCraft.Tests.EditMode.DropTargetTests" runstate="Runnable" seed="1726113686" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.000197" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1017" name="FactoryPresentationContractTests" fullname="RailCraft.Tests.EditMode.FactoryPresentationContractTests" classname="RailCraft.Tests.EditMode.FactoryPresentationContractTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:11Z" duration="0.260756" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1018" name="FactoryPresentationAssetsUseConservativeUrpSettings" fullname="RailCraft.Tests.EditMode.FactoryPresentationContractTests.FactoryPresentationAssetsUseConservativeUrpSettings" methodname="FactoryPresentationAssetsUseConservativeUrpSettings" classname="RailCraft.Tests.EditMode.FactoryPresentationContractTests" runstate="Runnable" seed="793476523" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:10Z" duration="0.003683" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1020" name="FactorySceneReferencesBakesAndKeepsInteractiveModulesDynamic" fullname="RailCraft.Tests.EditMode.FactoryPresentationContractTests.FactorySceneReferencesBakesAndKeepsInteractiveModulesDynamic" methodname="FactorySceneReferencesBakesAndKeepsInteractiveModulesDynamic" classname="RailCraft.Tests.EditMode.FactoryPresentationContractTests" runstate="Runnable" seed="911827875" result="Passed" start-time="2026-08-01 17:00:10Z" end-time="2026-08-01 17:00:11Z" duration="0.237996" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1019" name="HighlightMaterialsEnableUrpEmissionForPropertyBlocks" fullname="RailCraft.Tests.EditMode.FactoryPresentationContractTests.HighlightMaterialsEnableUrpEmissionForPropertyBlocks" methodname="HighlightMaterialsEnableUrpEmissionForPropertyBlocks" classname="RailCraft.Tests.EditMode.FactoryPresentationContractTests" runstate="Runnable" seed="1317371993" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.005242" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1023" name="PerformanceBudgetRecordsEveryRequiredCaptureState" fullname="RailCraft.Tests.EditMode.FactoryPresentationContractTests.PerformanceBudgetRecordsEveryRequiredCaptureState" methodname="PerformanceBudgetRecordsEveryRequiredCaptureState" classname="RailCraft.Tests.EditMode.FactoryPresentationContractTests" runstate="Runnable" seed="1539868561" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.001780" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1021" name="ProductionAssetBudgetsAreExecutableContracts" fullname="RailCraft.Tests.EditMode.FactoryPresentationContractTests.ProductionAssetBudgetsAreExecutableContracts" methodname="ProductionAssetBudgetsAreExecutableContracts" classname="RailCraft.Tests.EditMode.FactoryPresentationContractTests" runstate="Runnable" seed="1823219551" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.009373" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1022" name="ProductionMaterialImportGateIsScopedAndEnablesPropertyBlockEmission" fullname="RailCraft.Tests.EditMode.FactoryPresentationContractTests.ProductionMaterialImportGateIsScopedAndEnablesPropertyBlockEmission" methodname="ProductionMaterialImportGateIsScopedAndEnablesPropertyBlockEmission" classname="RailCraft.Tests.EditMode.FactoryPresentationContractTests" runstate="Runnable" seed="2145552313" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.001142" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1024" name="FactorySceneContractTests" fullname="RailCraft.Tests.EditMode.FactorySceneContractTests" classname="RailCraft.Tests.EditMode.FactorySceneContractTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:12Z" duration="0.997588" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1031" name="AssemblyBayPrefabExistsAndContainsFactoryDetails" fullname="RailCraft.Tests.EditMode.FactorySceneContractTests.AssemblyBayPrefabExistsAndContainsFactoryDetails" methodname="AssemblyBayPrefabExistsAndContainsFactoryDetails" classname="RailCraft.Tests.EditMode.FactorySceneContractTests" runstate="Runnable" seed="849524740" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.000389" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1027" name="FactoryCameraAndShotsHaveStableSerializedReferences" fullname="RailCraft.Tests.EditMode.FactorySceneContractTests.FactoryCameraAndShotsHaveStableSerializedReferences" methodname="FactoryCameraAndShotsHaveStableSerializedReferences" classname="RailCraft.Tests.EditMode.FactorySceneContractTests" runstate="Runnable" seed="1492249229" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.211249" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1028" name="FactoryDropTargetsMatchEveryFlowStep" fullname="RailCraft.Tests.EditMode.FactorySceneContractTests.FactoryDropTargetsMatchEveryFlowStep" methodname="FactoryDropTargetsMatchEveryFlowStep" classname="RailCraft.Tests.EditMode.FactorySceneContractTests" runstate="Runnable" seed="1910274780" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.216640" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1030" name="FactoryInputActionsExposeDocumentedBindings" fullname="RailCraft.Tests.EditMode.FactorySceneContractTests.FactoryInputActionsExposeDocumentedBindings" methodname="FactoryInputActionsExposeDocumentedBindings" classname="RailCraft.Tests.EditMode.FactorySceneContractTests" runstate="Runnable" seed="1963647582" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.002025" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1025" name="FactorySceneContainsRequiredProductionHierarchy" fullname="RailCraft.Tests.EditMode.FactorySceneContractTests.FactorySceneContainsRequiredProductionHierarchy" methodname="FactorySceneContainsRequiredProductionHierarchy" classname="RailCraft.Tests.EditMode.FactorySceneContractTests" runstate="Runnable" seed="2067117275" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.212319" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1026" name="FactorySceneProvidesCameraLightingAndProcessAnchors" fullname="RailCraft.Tests.EditMode.FactorySceneContractTests.FactorySceneProvidesCameraLightingAndProcessAnchors" methodname="FactorySceneProvidesCameraLightingAndProcessAnchors" classname="RailCraft.Tests.EditMode.FactorySceneContractTests" runstate="Runnable" seed="1517493198" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:11Z" duration="0.206552" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1029" name="RebuildingFactoryPreservesModelOverridesAndExistingBuildScenes" fullname="RailCraft.Tests.EditMode.FactorySceneContractTests.RebuildingFactoryPreservesModelOverridesAndExistingBuildScenes" methodname="RebuildingFactoryPreservesModelOverridesAndExistingBuildScenes" classname="RailCraft.Tests.EditMode.FactorySceneContractTests" runstate="Runnable" seed="336467502" result="Passed" start-time="2026-08-01 17:00:11Z" end-time="2026-08-01 17:00:12Z" duration="0.145729" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1032" name="GuidedFlowMachineTests" fullname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" classname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.005753" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1033" name="CorrectAnswersUnlockOnlyTheCurrentStep" fullname="RailCraft.Tests.EditMode.GuidedFlowMachineTests.CorrectAnswersUnlockOnlyTheCurrentStep" methodname="CorrectAnswersUnlockOnlyTheCurrentStep" classname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" runstate="Runnable" seed="1873406507" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000957" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1036" name="FirstCommissioningFailsThenLoopPasses" fullname="RailCraft.Tests.EditMode.GuidedFlowMachineTests.FirstCommissioningFailsThenLoopPasses" methodname="FirstCommissioningFailsThenLoopPasses" classname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" runstate="Runnable" seed="718707888" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000683" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1039" name="InvalidPhaseCallsLeaveTheCurrentStateUntouched" fullname="RailCraft.Tests.EditMode.GuidedFlowMachineTests.InvalidPhaseCallsLeaveTheCurrentStateUntouched" methodname="InvalidPhaseCallsLeaveTheCurrentStateUntouched" classname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" runstate="Runnable" seed="554348558" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000379" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="ReleaseSnapCompletesTheRun" fullname="RailCraft.Tests.EditMode.GuidedFlowMachineTests.ReleaseSnapCompletesTheRun" methodname="ReleaseSnapCompletesTheRun" classname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" runstate="Runnable" seed="693773068" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000399" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1040" name="ResetClearsProgressWithoutPersistence" fullname="RailCraft.Tests.EditMode.GuidedFlowMachineTests.ResetClearsProgressWithoutPersistence" methodname="ResetClearsProgressWithoutPersistence" classname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" runstate="Runnable" seed="1326963333" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000242" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1037" name="SuccessfulFirstCommissioningOpensReleaseKnowledgeGate" fullname="RailCraft.Tests.EditMode.GuidedFlowMachineTests.SuccessfulFirstCommissioningOpensReleaseKnowledgeGate" methodname="SuccessfulFirstCommissioningOpensReleaseKnowledgeGate" classname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" runstate="Runnable" seed="449149353" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000465" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1034" name="WrongAnswerDoesNotAdvanceQuestionIndex" fullname="RailCraft.Tests.EditMode.GuidedFlowMachineTests.WrongAnswerDoesNotAdvanceQuestionIndex" methodname="WrongAnswerDoesNotAdvanceQuestionIndex" classname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" runstate="Runnable" seed="149107222" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000186" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1035" name="WrongDropIsRejectedWithoutChangingStep" fullname="RailCraft.Tests.EditMode.GuidedFlowMachineTests.WrongDropIsRejectedWithoutChangingStep" methodname="WrongDropIsRejectedWithoutChangingStep" classname="RailCraft.Tests.EditMode.GuidedFlowMachineTests" runstate="Runnable" seed="1591438399" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000163" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1041" name="ModelContractValidatorTests" fullname="RailCraft.Tests.EditMode.ModelContractValidatorTests" classname="RailCraft.Tests.EditMode.ModelContractValidatorTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.241109" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1044" name="CatalogContainsOneContractForEachExactKey" fullname="RailCraft.Tests.EditMode.ModelContractValidatorTests.CatalogContainsOneContractForEachExactKey" methodname="CatalogContainsOneContractForEachExactKey" classname="RailCraft.Tests.EditMode.ModelContractValidatorTests" runstate="Runnable" seed="496705398" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.001320" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1042" name="CatalogResolvesEveryProductionAssetKey" fullname="RailCraft.Tests.EditMode.ModelContractValidatorTests.CatalogResolvesEveryProductionAssetKey" methodname="CatalogResolvesEveryProductionAssetKey" classname="RailCraft.Tests.EditMode.ModelContractValidatorTests" runstate="Runnable" seed="765732868" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.001302" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1047" name="DraggablePrefabReferencesItsRootColliderAndVisualRoot" fullname="RailCraft.Tests.EditMode.ModelContractValidatorTests.DraggablePrefabReferencesItsRootColliderAndVisualRoot" methodname="DraggablePrefabReferencesItsRootColliderAndVisualRoot" classname="RailCraft.Tests.EditMode.ModelContractValidatorTests" runstate="Runnable" seed="236638927" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000450" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1043" name="EveryDraggablePrefabHasRequiredContract" fullname="RailCraft.Tests.EditMode.ModelContractValidatorTests.EveryDraggablePrefabHasRequiredContract" methodname="EveryDraggablePrefabHasRequiredContract" classname="RailCraft.Tests.EditMode.ModelContractValidatorTests" runstate="Runnable" seed="1098878706" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000206" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1045" name="HeadDisplayIsStaticPresentationOnly" fullname="RailCraft.Tests.EditMode.ModelContractValidatorTests.HeadDisplayIsStaticPresentationOnly" methodname="HeadDisplayIsStaticPresentationOnly" classname="RailCraft.Tests.EditMode.ModelContractValidatorTests" runstate="Runnable" seed="1350492264" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000488" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1046" name="RebuildingPlaceholdersPreservesPrefabGuids" fullname="RailCraft.Tests.EditMode.ModelContractValidatorTests.RebuildingPlaceholdersPreservesPrefabGuids" methodname="RebuildingPlaceholdersPreservesPrefabGuids" classname="RailCraft.Tests.EditMode.ModelContractValidatorTests" runstate="Runnable" seed="78699023" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.236443" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1048" name="ProductionWheelContractTests" fullname="RailCraft.Tests.EditMode.ProductionWheelContractTests" classname="RailCraft.Tests.EditMode.ProductionWheelContractTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.006413" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1049" name="ProductionWheelUsesStableRuntimeContract" fullname="RailCraft.Tests.EditMode.ProductionWheelContractTests.ProductionWheelUsesStableRuntimeContract" methodname="ProductionWheelUsesStableRuntimeContract" classname="RailCraft.Tests.EditMode.ProductionWheelContractTests" runstate="Runnable" seed="273533970" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.005351" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <reason>
+                  <message><![CDATA[Production wheel is honestly blocked on the documented neutral-format delivery.]]></message>
+                </reason>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1050" name="ProjectConfigurationTests" fullname="RailCraft.Tests.EditMode.ProjectConfigurationTests" classname="RailCraft.Tests.EditMode.ProjectConfigurationTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.003336" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1054" name="ProjectDisablesUnityAudio" fullname="RailCraft.Tests.EditMode.ProjectConfigurationTests.ProjectDisablesUnityAudio" methodname="ProjectDisablesUnityAudio" classname="RailCraft.Tests.EditMode.ProjectConfigurationTests" runstate="Runnable" seed="1785389169" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000749" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1053" name="ProjectDoesNotUseTemplateInputActions" fullname="RailCraft.Tests.EditMode.ProjectConfigurationTests.ProjectDoesNotUseTemplateInputActions" methodname="ProjectDoesNotUseTemplateInputActions" classname="RailCraft.Tests.EditMode.ProjectConfigurationTests" runstate="Runnable" seed="1944446804" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000164" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1052" name="ProjectHasNoAnalyticsMultiplayerOrXrPackages" fullname="RailCraft.Tests.EditMode.ProjectConfigurationTests.ProjectHasNoAnalyticsMultiplayerOrXrPackages" methodname="ProjectHasNoAnalyticsMultiplayerOrXrPackages" classname="RailCraft.Tests.EditMode.ProjectConfigurationTests" runstate="Runnable" seed="897803377" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.001275" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1051" name="ProjectTargetsWindowsLinearColorSpace" fullname="RailCraft.Tests.EditMode.ProjectConfigurationTests.ProjectTargetsWindowsLinearColorSpace" methodname="ProjectTargetsWindowsLinearColorSpace" classname="RailCraft.Tests.EditMode.ProjectConfigurationTests" runstate="Runnable" seed="831144018" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000506" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1055" name="QuestionBankBaselineTests" fullname="RailCraft.Tests.EditMode.QuestionBankBaselineTests" classname="RailCraft.Tests.EditMode.QuestionBankBaselineTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.002680" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1056" name="FrozenQuestionBankContainsFortyChoiceAndEightTrueFalse" fullname="RailCraft.Tests.EditMode.QuestionBankBaselineTests.FrozenQuestionBankContainsFortyChoiceAndEightTrueFalse" methodname="FrozenQuestionBankContainsFortyChoiceAndEightTrueFalse" classname="RailCraft.Tests.EditMode.QuestionBankBaselineTests" runstate="Runnable" seed="90325710" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.002308" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1057" name="UiPrefabContractTests" fullname="RailCraft.Tests.EditMode.UiPrefabContractTests" classname="RailCraft.Tests.EditMode.UiPrefabContractTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.008525" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1061" name="NavigationPrefabsExposeExactV01Surface" fullname="RailCraft.Tests.EditMode.UiPrefabContractTests.NavigationPrefabsExposeExactV01Surface" methodname="NavigationPrefabsExposeExactV01Surface" classname="RailCraft.Tests.EditMode.UiPrefabContractTests" runstate="Runnable" seed="1481699517" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.003975" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1058" name="QuizPanelContainsRequiredFieldsAndNoScoreSurface" fullname="RailCraft.Tests.EditMode.UiPrefabContractTests.QuizPanelContainsRequiredFieldsAndNoScoreSurface" methodname="QuizPanelContainsRequiredFieldsAndNoScoreSurface" classname="RailCraft.Tests.EditMode.UiPrefabContractTests" runstate="Runnable" seed="717939773" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.001102" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1059" name="QuizPresenterPrefabUsesPointTwoSecondTransition" fullname="RailCraft.Tests.EditMode.UiPrefabContractTests.QuizPresenterPrefabUsesPointTwoSecondTransition" methodname="QuizPresenterPrefabUsesPointTwoSecondTransition" classname="RailCraft.Tests.EditMode.UiPrefabContractTests" runstate="Runnable" seed="959090656" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.000737" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1060" name="StepHudAndFeedbackPrefabsExposeRequiredViews" fullname="RailCraft.Tests.EditMode.UiPrefabContractTests.StepHudAndFeedbackPrefabsExposeRequiredViews" methodname="StepHudAndFeedbackPrefabsExposeRequiredViews" classname="RailCraft.Tests.EditMode.UiPrefabContractTests" runstate="Runnable" seed="346501837" result="Passed" start-time="2026-08-01 17:00:12Z" end-time="2026-08-01 17:00:12Z" duration="0.001787" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/Dylan/AppData/LocalLow/RailCraft Team/RailCraft\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

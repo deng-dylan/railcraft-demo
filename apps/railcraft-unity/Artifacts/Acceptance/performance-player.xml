@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="18.1052536">
+  <test-suite type="TestSuite" id="1000" name="RailCraft" fullname="RailCraft" runstate="Runnable" testcasecount="49" result="Passed" start-time="2026-08-01 13:28:22Z" end-time="2026-08-01 13:28:40Z" duration="18.105254" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">RAILCRAFT_PERF state=factory idle;fps=805.5;low1=342.2;draw=218;triangles=12759;main_ms=0.72;render_ms=0.47;memory_mb=135.6
+RAILCRAFT_PERF state=all bogie modules installed;fps=848.6;low1=359.0;draw=209;triangles=12973;main_ms=0.70;render_ms=0.45;memory_mb=136.8
+RAILCRAFT_PERF state=carbody lowering;fps=787.0;low1=321.8;draw=196;triangles=10719;main_ms=0.74;render_ms=0.49;memory_mb=136.6
+RAILCRAFT_PERF state=commissioning feedback;fps=843.4;low1=348.8;draw=184;triangles=7699;main_ms=0.71;render_ms=0.43;memory_mb=136.6
+RAILCRAFT_PERF state=final hero view;fps=807.5;low1=326.8;draw=219;triangles=13371;main_ms=0.73;render_ms=0.46;memory_mb=136.6
+RAILCRAFT_PERFORMANCE_REPORT D:\documents\project\gingchuangsai\apps\railcraft-unity\TestResults\task12-performance.json
+<properties><property name="platform" value="PlayMode"></property></properties><test-suite type="Assembly" id="1059" name="RailCraft.PlayModeTests.dll" fullname="D:/documents/project/gingchuangsai/apps/railcraft-unity/Builds/Task12Perf/PlayerWithTests/PlayerWithTests_Data/Managed/RailCraft.PlayModeTests.dll" runstate="Runnable" testcasecount="49" result="Passed" start-time="2026-08-01 13:28:22Z" end-time="2026-08-01 13:28:40Z" duration="18.092161" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">RAILCRAFT_PERF state=factory idle;fps=805.5;low1=342.2;draw=218;triangles=12759;main_ms=0.72;render_ms=0.47;memory_mb=135.6
+RAILCRAFT_PERF state=all bogie modules installed;fps=848.6;low1=359.0;draw=209;triangles=12973;main_ms=0.70;render_ms=0.45;memory_mb=136.8
+RAILCRAFT_PERF state=carbody lowering;fps=787.0;low1=321.8;draw=196;triangles=10719;main_ms=0.74;render_ms=0.49;memory_mb=136.6
+RAILCRAFT_PERF state=commissioning feedback;fps=843.4;low1=348.8;draw=184;triangles=7699;main_ms=0.71;render_ms=0.43;memory_mb=136.6
+RAILCRAFT_PERF state=final hero view;fps=807.5;low1=326.8;draw=219;triangles=13371;main_ms=0.73;render_ms=0.46;memory_mb=136.6
+RAILCRAFT_PERFORMANCE_REPORT D:\documents\project\gingchuangsai\apps\railcraft-unity\TestResults\task12-performance.json
+<properties><property name="_PID" value="9208"></property><property name="_APPDOMAIN" value="Unity Root Domain"></property><property name="platform" value="PlayMode"></property><property name="EditorOnly" value="False"></property></properties><test-suite type="TestSuite" id="1060" name="RailCraft" fullname="RailCraft" runstate="Runnable" testcasecount="49" result="Passed" start-time="2026-08-01 13:28:22Z" end-time="2026-08-01 13:28:40Z" duration="18.088553" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">RAILCRAFT_PERF state=factory idle;fps=805.5;low1=342.2;draw=218;triangles=12759;main_ms=0.72;render_ms=0.47;memory_mb=135.6
+RAILCRAFT_PERF state=all bogie modules installed;fps=848.6;low1=359.0;draw=209;triangles=12973;main_ms=0.70;render_ms=0.45;memory_mb=136.8
+RAILCRAFT_PERF state=carbody lowering;fps=787.0;low1=321.8;draw=196;triangles=10719;main_ms=0.74;render_ms=0.49;memory_mb=136.6
+RAILCRAFT_PERF state=commissioning feedback;fps=843.4;low1=348.8;draw=184;triangles=7699;main_ms=0.71;render_ms=0.43;memory_mb=136.6
+RAILCRAFT_PERF state=final hero view;fps=807.5;low1=326.8;draw=219;triangles=13371;main_ms=0.73;render_ms=0.46;memory_mb=136.6
+RAILCRAFT_PERFORMANCE_REPORT D:\documents\project\gingchuangsai\apps\railcraft-unity\TestResults\task12-performance.json
+<properties></properties><test-suite type="TestSuite" id="1061" name="Tests" fullname="RailCraft.Tests" runstate="Runnable" testcasecount="49" result="Passed" start-time="2026-08-01 13:28:22Z" end-time="2026-08-01 13:28:40Z" duration="18.080999" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">RAILCRAFT_PERF state=factory idle;fps=805.5;low1=342.2;draw=218;triangles=12759;main_ms=0.72;render_ms=0.47;memory_mb=135.6
+RAILCRAFT_PERF state=all bogie modules installed;fps=848.6;low1=359.0;draw=209;triangles=12973;main_ms=0.70;render_ms=0.45;memory_mb=136.8
+RAILCRAFT_PERF state=carbody lowering;fps=787.0;low1=321.8;draw=196;triangles=10719;main_ms=0.74;render_ms=0.49;memory_mb=136.6
+RAILCRAFT_PERF state=commissioning feedback;fps=843.4;low1=348.8;draw=184;triangles=7699;main_ms=0.71;render_ms=0.43;memory_mb=136.6
+RAILCRAFT_PERF state=final hero view;fps=807.5;low1=326.8;draw=219;triangles=13371;main_ms=0.73;render_ms=0.46;memory_mb=136.6
+RAILCRAFT_PERFORMANCE_REPORT D:\documents\project\gingchuangsai\apps\railcraft-unity\TestResults\task12-performance.json
+<properties></properties><test-suite type="TestSuite" id="1062" name="PlayMode" fullname="RailCraft.Tests.PlayMode" runstate="Runnable" testcasecount="49" result="Passed" start-time="2026-08-01 13:28:22Z" end-time="2026-08-01 13:28:40Z" duration="18.075677" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">RAILCRAFT_PERF state=factory idle;fps=805.5;low1=342.2;draw=218;triangles=12759;main_ms=0.72;render_ms=0.47;memory_mb=135.6
+RAILCRAFT_PERF state=all bogie modules installed;fps=848.6;low1=359.0;draw=209;triangles=12973;main_ms=0.70;render_ms=0.45;memory_mb=136.8
+RAILCRAFT_PERF state=carbody lowering;fps=787.0;low1=321.8;draw=196;triangles=10719;main_ms=0.74;render_ms=0.49;memory_mb=136.6
+RAILCRAFT_PERF state=commissioning feedback;fps=843.4;low1=348.8;draw=184;triangles=7699;main_ms=0.71;render_ms=0.43;memory_mb=136.6
+RAILCRAFT_PERF state=final hero view;fps=807.5;low1=326.8;draw=219;triangles=13371;main_ms=0.73;render_ms=0.46;memory_mb=136.6
+RAILCRAFT_PERFORMANCE_REPORT D:\documents\project\gingchuangsai\apps\railcraft-unity\TestResults\task12-performance.json
+<properties></properties><test-suite type="TestFixture" id="1042" name="PerformanceCaptureTests" fullname="RailCraft.Tests.PlayMode.PerformanceCaptureTests" classname="RailCraft.Tests.PlayMode.PerformanceCaptureTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-01 13:28:22Z" end-time="2026-08-01 13:28:40Z" duration="18.067114" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">RAILCRAFT_PERF state=factory idle;fps=805.5;low1=342.2;draw=218;triangles=12759;main_ms=0.72;render_ms=0.47;memory_mb=135.6
+RAILCRAFT_PERF state=all bogie modules installed;fps=848.6;low1=359.0;draw=209;triangles=12973;main_ms=0.70;render_ms=0.45;memory_mb=136.8
+RAILCRAFT_PERF state=carbody lowering;fps=787.0;low1=321.8;draw=196;triangles=10719;main_ms=0.74;render_ms=0.49;memory_mb=136.6
+RAILCRAFT_PERF state=commissioning feedback;fps=843.4;low1=348.8;draw=184;triangles=7699;main_ms=0.71;render_ms=0.43;memory_mb=136.6
+RAILCRAFT_PERF state=final hero view;fps=807.5;low1=326.8;draw=219;triangles=13371;main_ms=0.73;render_ms=0.46;memory_mb=136.6
+RAILCRAFT_PERFORMANCE_REPORT D:\documents\project\gingchuangsai\apps\railcraft-unity\TestResults\task12-performance.json
+<properties></properties><test-case id="1043" name="CompleteProductionFlowMeetsPlaceholderPerformanceBudget" fullname="RailCraft.Tests.PlayMode.PerformanceCaptureTests.CompleteProductionFlowMeetsPlaceholderPerformanceBudget" methodname="CompleteProductionFlowMeetsPlaceholderPerformanceBudget" classname="RailCraft.Tests.PlayMode.PerformanceCaptureTests" runstate="Runnable" seed="436509432" result="Passed" start-time="2026-08-01 13:28:22Z" end-time="2026-08-01 13:28:40Z" duration="18.059124" asserts="0">RAILCRAFT_PERF state=factory idle;fps=805.5;low1=342.2;draw=218;triangles=12759;main_ms=0.72;render_ms=0.47;memory_mb=135.6
+RAILCRAFT_PERF state=all bogie modules installed;fps=848.6;low1=359.0;draw=209;triangles=12973;main_ms=0.70;render_ms=0.45;memory_mb=136.8
+RAILCRAFT_PERF state=carbody lowering;fps=787.0;low1=321.8;draw=196;triangles=10719;main_ms=0.74;render_ms=0.49;memory_mb=136.6
+RAILCRAFT_PERF state=commissioning feedback;fps=843.4;low1=348.8;draw=184;triangles=7699;main_ms=0.71;render_ms=0.43;memory_mb=136.6
+RAILCRAFT_PERF state=final hero view;fps=807.5;low1=326.8;draw=219;triangles=13371;main_ms=0.73;render_ms=0.46;memory_mb=136.6
+RAILCRAFT_PERFORMANCE_REPORT D:\documents\project\gingchuangsai\apps\railcraft-unity\TestResults\task12-performance.json
+<properties><property name="_JOINTYPE" value="UnityCombinatorial"></property><property name="retryIteration" value="0"></property><property name="repeatIteration" value="0"></property></properties><output>RAILCRAFT_PERF state=factory idle;fps=805.5;low1=342.2;draw=218;triangles=12759;main_ms=0.72;render_ms=0.47;memory_mb=135.6
+RAILCRAFT_PERF state=all bogie modules installed;fps=848.6;low1=359.0;draw=209;triangles=12973;main_ms=0.70;render_ms=0.45;memory_mb=136.8
+RAILCRAFT_PERF state=carbody lowering;fps=787.0;low1=321.8;draw=196;triangles=10719;main_ms=0.74;render_ms=0.49;memory_mb=136.6
+RAILCRAFT_PERF state=commissioning feedback;fps=843.4;low1=348.8;draw=184;triangles=7699;main_ms=0.71;render_ms=0.43;memory_mb=136.6
+RAILCRAFT_PERF state=final hero view;fps=807.5;low1=326.8;draw=219;triangles=13371;main_ms=0.73;render_ms=0.46;memory_mb=136.6
+RAILCRAFT_PERFORMANCE_REPORT D:\documents\project\gingchuangsai\apps\railcraft-unity\TestResults\task12-performance.json
+</output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>
+</test-run>

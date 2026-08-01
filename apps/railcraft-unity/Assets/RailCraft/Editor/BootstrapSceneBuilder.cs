@@ -68,10 +68,10 @@ namespace RailCraft.Editor
                 new Vector2(0.5f, 0.5f), Vector2.zero);
             var hudObject = InstantiateUiPrefab(hudPrefab, canvas.transform, "StepHud");
             Anchor((RectTransform)hudObject.transform, new Vector2(0f, 1f),
-                new Vector2(0f, 1f), new Vector2(32f, -32f));
+                new Vector2(0f, 1f), new Vector2(32f, -32f), new Vector2(0f, 1f));
             var feedbackObject = InstantiateUiPrefab(feedbackPrefab, canvas.transform, "FeedbackToast");
             Anchor((RectTransform)feedbackObject.transform, new Vector2(0.5f, 0f),
-                new Vector2(0.5f, 0f), new Vector2(0f, 36f));
+                new Vector2(0.5f, 0f), new Vector2(0f, 36f), new Vector2(0.5f, 0f));
             var mainMenuObject = InstantiateUiPrefab(mainMenuPrefab, canvas.transform, "MainMenu");
             Anchor((RectTransform)mainMenuObject.transform, new Vector2(0.5f, 0.5f),
                 new Vector2(0.5f, 0.5f), Vector2.zero);
@@ -283,11 +283,11 @@ namespace RailCraft.Editor
         }
 
         private static void Anchor(RectTransform rect, Vector2 anchorMin, Vector2 anchorMax,
-            Vector2 anchoredPosition)
+            Vector2 anchoredPosition, Vector2? pivot = null)
         {
             rect.anchorMin = anchorMin;
             rect.anchorMax = anchorMax;
-            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.pivot = pivot ?? new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = anchoredPosition;
         }
 

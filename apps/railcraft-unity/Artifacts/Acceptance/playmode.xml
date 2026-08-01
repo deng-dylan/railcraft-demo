@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="51" result="Skipped:Ignored" total="51" passed="50" failed="0" inconclusive="0" skipped="1" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:23Z" duration="17.855958">
+  <test-suite type="TestSuite" id="1068" name="RailCraft" fullname="RailCraft" runstate="Runnable" testcasecount="51" result="Skipped" label="Ignored" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:23Z" duration="17.855958" total="51" passed="50" failed="0" inconclusive="0" skipped="1" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <reason>
+      <message><![CDATA[One or more child tests were ignored]]></message>
+    </reason>
+    <test-suite type="Assembly" id="1061" name="RailCraft.PlayModeTests.dll" fullname="D:/documents/project/gingchuangsai/apps/railcraft-unity/Library/ScriptAssemblies/RailCraft.PlayModeTests.dll" runstate="Runnable" testcasecount="51" result="Skipped" label="Ignored" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:23Z" duration="17.850713" total="51" passed="50" failed="0" inconclusive="0" skipped="1" asserts="0">
+      <properties>
+        <property name="_PID" value="20816" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <reason>
+        <message><![CDATA[One or more child tests were ignored]]></message>
+      </reason>
+      <test-suite type="TestSuite" id="1062" name="RailCraft" fullname="RailCraft" runstate="Runnable" testcasecount="51" result="Skipped" label="Ignored" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:23Z" duration="17.850385" total="51" passed="50" failed="0" inconclusive="0" skipped="1" asserts="0">
+        <properties />
+        <reason>
+          <message><![CDATA[One or more child tests were ignored]]></message>
+        </reason>
+        <test-suite type="TestSuite" id="1063" name="Tests" fullname="RailCraft.Tests" runstate="Runnable" testcasecount="51" result="Skipped" label="Ignored" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:23Z" duration="17.850271" total="51" passed="50" failed="0" inconclusive="0" skipped="1" asserts="0">
+          <properties />
+          <reason>
+            <message><![CDATA[One or more child tests were ignored]]></message>
+          </reason>
+          <test-suite type="TestSuite" id="1064" name="PlayMode" fullname="RailCraft.Tests.PlayMode" runstate="Runnable" testcasecount="51" result="Skipped" label="Ignored" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:23Z" duration="17.850096" total="51" passed="50" failed="0" inconclusive="0" skipped="1" asserts="0">
+            <properties />
+            <reason>
+              <message><![CDATA[One or more child tests were ignored]]></message>
+            </reason>
+            <test-suite type="TestFixture" id="1001" name="BootstrapStartupTests" fullname="RailCraft.Tests.PlayMode.BootstrapStartupTests" classname="RailCraft.Tests.PlayMode.BootstrapStartupTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:20Z" duration="15.104777" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1003" name="InvalidProductionContentShowsIssueCodeOnFatalSurface" fullname="RailCraft.Tests.PlayMode.BootstrapStartupTests.InvalidProductionContentShowsIssueCodeOnFatalSurface" methodname="InvalidProductionContentShowsIssueCodeOnFatalSurface" classname="RailCraft.Tests.PlayMode.BootstrapStartupTests" runstate="Runnable" seed="1761892079" result="Passed" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:05Z" duration="0.021020" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="MissingFactorySceneShowsStableFatalCode" fullname="RailCraft.Tests.PlayMode.BootstrapStartupTests.MissingFactorySceneShowsStableFatalCode" methodname="MissingFactorySceneShowsStableFatalCode" classname="RailCraft.Tests.PlayMode.BootstrapStartupTests" runstate="Runnable" seed="874157319" result="Passed" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:05Z" duration="0.008285" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Scene '__missing_factory_scene__' couldn't be loaded because it has not been added to the active build profile or shared scene list or the AssetBundle has not been loaded.
+To add a scene to the active build profile or shared scene list use the menu File->Build Profiles
+]]></output>
+              </test-case>
+              <test-case id="1002" name="ProductionBootstrapLoadsFactoryAndWiresFirstInteractiveStep" fullname="RailCraft.Tests.PlayMode.BootstrapStartupTests.ProductionBootstrapLoadsFactoryAndWiresFirstInteractiveStep" methodname="ProductionBootstrapLoadsFactoryAndWiresFirstInteractiveStep" classname="RailCraft.Tests.PlayMode.BootstrapStartupTests" runstate="Runnable" seed="861180186" result="Passed" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:20Z" duration="15.066897" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1005" name="CompletionPresentationTests" fullname="RailCraft.Tests.PlayMode.CompletionPresentationTests" classname="RailCraft.Tests.PlayMode.CompletionPresentationTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.002373" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1006" name="CompletionFocusesHeroAndMovesReleasedVehicleToTrackDestination" fullname="RailCraft.Tests.PlayMode.CompletionPresentationTests.CompletionFocusesHeroAndMovesReleasedVehicleToTrackDestination" methodname="CompletionFocusesHeroAndMovesReleasedVehicleToTrackDestination" classname="RailCraft.Tests.PlayMode.CompletionPresentationTests" runstate="Runnable" seed="1673636426" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.001855" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1007" name="DragDropControllerTests" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:21Z" duration="0.629063" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1015" name="CancellingAllInteractionsRestoresCameraAndEndsActiveDragOnce" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.CancellingAllInteractionsRestoresCameraAndEndsActiveDragOnce" methodname="CancellingAllInteractionsRestoresCameraAndEndsActiveDragOnce" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1468725221" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.047305" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1016" name="CancellingWhileIdleDoesNotDisableCameraOrbit" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.CancellingWhileIdleDoesNotDisableCameraOrbit" methodname="CancellingWhileIdleDoesNotDisableCameraOrbit" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1023232279" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.002603" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="DisablingDuringActiveDragRestoresPoseAndEmitsOneEndSignal" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.DisablingDuringActiveDragRestoresPoseAndEmitsOneEndSignal" methodname="DisablingDuringActiveDragRestoresPoseAndEmitsOneEndSignal" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="302510182" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.002752" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1018" name="DisablingDuringRejectedReturnRestoresStartPoseWithoutDuplicateEndSignal" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.DisablingDuringRejectedReturnRestoresStartPoseWithoutDuplicateEndSignal" methodname="DisablingDuringRejectedReturnRestoresStartPoseWithoutDuplicateEndSignal" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1272710981" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.004384" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1019" name="DisablingDuringSnapCompletesOnceAndLeavesTheModuleReusable" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.DisablingDuringSnapCompletesOnceAndLeavesTheModuleReusable" methodname="DisablingDuringSnapCompletesOnceAndLeavesTheModuleReusable" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="331505762" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.003436" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1017" name="DisablingFromDragEndCannotReenterTheController" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.DisablingFromDragEndCannotReenterTheController" methodname="DisablingFromDragEndCannotReenterTheController" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1157382787" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.002713" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1020" name="DisablingFromDragEndStillFinalizesTheRegisteredSnap" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.DisablingFromDragEndStillFinalizesTheRegisteredSnap" methodname="DisablingFromDragEndStillFinalizesTheRegisteredSnap" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="718221602" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.003114" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="PointerAcceptedDropRaisesCompletionOnlyAfterSnapFinishes" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.PointerAcceptedDropRaisesCompletionOnlyAfterSnapFinishes" methodname="PointerAcceptedDropRaisesCompletionOnlyAfterSnapFinishes" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1437988661" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.083062" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="PointerDraggingPreservesAuthoredRotation" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.PointerDraggingPreservesAuthoredRotation" methodname="PointerDraggingPreservesAuthoredRotation" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1459165350" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.002742" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="PointerDragStartsAtTheModuleRootWithoutSurfaceJump" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.PointerDragStartsAtTheModuleRootWithoutSurfaceJump" methodname="PointerDragStartsAtTheModuleRootWithoutSurfaceJump" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1972544684" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.003589" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="PointerDropUsesVisibleTargetWhenModuleAndTargetDepthDiffer" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.PointerDropUsesVisibleTargetWhenModuleAndTargetDepthDiffer" methodname="PointerDropUsesVisibleTargetWhenModuleAndTargetDepthDiffer" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1137524393" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.083516" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="PointerPressUsesItsOriginalPositionWhenMovedBeforeTheNextUpdate" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.PointerPressUsesItsOriginalPositionWhenMovedBeforeTheNextUpdate" methodname="PointerPressUsesItsOriginalPositionWhenMovedBeforeTheNextUpdate" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1729822271" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:20Z" duration="0.083373" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="RejectedReturnLocksTheModuleUntilItReachesItsStartPose" fullname="RailCraft.Tests.PlayMode.DragDropControllerTests.RejectedReturnLocksTheModuleUntilItReachesItsStartPose" methodname="RejectedReturnLocksTheModuleUntilItReachesItsStartPose" classname="RailCraft.Tests.PlayMode.DragDropControllerTests" runstate="Runnable" seed="1957603529" result="Passed" start-time="2026-08-01 17:01:20Z" end-time="2026-08-01 17:01:21Z" duration="0.304597" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1021" name="FactoryCameraControllerTests" fullname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" classname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.251223" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1023" name="CameraInputDoesNotRotateDraggedPart" fullname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests.CameraInputDoesNotRotateDraggedPart" methodname="CameraInputDoesNotRotateDraggedPart" classname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" runstate="Runnable" seed="1464225171" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.001823" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1025" name="InteractionLockSuppressesOrbitChanges" fullname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests.InteractionLockSuppressesOrbitChanges" methodname="InteractionLockSuppressesOrbitChanges" classname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" runstate="Runnable" seed="1538641015" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.001098" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1026" name="InteractionLockSuppressesPanAndKeyboardMove" fullname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests.InteractionLockSuppressesPanAndKeyboardMove" methodname="InteractionLockSuppressesPanAndKeyboardMove" classname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" runstate="Runnable" seed="1901997156" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.001557" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1028" name="NewShotInterruptsPreviousTransitionAndWins" fullname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests.NewShotInterruptsPreviousTransitionAndWins" methodname="NewShotInterruptsPreviousTransitionAndWins" classname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" runstate="Runnable" seed="1772577332" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.081255" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1024" name="OrbitPitchClampsAndCameraStaysAboveFactoryFloor" fullname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests.OrbitPitchClampsAndCameraStaysAboveFactoryFloor" methodname="OrbitPitchClampsAndCameraStaysAboveFactoryFloor" classname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" runstate="Runnable" seed="1300531981" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.001181" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1027" name="ShotDirectorReturnsToStableOverviewAfterStepFocus" fullname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests.ShotDirectorReturnsToStableOverviewAfterStepFocus" methodname="ShotDirectorReturnsToStableOverviewAfterStepFocus" classname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" runstate="Runnable" seed="2139684524" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.161195" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1029" name="UnknownShotLeavesCameraUnchanged" fullname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests.UnknownShotLeavesCameraUnchanged" methodname="UnknownShotLeavesCameraUnchanged" classname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" runstate="Runnable" seed="1592749045" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.001060" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1022" name="ZoomClampsToConfiguredRange" fullname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests.ZoomClampsToConfiguredRange" methodname="ZoomClampsToConfiguredRange" classname="RailCraft.Tests.PlayMode.FactoryCameraControllerTests" runstate="Runnable" seed="82980490" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.000904" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1030" name="FullFlowTests" fullname="RailCraft.Tests.PlayMode.FullFlowTests" classname="RailCraft.Tests.PlayMode.FullFlowTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.395989" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1034" name="CarbodyLoweringUsesVerticalMotionConstraint" fullname="RailCraft.Tests.PlayMode.FullFlowTests.CarbodyLoweringUsesVerticalMotionConstraint" methodname="CarbodyLoweringUsesVerticalMotionConstraint" classname="RailCraft.Tests.PlayMode.FullFlowTests" runstate="Runnable" seed="1893225090" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.010038" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1032" name="CommissioningUsesTeachingFailureInspectionAndQuestionFreeRetry" fullname="RailCraft.Tests.PlayMode.FullFlowTests.CommissioningUsesTeachingFailureInspectionAndQuestionFreeRetry" methodname="CommissioningUsesTeachingFailureInspectionAndQuestionFreeRetry" classname="RailCraft.Tests.PlayMode.FullFlowTests" runstate="Runnable" seed="614294797" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.010578" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1031" name="FullGuidedRunReachesCompletedAndUsesAllProductionIds" fullname="RailCraft.Tests.PlayMode.FullFlowTests.FullGuidedRunReachesCompletedAndUsesAllProductionIds" methodname="FullGuidedRunReachesCompletedAndUsesAllProductionIds" classname="RailCraft.Tests.PlayMode.FullFlowTests" runstate="Runnable" seed="883129061" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.009404" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1035" name="ResetCancelsActiveDragAndPendingSnapWithoutGhostCompletion" fullname="RailCraft.Tests.PlayMode.FullFlowTests.ResetCancelsActiveDragAndPendingSnapWithoutGhostCompletion" methodname="ResetCancelsActiveDragAndPendingSnapWithoutGhostCompletion" classname="RailCraft.Tests.PlayMode.FullFlowTests" runstate="Runnable" seed="1429522784" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.354780" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1033" name="ResetClearsProgressAndSecondRunHasNoDuplicateEvents" fullname="RailCraft.Tests.PlayMode.FullFlowTests.ResetClearsProgressAndSecondRunHasNoDuplicateEvents" methodname="ResetClearsProgressAndSecondRunHasNoDuplicateEvents" classname="RailCraft.Tests.PlayMode.FullFlowTests" runstate="Runnable" seed="417368232" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.010234" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1036" name="MenuAndResetTests" fullname="RailCraft.Tests.PlayMode.MenuAndResetTests" classname="RailCraft.Tests.PlayMode.MenuAndResetTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.077962" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1043" name="ExternalRestartUsesTheSameGuidanceDestination" fullname="RailCraft.Tests.PlayMode.MenuAndResetTests.ExternalRestartUsesTheSameGuidanceDestination" methodname="ExternalRestartUsesTheSameGuidanceDestination" classname="RailCraft.Tests.PlayMode.MenuAndResetTests" runstate="Runnable" seed="971413867" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.021886" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1037" name="MainMenuContainsRequiredActionsAndNoContinueButton" fullname="RailCraft.Tests.PlayMode.MenuAndResetTests.MainMenuContainsRequiredActionsAndNoContinueButton" methodname="MainMenuContainsRequiredActionsAndNoContinueButton" classname="RailCraft.Tests.PlayMode.MenuAndResetTests" runstate="Runnable" seed="1597545335" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.021612" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1039" name="OperationInstructionsReturnToMenuWithoutStartingRun" fullname="RailCraft.Tests.PlayMode.MenuAndResetTests.OperationInstructionsReturnToMenuWithoutStartingRun" methodname="OperationInstructionsReturnToMenuWithoutStartingRun" classname="RailCraft.Tests.PlayMode.MenuAndResetTests" runstate="Runnable" seed="1484911571" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.004500" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1041" name="ResetRequiresConfirmationThenReturnsToGuidanceAndClearsVisuals" fullname="RailCraft.Tests.PlayMode.MenuAndResetTests.ResetRequiresConfirmationThenReturnsToGuidanceAndClearsVisuals" methodname="ResetRequiresConfirmationThenReturnsToGuidanceAndClearsVisuals" classname="RailCraft.Tests.PlayMode.MenuAndResetTests" runstate="Runnable" seed="1512441861" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.005913" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1040" name="SettingsContainGraphicsAndWindowModeOnlyAndApplyInMemory" fullname="RailCraft.Tests.PlayMode.MenuAndResetTests.SettingsContainGraphicsAndWindowModeOnlyAndApplyInMemory" methodname="SettingsContainGraphicsAndWindowModeOnlyAndApplyInMemory" classname="RailCraft.Tests.PlayMode.MenuAndResetTests" runstate="Runnable" seed="559352329" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.006303" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="StartExperienceShowsExactGuidanceThenEntersKnowledgeGate" fullname="RailCraft.Tests.PlayMode.MenuAndResetTests.StartExperienceShowsExactGuidanceThenEntersKnowledgeGate" methodname="StartExperienceShowsExactGuidanceThenEntersKnowledgeGate" classname="RailCraft.Tests.PlayMode.MenuAndResetTests" runstate="Runnable" seed="1976228013" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.004723" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1042" name="UiConfirmedResetCancelsAnActiveDrag" fullname="RailCraft.Tests.PlayMode.MenuAndResetTests.UiConfirmedResetCancelsAnActiveDrag" methodname="UiConfirmedResetCancelsAnActiveDrag" classname="RailCraft.Tests.PlayMode.MenuAndResetTests" runstate="Runnable" seed="1273680430" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.004893" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1044" name="PerformanceCaptureTests" fullname="RailCraft.Tests.PlayMode.PerformanceCaptureTests" classname="RailCraft.Tests.PlayMode.PerformanceCaptureTests" runstate="Runnable" testcasecount="1" result="Skipped" label="Ignored" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.004287" total="1" passed="0" failed="0" inconclusive="0" skipped="1" asserts="0">
+              <properties />
+              <reason>
+                <message><![CDATA[One or more child tests were ignored]]></message>
+              </reason>
+              <test-case id="1045" name="CompleteProductionFlowMeetsPlaceholderPerformanceBudget" fullname="RailCraft.Tests.PlayMode.PerformanceCaptureTests.CompleteProductionFlowMeetsPlaceholderPerformanceBudget" methodname="CompleteProductionFlowMeetsPlaceholderPerformanceBudget" classname="RailCraft.Tests.PlayMode.PerformanceCaptureTests" runstate="Runnable" seed="1833660212" result="Skipped" label="Ignored" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.003641" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <reason>
+                  <message><![CDATA[Hardware performance capture requires RAILCRAFT_CAPTURE_PERFORMANCE=1.]]></message>
+                </reason>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1046" name="QuizPresenterTests" fullname="RailCraft.Tests.PlayMode.QuizPresenterTests" classname="RailCraft.Tests.PlayMode.QuizPresenterTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:22Z" duration="0.220545" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1052" name="DisabledPresenterCannotAdvanceTheStateMachine" fullname="RailCraft.Tests.PlayMode.QuizPresenterTests.DisabledPresenterCannotAdvanceTheStateMachine" methodname="DisabledPresenterCannotAdvanceTheStateMachine" classname="RailCraft.Tests.PlayMode.QuizPresenterTests" runstate="Runnable" seed="202764111" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:21Z" duration="0.001241" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1053" name="DisablingDuringFinalTransitionRecoversOneUnlockOnEnable" fullname="RailCraft.Tests.PlayMode.QuizPresenterTests.DisablingDuringFinalTransitionRecoversOneUnlockOnEnable" methodname="DisablingDuringFinalTransitionRecoversOneUnlockOnEnable" classname="RailCraft.Tests.PlayMode.QuizPresenterTests" runstate="Runnable" seed="129665701" result="Passed" start-time="2026-08-01 17:01:21Z" end-time="2026-08-01 17:01:22Z" duration="0.141068" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1048" name="FinalCorrectAnswerHidesQuizAndUnlocksStepOnce" fullname="RailCraft.Tests.PlayMode.QuizPresenterTests.FinalCorrectAnswerHidesQuizAndUnlocksStepOnce" methodname="FinalCorrectAnswerHidesQuizAndUnlocksStepOnce" classname="RailCraft.Tests.PlayMode.QuizPresenterTests" runstate="Runnable" seed="152690131" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.001469" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1050" name="OptionsStayDisabledDuringConfiguredTransition" fullname="RailCraft.Tests.PlayMode.QuizPresenterTests.OptionsStayDisabledDuringConfiguredTransition" methodname="OptionsStayDisabledDuringConfiguredTransition" classname="RailCraft.Tests.PlayMode.QuizPresenterTests" runstate="Runnable" seed="246645233" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.070941" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1049" name="PresenterRendersFourAndTwoOptionQuestionsInOrder" fullname="RailCraft.Tests.PlayMode.QuizPresenterTests.PresenterRendersFourAndTwoOptionQuestionsInOrder" methodname="PresenterRendersFourAndTwoOptionQuestionsInOrder" classname="RailCraft.Tests.PlayMode.QuizPresenterTests" runstate="Runnable" seed="1454919037" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.000957" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1051" name="RepeatedShowStepResumesAtStateMachineQuestionIndex" fullname="RailCraft.Tests.PlayMode.QuizPresenterTests.RepeatedShowStepResumesAtStateMachineQuestionIndex" methodname="RepeatedShowStepResumesAtStateMachineQuestionIndex" classname="RailCraft.Tests.PlayMode.QuizPresenterTests" runstate="Runnable" seed="1683561586" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.000959" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1054" name="StepHudShowsSecondCommissioningWithoutRepeatingKnowledgeCount" fullname="RailCraft.Tests.PlayMode.QuizPresenterTests.StepHudShowsSecondCommissioningWithoutRepeatingKnowledgeCount" methodname="StepHudShowsSecondCommissioningWithoutRepeatingKnowledgeCount" classname="RailCraft.Tests.PlayMode.QuizPresenterTests" runstate="Runnable" seed="493685529" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.001909" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1047" name="WrongAnswerShowsRetryAndKeepsPanelOpen" fullname="RailCraft.Tests.PlayMode.QuizPresenterTests.WrongAnswerShowsRetryAndKeepsPanelOpen" methodname="WrongAnswerShowsRetryAndKeepsPanelOpen" classname="RailCraft.Tests.PlayMode.QuizPresenterTests" runstate="Runnable" seed="940036278" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.000869" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1055" name="VisualFeedbackTests" fullname="RailCraft.Tests.PlayMode.VisualFeedbackTests" classname="RailCraft.Tests.PlayMode.VisualFeedbackTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:23Z" duration="1.162542" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1059" name="AcceptedDropShowsGreenFlashForConfiguredDuration" fullname="RailCraft.Tests.PlayMode.VisualFeedbackTests.AcceptedDropShowsGreenFlashForConfiguredDuration" methodname="AcceptedDropShowsGreenFlashForConfiguredDuration" classname="RailCraft.Tests.PlayMode.VisualFeedbackTests" runstate="Runnable" seed="274567585" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.660264" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1056" name="CurrentModuleAndTargetAreHighlighted" fullname="RailCraft.Tests.PlayMode.VisualFeedbackTests.CurrentModuleAndTargetAreHighlighted" methodname="CurrentModuleAndTargetAreHighlighted" classname="RailCraft.Tests.PlayMode.VisualFeedbackTests" runstate="Runnable" seed="438306337" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.004834" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1060" name="DisablingSnapEffectsClearsPersistentAndTransientRendererState" fullname="RailCraft.Tests.PlayMode.VisualFeedbackTests.DisablingSnapEffectsClearsPersistentAndTransientRendererState" methodname="DisablingSnapEffectsClearsPersistentAndTransientRendererState" classname="RailCraft.Tests.PlayMode.VisualFeedbackTests" runstate="Runnable" seed="1941532030" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.005511" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1057" name="LockedFuturePreviewIsStaticNeutralGreyWithoutEmission" fullname="RailCraft.Tests.PlayMode.VisualFeedbackTests.LockedFuturePreviewIsStaticNeutralGreyWithoutEmission" methodname="LockedFuturePreviewIsStaticNeutralGreyWithoutEmission" classname="RailCraft.Tests.PlayMode.VisualFeedbackTests" runstate="Runnable" seed="1940398330" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:22Z" duration="0.085767" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1058" name="RejectedDropShowsErrorWithoutMovingProgress" fullname="RailCraft.Tests.PlayMode.VisualFeedbackTests.RejectedDropShowsErrorWithoutMovingProgress" methodname="RejectedDropShowsErrorWithoutMovingProgress" classname="RailCraft.Tests.PlayMode.VisualFeedbackTests" runstate="Runnable" seed="1346195197" result="Passed" start-time="2026-08-01 17:01:22Z" end-time="2026-08-01 17:01:23Z" duration="0.405181" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/Dylan/AppData/LocalLow/RailCraft Team/RailCraft\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

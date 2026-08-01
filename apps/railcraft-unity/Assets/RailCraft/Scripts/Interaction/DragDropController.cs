@@ -26,6 +26,8 @@ namespace RailCraft.Interaction
         private DraggableModule activeModule;
         private Plane dragPlane;
         private Vector3 dragOffset;
+        private Vector2 pendingPressScreenPosition;
+        private bool hasPendingPress;
         private bool orbitWasEnabled;
         private bool cameraOrbitOverridden;
         private bool isDisabling;
@@ -41,6 +43,7 @@ namespace RailCraft.Interaction
         {
             isDisabling = false;
             pointerPositionAction.Enable();
+            pointerPressAction.performed += CapturePointerPressPosition;
             pointerPressAction.Enable();
         }
 
@@ -48,7 +51,9 @@ namespace RailCraft.Interaction
         {
             isDisabling = true;
             pointerPositionAction.Disable();
+            pointerPressAction.performed -= CapturePointerPressPosition;
             pointerPressAction.Disable();
+            hasPendingPress = false;
             StopAllCoroutines();
 
             var interruptedDrag = activeModule;
@@ -85,22 +90,32 @@ namespace RailCraft.Interaction
 
         private void OnDestroy()
         {
+            pointerPressAction.performed -= CapturePointerPressPosition;
             pointerPositionAction.Dispose();
             pointerPressAction.Dispose();
+        }
+
+        private void CapturePointerPressPosition(InputAction.CallbackContext context)
+        {
+            pendingPressScreenPosition = pointerPositionAction.ReadValue<Vector2>();
+            hasPendingPress = true;
         }
 
         private void Update()
         {
             var pointerPosition = pointerPositionAction.ReadValue<Vector2>();
-            if (pointerPressAction.WasPressedThisFrame())
-                TryBeginDragAtScreenPosition(pointerPosition);
+            if (hasPendingPress)
+            {
+                hasPendingPress = false;
+                TryBeginDragAtScreenPosition(pendingPressScreenPosition);
+            }
 
             if (activeModule == null)
                 return;
 
             DragToScreenPosition(pointerPosition);
             if (pointerPressAction.WasReleasedThisFrame())
-                ReleaseAt(activeModule.transform.position);
+                ReleaseAtScreenPosition(pointerPosition);
         }
 
         public void Configure(
@@ -131,6 +146,7 @@ namespace RailCraft.Interaction
         public void CancelAllInteractions()
         {
             StopAllCoroutines();
+            hasPendingPress = false;
 
             var interruptedDrag = activeModule;
             activeModule = null;
@@ -179,6 +195,16 @@ namespace RailCraft.Interaction
 
         public DragDropResult ReleaseAt(Vector3 worldPosition)
         {
+            return ReleaseToTarget(FindTarget(worldPosition));
+        }
+
+        public DragDropResult ReleaseAtScreenPosition(Vector2 screenPosition)
+        {
+            return ReleaseToTarget(FindTarget(screenPosition));
+        }
+
+        private DragDropResult ReleaseToTarget(DropTarget target)
+        {
             if (activeModule == null)
                 return new DragDropResult(false, "not_dragging", null, null);
 
@@ -191,7 +217,6 @@ namespace RailCraft.Interaction
                 if (authorization == null || !authorization.CanDrag(module.StepId))
                     return Reject(module, "step_locked", null);
 
-                var target = FindTarget(worldPosition);
                 if (target == null)
                     return Reject(module, "outside_target", null);
 
@@ -316,6 +341,38 @@ namespace RailCraft.Interaction
 
                 var distance = Vector3.Distance(worldPosition, target.SnapAnchor.position);
                 if (distance > target.SnapRadius || distance >= closestDistance)
+                    continue;
+
+                closest = target;
+                closestDistance = distance;
+            }
+
+            return closest;
+        }
+
+        private DropTarget FindTarget(Vector2 screenPosition)
+        {
+            var cameraForInteraction = interactionCamera == null ? Camera.main : interactionCamera;
+            if (cameraForInteraction == null)
+                return null;
+
+            DropTarget closest = null;
+            var closestDistance = float.PositiveInfinity;
+            foreach (var target in dropTargets)
+            {
+                if (target == null || target.SnapAnchor == null)
+                    continue;
+
+                var anchorScreen = cameraForInteraction.WorldToScreenPoint(target.SnapAnchor.position);
+                if (anchorScreen.z <= 0f)
+                    continue;
+
+                var radiusEdgeScreen = cameraForInteraction.WorldToScreenPoint(
+                    target.SnapAnchor.position + cameraForInteraction.transform.right * target.SnapRadius);
+                var pixelRadius = Mathf.Max(24f,
+                    Vector2.Distance(anchorScreen, radiusEdgeScreen));
+                var distance = Vector2.Distance(screenPosition, anchorScreen);
+                if (distance > pixelRadius || distance >= closestDistance)
                     continue;
 
                 closest = target;

@@ -42,6 +42,40 @@ namespace RailCraft.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator PointerPressUsesItsOriginalPositionWhenMovedBeforeTheNextUpdate()
+        {
+            var fixture = DragFixture.CreateUnlocked();
+            var completedCount = 0;
+            fixture.Controller.DropCompleted += _ => completedCount++;
+
+            try
+            {
+                yield return null;
+                Physics.SyncTransforms();
+                fixture.QueuePointerMove(fixture.ModuleScreenPosition);
+                fixture.QueueLeftButton(true);
+                fixture.QueuePointerMove(fixture.TargetScreenPosition);
+                yield return null;
+
+                Assert.That(fixture.Controller.IsPartDragActive, Is.True,
+                    "The press location must select the module even when the pointer moves in the same input frame.");
+
+                fixture.QueueLeftButton(false);
+                yield return null;
+                yield return new WaitForSeconds(0.08f);
+
+                Assert.That(completedCount, Is.EqualTo(1));
+                Assert.That(Vector3.Distance(
+                    fixture.Module.transform.position,
+                    fixture.Target.SnapAnchor.position), Is.LessThan(0.001f));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
         public IEnumerator PointerDraggingPreservesAuthoredRotation()
         {
             var fixture = DragFixture.CreateUnlocked();
@@ -82,6 +116,30 @@ namespace RailCraft.Tests.PlayMode
                     fixture.Target.SnapAnchor.position), Is.LessThan(0.001f));
                 Assert.That(Quaternion.Angle(fixture.Target.SnapAnchor.rotation, fixture.Module.transform.rotation),
                     Is.LessThan(0.01f));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator PointerDropUsesVisibleTargetWhenModuleAndTargetDepthDiffer()
+        {
+            var fixture = DragFixture.CreateUnlocked(targetDepth: 8f);
+            var completedCount = 0;
+            fixture.Controller.DropCompleted += _ => completedCount++;
+
+            try
+            {
+                yield return fixture.DragAcrossScreen(fixture.TargetScreenPosition);
+                yield return fixture.ReleasePointer();
+                yield return new WaitForSeconds(0.08f);
+
+                Assert.That(completedCount, Is.EqualTo(1));
+                Assert.That(Vector3.Distance(
+                    fixture.Module.transform.position,
+                    fixture.Target.SnapAnchor.position), Is.LessThan(0.001f));
             }
             finally
             {

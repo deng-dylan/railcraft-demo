@@ -10,6 +10,10 @@ namespace RailCraft.Presentation
     [DisallowMultipleComponent]
     public sealed class AssemblyPresenter : MonoBehaviour
     {
+        private const float VisibleStagingDistance = 2.4f;
+        private const float VisibleStagingLift = 0.35f;
+        private const float VisibleCarbodyLoweringHeight = 2.25f;
+
         private readonly List<GameObject> installedVisuals = new List<GameObject>();
         private readonly Dictionary<string, GameObject> installedByStepId =
             new Dictionary<string, GameObject>(StringComparer.Ordinal);
@@ -104,8 +108,18 @@ namespace RailCraft.Presentation
                 && currentTarget?.SnapAnchor != null)
             {
                 currentVisual.transform.SetPositionAndRotation(
-                    currentTarget.SnapAnchor.position + Vector3.up * 4f,
+                    currentTarget.SnapAnchor.position + Vector3.up * VisibleCarbodyLoweringHeight,
                     currentTarget.SnapAnchor.rotation);
+            }
+            else if (currentTarget?.SnapAnchor != null)
+            {
+                var stagingDirection = stagingRoot.position - currentTarget.SnapAnchor.position;
+                stagingDirection.y = 0f;
+                if (stagingDirection.sqrMagnitude < 0.001f)
+                    stagingDirection = Vector3.left;
+                currentVisual.transform.position = currentTarget.SnapAnchor.position
+                    + stagingDirection.normalized * VisibleStagingDistance
+                    + Vector3.up * VisibleStagingLift;
             }
             SetInteractionEnabled(false);
 
