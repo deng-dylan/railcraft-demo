@@ -2,7 +2,8 @@
   "name": "RailCraft.Runtime",
   "rootNamespace": "RailCraft",
   "references": [
-    "Unity.InputSystem"
+    "Unity.InputSystem",
+    "UnityEngine.UI"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
