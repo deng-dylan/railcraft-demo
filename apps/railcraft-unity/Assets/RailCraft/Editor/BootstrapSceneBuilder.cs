@@ -104,6 +104,10 @@ namespace RailCraft.Editor
             var reset = composition.AddComponent<ResetPresenter>();
             reset.ConfigureView(resetPanel, resetMessage, resetRequest, resetConfirm, resetCancel);
             var drag = composition.AddComponent<DragDropController>();
+            var highlight = composition.AddComponent<HighlightController>();
+            var snapEffects = composition.AddComponent<SnapEffectController>();
+            snapEffects.Configure(highlight, drag);
+            assembly.ConfigureEffects(snapEffects);
             var controller = composition.AddComponent<GuidedFlowController>();
             controller.ConfigureStartup(questions, flow, catalog, quiz, assembly, process,
                 completion, hud, feedback, drag);

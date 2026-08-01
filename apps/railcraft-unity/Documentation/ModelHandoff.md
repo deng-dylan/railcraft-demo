@@ -92,7 +92,9 @@ Assets/RailCraft/Art/Prefabs/Modules/WheelRuntime.prefab
 - 含 LOD0、LOD1、LOD2；
 - 含简化碰撞体，不含 `DraggableModule`；
 - 网格名使用 `swm400e1_wheel_<side>_<lod>`；
-- 材质名使用 `mat_<function>_<finish>`。
+- 材质名使用 `mat_<function>_<finish>`；
+- 材质使用 URP Lit 或兼容 shader，并提供 `_BaseColor`/`_Color`、`_EmissionColor` 与有效的本地 `_EMISSION` keyword；
+- 若材质从模型中抽取，统一放到 `Assets/RailCraft/Art/Materials/Production/`。
 
 ## 只替换视觉子节点
 
@@ -115,7 +117,7 @@ Assets/RailCraft/Art/Prefabs/Modules/module_wheelset_axlebox_b.prefab
 - drop target ID；
 - `flow.v1.json` 中所有 step ID 与 assetKey。
 
-完成替换后运行生产车轮契约、目录验证、拖放测试和完整 48 题/15 步流程。内容 JSON 不随模型替换改动。
+完成替换后先运行 `RailCraft/Configure Factory Presentation`，它会为 Catalog 中 `DraggableModule.VisualRoot` 下的材质启用 property-block emission；随后运行 `RailCraft/Validate Production Asset Budgets`、生产车轮契约、目录验证、拖放测试和完整 48 题/15 步流程。内容 JSON 不随模型替换改动。
 
 ## 接收记录模板
 

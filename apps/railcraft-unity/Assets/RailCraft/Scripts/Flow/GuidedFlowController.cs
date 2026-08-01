@@ -301,6 +301,9 @@ namespace RailCraft.Flow
             var staging = FindTransform("PartsStagingArea");
             if (staging == null)
                 throw new InvalidOperationException("factory_staging_missing");
+            var lockedFuture = FindTransform("LockedFutureModules");
+            if (lockedFuture == null)
+                throw new InvalidOperationException("factory_locked_future_missing");
             var installedObject = new GameObject("InstalledModules");
             installedObject.transform.SetParent(staging.parent, false);
 
@@ -314,6 +317,7 @@ namespace RailCraft.Flow
             assemblyPresenter.Configure(prefabCatalog, staging, installedObject.transform,
                 dragDropController);
             assemblyPresenter.ConfigureTargets(targets);
+            assemblyPresenter.ConfigureLockedFuture(lockedFuture);
             dragDropController.SetInteractionCamera(UnityEngine.Camera.main);
             dragDropController.Configure(this, targets, orbitController);
             Configure(loadedContent, prefabCatalog, quizPresenter, null, assemblyPresenter,
@@ -408,7 +412,7 @@ namespace RailCraft.Flow
             if (result == null)
                 return;
             var message = result.Code == "wrong_target"
-                ? "接口不匹配，请放回当前高亮位置。"
+                ? "安装位置不匹配，请拖到当前发光接口。"
                 : "模块尚未放入有效接口。";
             feedbackView?.Show(message, 1.5f);
         }

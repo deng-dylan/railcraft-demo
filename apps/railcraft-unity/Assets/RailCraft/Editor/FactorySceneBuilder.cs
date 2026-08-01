@@ -152,7 +152,15 @@ namespace RailCraft.Editor
             {
                 material.SetColor("_EmissionColor", emissive ? color * 2.2f : Color.black);
                 if (emissive)
+                {
                     material.EnableKeyword("_EMISSION");
+                    material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.BakedEmissive;
+                }
+                else
+                {
+                    material.DisableKeyword("_EMISSION");
+                    material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.EmissiveIsBlack;
+                }
             }
             EditorUtility.SetDirty(material);
             return material;
@@ -239,6 +247,7 @@ namespace RailCraft.Editor
                 new Vector3(8f, 0f, -3.5f), new Vector3(3.2f, 0.25f, 3f), materials.Orange, materials);
             BuildStation(CreateChild(factoryRoot.transform, "ReleaseBoard"),
                 new Vector3(-8f, 0f, 5.5f), new Vector3(3.2f, 0.25f, 3f), materials.Yellow, materials);
+            BuildLockedFutureModules(CreateChild(factoryRoot.transform, "LockedFutureModules"), materials);
 
             BuildBackgroundTrack(CreateChild(factoryRoot.transform, "BackgroundTrack"), materials);
             BuildHeadDisplay(CreateChild(factoryRoot.transform, "CR400AFHeadDisplay"));
@@ -263,6 +272,27 @@ namespace RailCraft.Editor
                 throw new InvalidOperationException($"Failed to save factory scene: {FactoryScenePath}");
 
             UpsertFactoryBuildScene();
+        }
+
+        private static void BuildLockedFutureModules(GameObject root, FactoryMaterials materials)
+        {
+            var previews = new[]
+            {
+                CreateCube(root.transform, "FutureBogiePreview",
+                    new Vector3(-11.8f, 0.75f, -5.2f), new Vector3(2.4f, 0.8f, 1.25f), materials.Dark),
+                CreateCube(root.transform, "FutureCarbodyPreview",
+                    new Vector3(-11.8f, 0.85f, -2.8f), new Vector3(2.8f, 1f, 1.15f), materials.Dark),
+                CreateCube(root.transform, "FutureCommissioningPreview",
+                    new Vector3(-11.8f, 0.65f, -0.5f), new Vector3(1.8f, 0.6f, 1.1f), materials.Dark)
+            };
+
+            foreach (var preview in previews)
+            {
+                var collider = preview.GetComponent<Collider>();
+                if (collider != null)
+                    UnityEngine.Object.DestroyImmediate(collider);
+                GameObjectUtility.SetStaticEditorFlags(preview, 0);
+            }
         }
 
         private static void UpsertFactoryBuildScene()
@@ -347,13 +377,23 @@ namespace RailCraft.Editor
                 }
             }
 
-            var reflectionObject = new GameObject("FactoryReflectionProbe");
-            reflectionObject.transform.SetParent(lighting.transform, false);
-            reflectionObject.transform.position = new Vector3(0f, 2.5f, 0f);
-            var reflection = reflectionObject.AddComponent<ReflectionProbe>();
-            reflection.mode = ReflectionProbeMode.Baked;
-            reflection.size = new Vector3(28f, 6f, 20f);
-            reflection.resolution = 128;
+            var reflectionProbes = CreateChild(lighting.transform, "BakedReflectionProbes");
+            foreach (var definition in new[]
+            {
+                (Name: "FactoryReflectionProbe_West", Position: new Vector3(-7f, 2.5f, 0f)),
+                (Name: "FactoryReflectionProbe_East", Position: new Vector3(7f, 2.5f, 0f))
+            })
+            {
+                var reflectionObject = new GameObject(definition.Name);
+                reflectionObject.transform.SetParent(reflectionProbes.transform, false);
+                reflectionObject.transform.localPosition = definition.Position;
+                var reflection = reflectionObject.AddComponent<ReflectionProbe>();
+                reflection.mode = ReflectionProbeMode.Baked;
+                reflection.size = new Vector3(18f, 6f, 20f);
+                reflection.resolution = 128;
+                reflection.boxProjection = true;
+                reflection.blendDistance = 2f;
+            }
 
             var probesObject = new GameObject("MovingItemLightProbes");
             probesObject.transform.SetParent(lighting.transform, false);

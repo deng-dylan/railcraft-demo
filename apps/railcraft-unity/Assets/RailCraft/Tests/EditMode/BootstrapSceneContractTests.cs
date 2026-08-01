@@ -67,6 +67,17 @@ namespace RailCraft.Tests.EditMode
                     Has.Length.EqualTo(1));
                 Assert.That(roots.SelectMany(root => root.GetComponentsInChildren<DragDropController>(true)).ToArray(),
                     Has.Length.EqualTo(1));
+                var highlights = roots.SelectMany(root => root.GetComponentsInChildren<HighlightController>(true)).ToArray();
+                var snapEffects = roots.SelectMany(root => root.GetComponentsInChildren<SnapEffectController>(true)).ToArray();
+                Assert.That(highlights, Has.Length.EqualTo(1));
+                Assert.That(snapEffects, Has.Length.EqualTo(1));
+                var snapData = new SerializedObject(snapEffects[0]);
+                Assert.That(snapData.FindProperty("highlightController").objectReferenceValue,
+                    Is.SameAs(highlights[0]));
+                Assert.That(snapData.FindProperty("dragDropController").objectReferenceValue, Is.Not.Null);
+                var assembly = roots.SelectMany(root => root.GetComponentsInChildren<AssemblyPresenter>(true)).Single();
+                Assert.That(new SerializedObject(assembly).FindProperty("snapEffectController").objectReferenceValue,
+                    Is.SameAs(snapEffects[0]));
 
                 var names = roots.SelectMany(root => root.GetComponentsInChildren<Transform>(true))
                     .Select(item => item.name).ToArray();

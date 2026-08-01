@@ -45,6 +45,7 @@ namespace RailCraft.Tests.PlayMode
                 .SelectMany(root => root.GetComponentsInChildren<AssemblyPresenter>(true)).Single();
             var drag = bootstrap.GetRootGameObjects()
                 .SelectMany(root => root.GetComponentsInChildren<DragDropController>(true)).Single();
+            Assert.That(assembly.LockedFutureCount, Is.EqualTo(3));
             var quizView = bootstrap.GetRootGameObjects()
                 .SelectMany(root => root.GetComponentsInChildren<QuizView>(true)).Single();
             var cameraDirector = Object.FindFirstObjectByType<CameraShotDirector>();

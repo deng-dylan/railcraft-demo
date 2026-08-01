@@ -19,7 +19,9 @@ namespace RailCraft.Presentation
         private PartPrefabCatalog catalog;
         private Transform stagingRoot;
         private Transform installedRoot;
+        private Transform lockedFutureRoot;
         private DragDropController dragController;
+        [SerializeField] private SnapEffectController snapEffectController;
         private StepDefinition currentStep;
         private GameObject currentVisual;
         private DraggableModule currentModule;
@@ -30,6 +32,9 @@ namespace RailCraft.Presentation
         public DraggableModule CurrentModule => currentModule;
         public DropTarget CurrentTarget => currentTarget;
         public bool IsTargetHighlighted => currentTargetMarker != null && currentTargetMarker.enabled;
+        public int LockedFutureCount => snapEffectController == null
+            ? 0
+            : snapEffectController.LockedFutureCount;
 
         public void Configure(PartPrefabCatalog configuredCatalog, Transform configuredStagingRoot,
             Transform configuredInstalledRoot, DragDropController configuredDragController)
@@ -38,6 +43,18 @@ namespace RailCraft.Presentation
             stagingRoot = configuredStagingRoot ?? transform;
             installedRoot = configuredInstalledRoot ?? transform;
             dragController = configuredDragController;
+        }
+
+        public void ConfigureEffects(SnapEffectController configuredSnapEffectController)
+        {
+            snapEffectController = configuredSnapEffectController;
+            snapEffectController?.SetLockedFuture(lockedFutureRoot);
+        }
+
+        public void ConfigureLockedFuture(Transform configuredLockedFutureRoot)
+        {
+            lockedFutureRoot = configuredLockedFutureRoot;
+            snapEffectController?.SetLockedFuture(lockedFutureRoot);
         }
 
         public void ConfigureTargets(IEnumerable<DropTarget> configuredTargets)
@@ -93,6 +110,7 @@ namespace RailCraft.Presentation
             SetInteractionEnabled(false);
 
             SetTargetHighlighted(true);
+            snapEffectController?.SetCurrentStep(currentModule, currentTarget);
             dragController?.SetDraggableModules(new[] { currentModule });
             return currentModule;
         }
@@ -112,6 +130,7 @@ namespace RailCraft.Presentation
 
             SetInteractionEnabled(false);
             SetTargetHighlighted(false);
+            snapEffectController?.ClearCurrentStep();
             var moduleHighlight = ResolveNamedRenderer(currentVisual.transform, "Highlight");
             if (moduleHighlight != null)
                 moduleHighlight.enabled = false;
@@ -159,6 +178,7 @@ namespace RailCraft.Presentation
         public void Clear()
         {
             DiscardCurrentVisual();
+            snapEffectController?.Clear();
             foreach (var visual in installedVisuals)
             {
                 if (visual != null)
@@ -178,6 +198,7 @@ namespace RailCraft.Presentation
         private void DiscardCurrentVisual()
         {
             SetTargetHighlighted(false);
+            snapEffectController?.ClearCurrentStep();
             if (currentVisual != null)
                 Destroy(currentVisual);
             currentStep = null;

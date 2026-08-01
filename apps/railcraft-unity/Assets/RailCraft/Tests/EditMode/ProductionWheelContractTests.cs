@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using RailCraft.Assets;
+using RailCraft.Editor;
 using RailCraft.Interaction;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -85,6 +86,12 @@ namespace RailCraft.Tests.EditMode
                     Assert.That(materials, Is.Not.Empty, renderer.name);
                     Assert.That(materials.All(material => material != null
                         && MaterialNamePattern.IsMatch(material.name)), Is.True, renderer.name);
+                    foreach (var material in materials)
+                    {
+                        Assert.That(ProductionAssetBudgetPostprocessor
+                            .GetPropertyBlockEmissionIssue(material), Is.Null,
+                            $"{renderer.name}/{material?.name}");
+                    }
                 }
             }
 
