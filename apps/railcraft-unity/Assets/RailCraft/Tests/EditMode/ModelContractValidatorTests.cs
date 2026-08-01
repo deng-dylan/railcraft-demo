@@ -85,5 +85,40 @@ namespace RailCraft.Tests.EditMode
             Assert.That(head.GetComponentInChildren<ModelContract>(true), Is.Null);
             Assert.That(head.GetComponentsInChildren<Renderer>(true), Is.Not.Empty);
         }
+
+        [Test]
+        public void RebuildingPlaceholdersPreservesPrefabGuids()
+        {
+            var catalog = AssetDatabase.LoadAssetAtPath<PartPrefabCatalog>(
+                "Assets/RailCraft/Art/PartPrefabCatalog.asset");
+            var before = catalog.Entries.ToDictionary(
+                entry => entry.assetKey,
+                entry => AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(entry.prefab)));
+
+            PlaceholderAssetBuilder.Build(false);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+
+            catalog = AssetDatabase.LoadAssetAtPath<PartPrefabCatalog>(
+                "Assets/RailCraft/Art/PartPrefabCatalog.asset");
+            foreach (var entry in catalog.Entries)
+            {
+                var path = AssetDatabase.GetAssetPath(entry.prefab);
+                Assert.That(AssetDatabase.AssetPathToGUID(path), Is.EqualTo(before[entry.assetKey]), entry.assetKey);
+            }
+        }
+
+        [Test]
+        public void DraggablePrefabReferencesItsRootColliderAndVisualRoot()
+        {
+            var catalog = AssetDatabase.LoadAssetAtPath<PartPrefabCatalog>(
+                "Assets/RailCraft/Art/PartPrefabCatalog.asset");
+            foreach (var entry in catalog.Entries)
+            {
+                var prefab = entry.prefab;
+                var module = prefab.GetComponent<RailCraft.Interaction.DraggableModule>();
+                Assert.That(module.InteractionCollider, Is.SameAs(prefab.GetComponent<Collider>()), entry.assetKey);
+                Assert.That(module.VisualRoot, Is.Not.SameAs(prefab.transform), entry.assetKey);
+            }
+        }
     }
 }

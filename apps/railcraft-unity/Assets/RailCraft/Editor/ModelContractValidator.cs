@@ -87,8 +87,14 @@ namespace RailCraft.Editor
                 issues.Add(prefix + "draggable_module_missing");
             if (collider == null)
                 issues.Add(prefix + "root_collider_missing");
+            if (draggable != null && collider != null && draggable.InteractionCollider != collider)
+                issues.Add(prefix + "interaction_collider_not_root_collider");
             if (visualRoot == null)
                 issues.Add(prefix + "visual_root_missing");
+            if (draggable != null && (draggable.VisualRoot == null || draggable.VisualRoot == transform))
+                issues.Add(prefix + "draggable_visual_root_invalid");
+            if (draggable != null && visualRoot != null && draggable.VisualRoot != visualRoot)
+                issues.Add(prefix + "draggable_visual_root_mismatch");
             if (highlight == null)
                 issues.Add(prefix + "highlight_missing");
             if (transform.localPosition.sqrMagnitude > 0.000001f)

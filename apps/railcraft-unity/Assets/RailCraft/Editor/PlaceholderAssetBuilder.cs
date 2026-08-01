@@ -265,10 +265,9 @@ namespace RailCraft.Editor
 
         private static GameObject SavePrefab(GameObject root, string path)
         {
-            var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-            if (existing != null)
-                AssetDatabase.DeleteAsset(path);
             var prefab = PrefabUtility.SaveAsPrefabAsset(root, path);
+            if (prefab == null)
+                throw new InvalidOperationException($"Failed to save placeholder prefab: {path}");
             UnityEngine.Object.DestroyImmediate(root);
             return prefab;
         }
