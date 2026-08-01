@@ -2,7 +2,8 @@
   "name": "RailCraft.Editor",
   "rootNamespace": "RailCraft.Editor",
   "references": [
-    "RailCraft.Runtime"
+    "RailCraft.Runtime",
+    "Unity.InputSystem"
   ],
   "includePlatforms": [
     "Editor"

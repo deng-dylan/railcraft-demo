@@ -1,0 +1,39 @@
+{
+    "name": "RailCraftControls",
+    "maps": [
+        {
+            "name": "Factory",
+            "id": "b277a3f0-3fe5-43b9-8e62-6fc67c2863dd",
+            "actions": [
+                { "name": "Point", "type": "Value", "id": "3d32f899-7457-4afe-9769-cf7f96910330", "expectedControlType": "Vector2", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "PrimaryPress", "type": "Button", "id": "22b5f1aa-3541-4d55-bb58-82ff36003e4a", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "OrbitPress", "type": "Button", "id": "b2aae44f-da4e-4546-91a3-a6e11b76959a", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "PanPress", "type": "Button", "id": "a6832e00-360a-4de6-85c8-47934ad21c57", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "PointerDelta", "type": "Value", "id": "69245bd6-9687-4105-ad76-33f24a284f92", "expectedControlType": "Vector2", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "Zoom", "type": "Value", "id": "21d45e42-a764-42f3-a09e-2d3244db08a4", "expectedControlType": "Axis", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "Move", "type": "Value", "id": "d51d9dc4-fb38-48b1-827f-b9f08ff04620", "expectedControlType": "Vector2", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "Cancel", "type": "Button", "id": "8c303704-ac1b-4fc1-ae24-dde216895411", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false }
+            ],
+            "bindings": [
+                { "name": "", "id": "06a40ee7-59b1-4323-ab06-41ce998417c9", "path": "<Pointer>/position", "interactions": "", "processors": "", "groups": "", "action": "Point", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "a9216f23-717d-4136-8603-94bba770fc05", "path": "<Mouse>/leftButton", "interactions": "", "processors": "", "groups": "", "action": "PrimaryPress", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "3f82f2b6-df7b-4e7a-a89e-760373d3fb03", "path": "<Mouse>/rightButton", "interactions": "", "processors": "", "groups": "", "action": "OrbitPress", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "75069fd1-0c2b-48d0-994a-678cb6467f24", "path": "<Mouse>/middleButton", "interactions": "", "processors": "", "groups": "", "action": "PanPress", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "d1b63217-8b33-4d87-9bcf-0ca79c412975", "path": "<Pointer>/delta", "interactions": "", "processors": "", "groups": "", "action": "PointerDelta", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "ee36ff21-080e-4eca-bcff-e8d024b1e000", "path": "<Mouse>/scroll/y", "interactions": "", "processors": "", "groups": "", "action": "Zoom", "isComposite": false, "isPartOfComposite": false },
+                { "name": "WASD", "id": "ea111418-657c-4de9-9606-09e3606e756d", "path": "2DVector", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": true, "isPartOfComposite": false },
+                { "name": "up", "id": "7f50239b-d9a1-42f0-8ccf-f87f20fe65fe", "path": "<Keyboard>/w", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "down", "id": "27569cf0-471c-4092-9c84-437c3828b6a6", "path": "<Keyboard>/s", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "left", "id": "dfe0dd06-1826-4664-bc1b-10f61118879e", "path": "<Keyboard>/a", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "right", "id": "ef67586f-9165-4993-acff-d34fc1e14e19", "path": "<Keyboard>/d", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "Arrows", "id": "1c46f2e6-d708-4a17-999b-23cebb4df9ba", "path": "2DVector", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": true, "isPartOfComposite": false },
+                { "name": "up", "id": "efb7f350-a77a-43d2-b793-97402478fe8a", "path": "<Keyboard>/upArrow", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "down", "id": "0ed25fbd-65ab-4ecf-9452-e667815a3834", "path": "<Keyboard>/downArrow", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "left", "id": "9fa15d1e-e12d-414c-8bf5-e1e7fedde5f3", "path": "<Keyboard>/leftArrow", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "right", "id": "b788643f-560f-47e5-8317-36b70f46bc1c", "path": "<Keyboard>/rightArrow", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "", "id": "42dba833-5952-44dd-8cec-6fec40d52a42", "path": "<Keyboard>/escape", "interactions": "", "processors": "", "groups": "", "action": "Cancel", "isComposite": false, "isPartOfComposite": false }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
