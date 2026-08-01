@@ -47,10 +47,29 @@ namespace RailCraft.Editor
 
         public static void BuildFromCommandLine() => Build();
 
-        public static void Build()
+        [MenuItem("RailCraft/Rebuild Factory Scene")]
+        public static void RebuildFromMenu() => Rebuild();
+
+        public static void RebuildFromCommandLine() => Rebuild();
+
+        public static void Build() => Build(false);
+
+        public static void Rebuild() => Build(true);
+
+        private static void Build(bool forceRebuild)
         {
             EnsureFolders();
             ValidatePrerequisites();
+            var existingScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(FactoryScenePath);
+            var existingAssemblyBay = AssetDatabase.LoadAssetAtPath<GameObject>(
+                FactoryPrefabRoot + "/AssemblyBay.prefab");
+            if (!forceRebuild && existingScene != null && existingAssemblyBay != null)
+            {
+                UpsertFactoryBuildScene();
+                AssetDatabase.SaveAssets();
+                return;
+            }
+
             var materials = LoadMaterials();
             var assemblyBay = BuildAssemblyBay(materials);
             var flow = LoadFlow();
