@@ -371,6 +371,7 @@ MonoBehaviour:
   stepId: brake_module
   interactionCollider: {fileID: 5197010816476754665}
   visualRoot: {fileID: 4340873394272300750}
+  motionConstraint: 0
 --- !u!65 &5197010816476754665
 BoxCollider:
   m_ObjectHideFlags: 0

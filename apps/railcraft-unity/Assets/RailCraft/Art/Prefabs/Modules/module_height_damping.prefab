@@ -191,6 +191,7 @@ MonoBehaviour:
   stepId: height_damping
   interactionCollider: {fileID: 2689418597775503144}
   visualRoot: {fileID: 5626598694059758326}
+  motionConstraint: 0
 --- !u!65 &2689418597775503144
 BoxCollider:
   m_ObjectHideFlags: 0

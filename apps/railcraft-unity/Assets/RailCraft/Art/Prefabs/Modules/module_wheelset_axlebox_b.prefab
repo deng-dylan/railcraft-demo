@@ -338,6 +338,7 @@ MonoBehaviour:
   stepId: wheelset_axlebox_b
   interactionCollider: {fileID: 2616700273115799112}
   visualRoot: {fileID: 1068055756402224833}
+  motionConstraint: 0
 --- !u!65 &2616700273115799112
 BoxCollider:
   m_ObjectHideFlags: 0

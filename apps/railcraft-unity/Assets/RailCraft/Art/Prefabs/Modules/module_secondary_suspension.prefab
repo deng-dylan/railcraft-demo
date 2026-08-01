@@ -462,6 +462,7 @@ MonoBehaviour:
   stepId: secondary_suspension
   interactionCollider: {fileID: 7485502484009251387}
   visualRoot: {fileID: 8727198776578221374}
+  motionConstraint: 0
 --- !u!65 &7485502484009251387
 BoxCollider:
   m_ObjectHideFlags: 0

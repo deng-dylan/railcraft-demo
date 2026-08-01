@@ -53,6 +53,18 @@ namespace RailCraft.CameraSystem
             return true;
         }
 
+        public void AddOrReplaceShot(FactoryCameraShot shot)
+        {
+            if (shot == null || string.IsNullOrWhiteSpace(shot.shotId))
+                throw new ArgumentException("A camera shot requires an id.", nameof(shot));
+
+            var index = shots.FindIndex(candidate => candidate != null && candidate.shotId == shot.shotId);
+            if (index >= 0)
+                shots[index] = shot;
+            else
+                shots.Add(shot);
+        }
+
         private IEnumerator TransitionTo(FactoryCameraShot shot)
         {
             var startFocus = cameraController.FocusPosition;

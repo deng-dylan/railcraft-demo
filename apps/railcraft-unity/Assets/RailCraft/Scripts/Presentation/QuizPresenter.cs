@@ -27,6 +27,7 @@ namespace RailCraft.Presentation
         private Coroutine transition;
 
         public event Action<string> StepUnlocked;
+        public event Action<AnswerResult> AnswerEvaluated;
 
         public StepDefinition CurrentStep => currentStep;
         public int CurrentQuestionIndex => currentQuestionIndex;
@@ -122,6 +123,7 @@ namespace RailCraft.Presentation
             var result = machine.SubmitAnswer(optionIndex);
             if (!string.Equals(result.QuestionId, question.id, StringComparison.Ordinal))
                 throw new InvalidOperationException("Quiz view and state machine answered different questions.");
+            AnswerEvaluated?.Invoke(result);
             if (!result.IsCorrect)
             {
                 view.SetFeedback("回答错误，请重新选择。");

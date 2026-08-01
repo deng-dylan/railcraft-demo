@@ -158,6 +158,7 @@ MonoBehaviour:
   stepId: traction_drive_a
   interactionCollider: {fileID: 1143752330769421650}
   visualRoot: {fileID: 8340667039848065172}
+  motionConstraint: 0
 --- !u!65 &1143752330769421650
 BoxCollider:
   m_ObjectHideFlags: 0

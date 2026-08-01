@@ -68,6 +68,7 @@ MonoBehaviour:
   stepId: sensor_module
   interactionCollider: {fileID: 6482063450498503858}
   visualRoot: {fileID: 1039724063278753533}
+  motionConstraint: 0
 --- !u!65 &6482063450498503858
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -248,6 +248,7 @@ MonoBehaviour:
   stepId: frame_module
   interactionCollider: {fileID: 2835489210201635500}
   visualRoot: {fileID: 8198612385223546376}
+  motionConstraint: 0
 --- !u!65 &2835489210201635500
 BoxCollider:
   m_ObjectHideFlags: 0

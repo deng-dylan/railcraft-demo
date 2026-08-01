@@ -158,6 +158,7 @@ MonoBehaviour:
   stepId: release
   interactionCollider: {fileID: 6543222041566052485}
   visualRoot: {fileID: 888314176155475246}
+  motionConstraint: 0
 --- !u!65 &6543222041566052485
 BoxCollider:
   m_ObjectHideFlags: 0

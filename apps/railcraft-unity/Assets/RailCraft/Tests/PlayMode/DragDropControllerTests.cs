@@ -151,6 +151,56 @@ namespace RailCraft.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator CancellingAllInteractionsRestoresCameraAndEndsActiveDragOnce()
+        {
+            var fixture = DragFixture.CreateUnlocked();
+            var endSignals = 0;
+            fixture.Controller.PartDragStateChanged += isDragging =>
+            {
+                if (!isDragging)
+                    endSignals++;
+            };
+
+            try
+            {
+                yield return fixture.BeginPointerDrag();
+                Assert.That(fixture.OrbitController.enabled, Is.False);
+
+                fixture.Controller.CancelAllInteractions();
+
+                Assert.That(fixture.Controller.IsPartDragActive, Is.False);
+                Assert.That(fixture.OrbitController.enabled, Is.True);
+                Assert.That(endSignals, Is.EqualTo(1));
+                Assert.That(Vector3.Distance(fixture.Module.transform.position, fixture.StartPosition),
+                    Is.LessThan(0.001f));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator CancellingWhileIdleDoesNotDisableCameraOrbit()
+        {
+            var fixture = DragFixture.CreateUnlocked();
+            try
+            {
+                Assert.That(fixture.OrbitController.enabled, Is.True);
+
+                fixture.Controller.CancelAllInteractions();
+                yield return null;
+
+                Assert.That(fixture.OrbitController.enabled, Is.True);
+                Assert.That(fixture.Controller.IsPartDragActive, Is.False);
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+        }
+
+        [UnityTest]
         public IEnumerator DisablingFromDragEndCannotReenterTheController()
         {
             var fixture = DragFixture.CreateUnlocked();

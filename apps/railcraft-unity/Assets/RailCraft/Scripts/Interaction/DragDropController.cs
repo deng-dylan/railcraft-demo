@@ -27,6 +27,7 @@ namespace RailCraft.Interaction
         private Plane dragPlane;
         private Vector3 dragOffset;
         private bool orbitWasEnabled;
+        private bool cameraOrbitOverridden;
         private bool isDisabling;
         private bool isEndingDrag;
 
@@ -115,6 +116,39 @@ namespace RailCraft.Interaction
                 if (target != null)
                     target.SetAuthorization(authorization);
             }
+        }
+
+        public void SetDraggableModules(DraggableModule[] configuredModules)
+        {
+            draggableModules = configuredModules ?? Array.Empty<DraggableModule>();
+        }
+
+        public void SetInteractionCamera(Camera configuredCamera)
+        {
+            interactionCamera = configuredCamera;
+        }
+
+        public void CancelAllInteractions()
+        {
+            StopAllCoroutines();
+
+            var interruptedDrag = activeModule;
+            activeModule = null;
+            if (interruptedDrag != null)
+            {
+                interruptedDrag.CancelDragAndRestoreStart();
+                PartDragStateChanged?.Invoke(false);
+            }
+
+            foreach (var module in returningModules)
+                module?.FinishReturn();
+            returningModules.Clear();
+
+            foreach (var entry in snappingModules)
+                entry.Key?.CancelDragAndRestoreStart();
+            snappingModules.Clear();
+            isEndingDrag = false;
+            RestoreCameraOrbit();
         }
 
         public bool TryBeginDrag(DraggableModule module)
@@ -293,19 +327,21 @@ namespace RailCraft.Interaction
 
         private void DisableCameraOrbit()
         {
-            if (cameraOrbitController == null)
+            if (cameraOrbitController == null || cameraOrbitOverridden)
                 return;
 
             orbitWasEnabled = cameraOrbitController.enabled;
             cameraOrbitController.enabled = false;
+            cameraOrbitOverridden = true;
         }
 
         private void RestoreCameraOrbit()
         {
-            if (cameraOrbitController == null)
+            if (cameraOrbitController == null || !cameraOrbitOverridden)
                 return;
 
             cameraOrbitController.enabled = orbitWasEnabled;
+            cameraOrbitOverridden = false;
         }
 
         private void RaiseRejected(DragDropResult result)

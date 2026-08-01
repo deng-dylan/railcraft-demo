@@ -2,11 +2,18 @@ using UnityEngine;
 
 namespace RailCraft.Interaction
 {
+    public enum DragMotionConstraint
+    {
+        Free,
+        Vertical
+    }
+
     public sealed class DraggableModule : MonoBehaviour
     {
         [SerializeField] private string stepId;
         [SerializeField] private Collider interactionCollider;
         [SerializeField] private Transform visualRoot;
+        [SerializeField] private DragMotionConstraint motionConstraint;
 
         private Vector3 startPosition;
         private Quaternion lockedRotation;
@@ -20,12 +27,18 @@ namespace RailCraft.Interaction
         public bool IsDragging => isDragging;
         public bool IsSnapping => isSnapping;
         public bool IsReturning => isReturning;
+        public DragMotionConstraint MotionConstraint => motionConstraint;
 
         public void Configure(string configuredStepId, Collider configuredCollider, Transform configuredVisualRoot)
         {
             stepId = configuredStepId;
             interactionCollider = configuredCollider;
             visualRoot = configuredVisualRoot;
+        }
+
+        public void SetMotionConstraint(DragMotionConstraint configuredConstraint)
+        {
+            motionConstraint = configuredConstraint;
         }
 
         internal bool BeginDrag()
@@ -45,7 +58,9 @@ namespace RailCraft.Interaction
             if (!isDragging)
                 return;
 
-            transform.position = position;
+            transform.position = motionConstraint == DragMotionConstraint.Vertical
+                ? new Vector3(startPosition.x, position.y, startPosition.z)
+                : position;
             transform.rotation = lockedRotation;
         }
 

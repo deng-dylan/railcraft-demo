@@ -68,6 +68,7 @@ MonoBehaviour:
   stepId: commissioning
   interactionCollider: {fileID: 3484092750454483396}
   visualRoot: {fileID: 8888909546290909893}
+  motionConstraint: 0
 --- !u!65 &3484092750454483396
 BoxCollider:
   m_ObjectHideFlags: 0

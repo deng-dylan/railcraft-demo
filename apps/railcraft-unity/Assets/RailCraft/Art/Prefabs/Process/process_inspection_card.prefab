@@ -248,6 +248,7 @@ MonoBehaviour:
   stepId: inspection
   interactionCollider: {fileID: 323024471846329866}
   visualRoot: {fileID: 663316660439647518}
+  motionConstraint: 0
 --- !u!65 &323024471846329866
 BoxCollider:
   m_ObjectHideFlags: 0

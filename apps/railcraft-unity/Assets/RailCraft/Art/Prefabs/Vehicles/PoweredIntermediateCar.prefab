@@ -372,6 +372,7 @@ MonoBehaviour:
   stepId: carbody_lowering
   interactionCollider: {fileID: 3410278255036120403}
   visualRoot: {fileID: 1048817039800746285}
+  motionConstraint: 0
 --- !u!65 &3410278255036120403
 BoxCollider:
   m_ObjectHideFlags: 0
