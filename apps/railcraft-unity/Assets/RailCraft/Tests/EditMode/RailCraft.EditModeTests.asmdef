@@ -3,6 +3,7 @@
   "rootNamespace": "RailCraft.Tests.EditMode",
   "references": [
     "RailCraft.Runtime",
+    "RailCraft.Editor",
     "Unity.InputSystem"
   ],
   "includePlatforms": [

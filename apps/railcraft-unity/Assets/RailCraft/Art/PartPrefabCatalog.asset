@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03afcfe81f6592040aa17aaabe85fa6e, type: 3}
+  m_Name: PartPrefabCatalog
+  m_EditorClassIdentifier: RailCraft.Runtime::RailCraft.Assets.PartPrefabCatalog
+  entries:
+  - assetKey: module.frame
+    prefab: {fileID: 5352047904808112745, guid: b2f8f884f68bf904c9c814ffdb464b5a, type: 3}
+  - assetKey: module.wheelset_axlebox_a
+    prefab: {fileID: 5902800951306051558, guid: 20069a8fdacfc5645baf6c85ea0f957f, type: 3}
+  - assetKey: module.wheelset_axlebox_b
+    prefab: {fileID: 7626377210669456642, guid: 6eb5a23649a59b64290afbffab211864, type: 3}
+  - assetKey: module.primary_suspension
+    prefab: {fileID: 2413977518284789276, guid: 9eee112b4a524174b8bfc6fc66714ee1, type: 3}
+  - assetKey: module.brake
+    prefab: {fileID: 8937772685933080577, guid: 25aa4cb5d97908943aaa08f6ec3d14ce, type: 3}
+  - assetKey: module.traction_drive_a
+    prefab: {fileID: 3385496776311928466, guid: 0010f2071e7792a4f9e314b28003f934, type: 3}
+  - assetKey: module.traction_drive_b
+    prefab: {fileID: 3781703384408578542, guid: 2875774b1c9bd9d45b2b40fbe5667e28, type: 3}
+  - assetKey: module.central_traction
+    prefab: {fileID: 2522980154745934566, guid: 776617bcb82bcbb43b17af64b6bd9b55, type: 3}
+  - assetKey: module.secondary_suspension
+    prefab: {fileID: 8456954539879775559, guid: 1679955e30ded704a9f86427eddc2467, type: 3}
+  - assetKey: module.height_damping
+    prefab: {fileID: 1656453773960862535, guid: 914aee6d3b458194c9360052ca3bfdc5, type: 3}
+  - assetKey: module.sensor
+    prefab: {fileID: 637460297401982366, guid: 34058c649656de949b7d2287c4ab7435, type: 3}
+  - assetKey: vehicle.powered_intermediate_car
+    prefab: {fileID: 8159592448159616809, guid: 8f529657b8d8ba64aa4dacc58c69474c, type: 3}
+  - assetKey: process.commissioning_card
+    prefab: {fileID: 812907610364320965, guid: a5b95d7041f050248923eb3c5ff1b917, type: 3}
+  - assetKey: process.inspection_card
+    prefab: {fileID: 5382053928136980007, guid: 0fdb1e7ad1e621d4b98936b5a9bd9c6f, type: 3}
+  - assetKey: process.release_card
+    prefab: {fileID: 2174302179730437495, guid: 0aefd4e99a16b574c9432553a9aafb43, type: 3}
