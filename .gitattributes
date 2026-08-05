@@ -7,7 +7,6 @@
 *.stl filter=lfs diff=lfs merge=lfs -text
 *.psd filter=lfs diff=lfs merge=lfs -text
 *.tga filter=lfs diff=lfs merge=lfs -text
-*.exr filter=lfs diff=lfs merge=lfs -text
 
 # Unity serializes empty YAML values with a trailing space. Keep whitespace
 # checks strict for hand-written code and documentation while accepting the
