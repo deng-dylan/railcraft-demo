@@ -21,7 +21,11 @@ namespace RailCraft.ThirdPerson.UI
         [SerializeField] private Text feedbackText;
         [SerializeField] private GameObject completionRoot;
         [SerializeField] private Text completionText;
+        [SerializeField] private Text completionDetailText;
         [SerializeField, Min(0.1f)] private float feedbackDuration = 2.5f;
+        [SerializeField] private Color feedbackSuccessColor = new Color(0.28f, 1f, 0.52f, 1f);
+        [SerializeField] private Color feedbackFailureColor = new Color(1f, 0.34f, 0.26f, 1f);
+        [SerializeField] private Color feedbackNeutralColor = new Color(0.36f, 0.92f, 1f, 1f);
 
         private WhiteboxGameSessionHost subscribedHost;
         private PlayerInteractionScanner subscribedScanner;
@@ -35,6 +39,7 @@ namespace RailCraft.ThirdPerson.UI
         public string Inventory => inventoryText == null ? string.Empty : inventoryText.text;
         public string Progress => progressText == null ? string.Empty : progressText.text;
         public bool IsCompletionVisible => completionRoot != null && completionRoot.activeSelf;
+        public bool? LastFeedbackWasSuccessful { get; private set; }
 
         public void Configure(
             WhiteboxGameSessionHost configuredSessionHost,
@@ -48,6 +53,33 @@ namespace RailCraft.ThirdPerson.UI
             GameObject configuredCompletionRoot,
             Text configuredCompletionText)
         {
+            Configure(
+                configuredSessionHost,
+                configuredInteractionScanner,
+                configuredInputLock,
+                configuredInteractionPromptText,
+                configuredTaskText,
+                configuredInventoryText,
+                configuredProgressText,
+                configuredFeedbackText,
+                configuredCompletionRoot,
+                configuredCompletionText,
+                null);
+        }
+
+        public void Configure(
+            WhiteboxGameSessionHost configuredSessionHost,
+            PlayerInteractionScanner configuredInteractionScanner,
+            ThirdPersonInputLock configuredInputLock,
+            Text configuredInteractionPromptText,
+            Text configuredTaskText,
+            Text configuredInventoryText,
+            Text configuredProgressText,
+            Text configuredFeedbackText,
+            GameObject configuredCompletionRoot,
+            Text configuredCompletionText,
+            Text configuredCompletionDetailText)
+        {
             Unsubscribe();
             sessionHost = configuredSessionHost;
             interactionScanner = configuredInteractionScanner;
@@ -59,6 +91,7 @@ namespace RailCraft.ThirdPerson.UI
             feedbackText = configuredFeedbackText;
             completionRoot = configuredCompletionRoot;
             completionText = configuredCompletionText;
+            completionDetailText = configuredCompletionDetailText;
             Subscribe();
             RefreshAll();
         }
@@ -78,6 +111,13 @@ namespace RailCraft.ThirdPerson.UI
         private void Update()
         {
             RefreshInteractionPrompt();
+            if (feedbackText != null && feedbackText.gameObject.activeSelf)
+            {
+                feedbackText.transform.localScale = Vector3.Lerp(
+                    feedbackText.transform.localScale,
+                    Vector3.one,
+                    10f * Time.unscaledDeltaTime);
+            }
             if (feedbackTimeRemaining <= 0f)
                 return;
 
@@ -212,6 +252,11 @@ namespace RailCraft.ThirdPerson.UI
 
             feedbackText.text = message ?? string.Empty;
             feedbackText.gameObject.SetActive(!string.IsNullOrWhiteSpace(message));
+            LastFeedbackWasSuccessful = ClassifyFeedback(message);
+            feedbackText.color = LastFeedbackWasSuccessful.HasValue
+                ? (LastFeedbackWasSuccessful.Value ? feedbackSuccessColor : feedbackFailureColor)
+                : feedbackNeutralColor;
+            feedbackText.transform.localScale = Vector3.one * 1.12f;
             feedbackTimeRemaining = feedbackDuration;
         }
 
@@ -221,6 +266,8 @@ namespace RailCraft.ThirdPerson.UI
                 completionRoot.SetActive(true);
             if (completionText != null)
                 completionText.text = "调试通过，车辆投入使用！";
+            if (completionDetailText != null && sessionHost != null)
+                completionDetailText.text = FormatSettlement(sessionHost.Session.Progress);
             completionOwnsInputLock = true;
             inputLock?.SetInputLocked(true);
         }
@@ -228,8 +275,12 @@ namespace RailCraft.ThirdPerson.UI
         private void HandleSessionReset()
         {
             feedbackTimeRemaining = 0f;
+            LastFeedbackWasSuccessful = null;
             if (feedbackText != null)
+            {
                 feedbackText.gameObject.SetActive(false);
+                feedbackText.transform.localScale = Vector3.one;
+            }
             if (completionRoot != null)
                 completionRoot.SetActive(false);
             ReleaseCompletionInputLock();
@@ -254,6 +305,51 @@ namespace RailCraft.ThirdPerson.UI
             for (var index = 0; index < parts.Count; index++)
                 names[index] = WhiteboxDisplayNames.Part(parts[index]);
             return $"库存（{parts.Count}）：{string.Join("、", names)}";
+        }
+
+        public static string FormatSettlement(SessionProgressSummary progress)
+        {
+            if (progress == null)
+                return "成绩数据暂不可用";
+
+            var elapsed = progress.ElapsedTime;
+            var totalHours = (int)elapsed.TotalHours;
+            var time = totalHours > 0
+                ? $"{totalHours:00}:{elapsed.Minutes:00}:{elapsed.Seconds:00}"
+                : $"{elapsed.Minutes:00}:{elapsed.Seconds:00}";
+            return
+                $"装配用时  {time}\n" +
+                $"答题正确  {progress.CorrectAnswerCount}/{progress.AnswerAttemptCount}  ·  " +
+                $"正确率 {progress.AnswerAccuracyPercent:0}%\n" +
+                $"得分  {progress.Score}  ·  等级：{progress.EngineerGradeDisplayName}";
+        }
+
+        private static bool? ClassifyFeedback(string message)
+        {
+            if (string.IsNullOrWhiteSpace(message))
+                return null;
+
+            var failureTokens = new[]
+            {
+                "无法", "没有", "尚未", "未解锁", "未完成", "未通过", "失败", "错误", "缺失", "锁定"
+            };
+            for (var index = 0; index < failureTokens.Length; index++)
+            {
+                if (message.IndexOf(failureTokens[index], StringComparison.Ordinal) >= 0)
+                    return false;
+            }
+
+            var successTokens = new[]
+            {
+                "正确", "已拾取", "已安装", "完成", "通过", "投入使用", "已解锁"
+            };
+            for (var index = 0; index < successTokens.Length; index++)
+            {
+                if (message.IndexOf(successTokens[index], StringComparison.Ordinal) >= 0)
+                    return true;
+            }
+
+            return null;
         }
     }
 }

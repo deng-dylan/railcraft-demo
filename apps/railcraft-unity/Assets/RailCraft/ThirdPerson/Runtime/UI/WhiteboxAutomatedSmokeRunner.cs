@@ -240,8 +240,22 @@ namespace RailCraft.ThirdPerson.UI
 
         private static void ValidateCompletionState()
         {
-            Ensure(FindSingle<WhiteboxGameSessionHost>().Session.IsVehicleComplete,
+            var host = FindSingle<WhiteboxGameSessionHost>();
+            Ensure(host.Session.IsVehicleComplete,
                 "Session did not report vehicle completion.");
+            Ensure(host.Session.FlowStatus == AssemblyFlowStatus.Completed,
+                "Assembly state machine did not reach Completed.");
+            var progress = FindSingle<WhiteboxAssemblyProgressPresenter>();
+            Ensure(progress.TotalSteps == 23 && progress.CompletedSteps == 23 &&
+                progress.CompletionPercent == 100,
+                "Assembly progress presenter did not reach 23/23 and 100 percent.");
+            Ensure(FindSingle<WhiteboxKnowledgePresenter>().IsCatalogUnlocked,
+                "Engineering knowledge compendium did not unlock.");
+            var save = FindSingle<WhiteboxSaveController>();
+            Ensure(save.HasActiveSession && save.HasSave,
+                "Completed session was not saved.");
+            Ensure(!FindSingle<WhiteboxMainMenuController>().IsMenuVisible,
+                "Main menu remained visible during automated play.");
             Ensure(FindSingle<WhiteboxHudPresenter>().IsCompletionVisible,
                 "Completion UI was not visible.");
             Ensure(FindSingle<ThirdPersonInputLock>().InputLocked,
@@ -263,7 +277,14 @@ namespace RailCraft.ThirdPerson.UI
             Ensure(!host.Session.IsLandingComplete, "Landing stayed complete after reset.");
             Ensure(host.Session.CommissioningPhase == CommissioningPhase.Locked,
                 "Commissioning state did not reset to locked.");
+            Ensure(host.Session.FlowStatus == AssemblyFlowStatus.Pending,
+                "Assembly state machine did not reset to Pending.");
             Ensure(host.Session.InventoryParts.Count == 0, "Inventory was not empty after reset.");
+            var progress = FindSingle<WhiteboxAssemblyProgressPresenter>();
+            Ensure(progress.CompletedSteps == 0 && progress.CompletionPercent == 0,
+                "Assembly progress did not reset to zero.");
+            Ensure(!FindSingle<WhiteboxKnowledgePresenter>().IsCatalogUnlocked,
+                "Engineering knowledge compendium stayed unlocked after reset.");
             Ensure(!FindSingle<WhiteboxHudPresenter>().IsCompletionVisible,
                 "Completion UI stayed visible after reset.");
             Ensure(!FindSingle<ThirdPersonInputLock>().InputLocked,

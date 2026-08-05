@@ -7,7 +7,7 @@
 
 | 状态 | 实现入口 | 产品范围 | 文档与证据 |
 | --- | --- | --- | --- |
-| 当前开发主线 | `Assets/RailCraft/ThirdPerson/` | 58题、14零件、6装配节点、落车与调试闭环 | [`ThirdPersonWhitebox.md`](ThirdPersonWhitebox.md)、[`../Artifacts/Whitebox/Acceptance`](../Artifacts/Whitebox/Acceptance) |
+| 当前开发主线 | `Assets/RailCraft/ThirdPerson/` | v0.2：58题、14零件、23步流程、存档、知识图鉴、结算与调试闭环 | [`ThirdPersonWhitebox.md`](ThirdPersonWhitebox.md)、[`../Artifacts/Whitebox/Acceptance`](../Artifacts/Whitebox/Acceptance) |
 | 冻结 Unity v0.1 | `Assets/RailCraft/Scenes/Bootstrap.unity`、`Factory.unity` | 固定视角、48题、15步引导流程 | [`Scope.md`](Scope.md)、[`Acceptance.md`](Acceptance.md)、[`PerformanceBudget.md`](PerformanceBudget.md)、[`../Artifacts/Acceptance`](../Artifacts/Acceptance) |
 | 冻结 Godot Demo | `../../railcraft-godot/` | 9题、9零件、3组件的历史 Demo | [`../../railcraft-godot/README.md`](../../railcraft-godot/README.md) |
 
@@ -16,14 +16,15 @@
 - 场景：`Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity`
 - 默认 Build Settings：只启用上述白盒场景；旧 v0.1 构建脚本显式使用其历史场景。
 - 重建场景：`RailCraft > Third Person Whitebox > Rebuild Scene`
-- 构建 Windows：`RailCraft > Third Person Whitebox > Build Windows x86_64`
+- 构建 Windows：`RailCraft > Third Person Whitebox > Build Windows x86_64`（自动先重建生成场景）
 - 本地产物：`Builds/Whitebox/RailCraftWhitebox.exe`
 - 流程、题库、Blender 替换与验收条件：
   [`ThirdPersonWhitebox.md`](ThirdPersonWhitebox.md)
 - 模型身份、单位、坐标、LOD 和生产资产门禁：[`ModelHandoff.md`](ModelHandoff.md)
 
-当前白盒证据目录包含构建日志、EditMode XML、成品冒烟日志和最终完成截图。每批
-主线改动应更新与该批风险相匹配的证据；完整 Build、Unity 缓存和中间截图保持本地。
+当前白盒证据目录包含构建日志、EditMode XML、成品冒烟日志和最终完成截图，具体
+覆盖批次以目录内验收报告为准。每批主线改动应更新与该批风险相匹配的证据；完整
+Build、Unity 缓存和中间截图保持本地。
 
 ## 冻结文档边界
 

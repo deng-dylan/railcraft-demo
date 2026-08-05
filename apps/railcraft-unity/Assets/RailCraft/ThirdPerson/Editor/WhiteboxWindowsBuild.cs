@@ -29,6 +29,9 @@ namespace RailCraft.ThirdPerson.Editor
 
         public static void Build()
         {
+            // The whitebox scene is generated source-of-truth. Rebuild it before every
+            // player build so a clean checkout cannot package a stale serialized scene.
+            WhiteboxSceneBuilder.Build();
             var scene = AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath);
             if (scene == null)
             {

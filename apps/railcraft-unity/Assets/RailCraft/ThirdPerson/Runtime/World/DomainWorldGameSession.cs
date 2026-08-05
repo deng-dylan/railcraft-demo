@@ -28,6 +28,9 @@ namespace RailCraft.ThirdPerson.World
         public bool IsLandingComplete => session.IsLandingComplete;
         public bool IsVehicleComplete => session.IsVehicleComplete;
         public CommissioningPhase CommissioningPhase => session.CommissioningState.Phase;
+        public AssemblyFlowStatus FlowStatus => session.FlowStatus;
+        public SessionProgressSummary Progress => session.Progress;
+        public bool IsTimingPaused => session.IsTimingPaused;
 
         public WorldAnswerResult SubmitAnswer(string questionId, int selectedOptionIndex)
         {
@@ -110,6 +113,26 @@ namespace RailCraft.ThirdPerson.World
         public bool IsModuleInstalled(ModuleId targetModuleId, ModuleId childModuleId)
         {
             return session.IsModuleInstalled(targetModuleId, childModuleId);
+        }
+
+        public WhiteboxGameSessionSnapshot ExportSnapshot()
+        {
+            return session.ExportSnapshot();
+        }
+
+        public void RestoreSnapshot(WhiteboxGameSessionSnapshot snapshot)
+        {
+            session.RestoreSnapshot(snapshot);
+        }
+
+        public void PauseTiming()
+        {
+            session.PauseTiming();
+        }
+
+        public void ResumeTiming()
+        {
+            session.ResumeTiming();
         }
 
         public void Reset()

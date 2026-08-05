@@ -5,7 +5,9 @@
 当前开发主线是 [`apps/railcraft-unity`](apps/railcraft-unity) 中的 Unity
 第三人称流程白盒。玩家在工厂中完成第三人称移动、58 道题循环、14 个零件的
 答题解锁与拾取、6 个装配节点，以及落车后的调试失败、重新调试、检验、复测和
-投入使用闭环。主线场景、构建入口和验收约定见
+投入使用闭环。当前 v0.2 同时包含主菜单、存档继续、23 步进度、知识图鉴、成绩
+结算、重玩、有限状态机、交互反馈和关键节点镜头；结算用时只累计实际装配时间，
+主菜单停留、应用暂停和离线时间不计入。主线场景、构建入口和验收约定见
 [`ThirdPersonWhitebox.md`](apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md)。
 
 ## 当前组成

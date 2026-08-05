@@ -14,6 +14,9 @@ namespace RailCraft.ThirdPerson.World
         bool IsLandingComplete { get; }
         bool IsVehicleComplete { get; }
         CommissioningPhase CommissioningPhase { get; }
+        AssemblyFlowStatus FlowStatus { get; }
+        SessionProgressSummary Progress { get; }
+        bool IsTimingPaused { get; }
 
         WorldAnswerResult SubmitAnswer(string questionId, int selectedOptionIndex);
         WorldCollectionResult CollectPart(PartId partId);
@@ -26,6 +29,10 @@ namespace RailCraft.ThirdPerson.World
         bool IsPartInstalled(ModuleId moduleId, PartId partId);
         bool IsModuleComplete(ModuleId moduleId);
         bool IsModuleInstalled(ModuleId targetModuleId, ModuleId childModuleId);
+        WhiteboxGameSessionSnapshot ExportSnapshot();
+        void RestoreSnapshot(WhiteboxGameSessionSnapshot snapshot);
+        void PauseTiming();
+        void ResumeTiming();
         void Reset();
     }
 }

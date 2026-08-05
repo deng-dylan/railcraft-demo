@@ -18,9 +18,11 @@ namespace RailCraft.ThirdPerson.World
 
         public event Action StateChanged;
         public event Action SessionReset;
+        public event Action<WhiteboxAnswerEvaluatedEvent> AnswerEvaluated;
         public event Action<string> FeedbackRequested;
         public event Action<string> ObjectiveChanged;
         public event Action VehicleCompleted;
+        public event Action<WhiteboxMilestoneEvent> MilestoneReached;
 
         public IWorldGameSession Session => session ?? (session = new DomainWorldGameSession());
         public string CurrentObjective => string.IsNullOrWhiteSpace(currentObjective)
@@ -42,6 +44,7 @@ namespace RailCraft.ThirdPerson.World
         {
             var result = Session.SubmitAnswer(questionId, selectedOptionIndex);
             StateChanged?.Invoke();
+            AnswerEvaluated?.Invoke(new WhiteboxAnswerEvaluatedEvent(questionId, result));
             return result;
         }
 
@@ -57,7 +60,10 @@ namespace RailCraft.ThirdPerson.World
         {
             var result = Session.InstallPart(moduleId, partId);
             if (result.Changed)
+            {
                 StateChanged?.Invoke();
+                MilestoneReached?.Invoke(WhiteboxMilestoneEvent.ForPart(partId, moduleId));
+            }
             return result;
         }
 
@@ -65,7 +71,10 @@ namespace RailCraft.ThirdPerson.World
         {
             var result = Session.InstallModule(targetModuleId, childModuleId);
             if (result.Changed)
+            {
                 StateChanged?.Invoke();
+                MilestoneReached?.Invoke(WhiteboxMilestoneEvent.ForModule(childModuleId));
+            }
             AnnounceCompletionIfNeeded();
             return result;
         }
@@ -111,6 +120,20 @@ namespace RailCraft.ThirdPerson.World
             ObjectiveChanged?.Invoke(CurrentObjective);
         }
 
+        public void RestoreSession(WhiteboxGameSessionSnapshot snapshot)
+        {
+            Session.RestoreSnapshot(snapshot ?? throw new ArgumentNullException(nameof(snapshot)));
+            completionAnnounced = Session.IsVehicleComplete;
+            currentObjective = Session.IsVehicleComplete
+                ? "调试检验合格，车辆投入使用"
+                : "已恢复装配进度，请继续当前流程";
+            SessionReset?.Invoke();
+            StateChanged?.Invoke();
+            ObjectiveChanged?.Invoke(CurrentObjective);
+            if (Session.IsVehicleComplete)
+                VehicleCompleted?.Invoke();
+        }
+
         private void Awake()
         {
             currentObjective = initialObjective;
@@ -130,7 +153,11 @@ namespace RailCraft.ThirdPerson.World
         private WorldCommissioningResult ApplyCommissioningResult(WorldCommissioningResult result)
         {
             if (result.Changed)
+            {
                 StateChanged?.Invoke();
+                MilestoneReached?.Invoke(
+                    WhiteboxMilestoneEvent.ForCommissioning(result.Phase));
+            }
             AnnounceCompletionIfNeeded();
             return result;
         }

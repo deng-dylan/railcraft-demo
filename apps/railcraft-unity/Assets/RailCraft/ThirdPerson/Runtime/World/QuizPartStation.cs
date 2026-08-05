@@ -242,10 +242,30 @@ namespace RailCraft.ThirdPerson.World
         {
             if (quizOpen)
                 CloseQuiz();
-            AdvanceQuestionForReset();
-            rewardUnlocked = false;
-            collected = false;
+            var snapshot = sessionHost == null
+                ? null
+                : sessionHost.Session.ExportSnapshot();
+            var isFreshSession = snapshot == null ||
+                (snapshot.FlowStatus == AssemblyFlowStatus.Pending &&
+                 (snapshot.UnlockedParts == null || snapshot.UnlockedParts.Length == 0) &&
+                 (snapshot.CollectedParts == null || snapshot.CollectedParts.Length == 0));
+            if (isFreshSession)
+                AdvanceQuestionForReset();
+            rewardUnlocked = snapshot != null && Contains(snapshot.UnlockedParts, rewardPart);
+            collected = snapshot != null && Contains(snapshot.CollectedParts, rewardPart);
             ApplyRewardVisualState();
+        }
+
+        private static bool Contains(PartId[] parts, PartId partId)
+        {
+            if (parts == null)
+                return false;
+            for (var index = 0; index < parts.Length; index++)
+            {
+                if (parts[index] == partId)
+                    return true;
+            }
+            return false;
         }
 
         private void AdvanceQuestionForReset()

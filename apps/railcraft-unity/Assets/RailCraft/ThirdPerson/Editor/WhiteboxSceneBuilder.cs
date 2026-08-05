@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using RailCraft.ThirdPerson.Domain;
@@ -50,6 +51,42 @@ namespace RailCraft.ThirdPerson.Editor
         {
             public WhiteboxQuizPanel QuizPanel;
             public WhiteboxHudPresenter Hud;
+            public WhiteboxMainMenuController MainMenu;
+        }
+
+        private sealed class MainMenuUi
+        {
+            public GameObject Root;
+            public GameObject SettingsRoot;
+            public Button Start;
+            public Button Continue;
+            public Button Settings;
+            public Button Quit;
+            public Button SettingsBack;
+            public Slider Volume;
+            public Text VolumeValue;
+            public Dropdown Quality;
+        }
+
+        private sealed class KnowledgeUi
+        {
+            public Button OpenButton;
+            public GameObject PopupRoot;
+            public Text PopupTitle;
+            public Text PopupBody;
+            public Button PopupClose;
+            public GameObject CompendiumRoot;
+            public Text CompendiumBody;
+            public Button CompendiumClose;
+        }
+
+        private sealed class CompletionUi
+        {
+            public GameObject Root;
+            public Text Title;
+            public Text Detail;
+            public Button Replay;
+            public Button OpenCompendium;
         }
 
         private readonly struct PartStationSpec
@@ -93,15 +130,56 @@ namespace RailCraft.ThirdPerson.Editor
             sessionHost.Configure(
                 new DomainWorldGameSession(),
                 "探索知识工位，答题解锁并拾取 14 类装配零件");
+            var saveController = hostObject.AddComponent<WhiteboxSaveController>();
+            saveController.Configure(sessionHost);
 
             var playerRig = BuildPlayer(CreateChild(root.transform, "PlayerRig"), palette);
-            var uiRig = BuildUi(CreateChild(root.transform, "Interface"), sessionHost, playerRig);
+            var feedbackRouter = hostObject.AddComponent<WhiteboxInteractionFeedbackRouter>();
+            feedbackRouter.Configure(sessionHost, playerRig.Scanner);
+            var uiRig = BuildUi(
+                CreateChild(root.transform, "Interface"),
+                sessionHost,
+                saveController,
+                playerRig);
             var gameplay = CreateChild(root.transform, "GameplayStations");
-            BuildPartStations(gameplay.transform, sessionHost, playerRig.InputLock, uiRig.QuizPanel, palette);
-            BuildModuleStations(gameplay.transform, sessionHost, palette);
-            BuildCompositeAssembly(gameplay.transform, sessionHost, palette);
-            BuildFinalAssembly(gameplay.transform, sessionHost, palette);
-            BuildCommissioningStations(gameplay.transform, sessionHost, palette);
+            var focusBindings = new List<AssemblyFocusBinding>();
+            BuildPartStations(
+                gameplay.transform,
+                sessionHost,
+                playerRig.InputLock,
+                playerRig.Scanner,
+                uiRig.QuizPanel,
+                palette);
+            BuildModuleStations(
+                gameplay.transform,
+                sessionHost,
+                playerRig.Scanner,
+                focusBindings,
+                palette);
+            BuildCompositeAssembly(
+                gameplay.transform,
+                sessionHost,
+                playerRig.Scanner,
+                focusBindings,
+                palette);
+            BuildFinalAssembly(
+                gameplay.transform,
+                sessionHost,
+                playerRig.Scanner,
+                focusBindings,
+                palette);
+            BuildCommissioningStations(
+                gameplay.transform,
+                sessionHost,
+                playerRig.Scanner,
+                palette);
+
+            var focusDirector = playerRig.OrbitCamera.gameObject.AddComponent<AssemblyCameraFocusDirector>();
+            focusDirector.Configure(
+                sessionHost,
+                playerRig.OrbitCamera.GetComponent<UnityEngine.Camera>(),
+                playerRig.OrbitCamera,
+                focusBindings);
             root.AddComponent<WhiteboxAutomatedSmokeRunner>();
 
             ConfigureRenderSettings();
@@ -408,6 +486,7 @@ namespace RailCraft.ThirdPerson.Editor
         private static UiRig BuildUi(
             GameObject interfaceRoot,
             WhiteboxGameSessionHost sessionHost,
+            WhiteboxSaveController saveController,
             PlayerRig playerRig)
         {
             var canvasObject = new GameObject(
@@ -428,18 +507,48 @@ namespace RailCraft.ThirdPerson.Editor
             var header = CreateText(
                 canvasObject.transform,
                 "WhiteboxHeader",
-                "RAILCRAFT · 第三人称玩法白盒",
-                22,
+                "RAILCRAFT · 高铁装配工程训练白盒 v0.2",
+                20,
                 FontStyle.Bold,
                 TextAnchor.MiddleCenter,
                 Color.white);
-            SetAnchoredRect(header.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -22f), new Vector2(620f, 46f));
+            SetAnchoredRect(
+                header.rectTransform,
+                new Vector2(0.5f, 1f),
+                new Vector2(0f, -18f),
+                new Vector2(650f, 34f));
+
+            var progressPanel = CreatePanel(
+                canvasObject.transform,
+                "AssemblyProgressPanel",
+                new Color(0.018f, 0.06f, 0.085f, 0.94f));
+            SetAnchoredRect(
+                (RectTransform)progressPanel.transform,
+                new Vector2(0.5f, 1f),
+                new Vector2(0f, -74f),
+                new Vector2(720f, 78f));
+            var stepText = CreateText(progressPanel.transform, "AssemblyStepText", "第1步/共23步", 22,
+                FontStyle.Bold, TextAnchor.MiddleLeft, new Color(0.42f, 0.92f, 1f));
+            SetAnchoredRect(stepText.rectTransform, new Vector2(0f, 0.5f), new Vector2(22f, 14f),
+                new Vector2(230f, 34f), new Vector2(0f, 0.5f));
+            var percentText = CreateText(progressPanel.transform, "AssemblyPercentText", "完成度 0%", 20,
+                FontStyle.Bold, TextAnchor.MiddleRight, new Color(1f, 0.76f, 0.22f));
+            SetAnchoredRect(percentText.rectTransform, new Vector2(1f, 0.5f), new Vector2(-22f, 14f),
+                new Vector2(190f, 34f), new Vector2(1f, 0.5f));
+            var flowStatusText = CreateText(progressPanel.transform, "AssemblyFlowStatusText", "状态：待装配", 18,
+                FontStyle.Normal, TextAnchor.MiddleCenter, Color.white);
+            SetAnchoredRect(flowStatusText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 14f),
+                new Vector2(230f, 32f));
+            var progressSlider = CreateSlider(progressPanel.transform, "AssemblyProgressSlider", false);
+            SetAnchoredRect((RectTransform)progressSlider.transform, new Vector2(0.5f, 0f),
+                new Vector2(0f, 12f), new Vector2(672f, 14f), new Vector2(0.5f, 0f));
+            progressSlider.interactable = false;
 
             var taskPanel = CreatePanel(
                 canvasObject.transform,
                 "TaskPanel",
                 new Color(0.025f, 0.055f, 0.075f, 0.88f));
-            SetAnchoredRect((RectTransform)taskPanel.transform, new Vector2(0f, 1f), new Vector2(28f, -28f), new Vector2(700f, 116f), new Vector2(0f, 1f));
+            SetAnchoredRect((RectTransform)taskPanel.transform, new Vector2(0f, 1f), new Vector2(28f, -126f), new Vector2(650f, 116f), new Vector2(0f, 1f));
             var taskText = CreateText(taskPanel.transform, "TaskText", "当前任务：探索工位", 23,
                 FontStyle.Bold, TextAnchor.UpperLeft, new Color(0.76f, 0.94f, 1f));
             Stretch(taskText.rectTransform, new Vector2(24f, 18f), new Vector2(-24f, -18f));
@@ -448,13 +557,31 @@ namespace RailCraft.ThirdPerson.Editor
                 canvasObject.transform,
                 "StatePanel",
                 new Color(0.025f, 0.055f, 0.075f, 0.88f));
-            SetAnchoredRect((RectTransform)statePanel.transform, new Vector2(1f, 1f), new Vector2(-28f, -28f), new Vector2(780f, 178f), new Vector2(1f, 1f));
+            SetAnchoredRect((RectTransform)statePanel.transform, new Vector2(1f, 1f), new Vector2(-28f, -126f), new Vector2(650f, 178f), new Vector2(1f, 1f));
             var progressText = CreateText(statePanel.transform, "ProgressText", "装配节点 0/6 · 落车未完成 · 调试锁定", 22,
                 FontStyle.Bold, TextAnchor.UpperLeft, new Color(1f, 0.78f, 0.26f));
-            SetTopRect(progressText.rectTransform, new Vector2(24f, -18f), new Vector2(732f, 50f));
+            SetTopRect(progressText.rectTransform, new Vector2(24f, -18f), new Vector2(602f, 50f));
             var inventoryText = CreateText(statePanel.transform, "InventoryText", "库存：空", 19,
                 FontStyle.Normal, TextAnchor.UpperLeft, Color.white);
-            SetTopRect(inventoryText.rectTransform, new Vector2(24f, -72f), new Vector2(732f, 92f));
+            SetTopRect(inventoryText.rectTransform, new Vector2(24f, -72f), new Vector2(602f, 92f));
+
+            var quickActions = CreatePanel(
+                canvasObject.transform,
+                "QuickActionsPanel",
+                new Color(0.018f, 0.05f, 0.07f, 0.9f));
+            SetAnchoredRect((RectTransform)quickActions.transform, new Vector2(1f, 0f),
+                new Vector2(-28f, 28f), new Vector2(500f, 64f), new Vector2(1f, 0f));
+            var menuButton = CreateButton(quickActions.transform, "MenuButton", "主菜单", 18);
+            SetAnchoredRect((RectTransform)menuButton.transform, new Vector2(0f, 0.5f),
+                new Vector2(8f, 0f), new Vector2(144f, 48f), new Vector2(0f, 0.5f));
+            var replayButton = CreateButton(quickActions.transform, "ReplayButton", "一键重玩", 18);
+            SetAnchoredRect((RectTransform)replayButton.transform, new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(156f, 48f));
+            var compendiumButton = CreateButton(quickActions.transform, "CompendiumButton", "工程知识图鉴", 18);
+            SetAnchoredRect((RectTransform)compendiumButton.transform, new Vector2(1f, 0.5f),
+                new Vector2(-8f, 0f), new Vector2(174f, 48f), new Vector2(1f, 0.5f));
+            var replayController = quickActions.AddComponent<WhiteboxResetButton>();
+            replayController.Configure(sessionHost, replayButton);
 
             var controlsPanel = CreatePanel(
                 canvasObject.transform,
@@ -488,7 +615,9 @@ namespace RailCraft.ThirdPerson.Editor
             SetAnchoredRect(crosshair.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(36f, 36f));
 
             var quizPanelComponent = BuildQuizPanel(canvasObject.transform);
-            var completionPanel = BuildCompletionPanel(canvasObject.transform, sessionHost, out var completionText);
+            var completionUi = BuildCompletionPanel(canvasObject.transform, sessionHost);
+            var knowledgeUi = BuildKnowledgeUi(canvasObject.transform, compendiumButton);
+            var mainMenuUi = BuildMainMenu(canvasObject.transform);
 
             var hud = canvasObject.AddComponent<WhiteboxHudPresenter>();
             hud.Configure(
@@ -500,8 +629,48 @@ namespace RailCraft.ThirdPerson.Editor
                 inventoryText,
                 progressText,
                 feedbackText,
-                completionPanel,
-                completionText);
+                completionUi.Root,
+                completionUi.Title,
+                completionUi.Detail);
+
+            var progressPresenter = canvasObject.AddComponent<WhiteboxAssemblyProgressPresenter>();
+            progressPresenter.Configure(
+                sessionHost,
+                progressSlider,
+                stepText,
+                percentText,
+                flowStatusText);
+
+            var knowledgePresenter = canvasObject.AddComponent<WhiteboxKnowledgePresenter>();
+            knowledgePresenter.Configure(
+                sessionHost,
+                playerRig.InputLock,
+                knowledgeUi.OpenButton,
+                knowledgeUi.PopupRoot,
+                knowledgeUi.PopupTitle,
+                knowledgeUi.PopupBody,
+                knowledgeUi.PopupClose,
+                knowledgeUi.CompendiumRoot,
+                knowledgeUi.CompendiumBody,
+                knowledgeUi.CompendiumClose,
+                completionUi.OpenCompendium);
+
+            var mainMenu = canvasObject.AddComponent<WhiteboxMainMenuController>();
+            mainMenu.Configure(
+                sessionHost,
+                saveController,
+                playerRig.InputLock,
+                mainMenuUi.Root,
+                mainMenuUi.SettingsRoot,
+                mainMenuUi.Start,
+                mainMenuUi.Continue,
+                mainMenuUi.Settings,
+                mainMenuUi.Quit,
+                mainMenuUi.SettingsBack,
+                mainMenuUi.Volume,
+                mainMenuUi.VolumeValue,
+                mainMenuUi.Quality,
+                menuButton);
 
             var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             eventSystem.transform.SetParent(interfaceRoot.transform, false);
@@ -510,7 +679,8 @@ namespace RailCraft.ThirdPerson.Editor
             return new UiRig
             {
                 QuizPanel = quizPanelComponent,
-                Hud = hud
+                Hud = hud,
+                MainMenu = mainMenu
             };
         }
 
@@ -545,32 +715,182 @@ namespace RailCraft.ThirdPerson.Editor
             return presenter;
         }
 
-        private static GameObject BuildCompletionPanel(
+        private static CompletionUi BuildCompletionPanel(
             Transform canvas,
-            WhiteboxGameSessionHost sessionHost,
-            out Text completionText)
+            WhiteboxGameSessionHost sessionHost)
         {
             var panel = CreatePanel(canvas, "CompletionPanel", new Color(0.018f, 0.05f, 0.055f, 0.98f));
-            SetAnchoredRect((RectTransform)panel.transform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760f, 380f));
-            completionText = CreateText(panel.transform, "CompletionText", "调试通过，车辆投入使用！", 38,
+            SetAnchoredRect((RectTransform)panel.transform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(840f, 540f));
+            var completionText = CreateText(panel.transform, "CompletionText", "调试通过，车辆投入使用！", 38,
                 FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.2f, 1f, 0.48f));
-            SetTopRect(completionText.rectTransform, new Vector2(48f, -58f), new Vector2(664f, 90f));
+            SetTopRect(completionText.rectTransform, new Vector2(48f, -42f), new Vector2(744f, 84f));
             var detail = CreateText(panel.transform, "CompletionDetail",
-                "14 类基础零件 → 5 个子总成 → 落车 → 调试回路\n流程闭环验证完成，可进入 Blender 资产替换阶段。",
-                23, FontStyle.Normal, TextAnchor.MiddleCenter, Color.white);
-            SetTopRect(detail.rectTransform, new Vector2(58f, -158f), new Vector2(644f, 96f));
-            var reset = CreateButton(panel.transform, "ResetWhiteboxButton", "重新开始", 23);
-            SetTopRect((RectTransform)reset.transform, new Vector2(248f, -292f), new Vector2(264f, 62f));
+                "装配用时  00:00\n答题正确  0/0  ·  正确率 0%\n得分  0  ·  等级：初级工程师",
+                24, FontStyle.Normal, TextAnchor.MiddleCenter, Color.white);
+            detail.verticalOverflow = VerticalWrapMode.Overflow;
+            SetTopRect(detail.rectTransform, new Vector2(70f, -142f), new Vector2(700f, 150f));
+            var unlockHint = CreateText(panel.transform, "CompendiumUnlockHint",
+                "工程知识图鉴已解锁，可随时回顾本次训练知识。",
+                20, FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.42f, 0.9f, 1f));
+            SetTopRect(unlockHint.rectTransform, new Vector2(70f, -302f), new Vector2(700f, 44f));
+            var reset = CreateButton(panel.transform, "ResetWhiteboxButton", "一键重玩", 22);
+            SetTopRect((RectTransform)reset.transform, new Vector2(120f, -408f), new Vector2(270f, 66f));
+            var compendium = CreateButton(panel.transform, "CompletionCompendiumButton", "打开工程知识图鉴", 22);
+            SetTopRect((RectTransform)compendium.transform, new Vector2(450f, -408f), new Vector2(270f, 66f));
             var resetController = panel.AddComponent<WhiteboxResetButton>();
             resetController.Configure(sessionHost, reset);
             panel.SetActive(false);
-            return panel;
+            return new CompletionUi
+            {
+                Root = panel,
+                Title = completionText,
+                Detail = detail,
+                Replay = reset,
+                OpenCompendium = compendium
+            };
+        }
+
+        private static KnowledgeUi BuildKnowledgeUi(Transform canvas, Button openButton)
+        {
+            var popupMask = CreatePanel(canvas, "EngineeringKnowledgePopupMask",
+                new Color(0.005f, 0.015f, 0.022f, 0.78f));
+            Stretch((RectTransform)popupMask.transform, Vector2.zero, Vector2.zero);
+            popupMask.GetComponent<Image>().raycastTarget = true;
+            var popup = CreatePanel(popupMask.transform, "EngineeringKnowledgePopup",
+                new Color(0.02f, 0.055f, 0.075f, 0.99f));
+            SetAnchoredRect((RectTransform)popup.transform, new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(920f, 520f));
+            var popupEyebrow = CreateText(popup.transform, "PopupEyebrow", "装配步骤完成 · 工程知识", 18,
+                FontStyle.Bold, TextAnchor.MiddleLeft, new Color(1f, 0.72f, 0.2f));
+            SetTopRect(popupEyebrow.rectTransform, new Vector2(48f, -28f), new Vector2(824f, 34f));
+            var popupTitle = CreateText(popup.transform, "PopupTitle", "知识标题", 31,
+                FontStyle.Bold, TextAnchor.MiddleLeft, new Color(0.34f, 0.92f, 1f));
+            SetTopRect(popupTitle.rectTransform, new Vector2(48f, -72f), new Vector2(824f, 54f));
+            var popupBody = CreateText(popup.transform, "PopupBody", string.Empty, 21,
+                FontStyle.Normal, TextAnchor.UpperLeft, Color.white);
+            popupBody.verticalOverflow = VerticalWrapMode.Overflow;
+            SetTopRect(popupBody.rectTransform, new Vector2(48f, -140f), new Vector2(824f, 260f));
+            var popupClose = CreateButton(popup.transform, "PopupCloseButton", "我知道了，继续装配", 21);
+            SetTopRect((RectTransform)popupClose.transform, new Vector2(300f, -438f), new Vector2(320f, 58f));
+            popupMask.SetActive(false);
+
+            var compendiumMask = CreatePanel(canvas, "EngineeringKnowledgeCompendiumMask",
+                new Color(0.003f, 0.012f, 0.018f, 0.82f));
+            Stretch((RectTransform)compendiumMask.transform, Vector2.zero, Vector2.zero);
+            compendiumMask.GetComponent<Image>().raycastTarget = true;
+            var compendium = CreatePanel(compendiumMask.transform, "EngineeringKnowledgeCompendium",
+                new Color(0.012f, 0.035f, 0.05f, 0.995f));
+            SetAnchoredRect((RectTransform)compendium.transform, new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(1320f, 900f));
+            var compendiumTitle = CreateText(compendium.transform, "CompendiumTitle",
+                "工程知识图鉴", 36, FontStyle.Bold, TextAnchor.MiddleLeft,
+                new Color(0.32f, 0.92f, 1f));
+            SetTopRect(compendiumTitle.rectTransform, new Vector2(56f, -36f), new Vector2(900f, 58f));
+            var compendiumSubtitle = CreateText(compendium.transform, "CompendiumSubtitle",
+                "本次训练已解锁的题目解析、零件、装配节点与调试知识",
+                19, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.78f, 0.84f, 0.88f));
+            SetTopRect(compendiumSubtitle.rectTransform, new Vector2(56f, -92f), new Vector2(1050f, 38f));
+            var scrollText = CreateScrollableText(
+                compendium.transform,
+                "CompendiumScroll",
+                20,
+                new Color(0.95f, 0.97f, 1f));
+            SetTopRect((RectTransform)scrollText.transform.parent.parent,
+                new Vector2(56f, -148f), new Vector2(1208f, 640f));
+            var compendiumClose = CreateButton(compendium.transform, "CompendiumCloseButton", "返回装配", 21);
+            SetTopRect((RectTransform)compendiumClose.transform, new Vector2(520f, -814f), new Vector2(280f, 60f));
+            compendiumMask.SetActive(false);
+
+            openButton.interactable = false;
+            return new KnowledgeUi
+            {
+                OpenButton = openButton,
+                PopupRoot = popupMask,
+                PopupTitle = popupTitle,
+                PopupBody = popupBody,
+                PopupClose = popupClose,
+                CompendiumRoot = compendiumMask,
+                CompendiumBody = scrollText,
+                CompendiumClose = compendiumClose
+            };
+        }
+
+        private static MainMenuUi BuildMainMenu(Transform canvas)
+        {
+            var root = CreatePanel(canvas, "MainMenuRoot", new Color(0.008f, 0.025f, 0.038f, 0.985f));
+            Stretch((RectTransform)root.transform, Vector2.zero, Vector2.zero);
+            var card = CreatePanel(root.transform, "MainMenuCard", new Color(0.025f, 0.085f, 0.12f, 0.98f));
+            SetAnchoredRect((RectTransform)card.transform, new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(720f, 760f));
+            var title = CreateText(card.transform, "MainMenuTitle", "高铁装配工程训练", 44,
+                FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.34f, 0.94f, 1f));
+            SetTopRect(title.rectTransform, new Vector2(44f, -74f), new Vector2(632f, 70f));
+            var subtitle = CreateText(card.transform, "MainMenuSubtitle",
+                "第三人称流程白盒 · 答题 · 拾取 · 分级装配 · 调试检验",
+                20, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.8f, 0.88f, 0.92f));
+            SetTopRect(subtitle.rectTransform, new Vector2(44f, -150f), new Vector2(632f, 54f));
+
+            var start = CreateButton(card.transform, "StartGameButton", "开始游戏", 25);
+            var resume = CreateButton(card.transform, "ContinueGameButton", "继续游戏", 25);
+            var settings = CreateButton(card.transform, "SettingsButton", "设置", 25);
+            var quit = CreateButton(card.transform, "QuitButton", "退出", 25);
+            SetTopRect((RectTransform)start.transform, new Vector2(150f, -260f), new Vector2(420f, 68f));
+            SetTopRect((RectTransform)resume.transform, new Vector2(150f, -350f), new Vector2(420f, 68f));
+            SetTopRect((RectTransform)settings.transform, new Vector2(150f, -440f), new Vector2(420f, 68f));
+            SetTopRect((RectTransform)quit.transform, new Vector2(150f, -530f), new Vector2(420f, 68f));
+            var footnote = CreateText(card.transform, "MainMenuFootnote",
+                "白盒阶段使用基础几何体；后续可直接替换为 Blender 资产。",
+                18, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.62f, 0.72f, 0.78f));
+            SetTopRect(footnote.rectTransform, new Vector2(60f, -650f), new Vector2(600f, 52f));
+
+            var settingsRoot = CreatePanel(root.transform, "SettingsRoot",
+                new Color(0.012f, 0.04f, 0.058f, 0.995f));
+            SetAnchoredRect((RectTransform)settingsRoot.transform, new Vector2(0.5f, 0.5f),
+                Vector2.zero, new Vector2(760f, 600f));
+            var settingsTitle = CreateText(settingsRoot.transform, "SettingsTitle", "设置", 38,
+                FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.34f, 0.94f, 1f));
+            SetTopRect(settingsTitle.rectTransform, new Vector2(60f, -42f), new Vector2(640f, 64f));
+            var volumeLabel = CreateText(settingsRoot.transform, "VolumeLabel", "音效音量", 23,
+                FontStyle.Bold, TextAnchor.MiddleLeft, Color.white);
+            SetTopRect(volumeLabel.rectTransform, new Vector2(86f, -152f), new Vector2(240f, 46f));
+            var volume = CreateSlider(settingsRoot.transform, "VolumeSlider", true);
+            SetTopRect((RectTransform)volume.transform, new Vector2(86f, -212f), new Vector2(500f, 28f));
+            var volumeValue = CreateText(settingsRoot.transform, "VolumeValue", "80%", 21,
+                FontStyle.Bold, TextAnchor.MiddleRight, new Color(1f, 0.76f, 0.24f));
+            SetTopRect(volumeValue.rectTransform, new Vector2(600f, -202f), new Vector2(76f, 44f));
+            var qualityLabel = CreateText(settingsRoot.transform, "QualityLabel", "画质", 23,
+                FontStyle.Bold, TextAnchor.MiddleLeft, Color.white);
+            SetTopRect(qualityLabel.rectTransform, new Vector2(86f, -294f), new Vector2(240f, 46f));
+            var quality = CreateDropdown(settingsRoot.transform, "QualityDropdown", "画质等级");
+            SetTopRect((RectTransform)quality.transform, new Vector2(86f, -356f), new Vector2(590f, 58f));
+            var settingsHint = CreateText(settingsRoot.transform, "SettingsHint",
+                "设置会自动保存，并在下次启动时恢复。",
+                18, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.72f, 0.8f, 0.84f));
+            SetTopRect(settingsHint.rectTransform, new Vector2(80f, -442f), new Vector2(600f, 44f));
+            var back = CreateButton(settingsRoot.transform, "SettingsBackButton", "保存并返回", 22);
+            SetTopRect((RectTransform)back.transform, new Vector2(230f, -506f), new Vector2(300f, 62f));
+            settingsRoot.SetActive(false);
+
+            return new MainMenuUi
+            {
+                Root = root,
+                SettingsRoot = settingsRoot,
+                Start = start,
+                Continue = resume,
+                Settings = settings,
+                Quit = quit,
+                SettingsBack = back,
+                Volume = volume,
+                VolumeValue = volumeValue,
+                Quality = quality
+            };
         }
 
         private static void BuildPartStations(
             Transform parent,
             WhiteboxGameSessionHost sessionHost,
             ThirdPersonInputLock inputLock,
+            PlayerInteractionScanner scanner,
             WhiteboxQuizPanel quizPanel,
             Palette palette)
         {
@@ -639,12 +959,15 @@ namespace RailCraft.ThirdPerson.Editor
                     part.DisplayName + "知识工位",
                     rewardVisual,
                     "继续收集零件，或前往流程图对应的装配工位");
+                AddInteractionVisual(station, scanner, stationBehaviour);
             }
         }
 
         private static void BuildModuleStations(
             Transform parent,
             WhiteboxGameSessionHost sessionHost,
+            PlayerInteractionScanner scanner,
+            ICollection<AssemblyFocusBinding> focusBindings,
             Palette palette)
         {
             var catalog = WhiteboxGameCatalog.CreateDefault();
@@ -718,6 +1041,12 @@ namespace RailCraft.ThirdPerson.Editor
                     definition.Id == ModuleId.SecondarySuspension
                         ? "二系悬挂装置完成；继续准备落车所需输入"
                         : "继续完成子总成；轮对轴箱、构架和一系悬挂将组成转向架构体");
+                AddInteractionVisual(station, scanner, stationBehaviour);
+                focusBindings?.Add(new AssemblyFocusBinding(
+                    definition.Id,
+                    completeBeacon.transform,
+                    configuredFallbackDistance: 5.2f,
+                    configuredFocusOffset: new Vector3(0f, -0.25f, 0f)));
             }
         }
 
@@ -747,6 +1076,8 @@ namespace RailCraft.ThirdPerson.Editor
         private static void BuildCompositeAssembly(
             Transform parent,
             WhiteboxGameSessionHost sessionHost,
+            PlayerInteractionScanner scanner,
+            ICollection<AssemblyFocusBinding> focusBindings,
             Palette palette)
         {
             var catalog = WhiteboxGameCatalog.CreateDefault();
@@ -798,11 +1129,19 @@ namespace RailCraft.ThirdPerson.Editor
                 visuals,
                 completeBeacon,
                 "转向架构体完成；准备二系悬挂、车体和中央牵引装置后进行落车");
+            AddInteractionVisual(station, scanner, behaviour);
+            focusBindings?.Add(new AssemblyFocusBinding(
+                ModuleId.BogieStructure,
+                completeBeacon.transform,
+                configuredFallbackDistance: 7f,
+                configuredFocusOffset: new Vector3(0f, -0.4f, 0f)));
         }
 
         private static void BuildFinalAssembly(
             Transform parent,
             WhiteboxGameSessionHost sessionHost,
+            PlayerInteractionScanner scanner,
+            ICollection<AssemblyFocusBinding> focusBindings,
             Palette palette)
         {
             var station = new GameObject("LandingAssemblyStation");
@@ -882,11 +1221,18 @@ namespace RailCraft.ThirdPerson.Editor
                 moduleVisuals,
                 partVisuals,
                 completedLandingVisual);
+            AddInteractionVisual(station, scanner, behaviour);
+            focusBindings?.Add(new AssemblyFocusBinding(
+                ModuleId.Landing,
+                completedLandingVisual.transform,
+                configuredFallbackDistance: 9f,
+                configuredFocusOffset: new Vector3(0f, 1.1f, 0f)));
         }
 
         private static void BuildCommissioningStations(
             Transform parent,
             WhiteboxGameSessionHost sessionHost,
+            PlayerInteractionScanner scanner,
             Palette palette)
         {
             var root = CreateChild(parent, "CommissioningLoopStations");
@@ -923,6 +1269,7 @@ namespace RailCraft.ThirdPerson.Editor
 
                 var behaviour = station.AddComponent<CommissioningStation>();
                 behaviour.Configure(sessionHost, definition.Action, definition.Name, ready, completed);
+                AddInteractionVisual(station, scanner, behaviour);
             }
 
             CreateWorldLabel(root.transform, "LoopGuide", "失败 → 重新调试 → 检验 → 返回调试判定    成功 → 投入使用",
@@ -1224,6 +1571,19 @@ namespace RailCraft.ThirdPerson.Editor
                 UnityEngine.Object.DestroyImmediate(collider);
         }
 
+        private static InteractableVisualFeedback AddInteractionVisual(
+            GameObject station,
+            PlayerInteractionScanner scanner,
+            MonoBehaviour interactable)
+        {
+            var feedback = station.AddComponent<InteractableVisualFeedback>();
+            feedback.Configure(
+                scanner,
+                interactable,
+                station.GetComponentsInChildren<Renderer>(true));
+            return feedback;
+        }
+
         private static void MarkStatic(GameObject item)
         {
             GameObjectUtility.SetStaticEditorFlags(
@@ -1315,6 +1675,148 @@ namespace RailCraft.ThirdPerson.Editor
                 TextAnchor.MiddleCenter, Color.white);
             Stretch(label.rectTransform, new Vector2(18f, 6f), new Vector2(-18f, -6f));
             return button;
+        }
+
+        private static Slider CreateSlider(Transform parent, string name, bool interactable)
+        {
+            var root = new GameObject(name, typeof(RectTransform), typeof(Slider));
+            root.transform.SetParent(parent, false);
+            var slider = root.GetComponent<Slider>();
+            slider.minValue = 0f;
+            slider.maxValue = 1f;
+            slider.value = interactable ? 0.8f : 0f;
+            slider.wholeNumbers = false;
+            slider.direction = Slider.Direction.LeftToRight;
+            slider.interactable = interactable;
+
+            var background = CreatePanel(root.transform, "Background", new Color(0.12f, 0.18f, 0.22f, 1f));
+            Stretch((RectTransform)background.transform, new Vector2(0f, 5f), new Vector2(0f, -5f));
+
+            var fillArea = new GameObject("Fill Area", typeof(RectTransform));
+            fillArea.transform.SetParent(root.transform, false);
+            Stretch((RectTransform)fillArea.transform, new Vector2(4f, 5f), new Vector2(-4f, -5f));
+            var fill = CreatePanel(fillArea.transform, "Fill", new Color(0.14f, 0.78f, 0.94f, 1f));
+            Stretch((RectTransform)fill.transform, Vector2.zero, Vector2.zero);
+
+            var handleArea = new GameObject("Handle Slide Area", typeof(RectTransform));
+            handleArea.transform.SetParent(root.transform, false);
+            Stretch((RectTransform)handleArea.transform, new Vector2(8f, 0f), new Vector2(-8f, 0f));
+            var handle = CreatePanel(handleArea.transform, "Handle", new Color(1f, 0.75f, 0.22f, 1f));
+            var handleRect = (RectTransform)handle.transform;
+            handleRect.sizeDelta = new Vector2(22f, 22f);
+
+            slider.fillRect = (RectTransform)fill.transform;
+            slider.handleRect = handleRect;
+            slider.targetGraphic = handle.GetComponent<Image>();
+            return slider;
+        }
+
+        private static Dropdown CreateDropdown(Transform parent, string name, string captionValue)
+        {
+            var root = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Dropdown));
+            root.transform.SetParent(parent, false);
+            var rootImage = root.GetComponent<Image>();
+            rootImage.color = new Color(0.075f, 0.22f, 0.3f, 1f);
+
+            var caption = CreateText(root.transform, "Label", captionValue, 21,
+                FontStyle.Normal, TextAnchor.MiddleLeft, Color.white);
+            Stretch(caption.rectTransform, new Vector2(20f, 6f), new Vector2(-60f, -6f));
+            var arrow = CreateText(root.transform, "Arrow", "▼", 18,
+                FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.4f, 0.92f, 1f));
+            SetAnchoredRect(arrow.rectTransform, new Vector2(1f, 0.5f), new Vector2(-28f, 0f),
+                new Vector2(32f, 32f));
+
+            var template = CreatePanel(root.transform, "Template", new Color(0.025f, 0.075f, 0.105f, 1f));
+            var templateRect = (RectTransform)template.transform;
+            templateRect.anchorMin = new Vector2(0f, 0f);
+            templateRect.anchorMax = new Vector2(1f, 0f);
+            templateRect.pivot = new Vector2(0.5f, 1f);
+            templateRect.anchoredPosition = new Vector2(0f, -4f);
+            templateRect.sizeDelta = new Vector2(0f, 250f);
+            var scrollRect = template.AddComponent<ScrollRect>();
+            scrollRect.horizontal = false;
+            scrollRect.vertical = true;
+            scrollRect.movementType = ScrollRect.MovementType.Clamped;
+
+            var viewport = CreatePanel(template.transform, "Viewport", new Color(0.02f, 0.055f, 0.075f, 1f));
+            Stretch((RectTransform)viewport.transform, new Vector2(4f, 4f), new Vector2(-4f, -4f));
+            var mask = viewport.AddComponent<Mask>();
+            mask.showMaskGraphic = true;
+
+            var content = new GameObject("Content", typeof(RectTransform));
+            content.transform.SetParent(viewport.transform, false);
+            var contentRect = (RectTransform)content.transform;
+            contentRect.anchorMin = new Vector2(0f, 1f);
+            contentRect.anchorMax = new Vector2(1f, 1f);
+            contentRect.pivot = new Vector2(0.5f, 1f);
+            contentRect.anchoredPosition = Vector2.zero;
+            contentRect.sizeDelta = new Vector2(0f, 48f);
+
+            var item = new GameObject("Item", typeof(RectTransform), typeof(Toggle));
+            item.transform.SetParent(content.transform, false);
+            var itemRect = (RectTransform)item.transform;
+            itemRect.anchorMin = new Vector2(0f, 0.5f);
+            itemRect.anchorMax = new Vector2(1f, 0.5f);
+            itemRect.pivot = new Vector2(0.5f, 0.5f);
+            itemRect.sizeDelta = new Vector2(0f, 48f);
+            var itemBackground = CreatePanel(item.transform, "Item Background", new Color(0.06f, 0.17f, 0.23f, 1f));
+            Stretch((RectTransform)itemBackground.transform, Vector2.zero, Vector2.zero);
+            var checkmark = CreateText(item.transform, "Item Checkmark", "✓", 20,
+                FontStyle.Bold, TextAnchor.MiddleCenter, new Color(1f, 0.75f, 0.22f));
+            SetAnchoredRect(checkmark.rectTransform, new Vector2(0f, 0.5f), new Vector2(24f, 0f),
+                new Vector2(32f, 40f));
+            var itemLabel = CreateText(item.transform, "Item Label", captionValue, 20,
+                FontStyle.Normal, TextAnchor.MiddleLeft, Color.white);
+            Stretch(itemLabel.rectTransform, new Vector2(54f, 3f), new Vector2(-12f, -3f));
+            var toggle = item.GetComponent<Toggle>();
+            toggle.targetGraphic = itemBackground.GetComponent<Image>();
+            toggle.graphic = checkmark;
+
+            scrollRect.viewport = (RectTransform)viewport.transform;
+            scrollRect.content = contentRect;
+            var dropdown = root.GetComponent<Dropdown>();
+            dropdown.targetGraphic = rootImage;
+            dropdown.template = templateRect;
+            dropdown.captionText = caption;
+            dropdown.itemText = itemLabel;
+            template.SetActive(false);
+            return dropdown;
+        }
+
+        private static Text CreateScrollableText(
+            Transform parent,
+            string name,
+            int fontSize,
+            Color color)
+        {
+            var root = CreatePanel(parent, name, new Color(0.02f, 0.065f, 0.09f, 0.9f));
+            var scroll = root.AddComponent<ScrollRect>();
+            scroll.horizontal = false;
+            scroll.vertical = true;
+            scroll.movementType = ScrollRect.MovementType.Clamped;
+            scroll.scrollSensitivity = 42f;
+
+            var viewport = CreatePanel(root.transform, "Viewport", Color.clear);
+            Stretch((RectTransform)viewport.transform, new Vector2(20f, 16f), new Vector2(-20f, -16f));
+            var mask = viewport.AddComponent<Mask>();
+            mask.showMaskGraphic = false;
+
+            var text = CreateText(viewport.transform, "Content", string.Empty, fontSize,
+                FontStyle.Normal, TextAnchor.UpperLeft, color);
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.horizontalOverflow = HorizontalWrapMode.Wrap;
+            text.rectTransform.anchorMin = new Vector2(0f, 1f);
+            text.rectTransform.anchorMax = new Vector2(1f, 1f);
+            text.rectTransform.pivot = new Vector2(0.5f, 1f);
+            text.rectTransform.anchoredPosition = Vector2.zero;
+            text.rectTransform.sizeDelta = Vector2.zero;
+            var textFitter = text.gameObject.AddComponent<ContentSizeFitter>();
+            textFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            textFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            scroll.viewport = (RectTransform)viewport.transform;
+            scroll.content = text.rectTransform;
+            return text;
         }
 
         private static void Stretch(RectTransform rect, Vector2 offsetMin, Vector2 offsetMax)

@@ -11,12 +11,21 @@
 6 个装配节点，以及调试失败、重新调试、检验和复测流程。题目答错可重试，所有
 奖励、拾取、安装和调试动作均有重复交互保护。
 
+当前 v0.2 增加主菜单、继续游戏、音效与画质设置、23 步装配进度、流程状态机、
+自动存档、成绩结算、一键重玩和工程知识图鉴。完成节点会显示知识提示，可交互
+工位带有高亮与成功/失败颜色反馈，关键总成完成时镜头自动聚焦后回到玩家视角。
+装配计时会在主菜单、应用暂停和退出期间停表，继续游戏后从原有效用时接着累计。
+
 - 主线场景：`Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity`
 - 重新生成：`RailCraft > Third Person Whitebox > Rebuild Scene`
-- Windows 构建：`RailCraft > Third Person Whitebox > Build Windows x86_64`
+- Windows 构建：`RailCraft > Third Person Whitebox > Build Windows x86_64`（构建前自动重建生成场景）
 - 本地入口：`Builds/Whitebox/RailCraftWhitebox.exe`
 - 当前规格：[`Documentation/ThirdPersonWhitebox.md`](Documentation/ThirdPersonWhitebox.md)
 - 当前证据：[`Artifacts/Whitebox/Acceptance`](Artifacts/Whitebox/Acceptance)
+
+从源码直接进入编辑器 Play 前先执行一次 `Rebuild Scene`，让生成器把 v0.2 组件和
+UI 写入场景；Windows 白盒构建入口会自动完成这一步。证据目录以其中验收报告标注
+的批次为准，只有重新完成 Unity 测试、构建与成品冒烟后才能作为 v0.2 最终证据。
 
 白盒使用 Unity `6000.3.21f1`、URP、Input System 和 uGUI。玩家使用 `WASD`
 移动、`Shift` 奔跑、鼠标控制镜头、滚轮缩放并按 `E` 交互。场景中的方块、圆柱、
