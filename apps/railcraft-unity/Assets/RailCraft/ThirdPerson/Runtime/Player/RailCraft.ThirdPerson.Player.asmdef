@@ -1,0 +1,16 @@
+{
+  "name": "RailCraft.ThirdPerson.Player",
+  "rootNamespace": "RailCraft.ThirdPerson.Player",
+  "references": [
+    "Unity.InputSystem"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

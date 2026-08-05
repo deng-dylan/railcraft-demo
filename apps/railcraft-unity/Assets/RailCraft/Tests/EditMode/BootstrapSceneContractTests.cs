@@ -17,14 +17,17 @@ namespace RailCraft.Tests.EditMode
     {
         private const string BootstrapPath = "Assets/RailCraft/Scenes/Bootstrap.unity";
         private const string FactoryPath = "Assets/RailCraft/Scenes/Factory.unity";
+        private const string CurrentMainlinePath =
+            "Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity";
 
         [Test]
-        public void BootstrapSceneIsFirstAndOwnsOneFullyReferencedCompositionRoot()
+        public void BootstrapSceneRemainsAvailableAndOwnsOneFullyReferencedCompositionRoot()
         {
             Assert.That(AssetDatabase.LoadAssetAtPath<SceneAsset>(BootstrapPath), Is.Not.Null);
-            Assert.That(EditorBuildSettings.scenes.Length, Is.GreaterThanOrEqualTo(2));
-            Assert.That(EditorBuildSettings.scenes[0].path, Is.EqualTo(BootstrapPath));
-            Assert.That(EditorBuildSettings.scenes[1].path, Is.EqualTo(FactoryPath));
+            Assert.That(AssetDatabase.LoadAssetAtPath<SceneAsset>(FactoryPath), Is.Not.Null);
+            Assert.That(EditorBuildSettings.scenes, Has.Length.EqualTo(1));
+            Assert.That(EditorBuildSettings.scenes[0].enabled, Is.True);
+            Assert.That(EditorBuildSettings.scenes[0].path, Is.EqualTo(CurrentMainlinePath));
 
             var scene = EditorSceneManager.OpenScene(BootstrapPath, OpenSceneMode.Additive);
             try

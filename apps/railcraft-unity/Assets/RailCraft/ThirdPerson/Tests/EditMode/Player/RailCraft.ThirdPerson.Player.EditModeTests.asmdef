@@ -1,0 +1,22 @@
+{
+  "name": "RailCraft.ThirdPerson.Player.EditModeTests",
+  "rootNamespace": "RailCraft.ThirdPerson.Player.Tests",
+  "references": [
+    "RailCraft.ThirdPerson.Player",
+    "Unity.InputSystem"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

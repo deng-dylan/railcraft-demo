@@ -2,3 +2,16 @@
 *.blend filter=lfs diff=lfs merge=lfs -text
 *.step filter=lfs diff=lfs merge=lfs -text
 *.x_t filter=lfs diff=lfs merge=lfs -text
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.obj filter=lfs diff=lfs merge=lfs -text
+*.stl filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.exr filter=lfs diff=lfs merge=lfs -text
+
+# Unity serializes empty YAML values with a trailing space. Keep whitespace
+# checks strict for hand-written code and documentation while accepting the
+# engine-owned representation in generated asset files.
+*.unity whitespace=-trailing-space
+*.meta whitespace=-trailing-space
+*.mat whitespace=-trailing-space

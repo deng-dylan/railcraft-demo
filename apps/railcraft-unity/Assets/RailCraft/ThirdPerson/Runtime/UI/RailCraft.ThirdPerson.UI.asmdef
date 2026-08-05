@@ -1,0 +1,19 @@
+{
+  "name": "RailCraft.ThirdPerson.UI",
+  "rootNamespace": "RailCraft.ThirdPerson.UI",
+  "references": [
+    "RailCraft.ThirdPerson.Domain",
+    "RailCraft.ThirdPerson.Player",
+    "RailCraft.ThirdPerson.World",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

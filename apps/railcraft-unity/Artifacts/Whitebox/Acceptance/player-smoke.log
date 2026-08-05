@@ -1,0 +1,8 @@
+RailCraft ThirdPerson Whitebox built-player smoke summary
+captured_at=2026-08-06T00:28:29+08:00
+unity_version=6000.3.21f1
+player=Builds/Whitebox/RailCraftWhitebox.exe
+flow=58 questions;14 parts;6 assembly nodes;landing;retuning;inspection;retest;in service
+result=Success
+RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED
+raw_local_log_sha256=c101658fda417b8448a3fd3fe33a18c9ab600bf086b63a6b6b0b940b48d620a6

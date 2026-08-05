@@ -1,0 +1,13 @@
+RailCraft repository EditMode test summary
+captured_at=2026-08-06T02:06:48+08:00
+unity_version=6000.3.21f1
+test_platform=EditMode
+testcasecount=84
+passed=84
+failed=0
+inconclusive=0
+skipped=0
+duration_seconds=1.8446416
+result=Passed
+result_xml=repository-editmode.xml
+raw_local_log_sha256=d7216f4879b0f6834abbed2d19f632e66acc7627200d50cba112257d99cd0c4b

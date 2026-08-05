@@ -12,6 +12,11 @@ namespace RailCraft.Editor
     {
         public const string RelativeOutputPath = "Builds/Windows/RailCraft.exe";
         public const string SuccessLogMarker = "RAILCRAFT_WINDOWS_BUILD_SUCCEEDED";
+        private static readonly string[] LegacyScenePaths =
+        {
+            "Assets/RailCraft/Scenes/Bootstrap.unity",
+            "Assets/RailCraft/Scenes/Factory.unity"
+        };
 
         [MenuItem("RailCraft/Build/Windows x86_64")]
         public static void Build()
@@ -33,16 +38,12 @@ namespace RailCraft.Editor
 
         private static void BuildWindowsPlayer()
         {
-            var scenes = EditorBuildSettings.scenes
-                .Where(scene => scene.enabled)
-                .Select(scene => scene.path)
-                .ToArray();
-
-            if (scenes.Length == 0)
-                throw new BuildFailedException("RailCraft Windows build requires at least one enabled build scene.");
-
-            if (scenes.Any(string.IsNullOrWhiteSpace))
-                throw new BuildFailedException("RailCraft Windows build contains an enabled scene with an empty path.");
+            var scenes = LegacyScenePaths.ToArray();
+            foreach (var scenePath in scenes)
+            {
+                if (AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath) == null)
+                    throw new BuildFailedException($"Frozen v0.1 build scene is missing: {scenePath}");
+            }
 
             var projectRoot = GetProjectRoot();
             var platformRelativeOutputPath = RelativeOutputPath.Replace(

@@ -1,0 +1,17 @@
+{
+  "name": "RailCraft.ThirdPerson.World",
+  "rootNamespace": "RailCraft.ThirdPerson.World",
+  "references": [
+    "RailCraft.ThirdPerson.Domain",
+    "RailCraft.ThirdPerson.Player"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

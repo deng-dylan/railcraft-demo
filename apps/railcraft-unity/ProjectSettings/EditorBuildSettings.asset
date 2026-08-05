@@ -6,10 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/RailCraft/Scenes/Bootstrap.unity
-    guid: de42d26546a71fd4f91bfe64aee0ac39
-  - enabled: 1
-    path: Assets/RailCraft/Scenes/Factory.unity
-    guid: e851a269d4e0b8a4c86590628f0fe008
+    path: Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity
+    guid: 8ab94909d683482498f1107fd518fb11
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

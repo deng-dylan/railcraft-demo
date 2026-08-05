@@ -1,0 +1,21 @@
+{
+  "name": "RailCraft.ThirdPerson.Domain.EditModeTests",
+  "rootNamespace": "RailCraft.ThirdPerson.Tests.EditMode.Domain",
+  "references": [
+    "RailCraft.ThirdPerson.Domain"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

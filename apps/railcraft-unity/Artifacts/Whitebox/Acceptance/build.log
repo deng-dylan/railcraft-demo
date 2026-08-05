@@ -1,0 +1,13 @@
+RailCraft ThirdPerson Whitebox Windows build summary
+captured_at=2026-08-06T00:27:57+08:00
+unity_version=6000.3.21f1
+unity_revision=c02631ffc030
+build_target=StandaloneWindows64
+scene=Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity
+output=Builds/Whitebox/RailCraftWhitebox.exe
+total_bytes=103580649
+warnings=0
+errors=0
+result=Success
+RAILCRAFT_WHITEBOX_BUILD_SUCCEEDED output=Builds/Whitebox/RailCraftWhitebox.exe;bytes=103580649;warnings=0;errors=0
+raw_local_log_sha256=43339985b6f1c3fca43d2462879913dbd79e0d81ad4de2bc7d77de5def48a5cd
