@@ -210,13 +210,14 @@ The public bogie paper supports subsystem names and the SWM-400E1 visual referen
 Install `6000.3.21f1` with “Windows Build Support (IL2CPP)” and create a Universal 3D project at:
 
 ```text
-D:\documents\project\gingchuangsai\apps\railcraft-unity
+<仓库根目录>\apps\railcraft-unity
 ```
 
 After creation, verify:
 
 ```powershell
-Get-Content 'D:\documents\project\gingchuangsai\apps\railcraft-unity\ProjectSettings\ProjectVersion.txt'
+$Project = (Resolve-Path '.\apps\railcraft-unity').Path
+Get-Content "$Project\ProjectSettings\ProjectVersion.txt"
 ```
 
 Expected:
@@ -272,10 +273,11 @@ namespace RailCraft.Tests.EditMode
 
 ```powershell
 $UnityExe = 'C:\Program Files\Unity 6000.3.21f1\Editor\Unity.exe'
+$Project = (Resolve-Path '.\apps\railcraft-unity').Path
 & $UnityExe -batchmode -nographics -quit `
-  -projectPath 'D:\documents\project\gingchuangsai\apps\railcraft-unity' `
+  -projectPath $Project `
   -runTests -testPlatform EditMode `
-  -testResults 'D:\documents\project\gingchuangsai\apps\railcraft-unity\TestResults\editmode.xml'
+  -testResults "$Project\TestResults\editmode.xml"
 ```
 
 Expected: non-zero exit or a failed assertion for product/company/build target.
@@ -1787,7 +1789,7 @@ namespace RailCraft.Editor
 
 ```powershell
 $UnityExe = 'C:\Program Files\Unity 6000.3.21f1\Editor\Unity.exe'
-$Project = 'D:\documents\project\gingchuangsai\apps\railcraft-unity'
+$Project = (Resolve-Path '.\apps\railcraft-unity').Path
 & $UnityExe -batchmode -nographics -quit -projectPath $Project -runTests -testPlatform EditMode -testResults "$Project\TestResults\editmode.xml"
 & $UnityExe -batchmode -nographics -quit -projectPath $Project -runTests -testPlatform PlayMode -testResults "$Project\TestResults\playmode.xml"
 ```
@@ -1864,11 +1866,12 @@ The limitation section must repeat that provisional process content and placehol
 - [ ] **Step 6: Generate checksums**
 
 ```powershell
+$Project = (Resolve-Path '.\apps\railcraft-unity').Path
 Get-FileHash -Algorithm SHA256 `
-  'D:\documents\project\gingchuangsai\apps\railcraft-unity\Builds\Windows\RailCraft.exe' |
+  "$Project\Builds\Windows\RailCraft.exe" |
   ForEach-Object { "$($_.Hash)  RailCraft.exe" } |
   Set-Content -Encoding ASCII `
-  'D:\documents\project\gingchuangsai\apps\railcraft-unity\Artifacts\Acceptance\checksums.txt'
+  "$Project\Artifacts\Acceptance\checksums.txt"
 ```
 
 - [ ] **Step 7: Final verification**

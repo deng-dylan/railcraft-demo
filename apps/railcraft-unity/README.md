@@ -58,7 +58,7 @@ RailCraft Unity v0.1 是 Windows x86_64 第一版固定视角测试版。体验�
 
 ```powershell
 $UnityExe = 'C:\Program Files\Unity 6000.3.21f1\Editor\Unity.exe'
-$Project = 'D:\documents\project\gingchuangsai\apps\railcraft-unity'
+$Project = (Resolve-Path '.\apps\railcraft-unity').Path
 
 & $UnityExe -batchmode -nographics `
   -projectPath $Project `
@@ -100,7 +100,7 @@ $env:RAILCRAFT_PERFORMANCE_OUTPUT = "$Project\TestResults\task12-performance.jso
 
 ```powershell
 $UnityExe = 'C:\Program Files\Unity 6000.3.21f1\Editor\Unity.exe'
-$Project = 'D:\documents\project\gingchuangsai\apps\railcraft-unity'
+$Project = (Resolve-Path '.\apps\railcraft-unity').Path
 
 & $UnityExe -batchmode -quit `
   -projectPath $Project `
@@ -121,7 +121,8 @@ Builds/Windows/RailCraft.exe
 在 64 位 Windows 10/11 上双击 `RailCraft.exe`，或在 PowerShell 中运行：
 
 ```powershell
-& 'D:\documents\project\gingchuangsai\apps\railcraft-unity\Builds\Windows\RailCraft.exe'
+$Project = (Resolve-Path '.\apps\railcraft-unity').Path
+& "$Project\Builds\Windows\RailCraft.exe"
 ```
 
 运行时内容完全本地，不需要网络连接。主要操作：

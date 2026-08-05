@@ -11,7 +11,7 @@
 
 | 内容 | 位置 | 结论 |
 |---|---|---|
-| 最终 Windows 构建日志 | `build.log` | 成功，2 个场景、0 warning、0 error |
+| 最终 Windows 构建摘要 | `build.log` | 成功，2 个场景、0 warning、0 error；机器信息已脱敏 |
 | EditMode XML | `editmode.xml` | 50/50 通过 |
 | PlayMode XML | `playmode.xml` | 50 通过、0 失败、1 个预期性能门禁跳过 |
 | 独立 Player 性能 XML | `performance-player.xml` | 1/1 通过 |
@@ -53,7 +53,7 @@ PlayMode 中跳过的用例为 `PerformanceCaptureTests.CompleteProductionFlowMe
 | SHA-256 | `48EFAB523AA684C653BD1254A6962D3410127B5C02DC1310F6F16F4810666556` |
 | 启动方式 | 从完整 `Builds/Windows/` 目录直接启动，完成走查后正常关闭 |
 
-`build.log` 末尾包含机器可读的 `RAILCRAFT_WINDOWS_BUILD_SUCCEEDED` 标记。发布时必须整体复制或压缩 `Builds/Windows/`，不可只分发 `RailCraft.exe`。
+`build.log` 保留机器可读的 `RAILCRAFT_WINDOWS_BUILD_SUCCEEDED` 标记和原始日志哈希，省略 Unity 许可会话、网络、进程、用户目录与机器标识。发布时必须整体复制或压缩 `Builds/Windows/`，不可只分发 `RailCraft.exe`。
 
 ## GUI 走查
 

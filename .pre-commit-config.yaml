@@ -3,14 +3,20 @@ minimum_pre_commit_version: "4.6.0"
 repos:
   - repo: local
     hooks:
+      - id: repository-layout
+        name: "Mainline: repository layout and source policy"
+        entry: powershell -NoProfile -ExecutionPolicy Bypass -File tools/Test-RepositoryLayout.ps1
+        language: system
+        pass_filenames: false
+        files: ^(apps/railcraft-unity/|deliveries/|prototypes/|tools/Test-RepositoryLayout\.ps1|\.gitignore|\.gitattributes)
       - id: gdformat-check
-        name: gdformat check
+        name: "Legacy Godot: gdformat check"
         entry: uv --directory apps/railcraft-godot run --frozen gdformat --check scripts tests
         language: system
         pass_filenames: false
         files: ^apps/railcraft-godot/(scripts|tests)/.*\.gd$
       - id: gdlint
-        name: gdlint
+        name: "Legacy Godot: gdlint"
         entry: uv --directory apps/railcraft-godot run --frozen gdlint scripts tests
         language: system
         pass_filenames: false

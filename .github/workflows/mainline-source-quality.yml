@@ -1,0 +1,30 @@
+name: Mainline Source Quality
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repository-layout:
+    name: Repository layout and source policy
+    runs-on: windows-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out source without generated artifacts
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Validate mainline source layout
+        shell: pwsh
+        run: ./tools/Test-RepositoryLayout.ps1

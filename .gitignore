@@ -8,16 +8,54 @@ tmp/
 apps/railcraft-unity/[Ll]ibrary/
 apps/railcraft-unity/[Tt]emp/
 apps/railcraft-unity/[Oo]bj/
+apps/railcraft-unity/[Bb]uild/
 apps/railcraft-unity/[Ll]ogs/
 apps/railcraft-unity/[Uu]ser[Ss]ettings/
+apps/railcraft-unity/[Mm]emoryCaptures/
+apps/railcraft-unity/[Rr]ecordings/
+apps/railcraft-unity/[Ee]xported[Oo]bj/
 apps/railcraft-unity/TestResults/
 apps/railcraft-unity/Builds/
+apps/railcraft-unity/Assets/AssetStoreTools*
+apps/railcraft-unity/Assets/Plugins/Editor/JetBrains*
+
+# Unity-generated IDE and debugger files
+apps/railcraft-unity/.vs/
+apps/railcraft-unity/.idea/
+apps/railcraft-unity/.vscode/
+apps/railcraft-unity/.consulo/
+apps/railcraft-unity/.gradle/
+apps/railcraft-unity/*.csproj
+apps/railcraft-unity/*.sln
+apps/railcraft-unity/*.slnx
+apps/railcraft-unity/*.sln.iml
+apps/railcraft-unity/*.unityproj
+apps/railcraft-unity/*.suo
+apps/railcraft-unity/*.tmp
+apps/railcraft-unity/*.user
+apps/railcraft-unity/*.userprefs
+apps/railcraft-unity/*.pidb
+apps/railcraft-unity/*.booproj
+apps/railcraft-unity/*.svd
+apps/railcraft-unity/*.pdb
+apps/railcraft-unity/*.mdb
+apps/railcraft-unity/*.pidb.meta
+apps/railcraft-unity/*.pdb.meta
+apps/railcraft-unity/*.mdb.meta
+apps/railcraft-unity/*.opendb
+apps/railcraft-unity/*.VC.db
+apps/railcraft-unity/*.DotSettings.user
+apps/railcraft-unity/*.apk
+apps/railcraft-unity/*.aab
+apps/railcraft-unity/*.unitypackage
+apps/railcraft-unity/sysinfo.txt
+apps/railcraft-unity/crashlytics-build.properties
 
 # OS and editor files
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Original delivery packages are retained locally or in release storage.
-# The repository tracks their manifests and reviewed source snapshots only.
+# Original delivery packages and unlicensed source are retained locally or in
+# approved private storage. Git tracks only their manifests and review notes.
 deliveries/**/release/**

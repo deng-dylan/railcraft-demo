@@ -7,7 +7,7 @@
     <reason>
       <message><![CDATA[One or more child tests were ignored]]></message>
     </reason>
-    <test-suite type="Assembly" id="1061" name="RailCraft.PlayModeTests.dll" fullname="D:/documents/project/gingchuangsai/apps/railcraft-unity/Library/ScriptAssemblies/RailCraft.PlayModeTests.dll" runstate="Runnable" testcasecount="51" result="Skipped" label="Ignored" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:23Z" duration="17.850713" total="51" passed="50" failed="0" inconclusive="0" skipped="1" asserts="0">
+    <test-suite type="Assembly" id="1061" name="RailCraft.PlayModeTests.dll" fullname="Library/ScriptAssemblies/RailCraft.PlayModeTests.dll" runstate="Runnable" testcasecount="51" result="Skipped" label="Ignored" start-time="2026-08-01 17:01:05Z" end-time="2026-08-01 17:01:23Z" duration="17.850713" total="51" passed="50" failed="0" inconclusive="0" skipped="1" asserts="0">
       <properties>
         <property name="_PID" value="20816" />
         <property name="_APPDOMAIN" value="Unity Child Domain" />
@@ -423,7 +423,7 @@ To add a scene to the active build profile or shared scene list use the menu Fil
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
-                <output><![CDATA[Saving results to: C:/Users/Dylan/AppData/LocalLow/RailCraft Team/RailCraft\TestResults.xml
+                <output><![CDATA[Saving results to: [LOCAL_APP_DATA]/RailCraft Team/RailCraft/TestResults.xml
 ]]></output>
               </test-case>
             </test-suite>
