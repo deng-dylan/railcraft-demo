@@ -3,6 +3,7 @@
 .superpowers/
 tmp/
 .tmp/
+TestResults/
 
 # Unity generated files
 apps/railcraft-unity/[Ll]ibrary/
