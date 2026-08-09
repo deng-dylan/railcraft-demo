@@ -3,6 +3,7 @@ using System.Linq;
 using RailCraft.ThirdPerson.Player;
 using RailCraft.ThirdPerson.World;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace RailCraft.ThirdPerson.UI
@@ -13,8 +14,12 @@ namespace RailCraft.ThirdPerson.UI
         [SerializeField] private WhiteboxGameSessionHost sessionHost;
         [SerializeField] private WhiteboxSaveController saveController;
         [SerializeField] private ThirdPersonInputLock inputLock;
+        [SerializeField] private WhiteboxKnowledgePresenter knowledgePresenter;
         [SerializeField] private GameObject mainMenuRoot;
         [SerializeField] private GameObject settingsRoot;
+        [SerializeField] private Text menuTitleText;
+        [SerializeField] private Text menuSubtitleText;
+        [SerializeField] private Text menuFootnoteText;
         [SerializeField] private Button startButton;
         [SerializeField] private Button continueButton;
         [SerializeField] private Button settingsButton;
@@ -26,9 +31,12 @@ namespace RailCraft.ThirdPerson.UI
         [SerializeField] private Dropdown qualityDropdown;
 
         private bool wired;
+        private bool menuOwnsTimingPause;
+        private bool menuOwnsInputLock;
 
         public bool IsMenuVisible => mainMenuRoot != null && mainMenuRoot.activeSelf;
         public bool IsSettingsVisible => settingsRoot != null && settingsRoot.activeSelf;
+        public bool HasActiveGame => saveController != null && saveController.HasActiveSession;
 
         public void Configure(
             WhiteboxGameSessionHost configuredSessionHost,
@@ -44,14 +52,22 @@ namespace RailCraft.ThirdPerson.UI
             Slider configuredVolumeSlider,
             Text configuredVolumeValueText,
             Dropdown configuredQualityDropdown,
-            Button configuredMenuButton)
+            Button configuredMenuButton,
+            Text configuredMenuTitleText = null,
+            Text configuredMenuSubtitleText = null,
+            Text configuredMenuFootnoteText = null,
+            WhiteboxKnowledgePresenter configuredKnowledgePresenter = null)
         {
             Unwire();
             sessionHost = configuredSessionHost;
             saveController = configuredSaveController;
             inputLock = configuredInputLock;
+            knowledgePresenter = configuredKnowledgePresenter;
             mainMenuRoot = configuredMainMenuRoot;
             settingsRoot = configuredSettingsRoot;
+            menuTitleText = configuredMenuTitleText;
+            menuSubtitleText = configuredMenuSubtitleText;
+            menuFootnoteText = configuredMenuFootnoteText;
             startButton = configuredStartButton;
             continueButton = configuredContinueButton;
             settingsButton = configuredSettingsButton;
@@ -69,14 +85,54 @@ namespace RailCraft.ThirdPerson.UI
 
         public void ShowMainMenu()
         {
-            sessionHost?.Session.PauseTiming();
+            var session = sessionHost?.Session;
+            if (!menuOwnsTimingPause && session != null && !session.IsTimingPaused)
+            {
+                session.PauseTiming();
+                menuOwnsTimingPause = session.IsTimingPaused;
+            }
             if (mainMenuRoot != null)
                 mainMenuRoot.SetActive(true);
             if (settingsRoot != null)
                 settingsRoot.SetActive(false);
-            inputLock?.SetInputLocked(true);
-            RefreshContinueButton();
+            if (!menuOwnsInputLock && inputLock != null && !inputLock.InputLocked)
+            {
+                inputLock.SetInputLocked(true);
+                menuOwnsInputLock = true;
+            }
+            RefreshMenuPresentation();
             saveController?.SaveCurrentSession();
+        }
+
+        public bool HandleEscapePressed()
+        {
+            if (IsSettingsVisible)
+            {
+                ApplySettingsAndReturn();
+                return true;
+            }
+
+            if (IsMenuVisible)
+            {
+                if (IsKnowledgeViewBlockingMenu())
+                    return false;
+                return ResumeCurrentGame();
+            }
+
+            if (!HasActiveGame || IsKnowledgeViewBlockingMenu() || inputLock != null && inputLock.InputLocked)
+                return false;
+
+            ShowMainMenu();
+            return true;
+        }
+
+        public bool ResumeCurrentGame()
+        {
+            if (!HasActiveGame)
+                return false;
+
+            CloseMenuForPlay();
+            return true;
         }
 
         public void StartNewGame()
@@ -90,14 +146,25 @@ namespace RailCraft.ThirdPerson.UI
 
         public bool ContinueGame()
         {
+            if (HasActiveGame)
+                return ResumeCurrentGame();
+
             if (saveController == null || !saveController.TryContinueGame())
             {
-                RefreshContinueButton();
+                RefreshMenuPresentation();
                 return false;
             }
 
             CloseMenuForPlay();
             return true;
+        }
+
+        private void Awake()
+        {
+            // Scene generation serializes the initial menu and its shared input lock as active.
+            // Reclaim that lock after loading so Start/Continue can release only the menu's lock.
+            if (IsMenuVisible && inputLock != null && inputLock.InputLocked)
+                menuOwnsInputLock = true;
         }
 
         private void Start()
@@ -112,6 +179,13 @@ namespace RailCraft.ThirdPerson.UI
             }
 
             ShowMainMenu();
+        }
+
+        private void LateUpdate()
+        {
+            var keyboard = Keyboard.current;
+            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
+                HandleEscapePressed();
         }
 
         private void OnEnable()
@@ -134,7 +208,7 @@ namespace RailCraft.ThirdPerson.UI
             settingsButton?.onClick.AddListener(ShowSettings);
             quitButton?.onClick.AddListener(QuitGame);
             settingsBackButton?.onClick.AddListener(ApplySettingsAndReturn);
-            menuButton?.onClick.AddListener(ShowMainMenu);
+            menuButton?.onClick.AddListener(HandleMenuButtonClicked);
             volumeSlider?.onValueChanged.AddListener(HandleVolumeChanged);
             qualityDropdown?.onValueChanged.AddListener(HandleQualityChanged);
             wired = true;
@@ -150,7 +224,7 @@ namespace RailCraft.ThirdPerson.UI
             settingsButton?.onClick.RemoveListener(ShowSettings);
             quitButton?.onClick.RemoveListener(QuitGame);
             settingsBackButton?.onClick.RemoveListener(ApplySettingsAndReturn);
-            menuButton?.onClick.RemoveListener(ShowMainMenu);
+            menuButton?.onClick.RemoveListener(HandleMenuButtonClicked);
             volumeSlider?.onValueChanged.RemoveListener(HandleVolumeChanged);
             qualityDropdown?.onValueChanged.RemoveListener(HandleQualityChanged);
             wired = false;
@@ -158,18 +232,31 @@ namespace RailCraft.ThirdPerson.UI
 
         private void CloseMenuForPlay()
         {
-            sessionHost?.Session.ResumeTiming();
+            if (menuOwnsTimingPause)
+                sessionHost?.Session.ResumeTiming();
+            menuOwnsTimingPause = false;
             if (settingsRoot != null)
                 settingsRoot.SetActive(false);
             if (mainMenuRoot != null)
                 mainMenuRoot.SetActive(false);
-            inputLock?.SetInputLocked(sessionHost != null && sessionHost.Session.IsVehicleComplete);
+            if (menuOwnsInputLock)
+            {
+                var anotherViewOwnsInput = sessionHost != null && sessionHost.Session.IsVehicleComplete ||
+                    IsKnowledgeViewBlockingMenu();
+                inputLock?.SetInputLocked(anotherViewOwnsInput);
+            }
+            menuOwnsInputLock = false;
             saveController?.SaveCurrentSession();
         }
 
         private void HandleContinueClicked()
         {
             ContinueGame();
+        }
+
+        private void HandleMenuButtonClicked()
+        {
+            HandleEscapePressed();
         }
 
         private void ShowSettings()
@@ -184,6 +271,7 @@ namespace RailCraft.ThirdPerson.UI
             SaveSettingsControls();
             if (settingsRoot != null)
                 settingsRoot.SetActive(false);
+            RefreshMenuPresentation();
         }
 
         private void HandleVolumeChanged(float value)
@@ -230,10 +318,40 @@ namespace RailCraft.ThirdPerson.UI
             qualityDropdown.interactable = QualitySettings.names.Length > 1;
         }
 
-        private void RefreshContinueButton()
+        private void RefreshMenuPresentation()
         {
+            var hasActiveGame = HasActiveGame;
+            if (menuTitleText != null)
+                menuTitleText.text = hasActiveGame ? "游戏已暂停" : "高铁装配工程训练";
+            if (menuSubtitleText != null)
+            {
+                menuSubtitleText.text = hasActiveGame
+                    ? "装配进度与计时已暂停 · 按 ESC 或“返回游戏”继续"
+                    : "第三人称流程白盒 · 答题 · 拾取 · 分级装配 · 调试检验";
+            }
+            if (menuFootnoteText != null)
+            {
+                menuFootnoteText.text = hasActiveGame
+                    ? "当前进度已自动保存；重新开始会清空本轮装配。"
+                    : "白盒阶段使用基础几何体；后续可直接替换为 Blender 资产。";
+            }
+            SetButtonLabel(startButton, hasActiveGame ? "重新开始" : "开始游戏");
+            SetButtonLabel(continueButton, hasActiveGame ? "返回游戏" : "继续游戏");
             if (continueButton != null)
-                continueButton.interactable = saveController != null && saveController.HasSave;
+                continueButton.interactable = HasActiveGame || saveController != null && saveController.HasSave;
+        }
+
+        private static void SetButtonLabel(Button button, string label)
+        {
+            var text = button == null ? null : button.GetComponentInChildren<Text>(true);
+            if (text != null)
+                text.text = label;
+        }
+
+        private bool IsKnowledgeViewBlockingMenu()
+        {
+            return knowledgePresenter != null &&
+                (knowledgePresenter.IsAnyViewOpen || knowledgePresenter.PendingPopupCount > 0);
         }
 
         private static void QuitGame()

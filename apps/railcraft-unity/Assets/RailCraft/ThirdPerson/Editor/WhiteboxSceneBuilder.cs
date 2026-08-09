@@ -58,6 +58,9 @@ namespace RailCraft.ThirdPerson.Editor
         {
             public GameObject Root;
             public GameObject SettingsRoot;
+            public Text Title;
+            public Text Subtitle;
+            public Text Footnote;
             public Button Start;
             public Button Continue;
             public Button Settings;
@@ -571,7 +574,7 @@ namespace RailCraft.ThirdPerson.Editor
                 new Color(0.018f, 0.05f, 0.07f, 0.9f));
             SetAnchoredRect((RectTransform)quickActions.transform, new Vector2(1f, 0f),
                 new Vector2(-28f, 28f), new Vector2(500f, 64f), new Vector2(1f, 0f));
-            var menuButton = CreateButton(quickActions.transform, "MenuButton", "主菜单", 18);
+            var menuButton = CreateButton(quickActions.transform, "MenuButton", "暂停菜单", 18);
             SetAnchoredRect((RectTransform)menuButton.transform, new Vector2(0f, 0.5f),
                 new Vector2(8f, 0f), new Vector2(144f, 48f), new Vector2(0f, 0.5f));
             var replayButton = CreateButton(quickActions.transform, "ReplayButton", "一键重玩", 18);
@@ -587,9 +590,9 @@ namespace RailCraft.ThirdPerson.Editor
                 canvasObject.transform,
                 "ControlsPanel",
                 new Color(0.025f, 0.055f, 0.075f, 0.78f));
-            SetAnchoredRect((RectTransform)controlsPanel.transform, new Vector2(0f, 0f), new Vector2(28f, 28f), new Vector2(570f, 74f), new Vector2(0f, 0f));
+            SetAnchoredRect((RectTransform)controlsPanel.transform, new Vector2(0f, 0f), new Vector2(28f, 28f), new Vector2(760f, 74f), new Vector2(0f, 0f));
             var controls = CreateText(controlsPanel.transform, "ControlsText",
-                "WASD 移动  ·  Shift 奔跑  ·  鼠标视角  ·  滚轮缩放  ·  E 交互",
+                "WASD 移动  ·  Shift 奔跑  ·  鼠标视角  ·  滚轮缩放  ·  E 交互  ·  ESC 暂停/返回",
                 19, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.84f, 0.88f, 0.91f));
             Stretch(controls.rectTransform, new Vector2(16f, 8f), new Vector2(-16f, -8f));
 
@@ -670,7 +673,11 @@ namespace RailCraft.ThirdPerson.Editor
                 mainMenuUi.Volume,
                 mainMenuUi.VolumeValue,
                 mainMenuUi.Quality,
-                menuButton);
+                menuButton,
+                mainMenuUi.Title,
+                mainMenuUi.Subtitle,
+                mainMenuUi.Footnote,
+                knowledgePresenter);
 
             var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             eventSystem.transform.SetParent(interfaceRoot.transform, false);
@@ -875,6 +882,9 @@ namespace RailCraft.ThirdPerson.Editor
             {
                 Root = root,
                 SettingsRoot = settingsRoot,
+                Title = title,
+                Subtitle = subtitle,
+                Footnote = footnote,
                 Start = start,
                 Continue = resume,
                 Settings = settings,

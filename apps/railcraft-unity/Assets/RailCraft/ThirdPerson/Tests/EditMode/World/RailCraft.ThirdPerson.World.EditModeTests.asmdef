@@ -6,6 +6,8 @@
     "RailCraft.ThirdPerson.Player",
     "RailCraft.ThirdPerson.World",
     "RailCraft.ThirdPerson.UI",
+    "Unity.InputSystem",
+    "Unity.InputSystem.TestFramework",
     "UnityEngine.UI"
   ],
   "includePlatforms": [

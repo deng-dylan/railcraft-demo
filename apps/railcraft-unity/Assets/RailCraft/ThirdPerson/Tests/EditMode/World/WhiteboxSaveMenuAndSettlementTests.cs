@@ -6,6 +6,7 @@ using RailCraft.ThirdPerson.Player;
 using RailCraft.ThirdPerson.UI;
 using RailCraft.ThirdPerson.World;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace RailCraft.ThirdPerson.Tests.EditMode.World
@@ -180,6 +181,165 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         }
 
         [Test]
+        public void LoadedInitialMenuReclaimsSerializedInputLockBeforeContinue()
+        {
+            var snapshotSession = new WhiteboxGameSession();
+            var question = QuestionRewarding(snapshotSession, PartId.Axle);
+            Assert.That(snapshotSession.SubmitAnswer(question.Id, question.CorrectOptionIndex).IsCorrect, Is.True);
+            PlayerPrefs.SetString(saveKey, JsonUtility.ToJson(snapshotSession.ExportSnapshot()));
+            PlayerPrefs.Save();
+
+            var host = CreateHost(root, out _);
+            var inputLock = root.AddComponent<ThirdPersonInputLock>();
+            inputLock.SetInputLocked(true);
+            var save = root.AddComponent<WhiteboxSaveController>();
+            save.Configure(host, saveKey, true);
+            var view = CreateMenu(host, save, inputLock);
+            var awake = typeof(WhiteboxMainMenuController).GetMethod(
+                "Awake",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(awake, Is.Not.Null);
+            awake.Invoke(view.Controller, null);
+
+            view.ContinueButton.onClick.Invoke();
+
+            Assert.That(host.Session.InventoryContains(PartId.Axle), Is.False);
+            Assert.That(host.Session.Progress.CorrectAnswerCount, Is.EqualTo(1));
+            Assert.That(view.Controller.IsMenuVisible, Is.False);
+            Assert.That(inputLock.InputLocked, Is.False);
+        }
+
+        [Test]
+        public void EscapeTogglesActiveGamePauseMenuAndReturnsFromSettingsFirst()
+        {
+            var host = CreateHost(root, out var worldSession);
+            var inputLock = root.AddComponent<ThirdPersonInputLock>();
+            var save = root.AddComponent<WhiteboxSaveController>();
+            save.Configure(host, saveKey, true);
+            var view = CreateMenu(host, save, inputLock);
+
+            view.StartButton.onClick.Invoke();
+            var question = QuestionRewarding(worldSession.DomainSession, PartId.Axle);
+            Assert.That(host.SubmitAnswer(question.Id, question.CorrectOptionIndex).IsCorrect, Is.True);
+
+            Assert.That(view.Controller.HandleEscapePressed(), Is.True);
+            Assert.That(view.Controller.IsMenuVisible, Is.True);
+            Assert.That(inputLock.InputLocked, Is.True);
+            Assert.That(host.Session.IsTimingPaused, Is.True);
+
+            view.SettingsButton.onClick.Invoke();
+            Assert.That(view.Controller.IsSettingsVisible, Is.True);
+            Assert.That(view.Controller.HandleEscapePressed(), Is.True);
+            Assert.That(view.Controller.IsSettingsVisible, Is.False);
+            Assert.That(view.Controller.IsMenuVisible, Is.True);
+            Assert.That(inputLock.InputLocked, Is.True);
+
+            Assert.That(view.Controller.HandleEscapePressed(), Is.True);
+            Assert.That(view.Controller.IsMenuVisible, Is.False);
+            Assert.That(inputLock.InputLocked, Is.False);
+            Assert.That(host.Session.IsTimingPaused, Is.False);
+        }
+
+        [Test]
+        public void EscapeCannotDismissInitialMenuOrOpenOverAnotherInputOwner()
+        {
+            var host = CreateHost(root, out _);
+            var inputLock = root.AddComponent<ThirdPersonInputLock>();
+            var save = root.AddComponent<WhiteboxSaveController>();
+            save.Configure(host, saveKey, true);
+            var view = CreateMenu(host, save, inputLock);
+
+            Assert.That(view.Controller.HandleEscapePressed(), Is.False);
+            Assert.That(view.Controller.IsMenuVisible, Is.True);
+
+            view.StartButton.onClick.Invoke();
+            inputLock.SetInputLocked(true);
+
+            Assert.That(view.Controller.HandleEscapePressed(), Is.False);
+            Assert.That(view.Controller.IsMenuVisible, Is.False);
+            Assert.That(inputLock.InputLocked, Is.True);
+        }
+
+        [Test]
+        public void InputSystemEscapeFrameOpensAndClosesPauseMenu()
+        {
+            var host = CreateHost(root, out _);
+            var inputLock = root.AddComponent<ThirdPersonInputLock>();
+            var save = root.AddComponent<WhiteboxSaveController>();
+            save.Configure(host, saveKey, true);
+            var view = CreateMenu(host, save, inputLock);
+            view.StartButton.onClick.Invoke();
+            var lateUpdate = typeof(WhiteboxMainMenuController).GetMethod(
+                "LateUpdate",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(lateUpdate, Is.Not.Null);
+
+            var inputFixture = new InputTestFixture();
+            inputFixture.Setup();
+            try
+            {
+                var keyboard = InputSystem.AddDevice<Keyboard>();
+                keyboard.MakeCurrent();
+                inputFixture.Press(keyboard.escapeKey);
+                Assert.That(Keyboard.current, Is.SameAs(keyboard));
+                Assert.That(keyboard.escapeKey.wasPressedThisFrame, Is.True);
+                lateUpdate.Invoke(view.Controller, null);
+                Assert.That(view.Controller.IsMenuVisible, Is.True);
+                Assert.That(inputLock.InputLocked, Is.True);
+
+                inputFixture.Release(keyboard.escapeKey);
+                inputFixture.Press(keyboard.escapeKey);
+                lateUpdate.Invoke(view.Controller, null);
+                Assert.That(view.Controller.IsMenuVisible, Is.False);
+                Assert.That(inputLock.InputLocked, Is.False);
+            }
+            finally
+            {
+                inputFixture.TearDown();
+            }
+        }
+
+        [Test]
+        public void PendingKnowledgePopupBlocksEscapeMenuUntilKnowledgeIsClosed()
+        {
+            var host = CreateHost(root, out var worldSession);
+            var inputLock = root.AddComponent<ThirdPersonInputLock>();
+            var save = root.AddComponent<WhiteboxSaveController>();
+            save.Configure(host, saveKey, true);
+            var popupRoot = Child("KnowledgePopup");
+            var knowledge = root.AddComponent<WhiteboxKnowledgePresenter>();
+            knowledge.Configure(
+                host,
+                inputLock,
+                null,
+                popupRoot,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+            var view = CreateMenu(host, save, inputLock, knowledge);
+            view.StartButton.onClick.Invoke();
+
+            var question = QuestionRewarding(worldSession.DomainSession, PartId.Axle);
+            Assert.That(host.SubmitAnswer(question.Id, question.CorrectOptionIndex).IsCorrect, Is.True);
+            Assert.That(knowledge.PendingPopupCount, Is.GreaterThan(0));
+            Assert.That(view.Controller.HandleEscapePressed(), Is.False);
+            Assert.That(view.Controller.IsMenuVisible, Is.False);
+
+            knowledge.FlushPendingKnowledgePopup();
+            Assert.That(knowledge.IsAnyViewOpen, Is.True);
+            Assert.That(inputLock.InputLocked, Is.True);
+            Assert.That(view.Controller.HandleEscapePressed(), Is.False);
+
+            knowledge.CloseKnowledgePopup();
+            Assert.That(inputLock.InputLocked, Is.False);
+            Assert.That(view.Controller.HandleEscapePressed(), Is.True);
+            Assert.That(view.Controller.IsMenuVisible, Is.True);
+        }
+
+        [Test]
         public void MainMenuAndContinueExcludePausedTimeFromSettlementClock()
         {
             var start = new DateTimeOffset(2026, 8, 6, 7, 0, 0, TimeSpan.Zero);
@@ -345,7 +505,8 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         private MenuView CreateMenu(
             WhiteboxGameSessionHost host,
             WhiteboxSaveController save,
-            ThirdPersonInputLock inputLock)
+            ThirdPersonInputLock inputLock,
+            WhiteboxKnowledgePresenter knowledgePresenter = null)
         {
             var menuRoot = Child("MainMenu");
             var settingsRoot = Child("Settings");
@@ -373,8 +534,9 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
                 slider,
                 volumeText,
                 quality,
-                menu);
-            return new MenuView(controller, start, continueButton);
+                menu,
+                configuredKnowledgePresenter: knowledgePresenter);
+            return new MenuView(controller, start, continueButton, settings);
         }
 
         private GameObject Child(string name, GameObject parent = null)
@@ -389,16 +551,19 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
             public MenuView(
                 WhiteboxMainMenuController controller,
                 Button startButton,
-                Button continueButton)
+                Button continueButton,
+                Button settingsButton)
             {
                 Controller = controller;
                 StartButton = startButton;
                 ContinueButton = continueButton;
+                SettingsButton = settingsButton;
             }
 
             public WhiteboxMainMenuController Controller { get; }
             public Button StartButton { get; }
             public Button ContinueButton { get; }
+            public Button SettingsButton { get; }
         }
 
         private sealed class ManualClock
