@@ -90,6 +90,7 @@ namespace RailCraft.ThirdPerson.Editor
             public Text Detail;
             public Button Replay;
             public Button OpenCompendium;
+            public Button OpenShowcase;
         }
 
         private readonly struct PartStationSpec
@@ -658,6 +659,13 @@ namespace RailCraft.ThirdPerson.Editor
                 knowledgeUi.CompendiumClose,
                 completionUi.OpenCompendium);
 
+            var showcaseEntry = canvasObject.AddComponent<FinalShowcaseEntryController>();
+            showcaseEntry.Configure(
+                sessionHost,
+                saveController,
+                completionUi.Root,
+                completionUi.OpenShowcase);
+
             var mainMenu = canvasObject.AddComponent<WhiteboxMainMenuController>();
             mainMenu.Configure(
                 sessionHost,
@@ -681,7 +689,8 @@ namespace RailCraft.ThirdPerson.Editor
 
             var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             eventSystem.transform.SetParent(interfaceRoot.transform, false);
-            eventSystem.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
+            // OnEnable assigns the default action asset. A second assignment
+            // throws in Input System 1.17 when rebuilding scenes in the Editor.
 
             return new UiRig
             {
@@ -727,7 +736,7 @@ namespace RailCraft.ThirdPerson.Editor
             WhiteboxGameSessionHost sessionHost)
         {
             var panel = CreatePanel(canvas, "CompletionPanel", new Color(0.018f, 0.05f, 0.055f, 0.98f));
-            SetAnchoredRect((RectTransform)panel.transform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(840f, 540f));
+            SetAnchoredRect((RectTransform)panel.transform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(840f, 620f));
             var completionText = CreateText(panel.transform, "CompletionText", "调试通过，车辆投入使用！", 38,
                 FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.2f, 1f, 0.48f));
             SetTopRect(completionText.rectTransform, new Vector2(48f, -42f), new Vector2(744f, 84f));
@@ -740,10 +749,12 @@ namespace RailCraft.ThirdPerson.Editor
                 "工程知识图鉴已解锁，可随时回顾本次训练知识。",
                 20, FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.42f, 0.9f, 1f));
             SetTopRect(unlockHint.rectTransform, new Vector2(70f, -302f), new Vector2(700f, 44f));
+            var showcase = CreateButton(panel.transform, "FinalShowcaseButton", "观看复兴号出厂展示  [V]", 22);
+            SetTopRect((RectTransform)showcase.transform, new Vector2(120f, -378f), new Vector2(600f, 62f));
             var reset = CreateButton(panel.transform, "ResetWhiteboxButton", "一键重玩", 22);
-            SetTopRect((RectTransform)reset.transform, new Vector2(120f, -408f), new Vector2(270f, 66f));
+            SetTopRect((RectTransform)reset.transform, new Vector2(120f, -466f), new Vector2(270f, 62f));
             var compendium = CreateButton(panel.transform, "CompletionCompendiumButton", "打开工程知识图鉴", 22);
-            SetTopRect((RectTransform)compendium.transform, new Vector2(450f, -408f), new Vector2(270f, 66f));
+            SetTopRect((RectTransform)compendium.transform, new Vector2(450f, -466f), new Vector2(270f, 62f));
             var resetController = panel.AddComponent<WhiteboxResetButton>();
             resetController.Configure(sessionHost, reset);
             panel.SetActive(false);
@@ -753,7 +764,8 @@ namespace RailCraft.ThirdPerson.Editor
                 Title = completionText,
                 Detail = detail,
                 Replay = reset,
-                OpenCompendium = compendium
+                OpenCompendium = compendium,
+                OpenShowcase = showcase
             };
         }
 
