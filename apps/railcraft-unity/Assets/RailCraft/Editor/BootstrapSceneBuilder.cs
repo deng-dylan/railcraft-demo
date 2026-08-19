@@ -153,9 +153,10 @@ namespace RailCraft.Editor
 
         private static void BuildEventSystem()
         {
-            var eventSystem = new GameObject("EventSystem", typeof(EventSystem),
+            new GameObject("EventSystem", typeof(EventSystem),
                 typeof(InputSystemUIInputModule));
-            eventSystem.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
+            // OnEnable assigns the default action asset. A second assignment
+            // throws in Input System 1.17 when rebuilding scenes in the Editor.
         }
 
         private static GameObject BuildProcessPanel(Transform parent, out Text message,

@@ -6,6 +6,7 @@
     "RailCraft.ThirdPerson.Player",
     "RailCraft.ThirdPerson.World",
     "RailCraft.ThirdPerson.UI",
+    "RailCraft.ThirdPerson.FinalShowcase",
     "Unity.InputSystem",
     "UnityEngine.UI",
     "Unity.RenderPipelines.Core.Runtime",

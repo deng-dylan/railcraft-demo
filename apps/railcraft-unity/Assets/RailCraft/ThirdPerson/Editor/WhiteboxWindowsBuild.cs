@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.Build;
@@ -11,6 +12,8 @@ namespace RailCraft.ThirdPerson.Editor
     {
         public const string ScenePath =
             "Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity";
+        public const string FinalShowcaseScenePath =
+            "Assets/RailCraft/ThirdPerson/Scenes/FinalShowcase.unity";
         public const string RelativeOutputPath =
             "Builds/Whitebox/RailCraftWhitebox.exe";
         public const string SuccessLogMarker =
@@ -40,6 +43,26 @@ namespace RailCraft.ThirdPerson.Editor
                     "Run RailCraft/Third Person Whitebox/Rebuild Scene first.");
             }
 
+            var showcaseModel = AssetDatabase.LoadAssetAtPath<GameObject>(
+                FinalShowcaseSceneBuilder.ModelAssetPath);
+            var finalShowcaseReady = false;
+            if (showcaseModel != null)
+            {
+                finalShowcaseReady = FinalShowcaseSceneBuilder.Build();
+                if (!finalShowcaseReady)
+                {
+                    throw new BuildFailedException(
+                        "FinalShowcase model was found but could not produce an imported-train scene.");
+                }
+            }
+            else if (AssetDatabase.LoadAssetAtPath<SceneAsset>(FinalShowcaseScenePath) != null)
+            {
+                Debug.LogWarning(
+                    "Ignoring an existing FinalShowcase scene because the current FBX could not be loaded.");
+            }
+
+            var buildScenes = ResolveBuildScenePaths(finalShowcaseReady);
+
             var projectRoot = Directory.GetParent(Application.dataPath)?.FullName;
             if (string.IsNullOrWhiteSpace(projectRoot))
                 throw new BuildFailedException("Could not resolve the Unity project root.");
@@ -65,7 +88,7 @@ namespace RailCraft.ThirdPerson.Editor
 
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {
-                scenes = new[] { ScenePath },
+                scenes = buildScenes,
                 locationPathName = stagingOutputPath,
                 target = BuildTarget.StandaloneWindows64,
                 options = BuildOptions.StrictMode
@@ -91,6 +114,14 @@ namespace RailCraft.ThirdPerson.Editor
                 $"bytes={report.summary.totalSize};" +
                 $"warnings={report.summary.totalWarnings};" +
                 $"errors={report.summary.totalErrors}");
+        }
+
+        public static string[] ResolveBuildScenePaths(bool finalShowcaseExists)
+        {
+            var scenes = new List<string> { ScenePath };
+            if (finalShowcaseExists)
+                scenes.Add(FinalShowcaseScenePath);
+            return scenes.ToArray();
         }
 
         private static void PromoteSuccessfulBuild(

@@ -16,11 +16,13 @@
 - 场景：`Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity`
 - 默认 Build Settings：只启用上述白盒场景；旧 v0.1 构建脚本显式使用其历史场景。
 - 重建场景：`RailCraft > Third Person Whitebox > Rebuild Scene`
-- 构建 Windows：`RailCraft > Third Person Whitebox > Build Windows x86_64`（自动先重建生成场景）
+- 构建 Windows：`RailCraft > Third Person Whitebox > Build Windows x86_64`（自动重建白盒；检测到复兴号 FBX 时同步重建并打包 `FinalShowcase`）
 - 本地产物：`Builds/Whitebox/RailCraftWhitebox.exe`
 - 流程、题库、Blender 替换与验收条件：
   [`ThirdPersonWhitebox.md`](ThirdPersonWhitebox.md)
 - 模型身份、单位、坐标、LOD 和生产资产门禁：[`ModelHandoff.md`](ModelHandoff.md)
+- 可选的完整编组出厂展示场景与 FBX 固定接入路径：
+  [`FinalShowcase.md`](FinalShowcase.md)
 
 当前白盒证据目录包含构建日志、EditMode XML、成品冒烟日志和最终完成截图，具体
 覆盖批次以目录内验收报告为准。每批主线改动应更新与该批风险相匹配的证据；完整

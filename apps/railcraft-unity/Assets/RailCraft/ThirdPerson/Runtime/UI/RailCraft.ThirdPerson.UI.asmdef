@@ -5,6 +5,7 @@
     "RailCraft.ThirdPerson.Domain",
     "RailCraft.ThirdPerson.Player",
     "RailCraft.ThirdPerson.World",
+    "Unity.InputSystem",
     "UnityEngine.UI"
   ],
   "includePlatforms": [],

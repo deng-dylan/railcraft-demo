@@ -34,6 +34,7 @@ namespace RailCraft.ThirdPerson.UI
             string failure = null;
             try
             {
+                ValidateEscapeMenu();
                 DriveToCompletion();
                 ValidateCompletionState();
             }
@@ -47,20 +48,32 @@ namespace RailCraft.ThirdPerson.UI
                 var screenshotPath = FindScreenshotPath(arguments);
                 if (!string.IsNullOrWhiteSpace(screenshotPath))
                 {
-                    var directory = Path.GetDirectoryName(screenshotPath);
-                    if (!string.IsNullOrWhiteSpace(directory))
-                        Directory.CreateDirectory(directory);
-                    CaptureRenderedPreview(screenshotPath);
-                    yield return null;
+                    try
+                    {
+                        var directory = Path.GetDirectoryName(screenshotPath);
+                        if (!string.IsNullOrWhiteSpace(directory))
+                            Directory.CreateDirectory(directory);
+                        CaptureRenderedPreview(screenshotPath);
+                    }
+                    catch (Exception exception)
+                    {
+                        failure = exception.ToString();
+                    }
+
+                    if (failure == null)
+                        yield return null;
                 }
 
-                try
+                if (failure == null)
                 {
-                    InvokeResetButton();
-                }
-                catch (Exception exception)
-                {
-                    failure = exception.ToString();
+                    try
+                    {
+                        InvokeResetButton();
+                    }
+                    catch (Exception exception)
+                    {
+                        failure = exception.ToString();
+                    }
                 }
             }
 
@@ -88,6 +101,22 @@ namespace RailCraft.ThirdPerson.UI
                 Debug.LogError($"{FailureLogMarker}\n{failure}");
                 Application.Quit(1);
             }
+        }
+
+        private static void ValidateEscapeMenu()
+        {
+            var menu = FindSingle<WhiteboxMainMenuController>();
+            var inputLock = FindSingle<ThirdPersonInputLock>();
+            Ensure(menu.HasActiveGame, "Smoke session was not active before ESC menu validation.");
+            Ensure(!menu.IsMenuVisible, "Main menu stayed visible after smoke session startup.");
+
+            Ensure(menu.HandleEscapePressed(), "ESC menu did not open during active gameplay.");
+            Ensure(menu.IsMenuVisible, "ESC menu root did not become visible.");
+            Ensure(inputLock.InputLocked, "ESC menu did not lock player input.");
+
+            Ensure(menu.HandleEscapePressed(), "ESC menu did not resume the active game.");
+            Ensure(!menu.IsMenuVisible, "ESC menu stayed visible after resume.");
+            Ensure(!inputLock.InputLocked, "ESC menu kept player input locked after resume.");
         }
 
         private void DriveToCompletion()

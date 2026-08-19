@@ -1,0 +1,22 @@
+{
+  "name": "RailCraft.ThirdPerson.FinalShowcase.EditModeTests",
+  "rootNamespace": "RailCraft.ThirdPerson.Tests.EditMode.FinalShowcase",
+  "references": [
+    "RailCraft.ThirdPerson.FinalShowcase"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
+

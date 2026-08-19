@@ -1,0 +1,514 @@
+{
+  "schemaVersion": 1,
+  "generatedUtc": "2026-08-17T06:46:37.6295298Z",
+  "source": {
+    "path": "Assets/RailCraft/ThirdPerson/Art/Models/FinalShowcase/FuxingTrain.fbx",
+    "bytes": 65693632,
+    "sha256": "c5b0f5042eb33ed8cbd895ff7b126dadccccef9e999a7b65e93df79bd2cdd35e",
+    "subtreeRootElementId": 301,
+    "subtreeMeshCount": 99
+  },
+  "coordinateSystem": {
+    "normalizedUnit": "meter",
+    "longitudinalAxis": "+X",
+    "upAxis": "+Y",
+    "lateralAxis": "+Z"
+  },
+  "detection": {
+    "method": "full-cross-section interface panels, then mesh-center assignment",
+    "expectedCarCount": 8,
+    "interfacePanelCriteria": {
+      "longitudinalSizeLessThanMeters": 0.01,
+      "heightCoverageGreaterThan": 0.85,
+      "widthCoverageGreaterThan": 0.85
+    },
+    "interfacePanelNodeIds": [
+      308,
+      326,
+      336,
+      346,
+      356,
+      366,
+      380
+    ],
+    "interfaceCentersMeters": [
+      -0.760061795841,
+      -0.465022795841,
+      -0.169913795841,
+      0.125195704159,
+      0.420305204159,
+      0.715414704159,
+      1.01052370416
+    ],
+    "meanInterfaceSpacingMeters": 0.29509758333349995,
+    "maxSpacingDeviationMeters": 5.858333349995082E-05,
+    "assignmentRule": "A mesh belongs to the interval containing its transformed bounding-box center; each interface panel belongs to the car on its -X side."
+  },
+  "trainBoundsMeters": {
+    "min": [
+      -1.02546479584,
+      9.57964809067E-05,
+      0.004929
+    ],
+    "max": [
+      1.27592720416,
+      0.0403007964809,
+      0.040463
+    ],
+    "size": [
+      2.301392,
+      0.0402049999999933,
+      0.035533999999999996
+    ]
+  },
+  "adjacentBoundsOverlap": [
+    {
+      "leftCarId": "car_01",
+      "rightCarId": "car_02",
+      "overlapMeters": 0.00044599999999994644
+    },
+    {
+      "leftCarId": "car_02",
+      "rightCarId": "car_03",
+      "overlapMeters": 0.00037599999999998746
+    },
+    {
+      "leftCarId": "car_03",
+      "rightCarId": "car_04",
+      "overlapMeters": 0.00037499999999998646
+    },
+    {
+      "leftCarId": "car_04",
+      "rightCarId": "car_05",
+      "overlapMeters": 0.00037699999999998846
+    },
+    {
+      "leftCarId": "car_05",
+      "rightCarId": "car_06",
+      "overlapMeters": 0.00037599999999998746
+    },
+    {
+      "leftCarId": "car_06",
+      "rightCarId": "car_07",
+      "overlapMeters": 0.0003769999999999607
+    },
+    {
+      "leftCarId": "car_07",
+      "rightCarId": "car_08",
+      "overlapMeters": 0.0021850000000001035
+    }
+  ],
+  "cars": [
+    {
+      "carId": "car_01",
+      "role": "head_a",
+      "meshCount": 20,
+      "vertices": 116694,
+      "triangles": 217779,
+      "boundsMeters": {
+        "min": [
+          -1.02546479584,
+          9.57964809067E-05,
+          0.005163
+        ],
+        "max": [
+          -0.757824795841,
+          0.0403007964809,
+          0.040463
+        ],
+        "center": [
+          -0.8916447958405,
+          0.02019829648090335,
+          0.022813
+        ],
+        "size": [
+          0.267639999999,
+          0.0402049999999933,
+          0.0353
+        ]
+      },
+      "interfacePanelNodeId": 308,
+      "nominalSegmentMeters": {
+        "minX": -1.02546479584,
+        "maxX": -0.760061795841,
+        "length": 0.2654029999990001,
+        "couplerMinusX": null,
+        "couplerPlusX": -0.760061795841
+      },
+      "memberNodeIds": [
+        304,
+        305,
+        306,
+        307,
+        308,
+        309,
+        310,
+        311,
+        312,
+        313,
+        314,
+        315,
+        316,
+        317,
+        318,
+        319,
+        320,
+        321,
+        322,
+        323
+      ]
+    },
+    {
+      "carId": "car_02",
+      "role": "intermediate",
+      "meshCount": 10,
+      "vertices": 131317,
+      "triangles": 248088,
+      "boundsMeters": {
+        "min": [
+          -0.758270795841,
+          9.57964809067E-05,
+          0.004929
+        ],
+        "max": [
+          -0.462785795841,
+          0.0400207964809,
+          0.040229
+        ],
+        "center": [
+          -0.610528295841,
+          0.020058296480903348,
+          0.022579000000000002
+        ],
+        "size": [
+          0.295485,
+          0.0399249999999933,
+          0.0353
+        ]
+      },
+      "interfacePanelNodeId": 326,
+      "nominalSegmentMeters": {
+        "minX": -0.760061795841,
+        "maxX": -0.465022795841,
+        "length": 0.295039,
+        "couplerMinusX": -0.760061795841,
+        "couplerPlusX": -0.465022795841
+      },
+      "memberNodeIds": [
+        324,
+        325,
+        326,
+        327,
+        328,
+        329,
+        330,
+        331,
+        332,
+        333
+      ]
+    },
+    {
+      "carId": "car_03",
+      "role": "intermediate",
+      "meshCount": 10,
+      "vertices": 131328,
+      "triangles": 248090,
+      "boundsMeters": {
+        "min": [
+          -0.463161795841,
+          9.57964809067E-05,
+          0.004929
+        ],
+        "max": [
+          -0.167676795841,
+          0.0400207964809,
+          0.040229
+        ],
+        "center": [
+          -0.315419295841,
+          0.020058296480903348,
+          0.022579000000000002
+        ],
+        "size": [
+          0.295485,
+          0.0399249999999933,
+          0.0353
+        ]
+      },
+      "interfacePanelNodeId": 336,
+      "nominalSegmentMeters": {
+        "minX": -0.465022795841,
+        "maxX": -0.169913795841,
+        "length": 0.29510899999999995,
+        "couplerMinusX": -0.465022795841,
+        "couplerPlusX": -0.169913795841
+      },
+      "memberNodeIds": [
+        334,
+        335,
+        336,
+        337,
+        338,
+        339,
+        340,
+        341,
+        342,
+        343
+      ]
+    },
+    {
+      "carId": "car_04",
+      "role": "intermediate",
+      "meshCount": 10,
+      "vertices": 131327,
+      "triangles": 248089,
+      "boundsMeters": {
+        "min": [
+          -0.168051795841,
+          9.57964809067E-05,
+          0.004929
+        ],
+        "max": [
+          0.127433204159,
+          0.0400207964809,
+          0.040229
+        ],
+        "center": [
+          -0.020309295840999997,
+          0.020058296480903348,
+          0.022579000000000002
+        ],
+        "size": [
+          0.295485,
+          0.0399249999999933,
+          0.0353
+        ]
+      },
+      "interfacePanelNodeId": 346,
+      "nominalSegmentMeters": {
+        "minX": -0.169913795841,
+        "maxX": 0.125195704159,
+        "length": 0.2951095,
+        "couplerMinusX": -0.169913795841,
+        "couplerPlusX": 0.125195704159
+      },
+      "memberNodeIds": [
+        344,
+        345,
+        346,
+        347,
+        348,
+        349,
+        350,
+        351,
+        352,
+        353
+      ]
+    },
+    {
+      "carId": "car_05",
+      "role": "intermediate",
+      "meshCount": 10,
+      "vertices": 131325,
+      "triangles": 248096,
+      "boundsMeters": {
+        "min": [
+          0.127056204159,
+          9.57964809067E-05,
+          0.004929
+        ],
+        "max": [
+          0.422542204159,
+          0.0400207964809,
+          0.040229
+        ],
+        "center": [
+          0.274799204159,
+          0.020058296480903348,
+          0.022579000000000002
+        ],
+        "size": [
+          0.295486,
+          0.0399249999999933,
+          0.0353
+        ]
+      },
+      "interfacePanelNodeId": 356,
+      "nominalSegmentMeters": {
+        "minX": 0.125195704159,
+        "maxX": 0.420305204159,
+        "length": 0.2951095,
+        "couplerMinusX": 0.125195704159,
+        "couplerPlusX": 0.420305204159
+      },
+      "memberNodeIds": [
+        354,
+        355,
+        356,
+        357,
+        358,
+        359,
+        360,
+        361,
+        362,
+        363
+      ]
+    },
+    {
+      "carId": "car_06",
+      "role": "intermediate",
+      "meshCount": 10,
+      "vertices": 131314,
+      "triangles": 248090,
+      "boundsMeters": {
+        "min": [
+          0.422166204159,
+          9.57964809067E-05,
+          0.004929
+        ],
+        "max": [
+          0.717652204159,
+          0.0400207964809,
+          0.040229
+        ],
+        "center": [
+          0.569909204159,
+          0.020058296480903348,
+          0.022579000000000002
+        ],
+        "size": [
+          0.29548599999999997,
+          0.0399249999999933,
+          0.0353
+        ]
+      },
+      "interfacePanelNodeId": 366,
+      "nominalSegmentMeters": {
+        "minX": 0.420305204159,
+        "maxX": 0.715414704159,
+        "length": 0.29510949999999997,
+        "couplerMinusX": 0.420305204159,
+        "couplerPlusX": 0.715414704159
+      },
+      "memberNodeIds": [
+        364,
+        365,
+        366,
+        367,
+        368,
+        369,
+        370,
+        371,
+        372,
+        373
+      ]
+    },
+    {
+      "carId": "car_07",
+      "role": "intermediate",
+      "meshCount": 10,
+      "vertices": 131321,
+      "triangles": 248091,
+      "boundsMeters": {
+        "min": [
+          0.717275204159,
+          9.57964809067E-05,
+          0.004929
+        ],
+        "max": [
+          1.01276120416,
+          0.0400207964809,
+          0.040229
+        ],
+        "center": [
+          0.8650182041595,
+          0.020058296480903348,
+          0.022579000000000002
+        ],
+        "size": [
+          0.295486000001,
+          0.0399249999999933,
+          0.0353
+        ]
+      },
+      "interfacePanelNodeId": 380,
+      "nominalSegmentMeters": {
+        "minX": 0.715414704159,
+        "maxX": 1.01052370416,
+        "length": 0.29510900000099993,
+        "couplerMinusX": 0.715414704159,
+        "couplerPlusX": 1.01052370416
+      },
+      "memberNodeIds": [
+        378,
+        379,
+        380,
+        393,
+        394,
+        395,
+        396,
+        397,
+        398,
+        399
+      ]
+    },
+    {
+      "carId": "car_08",
+      "role": "head_b",
+      "meshCount": 19,
+      "vertices": 115906,
+      "triangles": 216287,
+      "boundsMeters": {
+        "min": [
+          1.01057620416,
+          9.57964809067E-05,
+          0.005431
+        ],
+        "max": [
+          1.27592720416,
+          0.0403007964809,
+          0.039884
+        ],
+        "center": [
+          1.1432517041599999,
+          0.02019829648090335,
+          0.0226575
+        ],
+        "size": [
+          0.2653510000000001,
+          0.0402049999999933,
+          0.034453000000000004
+        ]
+      },
+      "interfacePanelNodeId": null,
+      "nominalSegmentMeters": {
+        "minX": 1.01052370416,
+        "maxX": 1.27592720416,
+        "length": 0.2654035000000001,
+        "couplerMinusX": 1.01052370416,
+        "couplerPlusX": null
+      },
+      "memberNodeIds": [
+        374,
+        375,
+        376,
+        377,
+        381,
+        382,
+        383,
+        384,
+        385,
+        386,
+        387,
+        388,
+        389,
+        390,
+        391,
+        392,
+        400,
+        401,
+        402
+      ]
+    }
+  ]
+}

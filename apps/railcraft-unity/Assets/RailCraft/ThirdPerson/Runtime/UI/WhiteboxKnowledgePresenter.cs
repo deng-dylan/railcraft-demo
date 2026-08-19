@@ -40,6 +40,9 @@ namespace RailCraft.ThirdPerson.UI
         public IReadOnlyList<KnowledgeEntry> UnlockedEntries =>
             knowledgeProgress?.UnlockedEntries ?? Array.Empty<KnowledgeEntry>();
         public int PendingPopupCount => pendingAnswerEntries.Count;
+        public bool IsAnyViewOpen =>
+            popupRoot != null && popupRoot.activeSelf ||
+            catalogRoot != null && catalogRoot.activeSelf;
 
         public void Configure(
             WhiteboxGameSessionHost host,
