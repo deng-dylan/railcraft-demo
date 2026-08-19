@@ -295,9 +295,47 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
             Assert.That(host.Session.CommissioningPhase,
                 Is.EqualTo(CommissioningPhase.ReadyForInitialTest));
             Assert.That(landingVisual.activeSelf, Is.True);
-            Assert.That(moduleVisuals.All(visual => visual.activeSelf), Is.True);
-            Assert.That(partVisuals.All(visual => visual.activeSelf), Is.True);
+            Assert.That(moduleVisuals.All(visual => !visual.activeSelf), Is.True);
+            Assert.That(partVisuals.All(visual => !visual.activeSelf), Is.True);
             Assert.That(completionCount, Is.Zero);
+        }
+
+        [Test]
+        public void LandingCompletionHidesInputVisualsAndLeavesOnlyTheDroppedVehicle()
+        {
+            CompleteBogieStructure();
+            CompleteLeafModule(ModuleId.SecondarySuspension);
+            UnlockAndCollect(PartId.Carbody);
+            UnlockAndCollect(PartId.CentralTractionDevice);
+
+            var modules = new[] { ModuleId.BogieStructure, ModuleId.SecondarySuspension };
+            var parts = new[] { PartId.Carbody, PartId.CentralTractionDevice };
+            var moduleSlots = CreateTransforms("LandingHideModuleSlot", modules.Length);
+            var partSlots = CreateTransforms("LandingHidePartSlot", parts.Length);
+            var moduleVisuals = CreateVisuals("LandingHideModuleVisual", modules.Length);
+            var partVisuals = CreateVisuals("LandingHidePartVisual", parts.Length);
+            var landingVisual = Child("LandingHideComplete");
+            var station = root.AddComponent<FinalAssemblyStation>();
+            station.Configure(
+                host,
+                ModuleId.Landing,
+                "落车工位",
+                modules,
+                parts,
+                moduleSlots,
+                partSlots,
+                moduleVisuals,
+                partVisuals,
+                landingVisual);
+
+            var context = new InteractionContext(root);
+            for (var index = 0; index < station.RequiredInputCount; index++)
+                station.Interact(context);
+
+            Assert.That(station.IsLandingComplete, Is.True);
+            Assert.That(landingVisual.activeSelf, Is.True);
+            Assert.That(moduleVisuals.Any(visual => visual.activeSelf), Is.False);
+            Assert.That(partVisuals.Any(visual => visual.activeSelf), Is.False);
         }
 
         [Test]

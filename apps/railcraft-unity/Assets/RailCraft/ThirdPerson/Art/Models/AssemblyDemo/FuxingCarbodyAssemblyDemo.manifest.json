@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "source_sha256": "c5b0f5042eb33ed8cbd895ff7b126dadccccef9e999a7b65e93df79bd2cdd35e",
+  "source_car_id": "car_02",
+  "blender_version": "5.2.0 LTS",
+  "mesh_object_count": 10,
+  "triangles": 247854,
+  "bounds_m": {
+    "minimum": [
+      -1.73482,
+      0.0,
+      -12.839424
+    ],
+    "maximum": [
+      1.73482,
+      3.067708,
+      12.839424
+    ]
+  },
+  "output": "FuxingCarbodyAssemblyDemo.fbx",
+  "output_sha256": "a3b671fdc0dfeb7f36729535a7888cafe4788ab6bf9d84c978297affea5d016d"
+}

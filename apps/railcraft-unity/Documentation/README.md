@@ -23,6 +23,10 @@
 - 模型身份、单位、坐标、LOD 和生产资产门禁：[`ModelHandoff.md`](ModelHandoff.md)
 - 可选的完整编组出厂展示场景与 FBX 固定接入路径：
   [`FinalShowcase.md`](FinalShowcase.md)
+- 组装阶段转向架结构示范件、来源转换、语义映射与防穿模约束：
+  [`AssemblyDemonstrationBogie.md`](AssemblyDemonstrationBogie.md)
+- 组装车间的 Kenney Factory Kit 资源、授权和布置规则：
+  [`FactoryKitEnvironment.md`](FactoryKitEnvironment.md)
 
 当前白盒证据目录包含构建日志、EditMode XML、成品冒烟日志和最终完成截图，具体
 覆盖批次以目录内验收报告为准。每批主线改动应更新与该批风险相匹配的证据；完整
