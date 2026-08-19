@@ -10,6 +10,9 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
 {
     public sealed class ReusableVisualGuidanceTests
     {
+        // Keep scanner fixtures isolated from colliders in whichever scene a
+        // preceding EditMode test happened to leave active.
+        private static readonly Vector3 TestOrigin = new Vector3(10000f, 10000f, 10000f);
         private readonly List<Material> materials = new List<Material>();
         private GameObject root;
 
@@ -17,6 +20,7 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         public void SetUp()
         {
             root = new GameObject("ReusableVisualGuidanceTests");
+            root.transform.position = TestOrigin;
         }
 
         [TearDown]
@@ -40,7 +44,7 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
             var target = GameObject.CreatePrimitive(PrimitiveType.Cube);
             target.name = "InteractableTarget";
             target.transform.SetParent(root.transform, false);
-            target.transform.position = Vector3.forward;
+            target.transform.localPosition = Vector3.forward;
             var interactable = target.AddComponent<GuidanceTestInteractable>();
             var renderer = target.GetComponent<Renderer>();
             var baseColor = new Color(0.16f, 0.28f, 0.42f, 1f);
