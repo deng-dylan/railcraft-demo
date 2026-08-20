@@ -83,6 +83,14 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         }
 
         [Test]
+        public void SemanticPartExtractionKeepsTheInspectedDefaultModel()
+        {
+            Assert.That(
+                ModelCandidateRegistry.GetBogieModelAssetPath(),
+                Is.EqualTo(BogieAssemblyDemoVisualFactory.ModelAssetPath));
+        }
+
+        [Test]
         public void ImportedCarbodyAssetHasCoachScaleAndNoRuntimeComponents()
         {
             var model = AssetDatabase.LoadAssetAtPath<GameObject>(

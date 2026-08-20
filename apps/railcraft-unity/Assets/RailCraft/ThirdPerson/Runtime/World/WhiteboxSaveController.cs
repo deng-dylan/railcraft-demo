@@ -54,8 +54,16 @@ namespace RailCraft.ThirdPerson.World
 
         public void StartNewGame()
         {
+            StartNewGame(sessionHost == null
+                ? AssemblyVariantId.FuxingDemo
+                : sessionHost.SelectedAssemblyVariant);
+        }
+
+        public void StartNewGame(AssemblyVariantId variant)
+        {
             activeSession = true;
             DeleteStoredSave();
+            sessionHost?.SelectAssemblyVariant(variant);
             sessionHost?.ResetSession();
             SaveCurrentSession();
         }
@@ -104,7 +112,7 @@ namespace RailCraft.ThirdPerson.World
             if (sessionHost == null || !activeSession)
                 return;
 
-            var snapshot = sessionHost.Session.ExportSnapshot();
+            var snapshot = sessionHost.ExportSnapshot();
             var json = JsonUtility.ToJson(snapshot);
             WriteStoredSave(EffectiveSaveKey, json);
             SaveAvailabilityChanged?.Invoke(true);

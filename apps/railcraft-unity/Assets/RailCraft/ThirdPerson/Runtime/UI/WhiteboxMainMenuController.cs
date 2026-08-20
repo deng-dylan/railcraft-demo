@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using RailCraft.ThirdPerson.Domain;
 using RailCraft.ThirdPerson.Player;
 using RailCraft.ThirdPerson.World;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace RailCraft.ThirdPerson.UI
         [SerializeField] private Slider volumeSlider;
         [SerializeField] private Text volumeValueText;
         [SerializeField] private Dropdown qualityDropdown;
+        [SerializeField] private Dropdown assemblyVariantDropdown;
 
         private bool wired;
         private bool menuOwnsTimingPause;
@@ -37,6 +39,7 @@ namespace RailCraft.ThirdPerson.UI
         public bool IsMenuVisible => mainMenuRoot != null && mainMenuRoot.activeSelf;
         public bool IsSettingsVisible => settingsRoot != null && settingsRoot.activeSelf;
         public bool HasActiveGame => saveController != null && saveController.HasActiveSession;
+        public AssemblyVariantId SelectedAssemblyVariant => ResolveSelectedVariant();
 
         public void Configure(
             WhiteboxGameSessionHost configuredSessionHost,
@@ -56,7 +59,8 @@ namespace RailCraft.ThirdPerson.UI
             Text configuredMenuTitleText = null,
             Text configuredMenuSubtitleText = null,
             Text configuredMenuFootnoteText = null,
-            WhiteboxKnowledgePresenter configuredKnowledgePresenter = null)
+            WhiteboxKnowledgePresenter configuredKnowledgePresenter = null,
+            Dropdown configuredAssemblyVariantDropdown = null)
         {
             Unwire();
             sessionHost = configuredSessionHost;
@@ -68,6 +72,7 @@ namespace RailCraft.ThirdPerson.UI
             menuTitleText = configuredMenuTitleText;
             menuSubtitleText = configuredMenuSubtitleText;
             menuFootnoteText = configuredMenuFootnoteText;
+            assemblyVariantDropdown = configuredAssemblyVariantDropdown;
             startButton = configuredStartButton;
             continueButton = configuredContinueButton;
             settingsButton = configuredSettingsButton;
@@ -78,6 +83,7 @@ namespace RailCraft.ThirdPerson.UI
             qualityDropdown = configuredQualityDropdown;
             menuButton = configuredMenuButton;
             PopulateQualityOptions();
+            PopulateAssemblyVariantOptions();
             LoadSettingsControls();
             Wire();
             ShowMainMenu();
@@ -138,9 +144,12 @@ namespace RailCraft.ThirdPerson.UI
         public void StartNewGame()
         {
             if (saveController != null)
-                saveController.StartNewGame();
+                saveController.StartNewGame(ResolveSelectedVariant());
             else
+            {
+                sessionHost?.SelectAssemblyVariant(ResolveSelectedVariant());
                 sessionHost?.ResetSession();
+            }
             CloseMenuForPlay();
         }
 
@@ -170,10 +179,19 @@ namespace RailCraft.ThirdPerson.UI
         private void Start()
         {
             WhiteboxRuntimeSettings.Apply(WhiteboxRuntimeSettings.Load());
-            if (Environment.GetCommandLineArgs().Any(argument =>
+            var arguments = Environment.GetCommandLineArgs();
+            if (arguments.Any(argument =>
                 string.Equals(argument, WhiteboxAutomatedSmokeRunner.SmokeArgument,
                     StringComparison.OrdinalIgnoreCase)))
             {
+                if (WhiteboxAutomatedSmokeRunner.TryGetRequestedVariant(
+                        arguments,
+                        out var requestedVariant))
+                {
+                    sessionHost?.SelectAssemblyVariant(requestedVariant);
+                    if (assemblyVariantDropdown != null)
+                        assemblyVariantDropdown.SetValueWithoutNotify((int)requestedVariant);
+                }
                 StartNewGame();
                 return;
             }
@@ -332,13 +350,50 @@ namespace RailCraft.ThirdPerson.UI
             if (menuFootnoteText != null)
             {
                 menuFootnoteText.text = hasActiveGame
-                    ? "当前进度已自动保存；重新开始会清空本轮装配。"
-                    : "白盒阶段使用基础几何体；后续可直接替换为 Blender 资产。";
+                    ? "当前进度已自动保存；选择其他方案并重新开始会清空本轮装配。"
+                    : "方案会写入存档；CAD 完成网格化后可替换对应模型插槽。";
             }
             SetButtonLabel(startButton, hasActiveGame ? "重新开始" : "开始游戏");
             SetButtonLabel(continueButton, hasActiveGame ? "返回游戏" : "继续游戏");
             if (continueButton != null)
                 continueButton.interactable = HasActiveGame || saveController != null && saveController.HasSave;
+            if (assemblyVariantDropdown != null && sessionHost != null)
+            {
+                assemblyVariantDropdown.SetValueWithoutNotify((int)sessionHost.SelectedAssemblyVariant);
+                // The value only takes effect after pressing Start/Restart, so
+                // it is safe to choose another plan while the current session
+                // is paused.
+                assemblyVariantDropdown.interactable = true;
+            }
+        }
+
+        private void PopulateAssemblyVariantOptions()
+        {
+            if (assemblyVariantDropdown == null)
+                return;
+
+            assemblyVariantDropdown.ClearOptions();
+            var labels = AssemblyVariantCatalog.Definitions
+                .Select(definition => definition.MenuLabel)
+                .ToList();
+            assemblyVariantDropdown.AddOptions(labels);
+            assemblyVariantDropdown.interactable = true;
+            if (sessionHost != null)
+                assemblyVariantDropdown.SetValueWithoutNotify((int)sessionHost.SelectedAssemblyVariant);
+        }
+
+        private AssemblyVariantId ResolveSelectedVariant()
+        {
+            if (assemblyVariantDropdown == null)
+                return sessionHost == null
+                    ? AssemblyVariantId.FuxingDemo
+                    : sessionHost.SelectedAssemblyVariant;
+
+            var index = Mathf.Clamp(
+                assemblyVariantDropdown.value,
+                0,
+                AssemblyVariantCatalog.Definitions.Count - 1);
+            return AssemblyVariantCatalog.Definitions[index].Id;
         }
 
         private static void SetButtonLabel(Button button, string label)

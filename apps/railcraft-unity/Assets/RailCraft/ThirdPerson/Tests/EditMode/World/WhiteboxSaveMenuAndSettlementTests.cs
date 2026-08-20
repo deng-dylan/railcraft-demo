@@ -102,6 +102,26 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         }
 
         [Test]
+        public void ContinueRestoresTheSelectedAssemblyVariant()
+        {
+            var sourceObject = Child("VariantSource");
+            var sourceHost = CreateHost(sourceObject, out _);
+            var sourceSave = sourceObject.AddComponent<WhiteboxSaveController>();
+            sourceSave.Configure(sourceHost, saveKey, true);
+            sourceSave.StartNewGame(AssemblyVariantId.Y25Freight);
+
+            var targetObject = Child("VariantTarget");
+            var targetHost = CreateHost(targetObject, out _);
+            var targetSave = targetObject.AddComponent<WhiteboxSaveController>();
+            targetSave.Configure(targetHost, saveKey, true);
+
+            Assert.That(targetSave.TryContinueGame(), Is.True);
+            Assert.That(
+                targetHost.SelectedAssemblyVariant,
+                Is.EqualTo(AssemblyVariantId.Y25Freight));
+        }
+
+        [Test]
         public void CorruptedSaveIsRejectedAndRemoved()
         {
             var host = CreateHost(root, out _);
@@ -154,6 +174,25 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
             Assert.That(save.HasSave, Is.True);
             Assert.That(view.Controller.IsMenuVisible, Is.False);
             Assert.That(inputLock.InputLocked, Is.False);
+        }
+
+        [Test]
+        public void MainMenuStartsTheVariantSelectedByThePlayer()
+        {
+            var host = CreateHost(root, out _);
+            var inputLock = root.AddComponent<ThirdPersonInputLock>();
+            var save = root.AddComponent<WhiteboxSaveController>();
+            save.Configure(host, saveKey, true);
+            var view = CreateMenu(host, save, inputLock);
+
+            view.AssemblyVariantDropdown.value = (int)AssemblyVariantId.TeachingConcept;
+            view.StartButton.onClick.Invoke();
+
+            Assert.That(
+                host.SelectedAssemblyVariant,
+                Is.EqualTo(AssemblyVariantId.TeachingConcept));
+            Assert.That(ReadStoredSnapshot().AssemblyVariant,
+                Is.EqualTo(AssemblyVariantId.TeachingConcept));
         }
 
         [Test]
@@ -535,6 +574,7 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
             var slider = Child("Volume", settingsRoot).AddComponent<Slider>();
             var volumeText = Child("VolumeText", settingsRoot).AddComponent<Text>();
             var quality = Child("Quality", settingsRoot).AddComponent<Dropdown>();
+            var assemblyVariant = Child("AssemblyVariant", menuRoot).AddComponent<Dropdown>();
             var controller = root.AddComponent<WhiteboxMainMenuController>();
             controller.Configure(
                 host,
@@ -551,8 +591,9 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
                 volumeText,
                 quality,
                 menu,
-                configuredKnowledgePresenter: knowledgePresenter);
-            return new MenuView(controller, start, continueButton, settings);
+                configuredKnowledgePresenter: knowledgePresenter,
+                configuredAssemblyVariantDropdown: assemblyVariant);
+            return new MenuView(controller, start, continueButton, settings, assemblyVariant);
         }
 
         private GameObject Child(string name, GameObject parent = null)
@@ -568,18 +609,21 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
                 WhiteboxMainMenuController controller,
                 Button startButton,
                 Button continueButton,
-                Button settingsButton)
+                Button settingsButton,
+                Dropdown assemblyVariantDropdown)
             {
                 Controller = controller;
                 StartButton = startButton;
                 ContinueButton = continueButton;
                 SettingsButton = settingsButton;
+                AssemblyVariantDropdown = assemblyVariantDropdown;
             }
 
             public WhiteboxMainMenuController Controller { get; }
             public Button StartButton { get; }
             public Button ContinueButton { get; }
             public Button SettingsButton { get; }
+            public Dropdown AssemblyVariantDropdown { get; }
         }
 
         private sealed class ManualClock

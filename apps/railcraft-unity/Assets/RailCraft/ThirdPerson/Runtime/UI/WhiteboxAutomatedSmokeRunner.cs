@@ -18,11 +18,29 @@ namespace RailCraft.ThirdPerson.UI
     public sealed class WhiteboxAutomatedSmokeRunner : MonoBehaviour
     {
         public const string SmokeArgument = "-whitebox-smoke";
+        public const string VariantArgumentPrefix = "-whitebox-smoke-variant=";
         public const string ScreenshotArgumentPrefix = "-whitebox-smoke-screenshot=";
         public const string BogieScreenshotArgumentPrefix = "-whitebox-smoke-bogie-screenshot=";
         public const string LandingScreenshotArgumentPrefix = "-whitebox-smoke-landing-screenshot=";
         public const string SuccessLogMarker = "RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED";
         public const string FailureLogMarker = "RAILCRAFT_WHITEBOX_SMOKE_FAILED";
+
+        public static bool TryGetRequestedVariant(
+            string[] arguments,
+            out AssemblyVariantId variant)
+        {
+            variant = AssemblyVariantId.FuxingDemo;
+            if (arguments == null)
+                return false;
+
+            var argument = arguments.FirstOrDefault(value =>
+                value.StartsWith(VariantArgumentPrefix, StringComparison.OrdinalIgnoreCase));
+            if (argument == null)
+                return false;
+
+            var key = argument.Substring(VariantArgumentPrefix.Length);
+            return AssemblyVariantCatalog.TryParse(key, out variant);
+        }
 
         private IEnumerator Start()
         {
@@ -124,6 +142,13 @@ namespace RailCraft.ThirdPerson.UI
         private void DriveToCompletion(string[] arguments)
         {
             var host = FindSingle<WhiteboxGameSessionHost>();
+            if (TryGetRequestedVariant(arguments, out var requestedVariant))
+            {
+                Ensure(
+                    host.SelectedAssemblyVariant == requestedVariant,
+                    $"Smoke requested {requestedVariant}, but active plan is " +
+                    $"{host.SelectedAssemblyVariant}.");
+            }
             var quizPanel = FindSingle<WhiteboxQuizPanel>();
             var inputLock = FindSingle<ThirdPersonInputLock>();
             var scanner = FindSingle<PlayerInteractionScanner>();

@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "sourceFiles": [
+    {
+      "fileName": "Y25转向架 欧洲货运火车.stp",
+      "sizeBytes": 51592910,
+      "sha256": "450713443569D0D7858338A199E0F8E44F195D6BA4F564A1B6DEDAA29BB96AAE",
+      "targetVariant": "Y25Freight",
+      "targetMesh": "VariantModels/Y25Freight/Y25FreightBogie.fbx"
+    },
+    {
+      "fileName": "地铁转向架（简化）（上色版）.SLDASM",
+      "sizeBytes": 4102504,
+      "sha256": "76FF95FBCF784BDFE2257344B1DA4C32807E1EA353651C8E3D3203A8F9776C2A",
+      "targetVariant": "MetroSimplified",
+      "targetMesh": "VariantModels/MetroSimplified/MetroSimplifiedBogie.fbx"
+    },
+    {
+      "fileName": "地铁转向架（上色版）.stp.SLDASM",
+      "sizeBytes": 16410903,
+      "sha256": "FB6DAB8C02A918DC91736A39CF5038C76EF1CC49ECD0F1169B096B4379A62DF4",
+      "targetVariant": "MetroSimplified",
+      "targetMesh": "VariantModels/MetroSimplified/MetroSimplifiedBogie.fbx"
+    },
+    {
+      "fileName": "简化铁路转向架（现实无对应）.SLDPRT",
+      "sizeBytes": 5859879,
+      "sha256": "BD27733C1EC93CA7E6F6BA531C4BAD9AC033A1802C15EE642C743D9810B5234E",
+      "targetVariant": "TeachingConcept",
+      "targetMesh": "VariantModels/TeachingConcept/TeachingConceptBogie.fbx",
+      "teachingOnly": true
+    }
+  ]
+}
