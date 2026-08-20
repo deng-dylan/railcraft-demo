@@ -18,9 +18,29 @@ namespace RailCraft.ThirdPerson.UI
     public sealed class WhiteboxAutomatedSmokeRunner : MonoBehaviour
     {
         public const string SmokeArgument = "-whitebox-smoke";
+        public const string VariantArgumentPrefix = "-whitebox-smoke-variant=";
         public const string ScreenshotArgumentPrefix = "-whitebox-smoke-screenshot=";
+        public const string BogieScreenshotArgumentPrefix = "-whitebox-smoke-bogie-screenshot=";
+        public const string LandingScreenshotArgumentPrefix = "-whitebox-smoke-landing-screenshot=";
         public const string SuccessLogMarker = "RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED";
         public const string FailureLogMarker = "RAILCRAFT_WHITEBOX_SMOKE_FAILED";
+
+        public static bool TryGetRequestedVariant(
+            string[] arguments,
+            out AssemblyVariantId variant)
+        {
+            variant = AssemblyVariantId.FuxingDemo;
+            if (arguments == null)
+                return false;
+
+            var argument = arguments.FirstOrDefault(value =>
+                value.StartsWith(VariantArgumentPrefix, StringComparison.OrdinalIgnoreCase));
+            if (argument == null)
+                return false;
+
+            var key = argument.Substring(VariantArgumentPrefix.Length);
+            return AssemblyVariantCatalog.TryParse(key, out variant);
+        }
 
         private IEnumerator Start()
         {
@@ -35,7 +55,7 @@ namespace RailCraft.ThirdPerson.UI
             try
             {
                 ValidateEscapeMenu();
-                DriveToCompletion();
+                DriveToCompletion(arguments);
                 ValidateCompletionState();
             }
             catch (Exception exception)
@@ -53,7 +73,7 @@ namespace RailCraft.ThirdPerson.UI
                         var directory = Path.GetDirectoryName(screenshotPath);
                         if (!string.IsNullOrWhiteSpace(directory))
                             Directory.CreateDirectory(directory);
-                        CaptureRenderedPreview(screenshotPath);
+                        CaptureCompletionPreview(screenshotPath);
                     }
                     catch (Exception exception)
                     {
@@ -119,9 +139,16 @@ namespace RailCraft.ThirdPerson.UI
             Ensure(!inputLock.InputLocked, "ESC menu kept player input locked after resume.");
         }
 
-        private void DriveToCompletion()
+        private void DriveToCompletion(string[] arguments)
         {
             var host = FindSingle<WhiteboxGameSessionHost>();
+            if (TryGetRequestedVariant(arguments, out var requestedVariant))
+            {
+                Ensure(
+                    host.SelectedAssemblyVariant == requestedVariant,
+                    $"Smoke requested {requestedVariant}, but active plan is " +
+                    $"{host.SelectedAssemblyVariant}.");
+            }
             var quizPanel = FindSingle<WhiteboxQuizPanel>();
             var inputLock = FindSingle<ThirdPersonInputLock>();
             var scanner = FindSingle<PlayerInteractionScanner>();
@@ -187,6 +214,15 @@ namespace RailCraft.ThirdPerson.UI
                 Ensure(scanner.TryInteract(), $"Scanner could not install bogie child module {index + 1}.");
             Ensure(compositeStation.IsComplete, "Bogie structure did not complete.");
 
+            var bogieScreenshotPath = FindArgumentPath(arguments, BogieScreenshotArgumentPrefix);
+            if (!string.IsNullOrWhiteSpace(bogieScreenshotPath))
+            {
+                var directory = Path.GetDirectoryName(bogieScreenshotPath);
+                if (!string.IsNullOrWhiteSpace(directory))
+                    Directory.CreateDirectory(directory);
+                CaptureBogiePreview(bogieScreenshotPath, compositeStation.transform);
+            }
+
             var finalStation = FindSingle<FinalAssemblyStation>();
             FocusStation(finalStation, scanner);
             for (var index = 0; index < finalStation.RequiredInputCount; index++)
@@ -196,6 +232,15 @@ namespace RailCraft.ThirdPerson.UI
             Ensure(finalStation.InstalledInputCount == finalStation.RequiredInputCount,
                 "Landing did not install all four inputs.");
             Ensure(host.Session.InventoryParts.Count == 0, "Inventory was not consumed by landing.");
+
+            var landingScreenshotPath = FindArgumentPath(arguments, LandingScreenshotArgumentPrefix);
+            if (!string.IsNullOrWhiteSpace(landingScreenshotPath))
+            {
+                var directory = Path.GetDirectoryName(landingScreenshotPath);
+                if (!string.IsNullOrWhiteSpace(directory))
+                    Directory.CreateDirectory(directory);
+                CaptureLandingPreview(landingScreenshotPath, finalStation.transform);
+            }
 
             var commissioningStations = FindAll<CommissioningStation>();
             Ensure(commissioningStations.Length == 3,
@@ -350,11 +395,136 @@ namespace RailCraft.ThirdPerson.UI
 
         private static string FindScreenshotPath(string[] arguments)
         {
+            return FindArgumentPath(arguments, ScreenshotArgumentPrefix);
+        }
+
+        private static string FindArgumentPath(string[] arguments, string prefix)
+        {
             var argument = arguments.FirstOrDefault(value =>
-                value.StartsWith(ScreenshotArgumentPrefix, StringComparison.OrdinalIgnoreCase));
+                value.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
             return argument == null
                 ? string.Empty
-                : argument.Substring(ScreenshotArgumentPrefix.Length).Trim('"');
+                : argument.Substring(prefix.Length).Trim('"');
+        }
+
+        private static void CaptureBogiePreview(string path, Transform station)
+        {
+            CaptureStationPreview(
+                path,
+                station,
+                new Vector3(5.8f, 3.8f, -5.6f),
+                new Vector3(0f, 1.35f, 0f),
+                34f);
+        }
+
+        private static void CaptureLandingPreview(string path, Transform station)
+        {
+            CaptureStationPreview(
+                path,
+                station,
+                // Keep the complete 25.7 m coach and both ±8 m bogies in frame
+                // while moving to a lower diagonal side angle that keeps the
+                // imported geometry readable.
+                new Vector3(23f, 6.2f, -28f),
+                new Vector3(0f, 2.7f, 0f),
+                36f);
+        }
+
+        private static void CaptureCompletionPreview(string path)
+        {
+            // The completion UI is the evidence for this shot.  The dropped
+            // vehicle can sit very close to the camera after the expanded
+            // landing lane was laid out, so hide it only for this one render
+            // and restore the scene immediately afterwards.
+            var droppedVehicle = FindAll<Transform>()
+                .SingleOrDefault(item => string.Equals(item.name, "DroppedVehicle", StringComparison.Ordinal));
+            var wasActive = droppedVehicle != null && droppedVehicle.gameObject.activeSelf;
+
+            try
+            {
+                if (droppedVehicle != null)
+                    droppedVehicle.gameObject.SetActive(false);
+                CaptureRenderedPreview(path);
+            }
+            finally
+            {
+                if (droppedVehicle != null)
+                    droppedVehicle.gameObject.SetActive(wasActive);
+            }
+        }
+
+        private static void CaptureStationPreview(
+            string path,
+            Transform station,
+            Vector3 localCameraPosition,
+            Vector3 localTarget,
+            float fieldOfView)
+        {
+            var camera = UnityEngine.Camera.main ?? FindSingle<UnityEngine.Camera>();
+            var previousPosition = camera.transform.position;
+            var previousRotation = camera.transform.rotation;
+            var previousFieldOfView = camera.fieldOfView;
+            var canvases = FindAll<Canvas>();
+            var canvasStates = canvases.Select(canvas => canvas.enabled).ToArray();
+            var feedback = station.GetComponent<InteractableVisualFeedback>();
+            var wasHighlighted = feedback != null && feedback.IsHighlighted;
+            var worldLabels = FindAll<TextMesh>()
+                .Select(label => label.gameObject)
+                .Distinct()
+                .ToArray();
+            var worldLabelStates = worldLabels.Select(item => item.activeSelf).ToArray();
+            var roofBeams = FindAll<Transform>()
+                .Where(item => string.Equals(item.name, "RoofBeams", StringComparison.Ordinal))
+                .Select(item => item.gameObject)
+                .Distinct()
+                .ToArray();
+            var roofBeamStates = roofBeams.Select(item => item.activeSelf).ToArray();
+            var playerRenderers = FindAll<ThirdPersonMotor>()
+                .SelectMany(motor => motor.GetComponentsInChildren<Renderer>(true))
+                .Distinct()
+                .ToArray();
+            var playerRendererStates = playerRenderers.Select(renderer => renderer.enabled).ToArray();
+
+            try
+            {
+                if (feedback != null)
+                {
+                    feedback.ClearFeedback();
+                    feedback.SetHighlighted(false);
+                }
+                foreach (var canvas in canvases)
+                    canvas.enabled = false;
+                foreach (var label in worldLabels)
+                    label.SetActive(false);
+                foreach (var roofBeam in roofBeams)
+                    roofBeam.SetActive(false);
+                foreach (var renderer in playerRenderers)
+                    renderer.enabled = false;
+
+                var target = station.TransformPoint(localTarget);
+                camera.transform.position = station.TransformPoint(localCameraPosition);
+                camera.transform.rotation = Quaternion.LookRotation(
+                    target - camera.transform.position,
+                    Vector3.up);
+                camera.fieldOfView = fieldOfView;
+                CaptureRenderedPreview(path);
+            }
+            finally
+            {
+                if (feedback != null)
+                    feedback.SetHighlighted(wasHighlighted);
+                camera.transform.position = previousPosition;
+                camera.transform.rotation = previousRotation;
+                camera.fieldOfView = previousFieldOfView;
+                for (var index = 0; index < canvases.Length; index++)
+                    canvases[index].enabled = canvasStates[index];
+                for (var index = 0; index < worldLabels.Length; index++)
+                    worldLabels[index].SetActive(worldLabelStates[index]);
+                for (var index = 0; index < roofBeams.Length; index++)
+                    roofBeams[index].SetActive(roofBeamStates[index]);
+                for (var index = 0; index < playerRenderers.Length; index++)
+                    playerRenderers[index].enabled = playerRendererStates[index];
+            }
         }
 
         private static void CaptureRenderedPreview(string path)

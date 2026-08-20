@@ -8,12 +8,17 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
 {
     public sealed class InteractionFeedbackRoutingTests
     {
+        // Some repository-wide EditMode tests leave the legacy Factory scene
+        // active. Keep physics fixtures away from that scene so scanner tests
+        // observe only the colliders they create themselves.
+        private static readonly Vector3 TestOrigin = new Vector3(10000f, 10000f, 10000f);
         private GameObject root;
 
         [SetUp]
         public void SetUp()
         {
             root = new GameObject("InteractionFeedbackRoutingTests");
+            root.transform.position = TestOrigin;
         }
 
         [TearDown]
@@ -135,7 +140,7 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
             var targetObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
             targetObject.name = "FeedbackTarget";
             targetObject.transform.SetParent(root.transform, false);
-            targetObject.transform.position = Vector3.forward;
+            targetObject.transform.localPosition = Vector3.forward;
             var target = targetObject.AddComponent<TestInteractable>();
             visual = targetObject.AddComponent<InteractableVisualFeedback>();
 

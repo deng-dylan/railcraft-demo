@@ -257,7 +257,9 @@ namespace RailCraft.ThirdPerson.World
                     {
                         if (installed)
                             SnapVisual(moduleVisuals[index].transform, moduleSnapSlots[index]);
-                        moduleVisuals[index].SetActive(installed);
+                        // Once the dropped vehicle is shown, hide the four staging
+                        // tokens so their geometry cannot overlap the completed body.
+                        moduleVisuals[index].SetActive(installed && !IsLandingComplete);
                     }
                 }
             }
@@ -272,7 +274,7 @@ namespace RailCraft.ThirdPerson.World
                     {
                         if (installed)
                             SnapVisual(partVisuals[index].transform, partSnapSlots[index]);
-                        partVisuals[index].SetActive(installed);
+                        partVisuals[index].SetActive(installed && !IsLandingComplete);
                     }
                 }
             }

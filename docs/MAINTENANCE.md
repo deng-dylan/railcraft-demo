@@ -6,6 +6,9 @@
 工程中的固定视角 v0.1 是冻结验收基线，`apps/railcraft-godot/` 是冻结历史
 Demo。维护时必须区分三者，避免用当前白盒证据覆盖历史证据。
 
+如果需要先判断内容该放在哪，再决定是否入库，优先查看
+`docs/repository-map.md`。
+
 ## 受版本控制的主线内容
 
 | 区域 | 维护规则 |
@@ -16,6 +19,11 @@ Demo。维护时必须区分三者，避免用当前白盒证据覆盖历史证�
 | `prototypes/` | 非主线原型的包装与说明；只有再分发权明确的源码快照可以进入 Git。 |
 | `docs/project/`、`docs/decisions/`、`docs/reviews/` | 项目基线、决策和评审记录。 |
 | `deliveries/*/*/README.md` | 外部资料与成员交付的清单、来源、许可和校验值。 |
+
+当前模型网格类文件通过 Git LFS 管理，包括 `*.fbx`、`*.blend`、`*.step`、
+`*.glb`、`*.obj`、`*.stl`、`*.x_t`、`*.psd`、`*.tga`。原始 CAD 候选先登记到
+`apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Art/Models/SourceCAD/`，
+确认授权、单位、原点和导出格式后，再把可运行网格放进 Unity 模型目录。
 
 ## 本地可再生内容
 

@@ -29,9 +29,13 @@ namespace RailCraft.ThirdPerson.UI
 
         public static void Apply(WhiteboxSettingsState state)
         {
-            AudioListener.volume = state.MasterVolume;
             if (QualitySettings.names.Length > 0 && QualitySettings.GetQualityLevel() != state.QualityLevel)
                 QualitySettings.SetQualityLevel(state.QualityLevel, true);
+
+            // Changing the quality level can recreate editor/player audio state.
+            // Apply the volume after that transition so the requested value is
+            // the final effective value in both the player and EditMode tests.
+            AudioListener.volume = state.MasterVolume;
         }
 
         public static void Save(float masterVolume, int qualityLevel)

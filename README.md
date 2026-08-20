@@ -10,6 +10,10 @@
 主菜单停留、应用暂停和离线时间不计入。主线场景、构建入口和验收约定见
 [`ThirdPersonWhitebox.md`](apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md)。
 
+仓库层面的路径分工、模型与 CAD 放置位置、可提交内容和本地可再生目录见
+[`docs/repository-map.md`](docs/repository-map.md)。后续继续接入转向架或车体模型时，
+优先按这张仓库地图放置占位说明、Unity 网格和交付登记。
+
 ## 当前组成
 
 仓库同时保留两套已冻结实现：Unity 固定视角 v0.1 是可复核的验收基线；Godot
@@ -58,6 +62,7 @@ Godot 历史 Demo 的说明见 [`apps/railcraft-godot/README.md`](apps/railcraft
 - 项目总仓库结构的依据见 [`docs/decisions/0001-project-repository-layout.md`](docs/decisions/0001-project-repository-layout.md)。
 - 当前主线切换的正式决策见 [`docs/decisions/0002-third-person-whitebox-mainline.md`](docs/decisions/0002-third-person-whitebox-mainline.md)。
 - 日常清理与归档边界见 [`docs/MAINTENANCE.md`](docs/MAINTENANCE.md)。
+- 当前仓库路径和模型放置约定见 [`docs/repository-map.md`](docs/repository-map.md)。
 
 ## 开发批次与推送
 

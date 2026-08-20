@@ -83,5 +83,10 @@ namespace RailCraft.ThirdPerson.Domain
         public ModuleAssemblySnapshot[] Modules = Array.Empty<ModuleAssemblySnapshot>();
         public CommissioningPhase CommissioningPhase = CommissioningPhase.Locked;
         public bool InitialTestAttempted;
+
+        // Added without changing the schema number so old v0.2 saves remain
+        // readable. JsonUtility leaves this field at the default FuxingDemo
+        // value when loading an older save.
+        public AssemblyVariantId AssemblyVariant = AssemblyVariantId.FuxingDemo;
     }
 }

@@ -1,0 +1,109 @@
+{
+  "schema": 2,
+  "source_sha256": "f0fb4a7beb5d25122ca654871918efd7922a152534865afb5778dc780e13db3b",
+  "blender_version": "5.2.0 LTS",
+  "frame": 1,
+  "removed_objects": [
+    "Camera",
+    "Light",
+    "Rail_L",
+    "Rail_R",
+    "Screw"
+  ],
+  "repairs": {
+    "wheelset_wheel_island_offsets_m": {
+      "Wheelset_F": [
+        0.0,
+        1.25,
+        0.46
+      ],
+      "Wheelset_R": [
+        0.0,
+        -1.25,
+        0.46
+      ]
+    },
+    "split_objects": [
+      "Axle_F",
+      "Axle_R",
+      "Wheels_F",
+      "Wheels_R",
+      "BrakeDiscs_F",
+      "BrakeDiscs_R"
+    ],
+    "reason": "F/R wheel and disc islands overlapped at Y=0,Z=0 in the delivered frame-1 mesh"
+  },
+  "groups": {
+    "Demo_WheelsetAxlebox": [
+      "Axle_F",
+      "Axle_R",
+      "Wheels_F",
+      "Wheels_R",
+      "Axlebox_FL",
+      "Axlebox_FR",
+      "Axlebox_RL",
+      "Axlebox_RR"
+    ],
+    "Demo_Frame": [
+      "Frame",
+      "BrakeDiscs_F",
+      "BrakeDiscs_R",
+      "Caliper_FL",
+      "Caliper_FR",
+      "Caliper_RL",
+      "Caliper_RR"
+    ],
+    "Demo_PrimarySuspension": [
+      "Spring_FL",
+      "Spring_FR",
+      "Spring_RL",
+      "Spring_RR",
+      "DamperV_FL",
+      "DamperV_FR",
+      "DamperV_RL",
+      "DamperV_RR"
+    ],
+    "Demo_SecondarySuspension": [
+      "AirSpring_L",
+      "AirSpring_R",
+      "DamperY_L",
+      "DamperY_R",
+      "DamperT_C"
+    ],
+    "Demo_Drive": [
+      "Motor_L",
+      "Motor_R",
+      "Gearbox_F",
+      "Gearbox_R",
+      "DriveShaft_F",
+      "DriveShaft_R"
+    ],
+    "Demo_CentralTraction": [
+      "Traction"
+    ]
+  },
+  "anchors": [
+    "BogieCenter",
+    "RailContactPlane",
+    "VehicleMount",
+    "Axle_01",
+    "Axle_02"
+  ],
+  "mesh_object_count": 35,
+  "triangles": 26860,
+  "bounds_blender_m": {
+    "minimum": [
+      -1.1,
+      -2.1,
+      -0.018
+    ],
+    "maximum": [
+      1.1,
+      2.1,
+      1.5
+    ]
+  },
+  "rail_top_z_blender_m": -0.03,
+  "output": "BogieAssemblyDemo.fbx",
+  "output_sha256": "a27ebff6143219d1ff2de3fa5536763058942d592c4f249c2b8f24e9ae7113aa"
+}

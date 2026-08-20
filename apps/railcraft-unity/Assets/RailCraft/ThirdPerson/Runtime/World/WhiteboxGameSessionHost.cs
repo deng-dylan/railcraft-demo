@@ -10,34 +10,77 @@ namespace RailCraft.ThirdPerson.World
     [DisallowMultipleComponent]
     public sealed class WhiteboxGameSessionHost : MonoBehaviour
     {
-        [SerializeField, TextArea] private string initialObjective = "寻找零件工位，答题解锁高铁零件";
+        [SerializeField, TextArea] private string initialObjective = "寻找零件工位，答题解锁轨道车辆零件";
+        [SerializeField] private AssemblyVariantId initialAssemblyVariant = AssemblyVariantId.FuxingDemo;
 
         private IWorldGameSession session;
         private bool completionAnnounced;
         private string currentObjective;
+        private AssemblyVariantId selectedAssemblyVariant = AssemblyVariantId.FuxingDemo;
 
         public event Action StateChanged;
         public event Action SessionReset;
         public event Action<WhiteboxAnswerEvaluatedEvent> AnswerEvaluated;
         public event Action<string> FeedbackRequested;
         public event Action<string> ObjectiveChanged;
+        public event Action<AssemblyVariantId> AssemblyVariantChanged;
         public event Action VehicleCompleted;
         public event Action<WhiteboxMilestoneEvent> MilestoneReached;
 
         public IWorldGameSession Session => session ?? (session = new DomainWorldGameSession());
+        public AssemblyVariantId SelectedAssemblyVariant => selectedAssemblyVariant;
+        public AssemblyVariantDefinition SelectedAssemblyVariantDefinition =>
+            AssemblyVariantCatalog.Get(selectedAssemblyVariant);
         public string CurrentObjective => string.IsNullOrWhiteSpace(currentObjective)
             ? initialObjective
             : currentObjective;
 
         public void Configure(IWorldGameSession configuredSession, string configuredInitialObjective = null)
         {
+            Configure(
+                configuredSession,
+                configuredInitialObjective,
+                initialAssemblyVariant);
+        }
+
+        public void Configure(
+            IWorldGameSession configuredSession,
+            string configuredInitialObjective,
+            AssemblyVariantId configuredInitialAssemblyVariant)
+        {
             session = configuredSession ?? throw new ArgumentNullException(nameof(configuredSession));
             if (configuredInitialObjective != null)
                 initialObjective = configuredInitialObjective;
+            initialAssemblyVariant = AssemblyVariantCatalog.Clamp(configuredInitialAssemblyVariant);
+            selectedAssemblyVariant = initialAssemblyVariant;
             currentObjective = initialObjective;
             completionAnnounced = Session.IsVehicleComplete;
             StateChanged?.Invoke();
             ObjectiveChanged?.Invoke(CurrentObjective);
+            AssemblyVariantChanged?.Invoke(selectedAssemblyVariant);
+        }
+
+        /// <summary>
+        /// Selects the playable vehicle plan. The caller normally invokes this
+        /// before starting a new saved session; changing it does not mutate the
+        /// domain progress until the caller resets or starts that session.
+        /// </summary>
+        public void SelectAssemblyVariant(AssemblyVariantId variant)
+        {
+            var normalized = AssemblyVariantCatalog.Clamp(variant);
+            if (selectedAssemblyVariant == normalized)
+                return;
+
+            selectedAssemblyVariant = normalized;
+            AssemblyVariantChanged?.Invoke(selectedAssemblyVariant);
+            StateChanged?.Invoke();
+        }
+
+        public WhiteboxGameSessionSnapshot ExportSnapshot()
+        {
+            var snapshot = Session.ExportSnapshot();
+            snapshot.AssemblyVariant = selectedAssemblyVariant;
+            return snapshot;
         }
 
         public WorldAnswerResult SubmitAnswer(string questionId, int selectedOptionIndex)
@@ -122,6 +165,9 @@ namespace RailCraft.ThirdPerson.World
 
         public void RestoreSession(WhiteboxGameSessionSnapshot snapshot)
         {
+            if (snapshot == null)
+                throw new ArgumentNullException(nameof(snapshot));
+            SelectAssemblyVariant(snapshot.AssemblyVariant);
             Session.RestoreSnapshot(snapshot ?? throw new ArgumentNullException(nameof(snapshot)));
             completionAnnounced = Session.IsVehicleComplete;
             currentObjective = Session.IsVehicleComplete
@@ -137,6 +183,7 @@ namespace RailCraft.ThirdPerson.World
         private void Awake()
         {
             currentObjective = initialObjective;
+            selectedAssemblyVariant = AssemblyVariantCatalog.Clamp(initialAssemblyVariant);
             _ = Session;
         }
 

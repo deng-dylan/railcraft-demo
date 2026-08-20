@@ -4,6 +4,7 @@
 tmp/
 .tmp/
 TestResults/
+Logs/
 
 # Unity generated files
 apps/railcraft-unity/[Ll]ibrary/
