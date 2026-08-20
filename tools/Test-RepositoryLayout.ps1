@@ -113,7 +113,7 @@ try {
     $guidOwners = @{}
     foreach ($metaFile in $metaFiles) {
         $metaContent = Get-Content -Raw -Encoding utf8 -LiteralPath $metaFile.FullName
-        $guidMatch = [regex]::Match($metaContent, '(?m)^guid:[ \t]*(?<guid>[0-9a-fA-F]{32})[ \t]*$')
+        $guidMatch = [regex]::Match($metaContent, '(?m)^guid:[ \t]*(?<guid>[0-9a-fA-F]{32})[ \t]*\r?$')
         $relativeMeta = $metaFile.FullName.Substring($repositoryRoot.Length + 1).Replace('\', '/')
         if (-not $guidMatch.Success) {
             $invalidMetaFiles.Add($relativeMeta)
