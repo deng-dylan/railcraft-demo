@@ -5,7 +5,7 @@
 - 平台：Windows x86_64
 - 主场景：`Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity`
 - 构建入口：`RailCraft.ThirdPerson.Editor.WhiteboxWindowsBuild.BuildFromCommandLine`
-- 候选定位：`v0.2.0-preview.1`
+- 候选定位：`v0.3.0-preview.1`
 
 ## 验收范围
 

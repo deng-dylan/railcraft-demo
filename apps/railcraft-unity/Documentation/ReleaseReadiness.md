@@ -1,9 +1,9 @@
-# RailCraft v0.2 当前进度与发行判断
+# RailCraft v0.3 当前进度与发行判断
 
 - 评估日期：2026-08-21
 - 评估对象：Unity 第三人称“标准工单 RC-EMU-01”主线
 - 当前分支：`codex/coherent-training-flow`
-- 建议版本定位：`v0.2.0-preview.1` / 竞赛演示候选版
+- 建议版本定位：`v0.3.0-preview.1` / 竞赛演示候选版
 
 ## 结论
 

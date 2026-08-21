@@ -7,7 +7,7 @@
 
 | 状态 | 实现入口 | 产品范围 | 文档与证据 |
 | --- | --- | --- | --- |
-| 当前开发主线 | `Assets/RailCraft/ThirdPerson/` | v0.2：58题、14零件、23步流程、存档、知识图鉴、结算与调试闭环 | [`ThirdPersonWhitebox.md`](ThirdPersonWhitebox.md)、[`../Artifacts/Whitebox/Acceptance`](../Artifacts/Whitebox/Acceptance) |
+| 当前开发主线 | `Assets/RailCraft/ThirdPerson/` | v0.3 候选版：标准工单、58题、14零件、23步流程、存档、知识图鉴、结算与调试闭环 | [`ThirdPersonWhitebox.md`](ThirdPersonWhitebox.md)、[`../Artifacts/Whitebox/Acceptance`](../Artifacts/Whitebox/Acceptance) |
 | 冻结 Unity v0.1 | `Assets/RailCraft/Scenes/Bootstrap.unity`、`Factory.unity` | 固定视角、48题、15步引导流程 | [`Scope.md`](Scope.md)、[`Acceptance.md`](Acceptance.md)、[`PerformanceBudget.md`](PerformanceBudget.md)、[`../Artifacts/Acceptance`](../Artifacts/Acceptance) |
 | 冻结 Godot Demo | `../../railcraft-godot/` | 9题、9零件、3组件的历史 Demo | [`../../railcraft-godot/README.md`](../../railcraft-godot/README.md) |
 
