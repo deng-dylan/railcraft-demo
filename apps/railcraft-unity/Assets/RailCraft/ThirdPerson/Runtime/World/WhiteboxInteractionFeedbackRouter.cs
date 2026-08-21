@@ -21,7 +21,7 @@ namespace RailCraft.ThirdPerson.World
     {
         private static readonly string[] FailureTokens =
         {
-            "失败", "错误", "无法", "没有", "缺失", "损坏", "未通过", "未完成",
+            "失败", "错误", "异常", "无法", "没有", "缺失", "损坏", "未通过", "未完成",
             "尚未", "不可", "不能", "拒绝", "无效", "failed", "failure",
             "incorrect", "missing", "invalid", "locked", "rejected"
         };

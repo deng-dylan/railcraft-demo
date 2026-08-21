@@ -57,10 +57,10 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         }
 
         [TestCase("回答正确，车轴已解锁", InteractionFeedbackOutcome.Success)]
-        [TestCase("落车完成，车辆进入调试阶段", InteractionFeedbackOutcome.Success)]
-        [TestCase("调试通过，车辆投入使用", InteractionFeedbackOutcome.Success)]
-        [TestCase("首次调试未通过，进入重新调试流程", InteractionFeedbackOutcome.Failure)]
-        [TestCase("库存中没有车轮", InteractionFeedbackOutcome.Failure)]
+        [TestCase("落车完成，已切换整车工况演示，进入调试检验阶段", InteractionFeedbackOutcome.Success)]
+        [TestCase("复测通过，车辆通过调试检验", InteractionFeedbackOutcome.Success)]
+        [TestCase("教学故障注入：传感器信号一致性异常（占位），请前往重新调试工位", InteractionFeedbackOutcome.Failure)]
+        [TestCase("当前待装配输入中没有车轮", InteractionFeedbackOutcome.Failure)]
         [TestCase("请前往下一工位", InteractionFeedbackOutcome.None)]
         [TestCase("", InteractionFeedbackOutcome.None)]
         public void FeedbackMessageClassificationHandlesChineseOutcomeLanguage(

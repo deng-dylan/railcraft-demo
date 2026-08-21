@@ -10,7 +10,8 @@ namespace RailCraft.ThirdPerson.World
     [DisallowMultipleComponent]
     public sealed class WhiteboxGameSessionHost : MonoBehaviour
     {
-        [SerializeField, TextArea] private string initialObjective = "寻找零件工位，答题解锁轨道车辆零件";
+        [SerializeField, TextArea] private string initialObjective =
+            "执行标准工单 RC-EMU-01：前往知识工位确认零件与装配要求";
         [SerializeField] private AssemblyVariantId initialAssemblyVariant = AssemblyVariantId.FuxingDemo;
 
         private IWorldGameSession session;
@@ -171,8 +172,8 @@ namespace RailCraft.ThirdPerson.World
             Session.RestoreSnapshot(snapshot ?? throw new ArgumentNullException(nameof(snapshot)));
             completionAnnounced = Session.IsVehicleComplete;
             currentObjective = Session.IsVehicleComplete
-                ? "调试检验合格，车辆投入使用"
-                : "已恢复装配进度，请继续当前流程";
+                ? "标准实训完成，车辆通过调试检验"
+                : "已恢复标准实训进度，请继续当前工位";
             SessionReset?.Invoke();
             StateChanged?.Invoke();
             ObjectiveChanged?.Invoke(CurrentObjective);
@@ -193,7 +194,7 @@ namespace RailCraft.ThirdPerson.World
                 return;
 
             completionAnnounced = true;
-            SetObjective("调试检验合格，车辆投入使用");
+            SetObjective("标准实训完成，车辆通过调试检验");
             VehicleCompleted?.Invoke();
         }
 

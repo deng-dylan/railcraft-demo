@@ -21,6 +21,8 @@ namespace RailCraft.ThirdPerson.World
         [SerializeField] private GameObject completedVisual;
 
         private WhiteboxGameSessionHost subscribedHost;
+        private const string InjectedFaultMessage =
+            "教学故障注入：传感器信号一致性异常（占位）";
 
         public CommissioningAction Action => action;
         public bool IsReady => sessionHost != null && IsReadyFor(sessionHost.Session.CommissioningPhase);
@@ -37,7 +39,7 @@ namespace RailCraft.ThirdPerson.World
                 switch (sessionHost.Session.CommissioningPhase)
                 {
                     case CommissioningPhase.Locked:
-                        return "请先完成落车";
+                        return "请先完成落车集成";
                     case CommissioningPhase.NeedsRetuning:
                         return action == CommissioningAction.Retune ? string.Empty : "请前往重新调试工位";
                     case CommissioningPhase.ReadyForInspection:
@@ -109,22 +111,22 @@ namespace RailCraft.ThirdPerson.World
             switch (action)
             {
                 case CommissioningAction.Retune:
-                    sessionHost.NotifyFeedback("重新调试完成，等待检验");
-                    sessionHost.SetObjective("前往检验工位");
+                    sessionHost.NotifyFeedback("教学故障处置完成，等待检验确认");
+                    sessionHost.SetObjective("前往检验工位确认处置结果");
                     break;
                 case CommissioningAction.Inspect:
-                    sessionHost.NotifyFeedback("检验完成，返回调试判定");
+                    sessionHost.NotifyFeedback("检验完成，返回调试判定进行复测");
                     sessionHost.SetObjective("返回调试判定工位进行复测");
                     break;
                 default:
                     if (result.Passed)
                     {
-                        sessionHost.NotifyFeedback("调试通过，车辆投入使用");
+                        sessionHost.NotifyFeedback("复测通过，车辆通过调试检验");
                     }
                     else
                     {
-                        sessionHost.NotifyFeedback("首次调试未通过，进入重新调试流程");
-                        sessionHost.SetObjective("前往重新调试工位");
+                        sessionHost.NotifyFeedback($"{InjectedFaultMessage}，请前往重新调试工位");
+                        sessionHost.SetObjective("前往重新调试工位处理教学故障");
                     }
                     break;
             }

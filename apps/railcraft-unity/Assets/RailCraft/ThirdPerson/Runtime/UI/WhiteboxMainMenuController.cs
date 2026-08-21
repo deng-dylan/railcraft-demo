@@ -12,6 +12,8 @@ namespace RailCraft.ThirdPerson.UI
     [DisallowMultipleComponent]
     public sealed class WhiteboxMainMenuController : MonoBehaviour
     {
+        private const AssemblyVariantId StandardAssemblyVariant = AssemblyVariantId.FuxingDemo;
+
         [SerializeField] private WhiteboxGameSessionHost sessionHost;
         [SerializeField] private WhiteboxSaveController saveController;
         [SerializeField] private ThirdPersonInputLock inputLock;
@@ -35,6 +37,7 @@ namespace RailCraft.ThirdPerson.UI
         private bool wired;
         private bool menuOwnsTimingPause;
         private bool menuOwnsInputLock;
+        private bool useSessionVariantForNextStart;
 
         public bool IsMenuVisible => mainMenuRoot != null && mainMenuRoot.activeSelf;
         public bool IsSettingsVisible => settingsRoot != null && settingsRoot.activeSelf;
@@ -143,11 +146,13 @@ namespace RailCraft.ThirdPerson.UI
 
         public void StartNewGame()
         {
+            var variant = ResolveSelectedVariant();
+            useSessionVariantForNextStart = false;
             if (saveController != null)
-                saveController.StartNewGame(ResolveSelectedVariant());
+                saveController.StartNewGame(variant);
             else
             {
-                sessionHost?.SelectAssemblyVariant(ResolveSelectedVariant());
+                sessionHost?.SelectAssemblyVariant(variant);
                 sessionHost?.ResetSession();
             }
             CloseMenuForPlay();
@@ -189,6 +194,7 @@ namespace RailCraft.ThirdPerson.UI
                         out var requestedVariant))
                 {
                     sessionHost?.SelectAssemblyVariant(requestedVariant);
+                    useSessionVariantForNextStart = true;
                     if (assemblyVariantDropdown != null)
                         assemblyVariantDropdown.SetValueWithoutNotify((int)requestedVariant);
                 }
@@ -340,30 +346,31 @@ namespace RailCraft.ThirdPerson.UI
         {
             var hasActiveGame = HasActiveGame;
             if (menuTitleText != null)
-                menuTitleText.text = hasActiveGame ? "游戏已暂停" : "高铁装配工程训练";
+                menuTitleText.text = hasActiveGame ? "实训已暂停" : "高速动车组转向架装配与调试实训";
             if (menuSubtitleText != null)
             {
                 menuSubtitleText.text = hasActiveGame
-                    ? "装配进度与计时已暂停 · 按 ESC 或“返回游戏”继续"
-                    : "第三人称流程白盒 · 答题 · 拾取 · 分级装配 · 调试检验";
+                    ? "当前工位与计时已暂停 · 按 ESC 或“继续实训”返回现场"
+                    : "标准工单 RC-EMU-01 · 知识确认 · 子总成装配 · 落车 · 调试检验";
             }
             if (menuFootnoteText != null)
             {
                 menuFootnoteText.text = hasActiveGame
-                    ? "当前进度已自动保存；选择其他方案并重新开始会清空本轮装配。"
-                    : "方案会写入存档；CAD 完成网格化后可替换对应模型插槽。";
+                    ? "当前进度已自动保存；重新开始会清空本轮标准实训进度。"
+                    : "本轮详细装配一套代表性转向架；扩展示范方案仅用于模型接入验证。";
             }
-            SetButtonLabel(startButton, hasActiveGame ? "重新开始" : "开始游戏");
-            SetButtonLabel(continueButton, hasActiveGame ? "返回游戏" : "继续游戏");
+            SetButtonLabel(startButton, hasActiveGame ? "重新开始标准实训" : "开始标准实训");
+            SetButtonLabel(continueButton, hasActiveGame ? "继续实训" : "继续实训");
             if (continueButton != null)
                 continueButton.interactable = HasActiveGame || saveController != null && saveController.HasSave;
             if (assemblyVariantDropdown != null && sessionHost != null)
             {
-                assemblyVariantDropdown.SetValueWithoutNotify((int)sessionHost.SelectedAssemblyVariant);
-                // The value only takes effect after pressing Start/Restart, so
-                // it is safe to choose another plan while the current session
-                // is paused.
-                assemblyVariantDropdown.interactable = true;
+                var menuVariant = hasActiveGame
+                    ? sessionHost.SelectedAssemblyVariant
+                    : StandardAssemblyVariant;
+                assemblyVariantDropdown.SetValueWithoutNotify((int)menuVariant);
+                assemblyVariantDropdown.interactable = false;
+                assemblyVariantDropdown.gameObject.SetActive(false);
             }
         }
 
@@ -377,23 +384,17 @@ namespace RailCraft.ThirdPerson.UI
                 .Select(definition => definition.MenuLabel)
                 .ToList();
             assemblyVariantDropdown.AddOptions(labels);
-            assemblyVariantDropdown.interactable = true;
-            if (sessionHost != null)
-                assemblyVariantDropdown.SetValueWithoutNotify((int)sessionHost.SelectedAssemblyVariant);
+            assemblyVariantDropdown.SetValueWithoutNotify((int)StandardAssemblyVariant);
+            assemblyVariantDropdown.interactable = false;
+            assemblyVariantDropdown.gameObject.SetActive(false);
         }
 
         private AssemblyVariantId ResolveSelectedVariant()
         {
-            if (assemblyVariantDropdown == null)
-                return sessionHost == null
-                    ? AssemblyVariantId.FuxingDemo
-                    : sessionHost.SelectedAssemblyVariant;
+            if (useSessionVariantForNextStart && sessionHost != null)
+                return sessionHost.SelectedAssemblyVariant;
 
-            var index = Mathf.Clamp(
-                assemblyVariantDropdown.value,
-                0,
-                AssemblyVariantCatalog.Definitions.Count - 1);
-            return AssemblyVariantCatalog.Definitions[index].Id;
+            return StandardAssemblyVariant;
         }
 
         private static void SetButtonLabel(Button button, string label)

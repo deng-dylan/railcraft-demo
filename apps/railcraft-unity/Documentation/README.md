@@ -7,7 +7,7 @@
 
 | 状态 | 实现入口 | 产品范围 | 文档与证据 |
 | --- | --- | --- | --- |
-| 当前开发主线 | `Assets/RailCraft/ThirdPerson/` | v0.2：58题、14零件、23步流程、存档、知识图鉴、结算与调试闭环 | [`ThirdPersonWhitebox.md`](ThirdPersonWhitebox.md)、[`../Artifacts/Whitebox/Acceptance`](../Artifacts/Whitebox/Acceptance) |
+| 当前开发主线 | `Assets/RailCraft/ThirdPerson/` | v0.3 候选版：标准工单、58题、14零件、23步流程、存档、知识图鉴、结算与调试闭环 | [`ThirdPersonWhitebox.md`](ThirdPersonWhitebox.md)、[`../Artifacts/Whitebox/Acceptance`](../Artifacts/Whitebox/Acceptance) |
 | 冻结 Unity v0.1 | `Assets/RailCraft/Scenes/Bootstrap.unity`、`Factory.unity` | 固定视角、48题、15步引导流程 | [`Scope.md`](Scope.md)、[`Acceptance.md`](Acceptance.md)、[`PerformanceBudget.md`](PerformanceBudget.md)、[`../Artifacts/Acceptance`](../Artifacts/Acceptance) |
 | 冻结 Godot Demo | `../../railcraft-godot/` | 9题、9零件、3组件的历史 Demo | [`../../railcraft-godot/README.md`](../../railcraft-godot/README.md) |
 
@@ -20,6 +20,8 @@
 - 本地产物：`Builds/Whitebox/RailCraftWhitebox.exe`
 - 流程、题库、Blender 替换与验收条件：
   [`ThirdPersonWhitebox.md`](ThirdPersonWhitebox.md)
+- 当前计划完成度、发行分级和后续优先级：
+  [`ReleaseReadiness.md`](ReleaseReadiness.md)
 - 模型身份、单位、坐标、LOD 和生产资产门禁：[`ModelHandoff.md`](ModelHandoff.md)
 - 可选的完整编组出厂展示场景与 FBX 固定接入路径：
   [`FinalShowcase.md`](FinalShowcase.md)
@@ -32,7 +34,8 @@
 - 组员 CAD 候选文件、转换顺序和网格插槽：
   [`ModelCandidateIntegration.md`](ModelCandidateIntegration.md)
 
-当前白盒证据目录包含构建日志、EditMode XML、成品冒烟日志和最终完成截图，具体
+当前白盒证据目录包含构建日志、EditMode XML、成品冒烟日志以及转向架、落车和
+最终完成截图，具体
 覆盖批次以目录内验收报告为准。每批主线改动应更新与该批风险相匹配的证据；完整
 Build、Unity 缓存和中间截图保持本地。
 

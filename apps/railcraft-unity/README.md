@@ -7,16 +7,16 @@
 ## 当前开发主线：第三人称流程白盒
 
 当前主线验证工厂第三人称探索、答题、拾取、库存、分级装配、落车、调试回路和
-投入使用的完整闭环。内容规模为 58 道题、14 个答题与零件拾取工位、14 个零件、
+实训结算的完整闭环。内容规模为 58 道题、14 个答题与零件拾取工位、14 个零件、
 6 个装配节点，以及调试失败、重新调试、检验和复测流程。题目答错可重试，所有
 奖励、拾取、安装和调试动作均有重复交互保护。
 
-当前 v0.2 增加主菜单、ESC 暂停菜单、继续游戏、音效与画质设置、23 步装配进度、流程状态机、
+当前 v0.3 候选版包含主菜单、ESC 暂停菜单、继续游戏、音效与画质设置、23 步装配进度、流程状态机、
 自动存档、成绩结算、一键重玩和工程知识图鉴。完成节点会显示知识提示，可交互
 工位带有高亮与成功/失败颜色反馈，关键总成完成时镜头自动聚焦后回到玩家视角。
 装配计时会在主菜单、应用暂停和退出期间停表，继续游戏后从原有效用时接着累计。
-主菜单还可选择复兴号、地铁简化、Y25 货运和教学概念四个装配方案；选择值进入存档，
-并贯穿答题、拾取、构体装配、落车和调试阶段，完整复兴号继续作为最终出厂展示。
+普通主菜单固定进入复兴号标准实训线；地铁简化、Y25 货运和教学概念三项继续保留为
+扩展登记、旧存档兼容和开发者烟测入口，完整复兴号继续作为最终出厂展示。
 
 - 主线场景：`Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity`
 - 重新生成：`RailCraft > Third Person Whitebox > Rebuild Scene`
@@ -24,10 +24,11 @@
 - 本地入口：`Builds/Whitebox/RailCraftWhitebox.exe`
 - 当前规格：[`Documentation/ThirdPersonWhitebox.md`](Documentation/ThirdPersonWhitebox.md)
 - 当前证据：[`Artifacts/Whitebox/Acceptance`](Artifacts/Whitebox/Acceptance)
+- 发行判断：[`Documentation/ReleaseReadiness.md`](Documentation/ReleaseReadiness.md)
 
-从源码直接进入编辑器 Play 前先执行一次 `Rebuild Scene`，让生成器把 v0.2 组件和
+从源码直接进入编辑器 Play 前先执行一次 `Rebuild Scene`，让生成器把 v0.3 组件和
 UI 写入场景；Windows 白盒构建入口会自动完成这一步。证据目录以其中验收报告标注
-的批次为准，只有重新完成 Unity 测试、构建与成品冒烟后才能作为 v0.2 最终证据。
+的批次为准；2026-08-21 候选批次已经重新完成 Unity 测试、构建与成品冒烟。
 
 白盒使用 Unity `6000.3.21f1`、URP、Input System 和 uGUI。玩家使用 `WASD`
 移动、`Shift` 奔跑、鼠标控制镜头、滚轮缩放、按 `E` 交互，并用 `ESC` 打开或关闭
@@ -69,7 +70,7 @@ RailCraft Unity v0.1 是 Windows x86_64 第一版固定视角测试版。体验�
 以下命令在已激活许可证的 Windows 环境执行。Unity Test Framework `1.6.0` 的命令行测试不附加 `-quit`；测试运行器会在完成后退出并写入 XML。
 
 ```powershell
-$UnityExe = 'C:\Program Files\Unity 6000.3.21f1\Editor\Unity.exe'
+$UnityExe = 'C:\Program Files\Unity\Hub\Editor\6000.3.21f1\Editor\Unity.exe'
 $Project = (Resolve-Path '.\apps\railcraft-unity').Path
 
 & $UnityExe -batchmode -nographics `
@@ -111,7 +112,7 @@ $env:RAILCRAFT_PERFORMANCE_OUTPUT = "$Project\TestResults\task12-performance.jso
 确保没有 Unity Editor 实例占用项目，然后运行：
 
 ```powershell
-$UnityExe = 'C:\Program Files\Unity 6000.3.21f1\Editor\Unity.exe'
+$UnityExe = 'C:\Program Files\Unity\Hub\Editor\6000.3.21f1\Editor\Unity.exe'
 $Project = (Resolve-Path '.\apps\railcraft-unity').Path
 
 & $UnityExe -batchmode -quit `
@@ -125,6 +126,12 @@ $Project = (Resolve-Path '.\apps\railcraft-unity').Path
 ```text
 Builds/Windows/RailCraft.exe
 ```
+
+若 Unity Hub 的许可证页显示 `Personal` 已激活，而命令行日志仍报告
+`com.unity.editor.headless was not found` 或 `No valid Unity Editor license found`，说明当前
+账户没有取得命令行 headless 权益。此时从 Hub 打开项目，在 `Window > General > Test Runner`
+运行测试，并使用 `RailCraft > Third Person Whitebox` 菜单重建场景和构建 Windows 版；普通
+编辑器许可证仍可完成同一套验证。避免改用未受 Hub 管理的旧编辑器目录。
 
 构建方法显式读取冻结的 `Bootstrap` 与 `Factory` 场景，以 `CleanBuildCache` 方式生成 Windows x86_64 Player。构建失败会抛出 `BuildFailedException`，调用进程返回失败状态。
 

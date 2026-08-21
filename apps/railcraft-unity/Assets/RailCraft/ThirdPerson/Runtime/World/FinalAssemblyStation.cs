@@ -43,7 +43,7 @@ namespace RailCraft.ThirdPerson.World
                 {
                     var child = requiredModules[moduleIndex];
                     return sessionHost.Session.IsModuleComplete(child)
-                        ? $"按 E 将{WhiteboxDisplayNames.Module(child)}送入{stationDisplayName}"
+                        ? $"按 E 将{WhiteboxDisplayNames.Module(child)}提交到{stationDisplayName}"
                         : $"请先完成{WhiteboxDisplayNames.Module(child)}";
                 }
 
@@ -52,8 +52,8 @@ namespace RailCraft.ThirdPerson.World
                     return string.Empty;
                 var part = requiredParts[partIndex];
                 return sessionHost.Session.InventoryContains(part)
-                    ? $"按 E 将{WhiteboxDisplayNames.Part(part)}送入{stationDisplayName}"
-                    : $"缺少{WhiteboxDisplayNames.Part(part)}，请先答题拾取";
+                    ? $"按 E 将{WhiteboxDisplayNames.Part(part)}提交到{stationDisplayName}"
+                    : $"缺少{WhiteboxDisplayNames.Part(part)}，请先完成知识确认并领取";
             }
         }
 
@@ -138,7 +138,7 @@ namespace RailCraft.ThirdPerson.World
             var part = requiredParts[partIndex];
             if (!sessionHost.Session.InventoryContains(part))
             {
-                sessionHost.NotifyFeedback($"库存中没有{WhiteboxDisplayNames.Part(part)}");
+                sessionHost.NotifyFeedback($"当前待装配输入中没有{WhiteboxDisplayNames.Part(part)}");
                 return;
             }
 
@@ -156,13 +156,13 @@ namespace RailCraft.ThirdPerson.World
             RefreshVisuals();
             if (IsLandingComplete)
             {
-                sessionHost.NotifyFeedback("落车完成，车辆进入调试阶段");
-                sessionHost.SetObjective("前往调试判定工位进行首次调试");
+                sessionHost.NotifyFeedback("落车完成，已切换整车工况演示，进入调试检验阶段");
+                sessionHost.SetObjective("前往调试判定工位，执行首次教学调试");
             }
             else
             {
                 sessionHost.NotifyFeedback($"已安装{inputName}");
-                sessionHost.SetObjective($"继续落车装配（{InstalledInputCount}/{RequiredInputCount}）");
+                sessionHost.SetObjective($"继续完成落车输入（{InstalledInputCount}/{RequiredInputCount}）");
             }
         }
 

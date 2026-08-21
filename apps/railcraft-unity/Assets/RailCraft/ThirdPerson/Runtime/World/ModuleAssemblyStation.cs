@@ -37,7 +37,7 @@ namespace RailCraft.ThirdPerson.World
 
                 var missingIndex = FindFirstUninstalledPartIndex();
                 return missingIndex >= 0
-                    ? $"缺少{WhiteboxDisplayNames.Part(requiredParts[missingIndex])}，请先答题拾取"
+                    ? $"缺少{WhiteboxDisplayNames.Part(requiredParts[missingIndex])}，请先完成知识确认并领取"
                     : string.Empty;
             }
         }
@@ -83,7 +83,8 @@ namespace RailCraft.ThirdPerson.World
             {
                 var missingIndex = FindFirstUninstalledPartIndex();
                 if (missingIndex >= 0)
-                    sessionHost.NotifyFeedback($"库存中没有{WhiteboxDisplayNames.Part(requiredParts[missingIndex])}");
+                    sessionHost.NotifyFeedback(
+                        $"当前待装配输入中没有{WhiteboxDisplayNames.Part(requiredParts[missingIndex])}");
                 return;
             }
 

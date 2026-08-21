@@ -191,15 +191,16 @@ namespace RailCraft.ThirdPerson.UI
             if (sessionHost == null)
             {
                 if (inventoryText != null)
-                    inventoryText.text = "库存：空";
+                    inventoryText.text = "待装配输入：空";
                 if (progressText != null)
-                    progressText.text = "装配节点 0/6 · 落车未完成 · 调试锁定";
+                    progressText.text = "阶段：知识确认\n总成：0/6 · 调试：未解锁";
                 return;
             }
 
             var session = sessionHost.Session;
+            var snapshot = sessionHost.ExportSnapshot();
             if (inventoryText != null)
-                inventoryText.text = FormatInventory(session.InventoryParts);
+                inventoryText.text = FormatCarriedInputs(session.InventoryParts);
 
             var completedModules = 0;
             var moduleIds = (ModuleId[])Enum.GetValues(typeof(ModuleId));
@@ -211,9 +212,14 @@ namespace RailCraft.ThirdPerson.UI
 
             if (progressText != null)
             {
-                var landing = session.IsLandingComplete ? "落车完成" : "落车未完成";
+                var stage = ResolveStage(session, completedModules);
+                var landing = session.IsLandingComplete ? "整车落位完成" : "整车落位未完成";
                 var commissioning = WhiteboxDisplayNames.Commissioning(session.CommissioningPhase);
-                progressText.text = $"装配节点 {completedModules}/{moduleIds.Length} · {landing} · {commissioning}";
+                var knowledge = snapshot.AnswerAttemptCount <= 0
+                    ? "知识：未作答"
+                    : $"知识：{snapshot.CorrectAnswerCount}/{snapshot.AnswerAttemptCount}";
+                progressText.text =
+                    $"阶段：{stage}\n总成：{completedModules}/{moduleIds.Length} · {knowledge} · 调试：{commissioning} · {landing}";
             }
         }
 
@@ -265,7 +271,7 @@ namespace RailCraft.ThirdPerson.UI
             if (completionRoot != null)
                 completionRoot.SetActive(true);
             if (completionText != null)
-                completionText.text = "调试通过，车辆投入使用！";
+                completionText.text = "标准实训完成，车辆通过调试检验";
             if (completionDetailText != null && sessionHost != null)
                 completionDetailText.text = FormatSettlement(sessionHost.Session.Progress);
             completionOwnsInputLock = true;
@@ -296,15 +302,15 @@ namespace RailCraft.ThirdPerson.UI
             inputLock?.SetInputLocked(false);
         }
 
-        private static string FormatInventory(IReadOnlyList<PartId> parts)
+        private static string FormatCarriedInputs(IReadOnlyList<PartId> parts)
         {
             if (parts == null || parts.Count == 0)
-                return "库存：空";
+                return "待装配输入：空";
 
             var names = new string[parts.Count];
             for (var index = 0; index < parts.Count; index++)
                 names[index] = WhiteboxDisplayNames.Part(parts[index]);
-            return $"库存（{parts.Count}）：{string.Join("、", names)}";
+            return $"待装配输入（{parts.Count}）：{string.Join("、", names)}";
         }
 
         public static string FormatSettlement(SessionProgressSummary progress)
@@ -331,7 +337,7 @@ namespace RailCraft.ThirdPerson.UI
 
             var failureTokens = new[]
             {
-                "无法", "没有", "尚未", "未解锁", "未完成", "未通过", "失败", "错误", "缺失", "锁定"
+                "无法", "没有", "尚未", "未解锁", "未完成", "未通过", "失败", "错误", "缺失", "锁定", "异常"
             };
             for (var index = 0; index < failureTokens.Length; index++)
             {
@@ -341,7 +347,7 @@ namespace RailCraft.ThirdPerson.UI
 
             var successTokens = new[]
             {
-                "正确", "已拾取", "已安装", "完成", "通过", "投入使用", "已解锁"
+                "正确", "已拾取", "已安装", "完成", "通过", "合格", "投入使用", "已解锁"
             };
             for (var index = 0; index < successTokens.Length; index++)
             {
@@ -350,6 +356,23 @@ namespace RailCraft.ThirdPerson.UI
             }
 
             return null;
+        }
+
+        private static string ResolveStage(IWorldGameSession session, int completedModules)
+        {
+            if (session == null)
+                return "知识确认";
+            if (session.IsVehicleComplete)
+                return "实训完成";
+            if (session.CommissioningPhase != CommissioningPhase.Locked)
+                return "调试检验";
+            if (session.IsLandingComplete)
+                return "落车完成";
+            if (session.AreAllModulesComplete)
+                return "落车集成";
+            if (completedModules > 0)
+                return "子总成装配";
+            return session.InventoryParts.Count > 0 ? "零件齐套" : "知识确认";
         }
     }
 }

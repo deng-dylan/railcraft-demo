@@ -19,12 +19,12 @@ namespace RailCraft.ThirdPerson.World
         {
             switch (phase)
             {
-                case CommissioningPhase.Locked: return "等待落车";
-                case CommissioningPhase.ReadyForInitialTest: return "等待首次调试";
-                case CommissioningPhase.NeedsRetuning: return "需要重新调试";
+                case CommissioningPhase.Locked: return "等待落车集成";
+                case CommissioningPhase.ReadyForInitialTest: return "等待首次调试判定";
+                case CommissioningPhase.NeedsRetuning: return "等待教学故障处理";
                 case CommissioningPhase.ReadyForInspection: return "等待检验";
-                case CommissioningPhase.ReadyForRetest: return "等待复测";
-                case CommissioningPhase.InService: return "投入使用";
+                case CommissioningPhase.ReadyForRetest: return "等待复测判定";
+                case CommissioningPhase.InService: return "调试合格";
                 default: return phase.ToString();
             }
         }

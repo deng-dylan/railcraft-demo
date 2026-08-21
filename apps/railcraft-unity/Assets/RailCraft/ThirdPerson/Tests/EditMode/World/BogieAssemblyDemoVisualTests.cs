@@ -188,6 +188,43 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         }
 
         [Test]
+        public void ProductCarbodyVisualUsesTheFinalShowcaseLiveryMaterials()
+        {
+            var model = AssetDatabase.LoadAssetAtPath<GameObject>(
+                BogieAssemblyDemoVisualFactory.CarbodyModelAssetPath);
+            var parent = new GameObject("ProductCarbodyMaterialTestRoot");
+            try
+            {
+                Assert.That(model, Is.Not.Null);
+                Assert.That(
+                    BogieAssemblyDemoVisualFactory.TryCreateProductCarbodyVisual(
+                        parent.transform,
+                        "ProductCarbody",
+                        displayLength: 0f,
+                        out var visual),
+                    Is.True);
+
+                var productMaterials = visual.GetComponentsInChildren<Renderer>(true)
+                    .SelectMany(renderer => renderer.sharedMaterials)
+                    .Where(material => material != null)
+                    .Distinct()
+                    .ToArray();
+                var expectedWhite = AssetDatabase.LoadAssetAtPath<Material>(
+                    BogieAssemblyDemoVisualFactory.ProductWhiteMaterialPath);
+                var expectedDark = AssetDatabase.LoadAssetAtPath<Material>(
+                    BogieAssemblyDemoVisualFactory.ProductDarkMaterialPath);
+
+                Assert.That(productMaterials, Does.Contain(expectedWhite));
+                Assert.That(productMaterials, Does.Contain(expectedDark));
+                Assert.That(visual.GetComponentsInChildren<Collider>(true), Is.Empty);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(parent);
+            }
+        }
+
+        [Test]
         public void RepairedWheelsetsAreSeparatedAndMeetTheRailReference()
         {
             var model = AssetDatabase.LoadAssetAtPath<GameObject>(
@@ -407,6 +444,10 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
                 Assert.That(names, Does.Contain("Installed_FixedDrivePackage"));
                 Assert.That(names.Count(item => item == "LandingBogie_Front"), Is.EqualTo(1));
                 Assert.That(names.Count(item => item == "LandingBogie_Rear"), Is.EqualTo(1));
+                Assert.That(names, Does.Contain("ProductLiveryStripe_Left"));
+                Assert.That(names, Does.Contain("ProductLiveryStripe_Right"));
+                Assert.That(names, Does.Contain("ProductWindow_Left_01"));
+                Assert.That(names, Does.Contain("ProductWindow_Right_12"));
                 Assert.That(names, Does.Contain("Axle_F"));
                 Assert.That(names, Does.Contain("Wheels_F"));
                 Assert.That(names, Does.Contain("BrakeDiscs_F"));

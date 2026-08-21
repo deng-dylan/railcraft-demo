@@ -20,6 +20,15 @@ namespace RailCraft.ThirdPerson.Editor
         public const string CarbodyModelAssetPath =
             "Assets/RailCraft/ThirdPerson/Art/Models/AssemblyDemo/FuxingCarbodyAssemblyDemo.fbx";
 
+        public const string ProductWhiteMaterialPath =
+            "Assets/RailCraft/ThirdPerson/Art/Materials/FinalShowcase/FS_TrainWhite.mat";
+        public const string ProductGlassMaterialPath =
+            "Assets/RailCraft/ThirdPerson/Art/Materials/FinalShowcase/FS_Glass.mat";
+        public const string ProductBlueMaterialPath =
+            "Assets/RailCraft/ThirdPerson/Art/Materials/FinalShowcase/FS_SignalBlue.mat";
+        public const string ProductDarkMaterialPath =
+            "Assets/RailCraft/ThirdPerson/Art/Materials/FinalShowcase/FS_DarkSteel.mat";
+
         public const string ModelRootName = "BogieAssemblyDemoRoot";
         public const string DemonstrationNotice =
             "结构示范件｜用于组装流程演示，外形与尺寸不代表 SWM-400E1 最终工程件";
@@ -171,6 +180,49 @@ namespace RailCraft.ThirdPerson.Editor
             float displayLength,
             out GameObject root)
         {
+            return TryCreateCarbodyVisualInternal(
+                parent,
+                name,
+                material,
+                displayLength,
+                overrideImportedMaterials: true,
+                out root);
+        }
+
+        /// <summary>
+        /// Creates the completed coach while retaining the source FBX material
+        /// assignments. Product presentation needs the authored windows,
+        /// doors and livery; assembly inputs still use the training palette.
+        /// </summary>
+        public static bool TryCreateProductCarbodyVisual(
+            Transform parent,
+            string name,
+            float displayLength,
+            out GameObject root)
+        {
+            if (!TryCreateCarbodyVisualInternal(
+                parent,
+                name,
+                material: null,
+                displayLength: displayLength,
+                overrideImportedMaterials: false,
+                out root))
+            {
+                return false;
+            }
+
+            ApplyProductLiveryMaterials(root);
+            return true;
+        }
+
+        private static bool TryCreateCarbodyVisualInternal(
+            Transform parent,
+            string name,
+            Material material,
+            float displayLength,
+            bool overrideImportedMaterials,
+            out GameObject root)
+        {
             root = null;
             var model = AssetDatabase.LoadAssetAtPath<GameObject>(CarbodyModelAssetPath);
             if (model == null || parent == null)
@@ -211,7 +263,8 @@ namespace RailCraft.ThirdPerson.Editor
 
             UnityEngine.Object.DestroyImmediate(instance);
             StripNonVisualComponents(rootObject);
-            ApplyMaterial(rootObject, material);
+            if (overrideImportedMaterials)
+                ApplyMaterial(rootObject, material);
 
             // Measure in the identity-rotation root frame.  Measuring from the
             // corrected child would express the coach back in its imported
@@ -382,6 +435,62 @@ namespace RailCraft.ThirdPerson.Editor
                 var count = Mathf.Max(1, renderer.sharedMaterials.Length);
                 renderer.sharedMaterials = Enumerable.Repeat(material, count).ToArray();
             }
+        }
+
+        private static void ApplyProductLiveryMaterials(GameObject root)
+        {
+            if (root == null)
+                return;
+
+            var white = AssetDatabase.LoadAssetAtPath<Material>(ProductWhiteMaterialPath);
+            var glass = AssetDatabase.LoadAssetAtPath<Material>(ProductGlassMaterialPath);
+            var blue = AssetDatabase.LoadAssetAtPath<Material>(ProductBlueMaterialPath);
+            var dark = AssetDatabase.LoadAssetAtPath<Material>(ProductDarkMaterialPath);
+            foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
+            {
+                var materials = renderer.sharedMaterials;
+                var changed = false;
+                for (var index = 0; index < materials.Length; index++)
+                {
+                    var replacement = ResolveProductMaterial(
+                        materials[index], white, glass, blue, dark);
+                    if (replacement == null || replacement == materials[index])
+                        continue;
+
+                    materials[index] = replacement;
+                    changed = true;
+                }
+
+                if (changed)
+                    renderer.sharedMaterials = materials;
+            }
+        }
+
+        private static Material ResolveProductMaterial(
+            Material source,
+            Material white,
+            Material glass,
+            Material blue,
+            Material dark)
+        {
+            if (source == null)
+                return white;
+
+            var materialName = source.name;
+            if (materialName.IndexOf("Silver", StringComparison.OrdinalIgnoreCase) >= 0)
+                return white;
+            if (materialName.IndexOf("Glas", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                string.Equals(materialName, "材质.2", StringComparison.Ordinal))
+                return glass;
+            if (string.Equals(materialName, "材质.1", StringComparison.Ordinal) ||
+                string.Equals(materialName, "材质.4", StringComparison.Ordinal))
+                return blue;
+            if (materialName.IndexOf("metal_bumpy", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                materialName.IndexOf("dark_plastic", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                materialName.IndexOf("futuristic_01", StringComparison.OrdinalIgnoreCase) >= 0)
+                return dark;
+
+            return source;
         }
 
         private static void StripNonVisualComponents(GameObject root)
