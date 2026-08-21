@@ -78,11 +78,11 @@ PlayMode 中跳过的用例为 `PerformanceCaptureTests.CompleteProductionFlowMe
 
 ## 本地运行、隐私与排除功能检查
 
-- 运行时代码和内容目录静态扫描未检出 `UnityWebRequest`、`HttpClient`、`WebClient`、`System.Net`、`PlayerPrefs`、`AudioSource`、计分、准确率、排行、多人、XR 或 Android 调用点。
+- 运行时代码和内容目录静态扫描未检出 `UnityWebRequest`、`HttpClient`、`WebClient`、`System.Net`、`PlayerPrefs`、`AudioSource`、计分、准确率、排行、多人、XR 或非 Windows 平台调用点。
 - `Packages/manifest.json` 和 `packages-lock.json` 不含 `com.unity.purchasing`、`com.unity.services.core` 或 `com.unity.analytics`。
 - 项目未启用 Services/IAP/Analytics 包或调用点；Unity 引擎自身可能携带内部 Analytics 模块，该事实不表示项目启用了分析功能。
 - Player 从完整本地 Build 目录启动。网络独立性以本地内容、无联网 API 调用点和无 Services 包为依据；本次记录未包含操作系统物理断网切换。
-- 没有存档、继续、账户、云同步、音频、触控、Android、XR 或多人功能。
+- 没有存档、继续、账户、云同步、音频、触控、非 Windows 平台、XR 或多人功能。
 
 ## 性能基线
 
