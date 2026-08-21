@@ -24,7 +24,8 @@ namespace RailCraft.ThirdPerson.Domain
             string shortName,
             string description,
             string assetStatus,
-            bool teachingOnly)
+            bool teachingOnly,
+            bool isPrimaryTrainingPlan)
         {
             Id = id;
             Key = key;
@@ -33,6 +34,7 @@ namespace RailCraft.ThirdPerson.Domain
             Description = description;
             AssetStatus = assetStatus;
             TeachingOnly = teachingOnly;
+            IsPrimaryTrainingPlan = isPrimaryTrainingPlan;
         }
 
         public AssemblyVariantId Id { get; }
@@ -42,8 +44,11 @@ namespace RailCraft.ThirdPerson.Domain
         public string Description { get; }
         public string AssetStatus { get; }
         public bool TeachingOnly { get; }
+        public bool IsPrimaryTrainingPlan { get; }
 
-        public string MenuLabel => $"{DisplayName} · {ShortName}";
+        public string MenuLabel => IsPrimaryTrainingPlan
+            ? $"{DisplayName} · {ShortName}"
+            : $"扩展示范 · {DisplayName}";
     }
 
     /// <summary>
@@ -59,34 +64,38 @@ namespace RailCraft.ThirdPerson.Domain
                 AssemblyVariantId.FuxingDemo,
                 "fuxing-demo",
                 "复兴号教学装配",
-                "当前默认方案",
-                "沿用现有复兴号车体与队员转向架示范 FBX，完整跑通答题、拾取、装配、落车和调试流程。",
+                "标准实训线",
+                "沿用现有复兴号车体与队员转向架示范 FBX，作为标准工单完整跑通知识确认、拾取、装配、落车和调试流程。",
                 "Unity 网格已接入",
-                false),
+                false,
+                true),
             new AssemblyVariantDefinition(
                 AssemblyVariantId.MetroSimplified,
                 "metro-simplified",
                 "地铁简化转向架",
-                "组员上色装配体",
-                "使用地铁简化转向架的结构方案；等待组员提供完整 Pack and Go 或导出的 FBX/GLB。",
+                "扩展示范件",
+                "作为组员模型接入验证使用；等待完整 Pack and Go 或导出的 FBX/GLB 后再评估纳入独立关卡。",
                 "上色网格插槽／示范件回退",
+                false,
                 false),
             new AssemblyVariantDefinition(
                 AssemblyVariantId.Y25Freight,
                 "y25-freight",
                 "Y25 欧洲货运转向架",
-                "货运方案",
-                "使用 Y25 货运转向架的结构方案；STEP 自包含，适合作为下一条导入管线。",
+                "扩展示范件",
+                "作为 STEP 导入与轻量化验证对象使用；适合后续拆成独立示范内容。",
                 "STEP 网格插槽／示范件回退",
+                false,
                 false),
             new AssemblyVariantDefinition(
                 AssemblyVariantId.TeachingConcept,
                 "teaching-concept",
                 "简化铁路转向架（现实无对应）",
-                "教学概念方案",
-                "组员标注为教学版、现实无对应车型；只作为玩法教学分支，完成后仍进入统一落车与调试流程。",
+                "教学概念件",
+                "组员标注为教学版、现实无对应车型；用于装配逻辑说明和材质流程验证，不作为标准实训考核对象。",
                 "教学材质插槽／示范件回退",
-                true)
+                true,
+                false)
         };
 
         public static IReadOnlyList<AssemblyVariantDefinition> Definitions => definitions;

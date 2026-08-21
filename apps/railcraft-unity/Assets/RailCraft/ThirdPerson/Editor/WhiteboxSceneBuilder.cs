@@ -69,7 +69,6 @@ namespace RailCraft.ThirdPerson.Editor
             public Slider Volume;
             public Text VolumeValue;
             public Dropdown Quality;
-            public Dropdown AssemblyVariant;
         }
 
         private sealed class KnowledgeUi
@@ -134,7 +133,7 @@ namespace RailCraft.ThirdPerson.Editor
             var sessionHost = hostObject.AddComponent<WhiteboxGameSessionHost>();
             sessionHost.Configure(
                 new DomainWorldGameSession(),
-                "探索知识工位，答题解锁并拾取 14 类装配零件");
+                "执行标准工单 RC-EMU-01：前往知识工位确认零件与装配要求");
             var saveController = hostObject.AddComponent<WhiteboxSaveController>();
             saveController.Configure(sessionHost);
 
@@ -147,7 +146,6 @@ namespace RailCraft.ThirdPerson.Editor
                 saveController,
                 playerRig);
             var gameplay = CreateChild(root.transform, "GameplayStations");
-            var variantPresentation = gameplay.AddComponent<AssemblyVariantGameplayPresentation>();
             var focusBindings = new List<AssemblyFocusBinding>();
             BuildPartStations(
                 gameplay.transform,
@@ -161,10 +159,6 @@ namespace RailCraft.ThirdPerson.Editor
                 sessionHost,
                 playerRig.Scanner,
                 focusBindings,
-                palette);
-            BuildAssemblyVariantReferenceDisplay(
-                gameplay.transform,
-                sessionHost,
                 palette);
             BuildCompositeAssembly(
                 gameplay.transform,
@@ -183,7 +177,6 @@ namespace RailCraft.ThirdPerson.Editor
                 sessionHost,
                 playerRig.Scanner,
                 palette);
-            variantPresentation.Configure(sessionHost, gameplay.transform);
 
             var focusDirector = playerRig.OrbitCamera.gameObject.AddComponent<AssemblyCameraFocusDirector>();
             focusDirector.Configure(
@@ -330,22 +323,25 @@ namespace RailCraft.ThirdPerson.Editor
                     palette.Steel));
             }
 
-            BuildZonePad(environment.transform, "WestKnowledgeLane", new Vector3(-23.2f, 0.015f, 0f),
-                new Vector3(7.2f, 0.03f, 39f), palette.Running);
-            BuildZonePad(environment.transform, "EastKnowledgeLane", new Vector3(23.2f, 0.015f, 0f),
-                new Vector3(7.2f, 0.03f, 39f), palette.Electrical);
-            BuildZonePad(environment.transform, "AssemblyFlowLane", new Vector3(0f, 0.02f, 0f),
-                new Vector3(34f, 0.04f, 27f), palette.Station);
+            BuildZonePad(environment.transform, "KnowledgeAndMaterialZone", new Vector3(-1.75f, 0.015f, -16f),
+                new Vector3(43f, 0.03f, 5.2f), palette.Running);
+            BuildZonePad(environment.transform, "SubassemblyZone", new Vector3(-6f, 0.02f, -10f),
+                new Vector3(32f, 0.04f, 5.2f), palette.Electrical);
+            BuildZonePad(environment.transform, "BogieAssemblyZone", new Vector3(0f, 0.022f, 1.5f),
+                new Vector3(9f, 0.044f, 7f), palette.Station);
+            BuildZonePad(environment.transform, "LandingZone", new Vector3(15f, 0.024f, 0f),
+                new Vector3(10f, 0.048f, 27f), palette.Station);
             BuildZonePad(environment.transform, "CommissioningLoop", new Vector3(0f, 0.025f, 16.5f),
                 new Vector3(30f, 0.05f, 6.5f), palette.Safety);
 
             BuildSafetyRailings(environment.transform, palette);
-            CreateWorldLabel(environment.transform, "WestLaneLabel", "零件知识工位 A",
-                new Vector3(-22.5f, 4.2f, 20.65f), Quaternion.identity, palette.Running.color, 1.05f);
-            CreateWorldLabel(environment.transform, "FlowLabel", "部件 → 子总成 → 转向架构体 → 落车",
-                new Vector3(0f, 4.2f, 20.65f), Quaternion.identity, palette.Safety.color, 0.82f);
-            CreateWorldLabel(environment.transform, "EastLaneLabel", "零件知识工位 B",
-                new Vector3(22.5f, 4.2f, 20.65f), Quaternion.identity, palette.Electrical.color, 1.05f);
+            CreateWorldLabel(environment.transform, "MaterialZoneLabel", "01  知识确认与材料准备",
+                new Vector3(-18f, 4.2f, 20.65f), Quaternion.identity, palette.Running.color, 0.78f);
+            CreateWorldLabel(environment.transform, "AssemblyZoneLabel", "02  子总成与转向架装配",
+                new Vector3(0f, 4.2f, 20.65f), Quaternion.identity, palette.Electrical.color, 0.78f);
+            CreateWorldLabel(environment.transform, "LandingZoneLabel", "03  落车 · 教学调试 · 检验",
+                new Vector3(18f, 4.2f, 20.65f), Quaternion.identity, palette.Safety.color, 0.78f);
+            BuildStandardWorkOrderBoard(environment.transform, palette);
 
             FactoryKitEnvironmentVisualFactory.BuildDefaultDecorations(
                 environment.transform,
@@ -365,10 +361,33 @@ namespace RailCraft.ThirdPerson.Editor
             MarkStatic(pad);
         }
 
+        private static void BuildStandardWorkOrderBoard(Transform parent, Palette palette)
+        {
+            var board = CreateChild(parent, "StandardWorkOrderBoard");
+            // Keep the board away from the player's initial chase-camera ray.
+            board.transform.localPosition = new Vector3(-13.5f, 0f, -19.55f);
+            var panel = CreatePrimitive(
+                PrimitiveType.Cube,
+                board.transform,
+                "WorkOrderPanel",
+                new Vector3(0f, 2.05f, 0f),
+                new Vector3(10.8f, 3.3f, 0.18f),
+                palette.Station);
+            RemoveCollider(panel);
+            CreateWorldLabel(
+                board.transform,
+                "WorkOrderTitle",
+                "标准工单  RC-EMU-01\n动力中间车转向架装配 → 落车 → 教学故障调试\n精装 1 套代表性转向架 · 同型第 2 套由配套生产线提供",
+                new Vector3(0f, 2.05f, 0.12f),
+                Quaternion.Euler(0f, 180f, 0f),
+                palette.White.color,
+                0.38f);
+        }
+
         private static void BuildSafetyRailings(Transform parent, Palette palette)
         {
             var railings = CreateChild(parent, "SafetyRailings");
-            foreach (var x in new[] { -19.2f, 19.2f })
+            foreach (var x in new[] { -25.5f, 25.5f })
             {
                 for (var z = -17f; z <= 17f; z += 4f)
                 {
@@ -526,7 +545,7 @@ namespace RailCraft.ThirdPerson.Editor
             var header = CreateText(
                 canvasObject.transform,
                 "WhiteboxHeader",
-                "RAILCRAFT · 高铁装配工程训练白盒 v0.2",
+                "RAILCRAFT · 高速动车组装配实训白盒 v0.3",
                 20,
                 FontStyle.Bold,
                 TextAnchor.MiddleCenter,
@@ -537,19 +556,19 @@ namespace RailCraft.ThirdPerson.Editor
                 new Vector2(0f, -18f),
                 new Vector2(650f, 34f));
 
-            var variantHudText = CreateText(
+            var workOrderText = CreateText(
                 canvasObject.transform,
-                "AssemblyVariantHudText",
-                "方案：复兴号教学装配 · Unity 网格已接入",
+                "WorkOrderHudText",
+                "标准工单 RC-EMU-01 · 动力中间车转向架装配、落车与调试实训",
                 16,
                 FontStyle.Bold,
                 TextAnchor.MiddleCenter,
                 new Color(1f, 0.78f, 0.26f));
             SetAnchoredRect(
-                variantHudText.rectTransform,
+                workOrderText.rectTransform,
                 new Vector2(0.5f, 1f),
                 new Vector2(0f, -47f),
-                new Vector2(820f, 26f));
+                new Vector2(980f, 26f));
 
             var progressPanel = CreatePanel(
                 canvasObject.transform,
@@ -591,10 +610,10 @@ namespace RailCraft.ThirdPerson.Editor
                 "StatePanel",
                 new Color(0.025f, 0.055f, 0.075f, 0.88f));
             SetAnchoredRect((RectTransform)statePanel.transform, new Vector2(1f, 1f), new Vector2(-28f, -126f), new Vector2(650f, 178f), new Vector2(1f, 1f));
-            var progressText = CreateText(statePanel.transform, "ProgressText", "装配节点 0/6 · 落车未完成 · 调试锁定", 22,
+            var progressText = CreateText(statePanel.transform, "ProgressText", "阶段：知识确认\n总成：0/6 · 调试：未解锁", 22,
                 FontStyle.Bold, TextAnchor.UpperLeft, new Color(1f, 0.78f, 0.26f));
             SetTopRect(progressText.rectTransform, new Vector2(24f, -18f), new Vector2(602f, 50f));
-            var inventoryText = CreateText(statePanel.transform, "InventoryText", "库存：空", 19,
+            var inventoryText = CreateText(statePanel.transform, "InventoryText", "待装配输入：空", 19,
                 FontStyle.Normal, TextAnchor.UpperLeft, Color.white);
             SetTopRect(inventoryText.rectTransform, new Vector2(24f, -72f), new Vector2(602f, 92f));
 
@@ -666,9 +685,6 @@ namespace RailCraft.ThirdPerson.Editor
                 completionUi.Title,
                 completionUi.Detail);
 
-            var variantHud = canvasObject.AddComponent<AssemblyVariantHudPresenter>();
-            variantHud.Configure(sessionHost, variantHudText);
-
             var progressPresenter = canvasObject.AddComponent<WhiteboxAssemblyProgressPresenter>();
             progressPresenter.Configure(
                 sessionHost,
@@ -717,8 +733,7 @@ namespace RailCraft.ThirdPerson.Editor
                 mainMenuUi.Title,
                 mainMenuUi.Subtitle,
                 mainMenuUi.Footnote,
-                knowledgePresenter,
-                mainMenuUi.AssemblyVariant);
+                knowledgePresenter);
 
             var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             eventSystem.transform.SetParent(interfaceRoot.transform, false);
@@ -770,7 +785,7 @@ namespace RailCraft.ThirdPerson.Editor
         {
             var panel = CreatePanel(canvas, "CompletionPanel", new Color(0.018f, 0.05f, 0.055f, 0.98f));
             SetAnchoredRect((RectTransform)panel.transform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(840f, 620f));
-            var completionText = CreateText(panel.transform, "CompletionText", "调试通过，车辆投入使用！", 38,
+            var completionText = CreateText(panel.transform, "CompletionText", "标准实训完成，车辆通过调试检验", 38,
                 FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.2f, 1f, 0.48f));
             SetTopRect(completionText.rectTransform, new Vector2(48f, -42f), new Vector2(744f, 84f));
             var detail = CreateText(panel.transform, "CompletionDetail",
@@ -779,10 +794,10 @@ namespace RailCraft.ThirdPerson.Editor
             detail.verticalOverflow = VerticalWrapMode.Overflow;
             SetTopRect(detail.rectTransform, new Vector2(70f, -142f), new Vector2(700f, 150f));
             var unlockHint = CreateText(panel.transform, "CompendiumUnlockHint",
-                "工程知识图鉴已解锁，可随时回顾本次训练知识。",
+                "工程知识图鉴已解锁；八编组整车展示可在完成后单独查看。",
                 20, FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.42f, 0.9f, 1f));
             SetTopRect(unlockHint.rectTransform, new Vector2(70f, -302f), new Vector2(700f, 44f));
-            var showcase = CreateButton(panel.transform, "FinalShowcaseButton", "观看复兴号出厂展示  [V]", 22);
+            var showcase = CreateButton(panel.transform, "FinalShowcaseButton", "查看八编组出厂展示  [V]", 22);
             SetTopRect((RectTransform)showcase.transform, new Vector2(120f, -378f), new Vector2(600f, 62f));
             var reset = CreateButton(panel.transform, "ResetWhiteboxButton", "一键重玩", 22);
             SetTopRect((RectTransform)reset.transform, new Vector2(120f, -466f), new Vector2(270f, 62f));
@@ -873,34 +888,27 @@ namespace RailCraft.ThirdPerson.Editor
             Stretch((RectTransform)root.transform, Vector2.zero, Vector2.zero);
             var card = CreatePanel(root.transform, "MainMenuCard", new Color(0.025f, 0.085f, 0.12f, 0.98f));
             SetAnchoredRect((RectTransform)card.transform, new Vector2(0.5f, 0.5f),
-                Vector2.zero, new Vector2(720f, 840f));
-            var title = CreateText(card.transform, "MainMenuTitle", "高铁装配工程训练", 44,
+                Vector2.zero, new Vector2(720f, 760f));
+            var title = CreateText(card.transform, "MainMenuTitle", "高速动车组转向架装配与调试实训", 38,
                 FontStyle.Bold, TextAnchor.MiddleCenter, new Color(0.34f, 0.94f, 1f));
             SetTopRect(title.rectTransform, new Vector2(44f, -74f), new Vector2(632f, 70f));
             var subtitle = CreateText(card.transform, "MainMenuSubtitle",
-                "第三人称流程白盒 · 答题 · 拾取 · 分级装配 · 调试检验",
+                "标准工单 RC-EMU-01 · 知识确认 · 分级装配 · 落车 · 调试检验",
                 20, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.8f, 0.88f, 0.92f));
             SetTopRect(subtitle.rectTransform, new Vector2(44f, -150f), new Vector2(632f, 54f));
 
-            var variantLabel = CreateText(card.transform, "AssemblyVariantLabel",
-                "本轮装配方案（会参与答题、拾取、装配、落车与调试）",
-                18, FontStyle.Bold, TextAnchor.MiddleLeft, new Color(1f, 0.78f, 0.26f));
-            SetTopRect(variantLabel.rectTransform, new Vector2(70f, -212f), new Vector2(580f, 34f));
-            var assemblyVariant = CreateDropdown(card.transform, "AssemblyVariantDropdown", "选择装配方案");
-            SetTopRect((RectTransform)assemblyVariant.transform, new Vector2(70f, -252f), new Vector2(580f, 56f));
-
-            var start = CreateButton(card.transform, "StartGameButton", "开始游戏", 25);
-            var resume = CreateButton(card.transform, "ContinueGameButton", "继续游戏", 25);
+            var start = CreateButton(card.transform, "StartGameButton", "开始标准实训", 25);
+            var resume = CreateButton(card.transform, "ContinueGameButton", "继续实训", 25);
             var settings = CreateButton(card.transform, "SettingsButton", "设置", 25);
             var quit = CreateButton(card.transform, "QuitButton", "退出", 25);
-            SetTopRect((RectTransform)start.transform, new Vector2(150f, -334f), new Vector2(420f, 68f));
-            SetTopRect((RectTransform)resume.transform, new Vector2(150f, -420f), new Vector2(420f, 68f));
-            SetTopRect((RectTransform)settings.transform, new Vector2(150f, -506f), new Vector2(420f, 68f));
-            SetTopRect((RectTransform)quit.transform, new Vector2(150f, -592f), new Vector2(420f, 68f));
+            SetTopRect((RectTransform)start.transform, new Vector2(150f, -260f), new Vector2(420f, 68f));
+            SetTopRect((RectTransform)resume.transform, new Vector2(150f, -350f), new Vector2(420f, 68f));
+            SetTopRect((RectTransform)settings.transform, new Vector2(150f, -440f), new Vector2(420f, 68f));
+            SetTopRect((RectTransform)quit.transform, new Vector2(150f, -530f), new Vector2(420f, 68f));
             var footnote = CreateText(card.transform, "MainMenuFootnote",
-                "方案会写入存档；CAD 源文件完成网格化后可替换同一方案插槽。",
+                "本轮详细装配一套代表性转向架；落车时按整车工况显示，八编组展示在结算后单独查看。",
                 18, FontStyle.Normal, TextAnchor.MiddleCenter, new Color(0.62f, 0.72f, 0.78f));
-            SetTopRect(footnote.rectTransform, new Vector2(60f, -706f), new Vector2(600f, 52f));
+            SetTopRect(footnote.rectTransform, new Vector2(60f, -650f), new Vector2(600f, 52f));
 
             var settingsRoot = CreatePanel(root.transform, "SettingsRoot",
                 new Color(0.012f, 0.04f, 0.058f, 0.995f));
@@ -944,8 +952,7 @@ namespace RailCraft.ThirdPerson.Editor
                 SettingsBack = back,
                 Volume = volume,
                 VolumeValue = volumeValue,
-                Quality = quality,
-                AssemblyVariant = assemblyVariant
+                Quality = quality
             };
         }
 
@@ -960,20 +967,23 @@ namespace RailCraft.ThirdPerson.Editor
             var catalog = WhiteboxGameCatalog.CreateDefault();
             var specs = new[]
             {
-                new PartStationSpec(PartId.Axle, new Vector3(-23.2f, 0f, -15f), -90f),
-                new PartStationSpec(PartId.Wheel, new Vector3(-23.2f, 0f, -10f), -90f),
-                new PartStationSpec(PartId.Bearing, new Vector3(-23.2f, 0f, -5f), -90f),
-                new PartStationSpec(PartId.BrakeDevice, new Vector3(-23.2f, 0f, 0f), -90f),
-                new PartStationSpec(PartId.TractionRod, new Vector3(-23.2f, 0f, 5f), -90f),
-                new PartStationSpec(PartId.SensorBracket, new Vector3(-23.2f, 0f, 10f), -90f),
-                new PartStationSpec(PartId.Carbody, new Vector3(-23.2f, 0f, 15f), -90f),
-                new PartStationSpec(PartId.PrimaryElasticElement, new Vector3(23.2f, 0f, -15f), 90f),
-                new PartStationSpec(PartId.PrimaryPositioningElement, new Vector3(23.2f, 0f, -10f), 90f),
-                new PartStationSpec(PartId.PrimaryDamper, new Vector3(23.2f, 0f, -5f), 90f),
-                new PartStationSpec(PartId.SecondaryElasticElement, new Vector3(23.2f, 0f, 0f), 90f),
-                new PartStationSpec(PartId.HeightControlElement, new Vector3(23.2f, 0f, 5f), 90f),
-                new PartStationSpec(PartId.SecondaryDamper, new Vector3(23.2f, 0f, 10f), 90f),
-                new PartStationSpec(PartId.CentralTractionDevice, new Vector3(23.2f, 0f, 15f), 90f)
+                // Materials are grouped by the subassembly they feed. This
+                // restores a short learn -> collect -> assemble loop and keeps
+                // the long landing track clear on the east side of the hall.
+                new PartStationSpec(PartId.Axle, new Vector3(-21f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.Wheel, new Vector3(-17.5f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.Bearing, new Vector3(-14f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.BrakeDevice, new Vector3(-10.5f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.TractionRod, new Vector3(-7f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.SensorBracket, new Vector3(-3.5f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.PrimaryElasticElement, new Vector3(0f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.PrimaryPositioningElement, new Vector3(3.5f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.PrimaryDamper, new Vector3(7f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.SecondaryElasticElement, new Vector3(10.5f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.HeightControlElement, new Vector3(14f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.SecondaryDamper, new Vector3(17.5f, 0f, -16f), 0f),
+                new PartStationSpec(PartId.Carbody, new Vector3(23f, 0f, -7f), 90f),
+                new PartStationSpec(PartId.CentralTractionDevice, new Vector3(23f, 0f, -2f), 90f)
             };
 
             var stations = CreateChild(parent, "QuizPartStations");
@@ -1036,21 +1046,18 @@ namespace RailCraft.ThirdPerson.Editor
             var catalog = WhiteboxGameCatalog.CreateDefault();
             var definitions = new[]
             {
-                // Keep the module row behind the long landing lane.  The
-                // display rails can then span a full intermediate coach
-                // without crossing an assembly table or trigger volume.
-                (Id: ModuleId.WheelsetAxlebox, Position: new Vector3(-13.5f, 0f, -17f), Yaw: 0f),
-                (Id: ModuleId.Frame, Position: new Vector3(-4.5f, 0f, -17f), Yaw: 0f),
-                (Id: ModuleId.PrimarySuspension, Position: new Vector3(4.5f, 0f, -17f), Yaw: 0f),
-                (Id: ModuleId.SecondarySuspension, Position: new Vector3(13.5f, 0f, -17f), Yaw: 0f)
+                (Id: ModuleId.WheelsetAxlebox, Position: new Vector3(-18f, 0f, -10f), Yaw: 0f),
+                (Id: ModuleId.Frame, Position: new Vector3(-10f, 0f, -10f), Yaw: 0f),
+                (Id: ModuleId.PrimarySuspension, Position: new Vector3(-2f, 0f, -10f), Yaw: 0f),
+                (Id: ModuleId.SecondarySuspension, Position: new Vector3(6f, 0f, -10f), Yaw: 0f)
             };
 
             var stations = CreateChild(parent, "ModuleAssemblyStations");
             CreateWorldLabel(
                 stations.transform,
                 "AssemblyDemonstrationNotice",
-                BogieAssemblyDemoVisualFactory.DemonstrationNotice,
-                new Vector3(0f, 3.9f, -14.2f),
+                "结构示范件｜本轮精装 1 套代表性转向架；同型第 2 套由配套生产线提供",
+                new Vector3(-6f, 3.9f, -7.2f),
                 Quaternion.Euler(0f, 180f, 0f),
                 palette.Warning.color,
                 0.42f);
@@ -1124,60 +1131,6 @@ namespace RailCraft.ThirdPerson.Editor
             }
         }
 
-        private static void BuildAssemblyVariantReferenceDisplay(
-            Transform parent,
-            WhiteboxGameSessionHost sessionHost,
-            Palette palette)
-        {
-            var display = CreateChild(parent, "AssemblyVariantReferenceDisplay");
-            display.transform.localPosition = new Vector3(0f, 0f, -23.5f);
-
-            var platform = CreatePrimitive(
-                PrimitiveType.Cube,
-                display.transform,
-                "ReferencePlatform",
-                new Vector3(0f, 0.18f, 0f),
-                new Vector3(7.2f, 0.36f, 4.2f),
-                palette.Steel);
-            RemoveCollider(platform);
-
-            var roots = new GameObject[AssemblyVariantCatalog.Definitions.Count];
-            for (var index = 0; index < AssemblyVariantCatalog.Definitions.Count; index++)
-            {
-                var definition = AssemblyVariantCatalog.Definitions[index];
-                var holder = CreateChild(display.transform, $"VariantReference_{definition.Id}");
-                holder.transform.localPosition = new Vector3(0f, 0.38f, 0f);
-                if (!AssemblyVariantVisualFactory.TryCreateReferenceVisual(
-                        holder.transform,
-                        "ReferenceModel",
-                        definition.Id,
-                        palette.Running,
-                        out _))
-                {
-                    CreateVisualCube(
-                        holder.transform,
-                        "ReferenceFallback",
-                        new Vector3(0f, 1.1f, 0f),
-                        new Vector3(2.6f, 0.7f, 1.6f),
-                        palette.Running);
-                }
-
-                roots[index] = holder;
-                holder.SetActive(false);
-            }
-
-            var label = CreateWorldLabel(
-                display.transform,
-                "AssemblyVariantReferenceLabel",
-                "当前玩法方案参考模型",
-                new Vector3(0f, 3.8f, 0f),
-                Quaternion.Euler(0f, 180f, 0f),
-                palette.Warning.color,
-                0.48f);
-            var router = display.AddComponent<AssemblyVariantVisualRouter>();
-            router.Configure(sessionHost, roots, label.GetComponent<TextMesh>());
-        }
-
         private static QuizQuestionPresentation CreateQuestionPresentation(
             QuizQuestionDefinition question,
             int rotationSeed)
@@ -1212,7 +1165,7 @@ namespace RailCraft.ThirdPerson.Editor
             var module = catalog.GetModule(ModuleId.BogieStructure);
             var station = new GameObject("CompositeStation_BogieStructure");
             station.transform.SetParent(parent, false);
-            station.transform.localPosition = new Vector3(-7f, 0f, 1.5f);
+            station.transform.localPosition = new Vector3(0f, 0f, 1.5f);
             var collider = station.AddComponent<BoxCollider>();
             collider.center = new Vector3(0f, 1f, 0f);
             collider.size = new Vector3(7f, 2.2f, 5.5f);
@@ -1248,52 +1201,19 @@ namespace RailCraft.ThirdPerson.Editor
 
             var completedVisual = CreateChild(station.transform, "BogieStructureCompletionVisual");
             completedVisual.transform.localPosition = new Vector3(0f, 0.69f, 0f);
-            var variantRoots = new GameObject[AssemblyVariantCatalog.Definitions.Count];
-            for (var index = 0; index < AssemblyVariantCatalog.Definitions.Count; index++)
-            {
-                var definition = AssemblyVariantCatalog.Definitions[index];
-                var holder = CreateChild(completedVisual.transform, $"CompletedVariant_{definition.Id}");
-                holder.transform.localPosition = Vector3.zero;
-                if (!AssemblyVariantVisualFactory.TryCreateReferenceVisual(
-                        holder.transform,
-                        "ReferenceModel",
-                        definition.Id,
-                        palette.Running,
-                        out _))
-                {
-                    CreateVisualCube(
-                        holder.transform,
-                        "ReferenceFallback",
-                        new Vector3(0f, 1.1f, 0f),
-                        new Vector3(2.6f, 0.7f, 1.6f),
-                        palette.Running);
-                }
-
-                variantRoots[index] = holder;
-            }
-
-            // Keep the original named drive package as an inactive compatibility
-            // node for existing scene-contract tooling. The active plan roots
-            // above own the visible geometry during play.
-            if (BogieAssemblyDemoVisualFactory.TryCreateFixedDriveVisual(
-                    completedVisual.transform,
-                    "Installed_FixedDrivePackage",
-                    palette.Electrical,
-                    out var legacyDrive))
-            {
-                legacyDrive.SetActive(false);
-            }
+            BogieAssemblyDemoVisualFactory.TryCreateFixedDriveVisual(
+                completedVisual.transform,
+                "Installed_FixedDrivePackage",
+                palette.Electrical,
+                out _);
 
             var completeBeacon = CreatePrimitive(PrimitiveType.Cylinder, completedVisual.transform,
                 "BogieStructureCompleteBeacon", new Vector3(0f, 1.35f, 1.7f),
                 new Vector3(0.18f, 0.58f, 0.18f), palette.Success);
             RemoveCollider(completeBeacon);
             completedVisual.SetActive(false);
-            CreateWorldLabel(station.transform, "StationLabel", "转向架构体装配台（结构示范）",
+            CreateWorldLabel(station.transform, "StationLabel", "代表性转向架总成装配台（结构示范）",
                 new Vector3(0f, 3.15f, -2.1f), Quaternion.identity, palette.Running.color, 0.58f);
-
-            var router = completedVisual.AddComponent<AssemblyVariantVisualRouter>();
-            router.Configure(sessionHost, variantRoots);
 
             var behaviour = station.AddComponent<CompositeAssemblyStation>();
             behaviour.Configure(
@@ -1304,7 +1224,7 @@ namespace RailCraft.ThirdPerson.Editor
                 slots,
                 visuals,
                 completedVisual,
-                "转向架构体完成；准备二系悬挂、车体和中央牵引装置后进行落车");
+                "代表性转向架完成；同型第 2 套由配套生产线提供，继续准备落车输入");
             AddInteractionVisual(station, scanner, behaviour);
             focusBindings?.Add(new AssemblyFocusBinding(
                 ModuleId.BogieStructure,
@@ -1322,7 +1242,7 @@ namespace RailCraft.ThirdPerson.Editor
         {
             var station = new GameObject("LandingAssemblyStation");
             station.transform.SetParent(parent, false);
-            station.transform.localPosition = new Vector3(7f, 0f, -0.5f);
+            station.transform.localPosition = new Vector3(15f, 0f, 0f);
             var collider = station.AddComponent<BoxCollider>();
             collider.center = new Vector3(0f, 1.25f, 0f);
             // The reference intermediate coach is approximately 25.7 m long,
@@ -1333,12 +1253,12 @@ namespace RailCraft.ThirdPerson.Editor
             collider.isTrigger = true;
 
             var lane = CreatePrimitive(PrimitiveType.Cube, station.transform, "AssemblyPlatform",
-                new Vector3(0f, 0.18f, 0f), new Vector3(8.4f, 0.36f, 29f), palette.Steel);
+                new Vector3(0f, 0.18f, 0f), new Vector3(8.4f, 0.36f, 27f), palette.Steel);
             RemoveCollider(lane);
             foreach (var x in new[] { -0.7175f, 0.7175f })
             {
                 CreatePrimitive(PrimitiveType.Cube, station.transform, $"Rail_{x}",
-                    new Vector3(x, 0.42f, 0f), new Vector3(0.14f, 0.14f, 28.5f), palette.White);
+                    new Vector3(x, 0.42f, 0f), new Vector3(0.14f, 0.14f, 26.5f), palette.White);
             }
 
             var moduleOrder = new[] { ModuleId.BogieStructure, ModuleId.SecondarySuspension };
@@ -1385,47 +1305,28 @@ namespace RailCraft.ThirdPerson.Editor
                     PartMaterial(partOrder[index], palette));
             }
 
-            var completedLandingVisual = CreateChild(station.transform, "DroppedVehicle");
-            var variantRoots = new GameObject[AssemblyVariantCatalog.Definitions.Count];
-            for (var index = 0; index < AssemblyVariantCatalog.Definitions.Count; index++)
-            {
-                var definition = AssemblyVariantCatalog.Definitions[index];
-                var holder = CreateChild(completedLandingVisual.transform, $"DroppedVariant_{definition.Id}");
-                holder.transform.localPosition = Vector3.zero;
-                BuildLandingVehicleVisualVariant(
-                    holder.transform,
-                    $"VariantVehicle_{definition.Id}",
-                    palette,
-                    definition.Id);
-
-                variantRoots[index] = holder;
-            }
-
-            // Preserve the original direct child names and 1:1 bounds for
-            // existing scene-contract checks. These compatibility meshes stay
-            // hidden in play; the selected variant root controls what players
-            // see after the landing operation completes.
-            var legacyVehicle = BuildLandingVehicleVisual(
-                completedLandingVisual.transform,
-                "LegacyFuxingVehicleContract",
+            // The process inputs disappear when landing is complete and one
+            // coherent product visual takes their place. Internal parts do not
+            // need to remain exposed for the product to read as completed.
+            var completedLandingVisual = BuildLandingVehicleVisual(
+                station.transform,
+                "DroppedVehicle",
                 palette);
-            var legacyChildren = legacyVehicle.transform.Cast<Transform>().ToArray();
-            foreach (var child in legacyChildren)
-            {
-                child.SetParent(completedLandingVisual.transform, false);
-                child.gameObject.SetActive(false);
-            }
-            UnityEngine.Object.DestroyImmediate(legacyVehicle);
 
             // Rail heads finish at Y=0.49. The imported bogie visuals use their
             // RailContactPlane anchor as local zero, so both wheelsets sit on top.
             completedLandingVisual.transform.localPosition = new Vector3(0f, 0.49f, 0f);
             completedLandingVisual.SetActive(false);
-            CreateWorldLabel(station.transform, "FinalAssemblyLabel", "落车工位 · 方案切换展示",
-                new Vector3(0f, 5.35f, -14.1f), Quaternion.identity, palette.Safety.color, 0.62f);
-
-            var router = completedLandingVisual.AddComponent<AssemblyVariantVisualRouter>();
-            router.Configure(sessionHost, variantRoots);
+            CreateWorldLabel(station.transform, "FinalAssemblyLabel", "落车工位 · 整车落位工况演示",
+                new Vector3(0f, 5.35f, -13.1f), Quaternion.identity, palette.Safety.color, 0.62f);
+            CreateWorldLabel(
+                station.transform,
+                "SecondBogieSupplyNotice",
+                "本轮精装的代表性转向架已用于整车落位演示\n另一转向架由配套生产线提供，成品按完整落车工况呈现",
+                new Vector3(0f, 3.75f, 13.1f),
+                Quaternion.identity,
+                palette.Warning.color,
+                0.42f);
 
             var behaviour = station.AddComponent<FinalAssemblyStation>();
             behaviour.Configure(
@@ -1447,58 +1348,6 @@ namespace RailCraft.ThirdPerson.Editor
                 configuredFocusOffset: new Vector3(0f, 1.6f, 0f)));
         }
 
-        private static void BuildLandingVehicleVisualVariant(
-            Transform parent,
-            string name,
-            Palette palette,
-            AssemblyVariantId variant)
-        {
-            var root = CreateChild(parent, name);
-                if (BogieAssemblyDemoVisualFactory.TryCreateCarbodyVisual(
-                    root.transform,
-                    $"VariantCarbodyReference_{variant}",
-                    palette.Carbody,
-                    displayLength: 0f,
-                    out var carbodyReference))
-            {
-                carbodyReference.transform.localPosition = new Vector3(0f, 1.575f, 0f);
-            }
-            else
-            {
-                CreateVisualCube(root.transform, "CarbodyFallback", new Vector3(0f, 2.3f, 0f),
-                    new Vector3(3.6f, 1.45f, 9.2f), palette.Carbody);
-                var nose = CreatePrimitive(PrimitiveType.Sphere, root.transform, "CabNoseFallback",
-                    new Vector3(0f, 2.2f, -4.45f), new Vector3(3.1f, 1.2f, 1.35f), palette.Carbody);
-                RemoveCollider(nose);
-            }
-
-            foreach (var placement in new[]
-            {
-                (Name: "Front", Z: -8f),
-                (Name: "Rear", Z: 8f)
-            })
-            {
-                var bogiePlacement = CreateChild(
-                    root.transform,
-                    $"LandingBogie_{placement.Name}_{variant}");
-                bogiePlacement.transform.localPosition = new Vector3(0f, 0f, placement.Z);
-                if (!AssemblyVariantVisualFactory.TryCreateReferenceVisual(
-                        bogiePlacement.transform,
-                        "CompletedBogieVisual",
-                        variant,
-                        palette.Running,
-                        out _))
-                {
-                    CreateVisualCube(bogiePlacement.transform, "BogieFallback", new Vector3(0f, 0.45f, 0f),
-                        new Vector3(2.7f, 0.3f, 1.35f), palette.Running);
-                    foreach (var x in new[] { -1.3f, 1.3f })
-                        CreateCylinder(bogiePlacement.transform, $"WheelFallback_{x}", new Vector3(x, 0.2f, 0f),
-                            new Vector3(0.46f, 0.14f, 0.46f), Quaternion.Euler(0f, 0f, 90f), palette.Steel);
-                }
-            }
-
-        }
-
         private static void BuildCommissioningStations(
             Transform parent,
             WhiteboxGameSessionHost sessionHost,
@@ -1510,7 +1359,7 @@ namespace RailCraft.ThirdPerson.Editor
             {
                 (Action: CommissioningAction.Test, Name: "调试判定", Position: new Vector3(-9f, 0f, 16f)),
                 (Action: CommissioningAction.Retune, Name: "重新调试", Position: new Vector3(0f, 0f, 16f)),
-                (Action: CommissioningAction.Inspect, Name: "检验", Position: new Vector3(9f, 0f, 16f))
+                (Action: CommissioningAction.Inspect, Name: "检验", Position: new Vector3(8f, 0f, 16f))
             };
 
             foreach (var definition in definitions)
@@ -1542,7 +1391,8 @@ namespace RailCraft.ThirdPerson.Editor
                 AddInteractionVisual(station, scanner, behaviour);
             }
 
-            CreateWorldLabel(root.transform, "LoopGuide", "失败 → 重新调试 → 检验 → 返回调试判定    成功 → 投入使用",
+            CreateWorldLabel(root.transform, "LoopGuide",
+                "首次调试判定（教学故障注入） → 重新调试 → 检验 → 复测判定 → 投入使用",
                 new Vector3(0f, 4.7f, 19.9f), Quaternion.identity, palette.Safety.color, 0.58f);
         }
 
@@ -1716,14 +1566,14 @@ namespace RailCraft.ThirdPerson.Editor
             // The extracted intermediate coach keeps its normalized 1:1
             // dimensions (about 25.7 m long). Its visual bottom is placed
             // 4.5 cm above the completed bogie mount to avoid interpenetration.
-            if (BogieAssemblyDemoVisualFactory.TryCreateCarbodyVisual(
+            if (BogieAssemblyDemoVisualFactory.TryCreateProductCarbodyVisual(
                     root.transform,
                     "FuxingCarbodyReference",
-                    palette.Carbody,
                     displayLength: 0f,
                     out var carbodyReference))
             {
                 carbodyReference.transform.localPosition = new Vector3(0f, 1.575f, 0f);
+                BuildProductCarbodyLivery(carbodyReference.transform, palette);
             }
             else
             {
@@ -1757,6 +1607,46 @@ namespace RailCraft.ThirdPerson.Editor
             }
 
             return root;
+        }
+
+        private static void BuildProductCarbodyLivery(Transform parent, Palette palette)
+        {
+            var glass = AssetDatabase.LoadAssetAtPath<Material>(
+                BogieAssemblyDemoVisualFactory.ProductGlassMaterialPath) ?? palette.Steel;
+            var blue = AssetDatabase.LoadAssetAtPath<Material>(
+                BogieAssemblyDemoVisualFactory.ProductBlueMaterialPath) ?? palette.Station;
+
+            foreach (var side in new[] { -1f, 1f })
+            {
+                var sideName = side < 0f ? "Left" : "Right";
+                CreateVisualCube(
+                    parent,
+                    $"ProductLiveryStripe_{sideName}",
+                    new Vector3(side * 1.746f, 1.24f, 0f),
+                    new Vector3(0.028f, 0.13f, 23.6f),
+                    blue);
+
+                for (var windowIndex = 0; windowIndex < 12; windowIndex++)
+                {
+                    var z = -10.45f + windowIndex * 1.9f;
+                    CreateVisualCube(
+                        parent,
+                        $"ProductWindow_{sideName}_{windowIndex + 1:00}",
+                        new Vector3(side * 1.75f, 1.91f, z),
+                        new Vector3(0.032f, 0.52f, 1.28f),
+                        glass);
+                }
+
+                foreach (var z in new[] { -11.85f, 11.85f })
+                {
+                    CreateVisualCube(
+                        parent,
+                        $"ProductDoor_{sideName}_{(z < 0f ? "Front" : "Rear")}",
+                        new Vector3(side * 1.752f, 1.2f, z),
+                        new Vector3(0.034f, 1.72f, 0.72f),
+                        blue);
+                }
+            }
         }
 
         private static Material PartMaterial(PartId partId, Palette palette)

@@ -172,27 +172,41 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
 
             Assert.That(save.HasActiveSession, Is.True);
             Assert.That(save.HasSave, Is.True);
+            Assert.That(host.SelectedAssemblyVariant, Is.EqualTo(AssemblyVariantId.FuxingDemo));
             Assert.That(view.Controller.IsMenuVisible, Is.False);
             Assert.That(inputLock.InputLocked, Is.False);
         }
 
         [Test]
-        public void MainMenuStartsTheVariantSelectedByThePlayer()
+        public void MainMenuStartIgnoresVariantDropdownAndUsesStandardPlan()
         {
             var host = CreateHost(root, out _);
             var inputLock = root.AddComponent<ThirdPersonInputLock>();
             var save = root.AddComponent<WhiteboxSaveController>();
             save.Configure(host, saveKey, true);
-            var view = CreateMenu(host, save, inputLock);
+            var view = CreateMenu(host, save, inputLock, includeAssemblyVariantDropdown: true);
 
             view.AssemblyVariantDropdown.value = (int)AssemblyVariantId.TeachingConcept;
             view.StartButton.onClick.Invoke();
 
             Assert.That(
                 host.SelectedAssemblyVariant,
-                Is.EqualTo(AssemblyVariantId.TeachingConcept));
+                Is.EqualTo(AssemblyVariantId.FuxingDemo));
             Assert.That(ReadStoredSnapshot().AssemblyVariant,
-                Is.EqualTo(AssemblyVariantId.TeachingConcept));
+                Is.EqualTo(AssemblyVariantId.FuxingDemo));
+        }
+
+        [Test]
+        public void MainMenuOmitsVariantDropdownInTheStandardTrainingLayout()
+        {
+            var host = CreateHost(root, out _);
+            var inputLock = root.AddComponent<ThirdPersonInputLock>();
+            var save = root.AddComponent<WhiteboxSaveController>();
+            save.Configure(host, saveKey, true);
+
+            var view = CreateMenu(host, save, inputLock);
+
+            Assert.That(view.AssemblyVariantDropdown, Is.Null);
         }
 
         [Test]
@@ -561,7 +575,8 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
             WhiteboxGameSessionHost host,
             WhiteboxSaveController save,
             ThirdPersonInputLock inputLock,
-            WhiteboxKnowledgePresenter knowledgePresenter = null)
+            WhiteboxKnowledgePresenter knowledgePresenter = null,
+            bool includeAssemblyVariantDropdown = false)
         {
             var menuRoot = Child("MainMenu");
             var settingsRoot = Child("Settings");
@@ -574,7 +589,9 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
             var slider = Child("Volume", settingsRoot).AddComponent<Slider>();
             var volumeText = Child("VolumeText", settingsRoot).AddComponent<Text>();
             var quality = Child("Quality", settingsRoot).AddComponent<Dropdown>();
-            var assemblyVariant = Child("AssemblyVariant", menuRoot).AddComponent<Dropdown>();
+            var assemblyVariant = includeAssemblyVariantDropdown
+                ? Child("AssemblyVariant", menuRoot).AddComponent<Dropdown>()
+                : null;
             var controller = root.AddComponent<WhiteboxMainMenuController>();
             controller.Configure(
                 host,

@@ -422,12 +422,12 @@ namespace RailCraft.ThirdPerson.UI
             CaptureStationPreview(
                 path,
                 station,
-                // Keep the complete 25.7 m coach and both ±8 m bogies in frame
-                // while moving to a lower diagonal side angle that keeps the
-                // imported geometry readable.
-                new Vector3(23f, 6.2f, -28f),
-                new Vector3(0f, 2.7f, 0f),
-                36f);
+                // The landing station now sits on the east side of the hall.
+                // Shoot from the open south-west side so the right factory
+                // wall cannot occlude the 25.7 m coach and both bogies.
+                new Vector3(-12f, 8f, -27f),
+                new Vector3(0f, 2.6f, 0f),
+                40f);
         }
 
         private static void CaptureCompletionPreview(string path)
