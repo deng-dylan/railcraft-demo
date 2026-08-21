@@ -176,6 +176,50 @@ try {
         }
     }
 
+    $packageManifestPath = Join-Path $repositoryRoot "apps/railcraft-unity/Packages/manifest.json"
+    $packageLockPath = Join-Path $repositoryRoot "apps/railcraft-unity/Packages/packages-lock.json"
+    $qualitySettingsPath = Join-Path $repositoryRoot "apps/railcraft-unity/ProjectSettings/QualitySettings.asset"
+    $mobileAssetPaths = @(
+        "apps/railcraft-unity/Assets/Settings/Mobile_RPAsset.asset",
+        "apps/railcraft-unity/Assets/Settings/Mobile_RPAsset.asset.meta",
+        "apps/railcraft-unity/Assets/Settings/Mobile_Renderer.asset",
+        "apps/railcraft-unity/Assets/Settings/Mobile_Renderer.asset.meta"
+    )
+    $mobilePipelineGuid = "5e6cbd92db86f4b18aec3ed561671858"
+    $desktopPipelineGuid = "4b83569d67af61e458304325a23e5dfd"
+    $releaseTargetIssues = New-Object System.Collections.Generic.List[string]
+
+    $packageManifest = Get-Content -Raw -Encoding utf8 -LiteralPath $packageManifestPath | ConvertFrom-Json
+    $packageLock = Get-Content -Raw -Encoding utf8 -LiteralPath $packageLockPath | ConvertFrom-Json
+    if ($packageManifest.dependencies.PSObject.Properties.Name -contains "com.unity.modules.androidjni") {
+        $releaseTargetIssues.Add("manifest retains com.unity.modules.androidjni")
+    }
+    if ($packageLock.dependencies.PSObject.Properties.Name -contains "com.unity.modules.androidjni") {
+        $releaseTargetIssues.Add("packages-lock retains com.unity.modules.androidjni")
+    }
+
+    $presentMobileAssets = @($mobileAssetPaths | Where-Object {
+        Test-Path -LiteralPath (Join-Path $repositoryRoot $_)
+    })
+    foreach ($assetPath in $presentMobileAssets) {
+        $releaseTargetIssues.Add("mobile render asset remains: $assetPath")
+    }
+
+    $qualitySettings = Get-Content -Raw -Encoding utf8 -LiteralPath $qualitySettingsPath
+    if ($qualitySettings.Contains($mobilePipelineGuid, [StringComparison]::OrdinalIgnoreCase)) {
+        $releaseTargetIssues.Add("QualitySettings still references the mobile render pipeline")
+    }
+    if (-not $qualitySettings.Contains($desktopPipelineGuid, [StringComparison]::OrdinalIgnoreCase)) {
+        $releaseTargetIssues.Add("QualitySettings does not reference the desktop render pipeline")
+    }
+
+    if ($releaseTargetIssues.Count -eq 0) {
+        Add-Pass "Unity package and render configuration exposes Windows as the only release target."
+    }
+    else {
+        Add-Failure "Non-Windows release configuration remains: $(Format-PathSample $releaseTargetIssues.ToArray())."
+    }
+
     $questionBankPath = Join-Path $repositoryRoot "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxQuestionBank.cs"
     if (Test-Path -LiteralPath $questionBankPath -PathType Leaf) {
         $questionBank = Get-Content -Raw -Encoding utf8 -LiteralPath $questionBankPath

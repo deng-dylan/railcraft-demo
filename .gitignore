@@ -26,7 +26,6 @@ apps/railcraft-unity/.vs/
 apps/railcraft-unity/.idea/
 apps/railcraft-unity/.vscode/
 apps/railcraft-unity/.consulo/
-apps/railcraft-unity/.gradle/
 apps/railcraft-unity/*.csproj
 apps/railcraft-unity/*.sln
 apps/railcraft-unity/*.slnx
@@ -47,8 +46,6 @@ apps/railcraft-unity/*.mdb.meta
 apps/railcraft-unity/*.opendb
 apps/railcraft-unity/*.VC.db
 apps/railcraft-unity/*.DotSettings.user
-apps/railcraft-unity/*.apk
-apps/railcraft-unity/*.aab
 apps/railcraft-unity/*.unitypackage
 apps/railcraft-unity/sysinfo.txt
 apps/railcraft-unity/crashlytics-build.properties

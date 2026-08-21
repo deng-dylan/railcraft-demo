@@ -34,7 +34,7 @@
 - Do not display citations or source fields for the question bank.
 - Wrong answers allow retry. Correct completion unlocks the current drag step.
 - Do not calculate or display score, accuracy, grade, ranking, or knowledge mastery.
-- Do not implement save, continue, accounts, networking, analytics, audio, Android, XR, touch controls, or multiplayer.
+- Do not implement save, continue, accounts, networking, analytics, audio, non-Windows targets, XR, touch controls, or multiplayer.
 - Include start, guidance, settings limited to graphics/window mode, reset flow, and exit.
 - Runtime content is fully local and must not require a network connection.
 - Placeholder or public low-poly models are allowed. Engineering dimensions and vehicle-specific geometry must come from the responsible teammate or a verified technical source.
