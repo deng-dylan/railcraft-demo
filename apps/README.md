@@ -1,14 +1,17 @@
 # RailCraft 应用入口
 
-`apps/` 保存当前可运行应用和仍需保留的历史实现。
+## 当前应用
 
-## 目录
+[railcraft-unity](railcraft-unity/) 是唯一的当前应用。它承载 Unity ThirdPerson 标准实训、Windows x86_64 构建和当前验收证据。
 
-- `railcraft-unity/`：当前开发主线。Unity 第三人称流程白盒与冻结的 Unity v0.1 验收基线共用同一工程，详细入口见 [`railcraft-unity/README.md`](railcraft-unity/README.md)。
-- `railcraft-godot/`：冻结的 Godot `v0.1.0-demo` 历史 Demo，仅用于回溯、对照和资料保留。
+- 运行与开发：[Unity 主线 README](railcraft-unity/README.md)
+- 发行与下载：[当前发行说明](railcraft-unity/Documentation/Release.md)
+- 规格与验收：[ThirdPerson 标准实训规格](railcraft-unity/Documentation/ThirdPersonWhitebox.md)
 
-## 使用规则
+新玩法、场景、题库、模型替换和当前验收均进入 railcraft-unity。
 
-- 新玩法、主线场景和当前验收证据继续进入 `railcraft-unity/`。
-- 历史 Demo 仅接受可追溯勘误，不承接当前玩法扩展。
-- 与主线技术路线不同的探索版本进入仓库前，先评估是否更适合归档到 `prototypes/`。
+## 归档实现
+
+[railcraft-godot](railcraft-godot/) 保存 Godot v0.1.0-demo 的源码、测试和发行证据，仅用于复现、审计与方案回溯。它不承接当前玩法功能。
+
+其它技术路线的探索版本统一见[历史归档](../docs/archive/README.md)和[原型目录](../prototypes/README.md)。

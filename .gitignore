@@ -18,6 +18,7 @@ apps/railcraft-unity/[Rr]ecordings/
 apps/railcraft-unity/[Ee]xported[Oo]bj/
 apps/railcraft-unity/TestResults/
 apps/railcraft-unity/Builds/
+apps/railcraft-unity/ReleasePackages/
 apps/railcraft-unity/Assets/AssetStoreTools*
 apps/railcraft-unity/Assets/Plugins/Editor/JetBrains*
 

@@ -1,0 +1,720 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Channel LicenseClient-Dylan doesn't exist
+Built from '6000.3/staging' branch; Version is '6000.3.21f1 (c02631ffc030) revision 12592689'; Using compiler version '194234433'; Build Type 'Release'
+OS: 'Windows 11  (10.0.26200) Professional' Language: 'zh' Physical Memory: 32213 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-08-26T12:37:54Z
+[Licensing::Module] Successfully launched the LicensingClient (PId: 53840)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-Dylan" at "2026-08-26T12:37:55.1841357Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 53840, path: "C:/Program Files/Unity/Hub/Editor/6000.3.21f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.3.21f1\Editor\Unity.exe
+-batchmode
+-nographics
+-projectPath
+D:\documents\project\gingchuangsai\apps\railcraft-unity
+-runTests
+-testPlatform
+EditMode
+-testResults
+D:\documents\project\gingchuangsai\apps\railcraft-unity\Artifacts\Whitebox\Releases\v0.3.0-preview.1\editmode.xml
+-logFile
+D:\documents\project\gingchuangsai\apps\railcraft-unity\Artifacts\Whitebox\Releases\v0.3.0-preview.1\editmode.log
+Successfully changed project path to: D:\documents\project\gingchuangsai\apps\railcraft-unity
+D:/documents/project/gingchuangsai/apps/railcraft-unity
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+Player connection [55444]  Target information:
+
+Player connection [55444]  * "[IP] redacted [Port] 55504 [Flags] 2 [Guid] 4218275715 [EditorId] 4218275715 [Version] 1048832 [Id] WindowsEditor(7,BDPC) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor"
+
+Player connection [55444]  * "[IP] redacted [Port] 55504 [Flags] 2 [Guid] 4218275715 [EditorId] 4218275715 [Version] 1048832 [Id] WindowsEditor(7,BDPC) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor"
+
+Player connection [55444]  * "[IP] redacted [Port] 55504 [Flags] 2 [Guid] 4218275715 [EditorId] 4218275715 [Version] 1048832 [Id] WindowsEditor(7,BDPC) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor"
+
+Player connection [55444]  * "[IP] redacted [Port] 55504 [Flags] 2 [Guid] 4218275715 [EditorId] 4218275715 [Version] 1048832 [Id] WindowsEditor(7,BDPC) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor"
+
+Player connection [55444] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [55444] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              ff939d3b1c094ee086f0ea286cbaaeb6
+  Correlation Id:          f6e58a01a7aeb13673a624099411c5c9
+  External correlation Id: 5678875368479755821
+  Machine Id:              0r/3i2FcR2WJYSWP0we/bVGN9uY=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-Dylan" (connect: 0.57s, validation: 0.32s, handshake: 0.09s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-Dylan-notifications" at "2026-08-26T12:37:55.6013253Z"
+[Licensing::Module] Connected to LicensingClient (PId: 53840, launch time: 0.06, total connection time: 0.98s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 15669742007901-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Module] Licensing Background thread has ended after 1.09s
+[Package Manager] Connected to IPC stream "Upm-46888" after 0.5 seconds.
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Artifact Garbage Collection - Removed 14 unused hashed content files
+Refreshing native plugins compatible for Editor in 0.31 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.3.21f1 (c02631ffc030)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.21f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/documents/project/gingchuangsai/apps/railcraft-unity/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.3.21f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.3.21f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.3.21f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56888
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.21f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.002951 seconds.
+- Loaded All Assemblies, in  0.547 seconds
+Native extension for WindowsStandalone target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.584 seconds
+Domain Reload Profiling: 1127ms
+	BeginReloadAssembly (201ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (48ms)
+	RebuildNativeTypeToScriptingClass (13ms)
+	initialDomainReloadingComplete (58ms)
+	LoadAllAssembliesAndSetupDomain (221ms)
+		LoadAssemblies (195ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (218ms)
+			TypeCache.Refresh (214ms)
+				TypeCache.ScanAssembly (196ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (585ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (527ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (103ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (108ms)
+			ProcessInitializeOnLoadAttributes (189ms)
+			ProcessInitializeOnLoadMethodAttributes (123ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 54 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.ai.navigation@2.0.14 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.ai.navigation@134dd6a3b97b)
+    com.unity.collab-proxy@2.12.4 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.collab-proxy@0b1559bcd34e)
+    com.unity.ide.rider@3.0.40 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.ide.rider@e4950c6d131b)
+    com.unity.ide.visualstudio@2.0.26 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.ide.visualstudio@a99d56dec63f)
+    com.unity.inputsystem@1.17.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.inputsystem@02433b2481ab)
+    com.unity.timeline@1.8.12 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.timeline@8cd8509afae5)
+    com.unity.visualscripting@1.9.12 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.visualscripting@4edfcc09512f)
+    com.unity.searcher@4.9.4 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.searcher@d45a78918735)
+    com.unity.burst@1.8.30 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.burst@2f3d916873ea)
+    com.unity.mathematics@1.3.3 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.collections@2.6.8 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.collections@84e8eb3fc12e)
+    com.unity.nuget.mono-cecil@1.11.6 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.5.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.test-framework.performance@8b56083ec0f0)
+  Built-in packages:
+    com.unity.2d.sprite@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.2d.sprite@d8bb22511404)
+    com.unity.2d.tilemap@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.2d.tilemap@f666889fd587)
+    com.unity.render-pipelines.universal@17.3.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.render-pipelines.universal@8aa8d736cba6)
+    com.unity.test-framework@1.6.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.test-framework@bd7f943e9647)
+    com.unity.ugui@2.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.ugui@e20f1880fa04)
+    com.unity.modules.accessibility@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.accessibility)
+    com.unity.modules.adaptiveperformance@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.adaptiveperformance)
+    com.unity.modules.ai@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.animation@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.terrainphysics)
+    com.unity.modules.tilemap@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.tilemap)
+    com.unity.modules.ui@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.umbra)
+    com.unity.modules.unitywebrequest@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vectorgraphics@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.vectorgraphics)
+    com.unity.modules.vehicles@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.video)
+    com.unity.modules.wind@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.wind)
+    com.unity.modules.hierarchycore@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.hierarchycore)
+    com.unity.modules.subsystems@1.0.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.modules.subsystems)
+    com.unity.ext.nunit@2.0.5 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.render-pipelines.core@17.3.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.render-pipelines.core@c67c01575725)
+    com.unity.shadergraph@17.3.0 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.shadergraph@aa8306cf39d6)
+    com.unity.render-pipelines.universal-config@17.0.3 (location: D:\documents\project\gingchuangsai\apps\railcraft-unity\Library\PackageCache\com.unity.render-pipelines.universal-config@8dc1aab4af1d)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.05 seconds
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.21f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: D:/documents/project/gingchuangsai/apps/railcraft-unity
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 0s737ms
+[450/961    0s] WriteResponseFile Library/Bee/artifacts/rsp/4747638433968585886.rsp
+[744/961    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+*** Tundra build success (0.57 seconds), 2 items updated, 961 evaluated
+AssetDatabase: script compilation time: 1.392561s
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  1.177 seconds
+Refreshing native plugins compatible for Editor in 1.70 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 2.55 ms, found 4 plugins.
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  3.810 seconds
+Domain Reload Profiling: 4978ms
+	BeginReloadAssembly (350ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (38ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (144ms)
+	RebuildCommonClasses (43ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (41ms)
+	LoadAllAssembliesAndSetupDomain (719ms)
+		LoadAssemblies (518ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (326ms)
+			TypeCache.Refresh (225ms)
+				TypeCache.ScanAssembly (210ms)
+			BuildScriptInfoCaches (82ms)
+			ResolveRequiredComponents (12ms)
+	FinalizeReload (3811ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (3414ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (33ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (185ms)
+			ProcessInitializeOnLoadAttributes (3008ms)
+			ProcessInitializeOnLoadMethodAttributes (171ms)
+			AfterProcessingInitializeOnLoad (13ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (37ms)
+Start importing Packages/com.unity.render-pipelines.core/Tests/Editor/UnifiedRayTracing/TraceRays.urtshader using Guid(1142bbad8b9e8c44c83a9775ff120d37) (ScriptedImporter)Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
+
+Compiling Ray Tracing Shader "TraceRays.urtshader", keywords = <no keywords>
+    finished in 0.02 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '488f1fa279908b22ccf0712b57e157d7') in 0.2041981 seconds
+Start importing Packages/com.unity.render-pipelines.universal/Runtime/RendererFeatures/SurfaceCacheGI/SurfaceCacheCore/RisEstimation.urtshader using Guid(713f6141bd66a134383b787f2eaa7c11) (ScriptedImporter)
+Compiling Ray Tracing Shader "RisEstimation.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: 'e10db10dd3fff1482e6f6829c30241da') in 0.0279079 seconds
+Start importing Packages/com.unity.render-pipelines.core/Editor/Lighting/ProbeVolume/RenderingLayerMask/TraceRenderingLayerMask.urtshader using Guid(94a070d33e408384bafc1dea4a565df9) (ScriptedImporter)
+Compiling Ray Tracing Shader "TraceRenderingLayerMask.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '429af685779b9b6687d168527af601a1') in 0.0252687 seconds
+Start importing Packages/com.unity.render-pipelines.universal/Runtime/RendererFeatures/SurfaceCacheGI/SurfaceCacheCore/UniformEstimation.urtshader using Guid(94a39d12848d8d64ca962a72b74e7c50) (ScriptedImporter)
+Compiling Ray Tracing Shader "UniformEstimation.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '5ce19e5f1a23e02548f0bf81582d69bb') in 0.0155452 seconds
+Start importing Packages/com.unity.render-pipelines.core/Tests/Editor/UnifiedRayTracing/TraceTransparentRays.urtshader using Guid(6513c3b892e933c4f8d00c19d5c47532) (ScriptedImporter)
+Compiling Ray Tracing Shader "TraceTransparentRays.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: 'ca58980c3b604796b728d1cb3c92f61a') in 0.0104983 seconds
+Start importing Packages/com.unity.render-pipelines.core/Editor/Lighting/ProbeVolume/DynamicGI/DynamicGISkyOcclusion.urtshader using Guid(5a2a534753fbdb44e96c3c78b5a6999d) (ScriptedImporter)
+Compiling Ray Tracing Shader "DynamicGISkyOcclusion.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '0dc1f800bcbac359df7a7fc6400f16e4') in 0.0158154 seconds
+Start importing Packages/com.unity.render-pipelines.core/Tests/Editor/UnifiedRayTracing/TraceRaysAndFetchAttributes.urtshader using Guid(fbc59f55df2416344b008dc23753cae2) (ScriptedImporter)
+Compiling Ray Tracing Shader "TraceRaysAndFetchAttributes.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '9216d50ef0b1f8b055fdf5822a1034ab') in 0.0125701 seconds
+Start importing Packages/com.unity.render-pipelines.universal/Runtime/RendererFeatures/SurfaceCacheGI/SurfaceCacheCore/RestirCandidateTemporal.urtshader using Guid(ad3a9f9982f8c4f4a839a78955e78458) (ScriptedImporter)
+Compiling Ray Tracing Shader "RestirCandidateTemporal.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '98b33e5bc6e8cd0cd311ee0a991c0d9e') in 0.0152138 seconds
+Start importing Packages/com.unity.render-pipelines.core/Editor/Lighting/ProbeVolume/VirtualOffset/TraceVirtualOffset.urtshader using Guid(ff2cbab5da58bf04d82c5f34037ed123) (ScriptedImporter)
+Compiling Ray Tracing Shader "TraceVirtualOffset.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '8c8f8a0428ea96a9cb740fae125d5e1a') in 0.0202258 seconds
+Refreshing native plugins compatible for Editor in 2.45 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=1f90032f4540b8a48bd479551b8acda9): Total: 7.953 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=9 (actual=9, local cache=0, cache server=0)
+		Asset DB Process Time: managed=6 ms, native=4896 ms
+		Asset DB Callback time: managed=254 ms, native=164 ms
+		Scripting: domain reloads=1, domain reload time=1177 ms, compile time=1396 ms, other=57 ms
+		Project Asset Count: scripts=1356, non-scripts=2552
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeCustomDependenciesCallbacks: 0.002ms
+	InvokePackagesCallback: 60.364ms
+	ApplyChangesToAssetFolders: 0.917ms
+	Scan: 245.189ms
+	OnSourceAssetsModified: 0.003ms
+	CategorizeAssetsWithTransientArtifact: 74.122ms
+	ProcessAssetsWithTransientArtifactChanges: 105.451ms
+	CategorizeAssets: 82.876ms
+	ImportOutOfDateAssets: 4193.989ms (2426.085ms without children)
+		ImportManagerImport: 366.947ms (5.451ms without children)
+			ImportInProcess: 360.855ms
+			UpdateCategorizedAssets: 0.641ms
+		CompileScripts: 1396.434ms
+		ReloadNativeAssets: 0.039ms
+		UnloadImportedAssets: 0.850ms
+		ReloadImportedAssets: 2.346ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.565ms
+		InitializingProgressBar: 0.009ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.712ms
+	PostProcessAllAssets: 356.889ms
+	Hotreload: 4.818ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.003ms
+	UnloadStreamsBegin: 3.162ms
+	PersistCurrentRevisions: 0.256ms
+	UnloadStreamsEnd: 0.002ms
+	GenerateScriptTypeHashes: 4.345ms
+	Untracked: 2825.441ms
+
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 8.181ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-RailCraft
+Unloading 25 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6726 unused Assets / (2.3 MB). Loaded Objects now: 7588.
+Memory consumption went from 200.1 MB to 197.8 MB.
+Total: 12.065000 ms (FindLiveObjects: 0.923300 ms CreateObjectMapping: 1.160100 ms MarkObjects: 7.370200 ms  DeleteObjects: 2.609400 ms)
+
+Microsoft Media Foundation video decoding to texture disabled: graphics device is Null, only Direct3D 11 and Direct3D 12 (only on desktop) are supported for hardware-accelerated video decoding.
+[Project] Loading completed in 11.758 seconds
+	Project init time: 				10.917 seconds
+		Template init time: 		0.000 seconds
+		Package Manager init time: 		0.468 seconds
+		Asset Database init time: 		0.280 seconds
+		Global illumination init time: 	0.005 seconds
+		Assemblies load time: 			1.171 seconds
+		Unity extensions init time: 	0.011 seconds
+		Asset Database refresh time: 	7.954 seconds
+	Scene opening time: 			0.144 seconds
+##utp:{"type":"ProjectInfo","version":2,"phase":"Immediate","time":1787747886301,"processId":46888,"projectLoad":11.7584453,"projectInit":10.9170475,"templateInit":0.0,"packageManagerInit":0.4682667,"assetDatabaseInit":0.2802995,"globalIlluminationInit":0.0049602,"assembliesLoad":1.1711118,"unityExtensionsInit":0.0105036,"assetDatabaseRefresh":7.9536515,"sceneOpening":0.1442444}
+##utp:{"type":"EditorInfo","version":2,"phase":"Immediate","time":1787747886301,"processId":46888,"editorVersion":"6000.3.21f1 (c02631ffc030)","branch":"6000.3/staging","buildType":"Release","platform":"Windows"}
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+Running tests for ExecutionSettings with details:
+targetPlatform =
+playerHeartbeatTimeout = 600
+filters[0] =
+   Filter with settings:
+   testMode = EditMode
+   targetPlatform =
+   testNames = null
+   groupNames = null
+   categoryNames = null
+   assemblyNames = null
+ignoreTests = {}
+featureFlags = null
+
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UnityEditor.TestTools.TestRunner.CommandLineTest.Executer:InitializeAndExecuteRun (string[]) (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/CommandLineTest/Executer.cs:53)
+UnityEditor.TestTools.TestRunner.CommandLineTest.TestStarter:InitializeAndExecuteRun () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/CommandLineTest/TestStarter.cs:64)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/CommandLineTest/Executer.cs Line: 53)
+
+Start Indexing on Editor startup
+[Indexing] Starting Initial Indexing for Assets
+[UnityConnectServicesConfig] config is NOT valid, switching to default
+Created GICache directory at C:/Users/Dylan/AppData/LocalLow/Unity/Caches/GiCache. Took: 0.042s, timestamps: [11.763 - 11.805]
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 1 unused Assets / (44.4 KB). Loaded Objects now: 7613.
+Memory consumption went from 185.7 MB to 185.6 MB.
+Total: 8.438400 ms (FindLiveObjects: 0.345300 ms CreateObjectMapping: 0.198400 ms MarkObjects: 7.817500 ms  DeleteObjects: 0.075300 ms)
+
+Executing IPrebuildSetup for: Unity.PerformanceTesting.Editor.TestRunBuilder.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UnityEditor.TestTools.TestRunner.TestRun.Tasks.BuildActionTaskBase`1/<ExecuteMethods>d__8<UnityEngine.TestTools.IPrebuildSetup>:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/Tasks/BuildActionTaskBase.cs:48)
+UnityEditor.TestTools.TestRunner.TestRun.Tasks.BuildActionTaskBase`1/<Execute>d__7<UnityEngine.TestTools.IPrebuildSetup>:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/Tasks/BuildActionTaskBase.cs:34)
+UnityEditor.TestTools.TestRunner.TestRun.TestJobRunner:ExecuteStep () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/TestJobRunner.cs:173)
+UnityEditor.TestTools.TestRunner.TestRun.TestJobRunner:ExecuteCallback () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/TestJobRunner.cs:108)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/Tasks/BuildActionTaskBase.cs Line: 48)
+
+Opening scene 'Assets/RailCraft/Scenes/Bootstrap.unity additively'
+Loaded scene 'Assets/RailCraft/Scenes/Bootstrap.unity'
+	Deserialize:            34.040 ms
+	Integration:            71.261 ms
+	Integration of assets:  1.406 ms
+	Thread Wait Time:       0.027 ms
+	Total Operation Time:   106.734 ms
+LightingSettings: switching bake backend from 2 to 1.
+Opening scene 'Assets/RailCraft/Scenes/Factory.unity'
+Unloading 31 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/RailCraft/Scenes/Factory.unity'
+	Deserialize:            14.882 ms
+	Integration:            255.632 ms
+	Integration of assets:  0.022 ms
+	Thread Wait Time:       0.016 ms
+	Total Operation Time:   270.553 ms
+Unloading 609 unused Assets / (114.1 KB). Loaded Objects now: 8966.
+Memory consumption went from 190.5 MB to 190.4 MB.
+Total: 10.168900 ms (FindLiveObjects: 0.711300 ms CreateObjectMapping: 0.827700 ms MarkObjects: 8.232500 ms  DeleteObjects: 0.396200 ms)
+
+Opening scene 'Assets/RailCraft/Scenes/Factory.unity'
+Unloading 45 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/RailCraft/Scenes/Factory.unity'
+	Deserialize:            8.212 ms
+	Integration:            230.343 ms
+	Integration of assets:  0.005 ms
+	Thread Wait Time:       0.023 ms
+	Total Operation Time:   238.583 ms
+Unloading 623 unused Assets / (94.8 KB). Loaded Objects now: 8973.
+Memory consumption went from 188.4 MB to 188.3 MB.
+Total: 10.231000 ms (FindLiveObjects: 0.565500 ms CreateObjectMapping: 0.381800 ms MarkObjects: 8.872700 ms  DeleteObjects: 0.409900 ms)
+
+Opening scene 'Assets/RailCraft/Scenes/Factory.unity'
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/RailCraft/Scenes/Factory.unity'
+	Deserialize:            9.897 ms
+	Integration:            230.391 ms
+	Integration of assets:  0.005 ms
+	Thread Wait Time:       0.023 ms
+	Total Operation Time:   240.316 ms
+Unloading 1 unused Assets / (0 B). Loaded Objects now: 8973.
+Memory consumption went from 188.0 MB to 188.0 MB.
+Total: 9.092700 ms (FindLiveObjects: 0.543500 ms CreateObjectMapping: 0.334000 ms MarkObjects: 8.176200 ms  DeleteObjects: 0.037900 ms)
+
+Opening scene 'Assets/RailCraft/Scenes/Factory.unity'
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/RailCraft/Scenes/Factory.unity'
+	Deserialize:            6.826 ms
+	Integration:            232.998 ms
+	Integration of assets:  0.004 ms
+	Thread Wait Time:       0.025 ms
+	Total Operation Time:   239.852 ms
+Unloading 1 unused Assets / (0 B). Loaded Objects now: 8973.
+Memory consumption went from 188.1 MB to 188.1 MB.
+Total: 9.922600 ms (FindLiveObjects: 0.675200 ms CreateObjectMapping: 0.492900 ms MarkObjects: 8.665000 ms  DeleteObjects: 0.081700 ms)
+
+Opening scene 'Assets/RailCraft/Scenes/Factory.unity'
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/RailCraft/Scenes/Factory.unity'
+	Deserialize:            7.547 ms
+	Integration:            231.697 ms
+	Integration of assets:  0.004 ms
+	Thread Wait Time:       0.023 ms
+	Total Operation Time:   239.271 ms
+Unloading 1 unused Assets / (0 B). Loaded Objects now: 8973.
+Memory consumption went from 188.1 MB to 188.1 MB.
+Total: 9.714100 ms (FindLiveObjects: 0.519600 ms CreateObjectMapping: 0.201500 ms MarkObjects: 8.945600 ms  DeleteObjects: 0.045900 ms)
+
+Loaded scene 'Library/Unused/10d0be82fe407fb4f8dc31b883df5129'
+	Deserialize:            0.417 ms
+	Integration:            0.180 ms
+	Integration of assets:  0.002 ms
+	Thread Wait Time:       0.011 ms
+	Total Operation Time:   0.610 ms
+Start importing Assets/RailCraft/Art/Prefabs/Modules/module_frame.prefab using Guid(b2f8f884f68bf904c9c814ffdb464b5a) (PrefabImporter) -> (artifact id: 'af437e90e51045f0e8451ecf9452f67d') in 0.0057129 seconds
+Refreshing native plugins compatible for Editor in 1.71 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=011542c9fc4d61d4b81489c1b58d8a9b): Total: 0.089 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing ProjectSettings/EditorBuildSettings.asset using Guid(0000000000000000b000000000000000) (LibraryAssetImporter) -> (artifact id: '513877938ea03ef9d74d1e130581161f') in 0.0041665 seconds
+Refreshing native plugins compatible for Editor in 1.82 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=8d978225d54daef4e9ae257d518be754): Total: 0.039 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Loaded scene 'Library/Unused/c7ef06cf021768a40a63986a5d65b64a'
+	Deserialize:            0.463 ms
+	Integration:            0.117 ms
+	Integration of assets:  0.002 ms
+	Thread Wait Time:       0.020 ms
+	Total Operation Time:   0.602 ms
+Refreshing native plugins compatible for Editor in 1.96 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=1f9f04e46b25fad46a36f0999ed466f0): Total: 0.035 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing ProjectSettings/EditorBuildSettings.asset using Guid(0000000000000000b000000000000000) (LibraryAssetImporter) -> (artifact id: '1c87d8d74ccfd3af85c32a359f2c51bd') in 0.003023 seconds
+Refreshing native plugins compatible for Editor in 1.77 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=bcb59b4c6919db949b5401e29de92a82): Total: 0.039 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=9dd7e2e8c0cf1f04a994761229e1388b): Total: 0.009 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=cd4ef4e6df7aaee4fa6c21c35364d856): Total: 0.010 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=d70b99a0912b0ac47a506c260de335e6): Total: 0.012 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=03faec2db1beabf47bc4c2e23e76df42): Total: 0.011 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=cc7c854ffc7cbc144911236a76f1a3f9): Total: 0.012 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=514b3ec5a41b3c543a3c3effa654fee6): Total: 0.011 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=2134cdd45125cb049836c18b25810076): Total: 0.011 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=89dd78233b874984d9adbcf534835f02): Total: 0.010 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=e7eab357e92168c4cad66149d3b920f8): Total: 0.009 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=0bde9ef8cdd24b54c9b8337311bf9910): Total: 0.010 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=79c5976baf7973f41b741cc12538a67c): Total: 0.010 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=9b819a2ced96ba54992627821ccd5cae): Total: 0.011 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=b010cc0fe92e0f24e9788631bcd634bb): Total: 0.010 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=22d3b1e9644abe84cbceb54da8b3c5c8): Total: 0.010 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=484dc2a5c32259b4893ae3598972df77): Total: 0.010 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=0d42cf1988b41884fa2ee9b37ce4a2f3): Total: 0.011 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=1194297786841c44db6de41682a6e280): Total: 0.010 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/RailCraft/Art/Materials/RailBlue.mat using Guid(262087d107e747247b530c7e5fe52cf4) (NativeFormatImporter) -> (artifact id: '76ed5f1da99699fde2a3b2bba2877fdf') in 0.003083 seconds
+Start importing Assets/RailCraft/Art/Materials/Steel.mat using Guid(08e8ab63c227d914a90ef29d4ccb5505) (NativeFormatImporter) -> (artifact id: '3aebd5137c8d1cd9b976ff0fdaf4590b') in 0.0033219 seconds
+Start importing Assets/RailCraft/Art/Materials/SensorCyan.mat using Guid(0af67dbf0760da745b88df8702aaaf0c) (NativeFormatImporter) -> (artifact id: '2a59365a863f4f6ad08574e2f4295b1e') in 0.0028417 seconds
+Start importing Assets/RailCraft/Art/Materials/SafetyYellow.mat using Guid(8bce05d498ecce6498a3a22657b9230b) (NativeFormatImporter) -> (artifact id: '09b76fcf021958f98ec9f2fbf83ff82c') in 0.0033138 seconds
+Start importing Assets/RailCraft/Art/Materials/SignalOrange.mat using Guid(9b42434c4228c8e4091fdee662e228fc) (NativeFormatImporter) -> (artifact id: '66c82b5ebdcf8eb8b9f1bd13559b324f') in 0.0025205 seconds
+Start importing Assets/RailCraft/Art/Materials/BrakeRed.mat using Guid(1ce8f8e4faa36bd4b9686cde5865f7db) (NativeFormatImporter) -> (artifact id: '071b5b64ee7db330c4ccbbd91a50a2a8') in 0.0029165 seconds
+Start importing Assets/RailCraft/Art/Materials/TractionViolet.mat using Guid(dc73f3e7c68489a4990e5425e8220797) (NativeFormatImporter) -> (artifact id: '108011c4eab017de8dc843d8afa3d6a5') in 0.0025774 seconds
+Start importing Assets/RailCraft/Art/Materials/CardWhite.mat using Guid(3f132897693637f4ebdec3715cfb2362) (NativeFormatImporter) -> (artifact id: '1d7bc60f4af3514da1e0260b50d2555e') in 0.004261 seconds
+Start importing Assets/RailCraft/Art/Materials/InspectionGreen.mat using Guid(fff2a1d00d0abf24186ce934aa7385d7) (NativeFormatImporter) -> (artifact id: 'ee59e90c796d104f87a2ad5624be126e') in 0.0026357 seconds
+Start importing Assets/RailCraft/Art/PartPrefabCatalog.asset using Guid(e04ba6fd646640f429a745c06a4e27ed) (NativeFormatImporter) -> (artifact id: '23398f1c7de6636e3ced6cd0a7bf238c') in 0.0032621 seconds
+Refreshing native plugins compatible for Editor in 2.00 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=b0cef04611795b44e825e37e5462e3c6): Total: 0.065 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=8d973d104e315ff4fb5f2a348c395527): Total: 0.016 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=d94232b380726af4db612e4d0b032492): Total: 0.009 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+Opening scene 'Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity'
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity'
+	Deserialize:            42.492 ms
+	Integration:            803.482 ms
+	Integration of assets:  0.045 ms
+	Thread Wait Time:       0.019 ms
+	Total Operation Time:   846.040 ms
+Unloading 1244 unused Assets / (2.3 MB). Loaded Objects now: 10459.
+Memory consumption went from 198.9 MB to 196.7 MB.
+Total: 12.722500 ms (FindLiveObjects: 0.848500 ms CreateObjectMapping: 0.923400 ms MarkObjects: 9.221100 ms  DeleteObjects: 1.728000 ms)
+
+Opening scene 'Assets/RailCraft/Scenes/Factory.unity'
+Unloading 14 Unused Serialized files (Serialized files now loaded: 0)
+LightingSettings: switching bake backend from 2 to 1.
+Loaded scene 'Assets/RailCraft/Scenes/Factory.unity'
+	Deserialize:            8.849 ms
+	Integration:            230.471 ms
+	Integration of assets:  0.110 ms
+	Thread Wait Time:       0.018 ms
+	Total Operation Time:   239.447 ms
+Unloading 73 unused Assets / (35.9 KB). Loaded Objects now: 8971.
+Memory consumption went from 197.4 MB to 197.4 MB.
+Total: 8.789200 ms (FindLiveObjects: 0.611500 ms CreateObjectMapping: 0.291600 ms MarkObjects: 7.600700 ms  DeleteObjects: 0.284400 ms)
+
+Opening scene 'Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity'
+Unloading 18 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity'
+	Deserialize:            33.287 ms
+	Integration:            219.494 ms
+	Integration of assets:  0.046 ms
+	Thread Wait Time:       0.017 ms
+	Total Operation Time:   252.844 ms
+Unloading 553 unused Assets / (0.7 MB). Loaded Objects now: 10462.
+Memory consumption went from 198.4 MB to 197.7 MB.
+Total: 10.147600 ms (FindLiveObjects: 0.748000 ms CreateObjectMapping: 0.364800 ms MarkObjects: 8.629800 ms  DeleteObjects: 0.403300 ms)
+
+Opening scene 'Assets/RailCraft/Scenes/Factory.unity'
+Unloading 13 Unused Serialized files (Serialized files now loaded: 0)
+LightingSettings: switching bake backend from 2 to 1.
+Loaded scene 'Assets/RailCraft/Scenes/Factory.unity'
+	Deserialize:            7.668 ms
+	Integration:            221.428 ms
+	Integration of assets:  0.024 ms
+	Thread Wait Time:       0.019 ms
+	Total Operation Time:   229.139 ms
+Unloading 72 unused Assets / (32.9 KB). Loaded Objects now: 8971.
+Memory consumption went from 197.4 MB to 197.4 MB.
+Total: 8.917800 ms (FindLiveObjects: 0.610600 ms CreateObjectMapping: 0.400600 ms MarkObjects: 7.715500 ms  DeleteObjects: 0.189900 ms)
+
+RAILCRAFT_SAVE_REJECTED JSON parse error: Missing a name for object member.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+RailCraft.ThirdPerson.World.WhiteboxSaveController:TryContinueGame () (at Assets/RailCraft/ThirdPerson/Runtime/World/WhiteboxSaveController.cs:102)
+RailCraft.ThirdPerson.Tests.EditMode.World.WhiteboxSaveMenuAndSettlementTests:CorruptedSaveIsRejectedAndRemoved () (at Assets/RailCraft/ThirdPerson/Tests/EditMode/World/WhiteboxSaveMenuAndSettlementTests.cs:133)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+NUnit.Framework.Internal.Reflect:InvokeMethod (System.Reflection.MethodInfo,object,object[])
+NUnit.Framework.Internal.MethodWrapper:Invoke (object,object[])
+NUnit.Framework.Internal.Commands.TestMethodCommand:RunNonAsyncTestMethod (NUnit.Framework.Internal.ITestExecutionContext)
+NUnit.Framework.Internal.Commands.TestMethodCommand:RunTestMethod (NUnit.Framework.Internal.ITestExecutionContext)
+NUnit.Framework.Internal.Commands.TestMethodCommand:Execute (NUnit.Framework.Internal.ITestExecutionContext)
+UnityEngine.TestTools.UnityTestMethodCommand:Execute (NUnit.Framework.Internal.ITestExecutionContext) (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/UnityTestMethodCommand.cs:19)
+UnityEngine.TestRunner.NUnitExtensions.Runner.UnityLogCheckDelegatingCommand/<>c__DisplayClass2_0:<Execute>b__0 () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/UnityLogCheckDelegatingCommand.cs:24)
+UnityEngine.TestRunner.NUnitExtensions.Runner.UnityLogCheckDelegatingCommand:CaptureException (NUnit.Framework.Internal.TestResult,System.Action) (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/UnityLogCheckDelegatingCommand.cs:72)
+UnityEngine.TestRunner.NUnitExtensions.Runner.UnityLogCheckDelegatingCommand:ExecuteAndCheckLog (UnityEngine.TestTools.Logging.LogScope,NUnit.Framework.Internal.TestResult,System.Action) (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/UnityLogCheckDelegatingCommand.cs:83)
+UnityEngine.TestRunner.NUnitExtensions.Runner.UnityLogCheckDelegatingCommand:Execute (NUnit.Framework.Internal.ITestExecutionContext) (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/UnityLogCheckDelegatingCommand.cs:24)
+UnityEngine.TestRunner.NUnitExtensions.Runner.UnityLogCheckDelegatingCommand/<ExecuteEnumerable>d__3:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/UnityLogCheckDelegatingCommand.cs:35)
+UnityEngine.TestTools.BeforeAfterTestCommandBase`1/<ExecuteEnumerable>d__16<NUnit.Framework.ITestAction>:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/BeforeAfterTestCommandBase.cs:212)
+UnityEngine.TestTools.ImmediateEnumerableCommand:Execute (NUnit.Framework.Internal.ITestExecutionContext) (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/ImmediateEnumerableCommand.cs:18)
+UnityEngine.TestTools.BeforeAfterTestCommandBase`1/<ExecuteEnumerable>d__16<System.Reflection.MethodInfo>:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/BeforeAfterTestCommandBase.cs:219)
+UnityEngine.TestTools.BeforeAfterTestCommandBase`1/<ExecuteEnumerable>d__16<System.Reflection.MethodInfo>:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/BeforeAfterTestCommandBase.cs:212)
+UnityEngine.TestTools.BeforeAfterTestCommandBase`1/<ExecuteEnumerable>d__16<UnityEngine.TestTools.IOuterUnityTestAction>:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/BeforeAfterTestCommandBase.cs:212)
+UnityEngine.TestTools.RetryCommand/<ExecuteEnumerable>d__2:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/RetryCommand.cs:37)
+UnityEngine.TestTools.RepeatCommand/<ExecuteEnumerable>d__2:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/RepeatCommand.cs:36)
+UnityEngine.TestTools.IgnoreTestCommand/<ExecuteEnumerable>d__3:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/IgnoreTestCommand.cs:42)
+UnityEngine.TestTools.StrictCheckCommand/<ExecuteEnumerable>d__2:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Commands/StrictCheckCommand.cs:29)
+UnityEngine.TestRunner.NUnitExtensions.Runner.DefaultTestWorkItem/<PerformWork>d__2:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/DefaultTestWorkItem.cs:50)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<RunChildren>d__17:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:207)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<PerformWork>d__13:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:82)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<RunChildren>d__17:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:207)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<PerformWork>d__13:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:82)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<RunChildren>d__17:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:207)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<PerformWork>d__13:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:82)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<RunChildren>d__17:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:207)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<PerformWork>d__13:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:82)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<RunChildren>d__17:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:207)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<PerformWork>d__13:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:82)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<RunChildren>d__17:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:207)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<PerformWork>d__13:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:82)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<RunChildren>d__17:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:207)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<PerformWork>d__13:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:82)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<RunChildren>d__17:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:207)
+UnityEngine.TestRunner.NUnitExtensions.Runner.CompositeWorkItem/<PerformWork>d__13:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Runner/CompositeWorkItem.cs:82)
+UnityEditor.TestTools.TestRunner.EditModeRunner:MoveNextAndUpdateYieldObject () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRunner/EditModeRunner.cs:167)
+UnityEditor.TestTools.TestRunner.EditModeRunner:TestConsumer (UnityEditor.TestTools.TestRunner.TestRunnerStateSerializer) (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRunner/EditModeRunner.cs:200)
+UnityEditor.TestTools.TestRunner.TestRun.Tasks.EditModeRunTask/<Execute>d__1:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/Tasks/EditModeRunTask.cs:48)
+UnityEditor.TestTools.TestRunner.TestRun.TestJobRunner:ExecuteStep () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/TestJobRunner.cs:173)
+UnityEditor.TestTools.TestRunner.TestRun.TestJobRunner:ExecuteCallback () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/TestJobRunner.cs:108)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/RailCraft/ThirdPerson/Runtime/World/WhiteboxSaveController.cs Line: 102)
+
+Saving results to: C:/Users/Dylan/AppData/LocalLow/RailCraft Team/RailCraft\TestResults.xml
+Saving results to: D:\documents\project\gingchuangsai\apps\railcraft-unity\Artifacts\Whitebox\Releases\v0.3.0-preview.1\editmode.xml
+Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UnityEditor.TestTools.TestRunner.TestRun.Tasks.BuildActionTaskBase`1/<ExecuteMethods>d__8<UnityEngine.TestTools.IPostBuildCleanup>:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/Tasks/BuildActionTaskBase.cs:48)
+UnityEditor.TestTools.TestRunner.TestRun.Tasks.BuildActionTaskBase`1/<Execute>d__7<UnityEngine.TestTools.IPostBuildCleanup>:MoveNext () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/Tasks/BuildActionTaskBase.cs:34)
+UnityEditor.TestTools.TestRunner.TestRun.TestJobRunner:ExecuteStep () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/TestJobRunner.cs:173)
+UnityEditor.TestTools.TestRunner.TestRun.TestJobRunner:ExecuteCallback () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/TestJobRunner.cs:108)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/TestRun/Tasks/BuildActionTaskBase.cs Line: 48)
+
+Unloading 34 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 706 unused Assets / (12.4 MB). Loaded Objects now: 7619.
+Memory consumption went from 199.0 MB to 186.7 MB.
+Total: 12.420500 ms (FindLiveObjects: 0.589800 ms CreateObjectMapping: 0.321300 ms MarkObjects: 9.972300 ms  DeleteObjects: 1.535400 ms)
+
+DisplayProgressbar: Undo
+Test run completed. Exiting with code 0 (Ok). Run completed.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UnityEditor.TestTools.TestRunner.CommandLineTest.Executer:ExitApplication (UnityEditor.TestTools.TestRunner.CommandLineTest.Executer/ReturnCodes,string) (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/CommandLineTest/Executer.cs:81)
+UnityEditor.TestTools.TestRunner.CommandLineTest.Executer:ExitIfRunIsCompleted () (at ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/CommandLineTest/Executer.cs:74)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEditor.TestRunner/CommandLineTest/Executer.cs Line: 81)
+
+Start importing ProjectSettings/TimeManager.asset using Guid(00000000000000007000000000000000) (LibraryAssetImporter) -> (artifact id: '52c307e924e96ceef905bcc2cea85a00') in 0.0036871 seconds
+Start importing ProjectSettings/QualitySettings.asset using Guid(00000000000000009000000000000000) (LibraryAssetImporter) -> (artifact id: '049f9f1d8cdaad7d4f002cb1cc56c868') in 0.0035349 seconds
+Refreshing native plugins compatible for Editor in 1.71 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=7a95a100850a9834299450b9655916c2): Total: 0.043 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-Dylan-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-Dylan channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1787747892896,"processId":46888,"allocatedMemory":14397005,"memoryLabels":[{"Default":14409},{"Permanent":15236},{"NewDelete":67811},{"Thread":4230344},{"Manager":36073},{"VertexData":8},{"Geometry":816},{"Texture":296},{"Shader":81461},{"Material":24},{"GfxDevice":55872},{"Animation":392},{"Audio":2632},{"FreeType":8},{"FontEngine":736},{"Physics":2146},{"Physics2D":16},{"Serialization":592},{"Input":14984},{"JobScheduler":33024},{"TextLib":280},{"Mono":32},{"MonoCode":64},{"ScriptingNativeRuntime":155060},{"BaseObject":1620272},{"Resource":1336},{"Renderer":3000},{"Transform":4685},{"File":9795},{"WebCam":616},{"Culling":32},{"Terrain":11394},{"Wind":24},{"STL":40},{"String":13910},{"DynamicArray":115133},{"HashMap":76874},{"Utility":2661366},{"Curl":2675},{"PoolAlloc":2152},{"AI":80},{"TypeTree":5341},{"ScriptManager":512},{"RuntimeInitializeOnLoadManager":64},{"SpriteAtlas":112},{"GI":7792},{"Director":8240},{"CloudService":288},{"WebRequest":552},{"VR":47994},{"SceneManager":504},{"Video":64},{"LazyScriptCache":32},{"Camera":17},{"Secure":2377},{"SerializationCache":1576},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57888},{"StaticSafetyDebugInfo":278528},{"Analytics":336},{"Hierarchy":608},{"CoreStats":13112},{"Identifiers":6480},{"Gui":96},{"EditorUtility":118355},{"VersionControl":4},{"Undo":947},{"AssetDatabase":4552829},{"EditorGi":328},{"UnityConnect":29232},{"Upm":1896},{"AssetCompliance":64},{"DrivenProperties":72},{"LocalIPC":211},{"ProfilerEditor":9746},{"CoreBusinessMetrics":3244},{"Licensing":1248},{"AssetReference":32},{"IPCStream":32}]}

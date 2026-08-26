@@ -1,18 +1,21 @@
 # RailCraft 文档入口
 
-`docs/` 保存项目级决策、评审、历史资料和维护规则；应用内规格与验收细节继续放在各自应用目录下。
+## 当前版本文档
 
-## 快速导航
+当前版本是 Unity ThirdPerson 标准实训。日常阅读与更新从以下入口开始：
 
-- `repository-map.md`：总仓库路径分工、模型/CAD 放置位置和提交边界。
-- `decisions/`：仓库结构、技术路线和主线切换等 ADR。
-- `project/`：项目启动期资料、历史需求、计划和设计文档。
-- `reviews/`：外部 Demo、模型来源和技术方案评审记录。
-- `superpowers/`：工具工作流和协作文档。
-- `MAINTENANCE.md`：仓库清理边界、缓存处理和交付归档规则。
+- [当前发行说明](../apps/railcraft-unity/Documentation/Release.md)：版本、运行方式、限制和交付清单。
+- [ThirdPerson 标准实训规格](../apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md)：流程、题库、资产替换与验收条件。
+- [当前验收报告](../apps/railcraft-unity/Artifacts/Whitebox/Acceptance/acceptance-report.md)：构建、测试、冒烟和截图证据。
+- [发行评估快照](../apps/railcraft-unity/Documentation/ReleaseReadiness.md)：预发布范围和剩余发行工作。
+- [仓库地图](repository-map.md)：源码、模型、交付与 Git 边界。
 
-## 与源码的关系
+## 开发与治理
 
-- Unity 当前主线规格和验收入口见 [`../apps/railcraft-unity/Documentation/README.md`](../apps/railcraft-unity/Documentation/README.md)。
-- 仓库总览和主线入口见 [`../README.md`](../README.md)。
-- 历史或冻结版本的结论保留原位，不在这里回写当前白盒状态。
+- [decisions](decisions/)：当前产品与仓库决策。主线以 ADR-0002 为准。
+- [MAINTENANCE.md](MAINTENANCE.md)：缓存、构建、原始交付与归档规则。
+- [reviews](reviews/)：外部方案、模型与技术评审，供当前主线接入前复核。
+
+## 历史归档
+
+[archive](archive/README.md) 汇集冻结 Unity v0.1、Godot Demo、独立原型和启动期资料的入口。它们保留可追溯性，不构成当前版本的日常入口或发行范围。

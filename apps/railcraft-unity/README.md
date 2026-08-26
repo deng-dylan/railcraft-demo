@@ -1,10 +1,9 @@
-# RailCraft Unity
+# RailCraft Unity — 当前发行主线
 
-> **当前开发主线：第三人称流程白盒。** Unity 固定视角 v0.1 已冻结为验收
-> 基线；Godot `v0.1.0-demo` 已冻结为历史 Demo。三者的版本关系和文档入口见
-> [`Documentation/README.md`](Documentation/README.md)。
+> **当前发行：v0.3.0-preview.1。** Unity ThirdPerson 标准实训是唯一的日常体验、开发和验收入口。
+> 固定视角 Unity v0.1、Godot Demo 和独立原型均保留为归档资料，入口见 [`Documentation/README.md`](Documentation/README.md)。
 
-## 当前开发主线：第三人称流程白盒
+## 当前版本：ThirdPerson 标准实训
 
 当前主线验证工厂第三人称探索、答题、拾取、库存、分级装配、落车、调试回路和
 实训结算的完整闭环。内容规模为 58 道题、14 个答题与零件拾取工位、14 个零件、
@@ -24,7 +23,8 @@
 - 本地入口：`Builds/Whitebox/RailCraftWhitebox.exe`
 - 当前规格：[`Documentation/ThirdPersonWhitebox.md`](Documentation/ThirdPersonWhitebox.md)
 - 当前证据：[`Artifacts/Whitebox/Acceptance`](Artifacts/Whitebox/Acceptance)
-- 发行判断：[`Documentation/ReleaseReadiness.md`](Documentation/ReleaseReadiness.md)
+- 发行说明：[`Documentation/Release.md`](Documentation/Release.md)
+- 发行评估快照：[`Documentation/ReleaseReadiness.md`](Documentation/ReleaseReadiness.md)
 
 从源码直接进入编辑器 Play 前先执行一次 `Rebuild Scene`，让生成器把 v0.3 组件和
 UI 写入场景；Windows 白盒构建入口会自动完成这一步。证据目录以其中验收报告标注
@@ -36,11 +36,14 @@ UI 写入场景；Windows 白盒构建入口会自动完成这一步。证据目
 胶囊和程序化标识是可替换视觉资产，后续 Blender prefab 继续遵守
 [`Documentation/ModelHandoff.md`](Documentation/ModelHandoff.md)。
 
-项目默认 `EditorBuildSettings` 只启用 `ThirdPersonWhitebox`。白盒构建入口只打包
-这一张主线场景；冻结 v0.1 的历史构建脚本显式打包 `Bootstrap` 与 `Factory`，不读取
-当前默认场景。每批主线改动通过对应测试、Windows 构建和成品冒烟后单独
+项目默认 `EditorBuildSettings` 以 `ThirdPersonWhitebox` 为启动场景。白盒构建入口会将
+`FinalShowcase` 作为完成后的可选展示场景一并打包；冻结 v0.1 的历史构建脚本显式打包
+`Bootstrap` 与 `Factory`，不读取当前默认场景。每批主线改动通过对应测试、Windows 构建和成品冒烟后单独
 提交并及时推送当前功能分支；该批次产生的日志、测试 XML 和最终截图同步更新到
 `Artifacts/Whitebox/Acceptance/`。
+
+<details>
+<summary><strong>历史归档：Unity 固定视角 v0.1（仅供复现、审计与回归）</strong></summary>
 
 ## 冻结验收基线：Unity 固定视角 v0.1
 
@@ -191,6 +194,8 @@ Artifacts/Acceptance/
 ```
 
 范围与逐条证据见 [`Documentation/Scope.md`](Documentation/Scope.md) 和 [`Documentation/Acceptance.md`](Documentation/Acceptance.md)。
+
+</details>
 
 ## 共享模型限制
 

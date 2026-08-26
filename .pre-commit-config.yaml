@@ -5,7 +5,7 @@ repos:
     hooks:
       - id: repository-layout
         name: "Mainline: repository layout and source policy"
-        entry: powershell -NoProfile -ExecutionPolicy Bypass -File tools/Test-RepositoryLayout.ps1
+        entry: pwsh -NoProfile -ExecutionPolicy Bypass -File tools/Test-RepositoryLayout.ps1
         language: system
         pass_filenames: false
         files: ^(apps/railcraft-unity/|deliveries/|prototypes/|tools/Test-RepositoryLayout\.ps1|\.gitignore|\.gitattributes)
