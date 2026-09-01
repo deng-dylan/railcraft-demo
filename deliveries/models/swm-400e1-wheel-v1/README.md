@@ -52,7 +52,7 @@ Unity 不直接导入 `.SLDPRT`。运行时资产统一采用优化后的 `.fbx`
 
 ## v0.1 生产资产门禁状态
 
-统一交接规范见 `apps/railcraft-unity/Documentation/ModelHandoff.md`。当前交付记录如下：
+统一交接规范见 `railcraft-unity/Documentation/ModelHandoff.md`。当前交付记录如下：
 
 | 必填项 | 当前值 | 门禁 |
 |---|---|---|

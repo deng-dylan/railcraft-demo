@@ -32,7 +32,7 @@
 pwsh -NoProfile -File tools/New-WhiteboxReleasePackage.ps1 -Version v0.3.0-preview.1
 ~~~
 
-脚本会校验 Unity 运行目录，生成完整 Windows ZIP、离线说明副本和 SHA-256 校验文件；输出位于 apps/railcraft-unity/ReleasePackages/，该目录不进入 Git。
+脚本会校验 Unity 运行目录，生成完整 Windows ZIP、离线说明副本和 SHA-256 校验文件；输出位于 railcraft-unity/ReleasePackages/，该目录不进入 Git。
 
 ## 预发布验证
 

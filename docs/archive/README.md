@@ -1,10 +1,10 @@
 # RailCraft 历史归档
 
-本页汇集可复现、审计与方案追溯资料。当前体验、开发、构建和发行入口位于 [Unity ThirdPerson 主线](../../apps/railcraft-unity/README.md)。
+本页汇集可复现、审计与方案追溯资料。当前体验、开发、构建和发行入口位于 [Unity ThirdPerson 主线](../../railcraft-unity/README.md)。
 
 ## 冻结实现
 
-- [Unity 固定视角 v0.1](../../apps/railcraft-unity/Documentation/README.md)：历史场景、验收与性能资料。
+- [Unity 固定视角 v0.1](../../railcraft-unity/Documentation/README.md)：历史场景、验收与性能资料。
 - [Godot v0.1.0-demo](../../apps/railcraft-godot/README.md)：历史源码、测试、Windows 发布记录。
 
 ## 独立原型与外部方案

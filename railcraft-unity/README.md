@@ -65,7 +65,7 @@ RailCraft Unity v0.1 是 Windows x86_64 第一版固定视角测试版。体验�
 - Unity Test Framework：`Packages/manifest.json` 请求 `1.4.3`；Unity 6000.3.21f1 在 `packages-lock.json` 中解析为内置 `1.6.0`
 - 默认窗口：1920×1080、Windowed
 
-使用固定编辑器打开 `apps/railcraft-unity`。冻结 v0.1 的场景仍位于
+使用固定编辑器打开 `railcraft-unity`。冻结 v0.1 的场景仍位于
 `Assets/RailCraft/Scenes/Bootstrap.unity` 与 `Factory.unity`。其历史构建入口显式使用
 这两张场景，因此无需覆盖当前白盒的默认 Build Settings。
 
@@ -75,7 +75,7 @@ RailCraft Unity v0.1 是 Windows x86_64 第一版固定视角测试版。体验�
 
 ```powershell
 $UnityExe = 'C:\Program Files\Unity\Hub\Editor\6000.3.21f1\Editor\Unity.exe'
-$Project = (Resolve-Path '.\apps\railcraft-unity').Path
+$Project = (Resolve-Path '.\railcraft-unity').Path
 
 & $UnityExe -batchmode -nographics `
   -projectPath $Project `
@@ -117,7 +117,7 @@ $env:RAILCRAFT_PERFORMANCE_OUTPUT = "$Project\TestResults\task12-performance.jso
 
 ```powershell
 $UnityExe = 'C:\Program Files\Unity\Hub\Editor\6000.3.21f1\Editor\Unity.exe'
-$Project = (Resolve-Path '.\apps\railcraft-unity').Path
+$Project = (Resolve-Path '.\railcraft-unity').Path
 
 & $UnityExe -batchmode -quit `
   -projectPath $Project `
@@ -144,7 +144,7 @@ Builds/Windows/RailCraft.exe
 在 64 位 Windows 10/11 上双击 `RailCraft.exe`，或在 PowerShell 中运行：
 
 ```powershell
-$Project = (Resolve-Path '.\apps\railcraft-unity').Path
+$Project = (Resolve-Path '.\railcraft-unity').Path
 & "$Project\Builds\Windows\RailCraft.exe"
 ```
 

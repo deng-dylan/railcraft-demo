@@ -33,7 +33,7 @@ namespace RailCraft.Tests.EditMode
             if (prefab == null)
             {
                 var repositoryRoot = Path.GetFullPath(Path.Combine(
-                    Application.dataPath, "..", "..", ".."));
+                    Application.dataPath, "..", ".."));
                 var manifestPath = Path.Combine(repositoryRoot, "deliveries", "models",
                     "swm-400e1-wheel-v1", "README.md");
                 Assert.That(File.Exists(manifestPath), Is.True,

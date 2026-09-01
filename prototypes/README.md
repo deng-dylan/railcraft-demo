@@ -1,7 +1,7 @@
 # RailCraft 历史原型归档
 
 `prototypes/` 保存没有进入当前主线的独立原型源码快照和说明，用于评审、回溯和方案比较。
-当前体验、开发和发行入口位于 [Unity ThirdPerson 主线](../apps/railcraft-unity/README.md)。
+当前体验、开发和发行入口位于 [Unity ThirdPerson 主线](../railcraft-unity/README.md)。
 
 ## 当前内容
 

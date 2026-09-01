@@ -1,14 +1,14 @@
-# RailCraft 应用入口
+# RailCraft 归档应用入口
 
-## 当前应用
+## 当前主线
 
-[railcraft-unity](railcraft-unity/) 是唯一的当前应用。它承载 Unity ThirdPerson 标准实训、Windows x86_64 构建和当前验收证据。
+[railcraft-unity](../railcraft-unity/) 已移动到仓库根层，是唯一的当前应用。它承载 Unity ThirdPerson 标准实训、Windows x86_64 构建和当前验收证据。
 
-- 运行与开发：[Unity 主线 README](railcraft-unity/README.md)
-- 发行与下载：[当前发行说明](railcraft-unity/Documentation/Release.md)
-- 规格与验收：[ThirdPerson 标准实训规格](railcraft-unity/Documentation/ThirdPersonWhitebox.md)
+- 运行与开发：[Unity 主线 README](../railcraft-unity/README.md)
+- 发行与下载：[当前发行说明](../railcraft-unity/Documentation/Release.md)
+- 规格与验收：[ThirdPerson 标准实训规格](../railcraft-unity/Documentation/ThirdPersonWhitebox.md)
 
-新玩法、场景、题库、模型替换和当前验收均进入 railcraft-unity。
+新玩法、场景、题库、模型替换和当前验收均进入根层 railcraft-unity。
 
 ## 归档实现
 

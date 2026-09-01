@@ -2,7 +2,8 @@
 
 > **状态：已完成并冻结。** 本文是 2026-08-01 固定视角 Unity v0.1 的历史实施计划，
 > 保留当时的约束、命令和任务拆分用于审计。当前开发范围以
-> `apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md` 为准。
+> `railcraft-unity/Documentation/ThirdPersonWhitebox.md` 为准。正文中的
+> `apps/railcraft-unity` 继续保留为当时的历史路径。
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

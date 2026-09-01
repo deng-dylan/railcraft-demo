@@ -2,7 +2,7 @@
 
 本说明用于保持 RailCraft 总仓库可审计、可构建，并避免将可再生缓存或成员原始交付误纳入版本控制。
 
-当前开发主线是 `apps/railcraft-unity/Assets/RailCraft/ThirdPerson/`。同一 Unity
+当前开发主线是 `railcraft-unity/Assets/RailCraft/ThirdPerson/`。同一 Unity
 工程中的固定视角 v0.1 是冻结验收基线，`apps/railcraft-godot/` 是冻结历史
 Demo。维护时必须区分三者，避免用当前白盒证据覆盖历史证据。
 
@@ -13,8 +13,8 @@ Demo。维护时必须区分三者，避免用当前白盒证据覆盖历史证�
 
 | 区域 | 维护规则 |
 | --- | --- |
-| `apps/railcraft-unity/Assets/RailCraft/ThirdPerson/` | 当前第三人称白盒主线。跟踪源码、场景、白盒视觉、测试和稳定替换契约。 |
-| `apps/railcraft-unity/` 的既有 `Bootstrap`/`Factory` | 冻结的 Unity 固定视角 v0.1 验收基线，只接受可追溯勘误或必要维护。 |
+| `railcraft-unity/Assets/RailCraft/ThirdPerson/` | 当前第三人称白盒主线。跟踪源码、场景、白盒视觉、测试和稳定替换契约。 |
+| `railcraft-unity/` 的既有 `Bootstrap`/`Factory` | 冻结的 Unity 固定视角 v0.1 验收基线，只接受可追溯勘误或必要维护。 |
 | `apps/railcraft-godot/` | 冻结的 Godot `v0.1.0-demo` 历史 Demo，保留原位以便回溯。 |
 | `prototypes/` | 非主线原型的包装与说明；只有再分发权明确的源码快照可以进入 Git。 |
 | `docs/project/`、`docs/decisions/`、`docs/reviews/` | 项目基线、决策和评审记录。 |
@@ -22,7 +22,7 @@ Demo。维护时必须区分三者，避免用当前白盒证据覆盖历史证�
 
 当前模型网格类文件通过 Git LFS 管理，包括 `*.fbx`、`*.blend`、`*.step`、
 `*.glb`、`*.obj`、`*.stl`、`*.x_t`、`*.psd`、`*.tga`。原始 CAD 候选先登记到
-`apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Art/Models/SourceCAD/`，
+`railcraft-unity/Assets/RailCraft/ThirdPerson/Art/Models/SourceCAD/`，
 确认授权、单位、原点和导出格式后，再把可运行网格放进 Unity 模型目录。
 
 ## 本地可再生内容
@@ -51,8 +51,8 @@ Build 目录或中间捕获。
 ## 当前开发与冻结基线
 
 - 当前第三人称白盒的规格、流程和验收条件位于
-  `apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md`，当前证据位于
-  `apps/railcraft-unity/Artifacts/Whitebox/Acceptance/`。
+  `railcraft-unity/Documentation/ThirdPersonWhitebox.md`，当前证据位于
+  `railcraft-unity/Artifacts/Whitebox/Acceptance/`。
 - 冻结 Unity v0.1 的范围、验收条件、性能基线和最终证据位于既有
   `Documentation/Scope.md`、`Acceptance.md`、`PerformanceBudget.md` 与
   `Artifacts/Acceptance/`；这些文件的历史结论不随白盒迭代改写。

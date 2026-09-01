@@ -8,7 +8,7 @@ repos:
         entry: pwsh -NoProfile -ExecutionPolicy Bypass -File tools/Test-RepositoryLayout.ps1
         language: system
         pass_filenames: false
-        files: ^(apps/railcraft-unity/|deliveries/|prototypes/|tools/Test-RepositoryLayout\.ps1|\.gitignore|\.gitattributes)
+        files: ^(railcraft-unity/|deliveries/|prototypes/|tools/Test-RepositoryLayout\.ps1|\.gitignore|\.gitattributes)
       - id: gdformat-check
         name: "Legacy Godot: gdformat check"
         entry: uv --directory apps/railcraft-godot run --frozen gdformat --check scripts tests

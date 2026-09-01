@@ -19,10 +19,10 @@
 
 ## 当前计划边界
 
-- 当前开发主线：`apps/railcraft-unity/Assets/RailCraft/ThirdPerson/`
+- 当前开发主线：`railcraft-unity/Assets/RailCraft/ThirdPerson/`
 - 当前范围：58题、14零件、6装配节点、调试闭环和 Blender 视觉替换
-- 当前规格：`apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md`
-- 当前证据：`apps/railcraft-unity/Artifacts/Whitebox/Acceptance/`
+- 当前规格：`railcraft-unity/Documentation/ThirdPersonWhitebox.md`
+- 当前证据：`railcraft-unity/Artifacts/Whitebox/Acceptance/`
 - 冻结 Unity v0.1 与 Godot Demo 的功能扩展不进入本目录的活动计划
 
 `.superpowers/` 和 `docs/superpowers/` 中的工具执行稿不会自动成为项目计划。需要

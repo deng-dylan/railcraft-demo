@@ -4,7 +4,7 @@
 - 来源原件：`50道选择+30道判断.doc`
 - 来源 SHA-256：`45F94190C8486DC78A74994C7120A81C0949331E67956A2751B1A3450C9C0C70`
 - 来源登记：[`../question-bank-v1/README.md`](../question-bank-v1/README.md)
-- 运行时题库：`apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxQuestionBank.cs`
+- 运行时题库：`railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxQuestionBank.cs`
 
 ## v2 冻结结果
 

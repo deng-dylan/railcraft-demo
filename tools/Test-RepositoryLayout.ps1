@@ -46,32 +46,32 @@ try {
     $requiredFiles = @(
         ".gitattributes",
         ".gitignore",
-        "apps/railcraft-unity/Packages/manifest.json",
-        "apps/railcraft-unity/Packages/packages-lock.json",
-        "apps/railcraft-unity/ProjectSettings/ProjectVersion.txt",
-        "apps/railcraft-unity/ProjectSettings/EditorBuildSettings.asset",
-        "apps/railcraft-unity/Assets/RailCraft/Scenes/Bootstrap.unity",
-        "apps/railcraft-unity/Assets/RailCraft/Scenes/Factory.unity",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson.meta",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Editor/RailCraft.ThirdPerson.Editor.asmdef",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Editor/WhiteboxSceneBuilder.cs",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Editor/WhiteboxWindowsBuild.cs",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/RailCraft.ThirdPerson.Domain.asmdef",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxGameCatalog.cs",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxGameSession.cs",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxQuestionBank.cs",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Player/RailCraft.ThirdPerson.Player.asmdef",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/UI/RailCraft.ThirdPerson.UI.asmdef",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/UI/WhiteboxAutomatedSmokeRunner.cs",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/World/RailCraft.ThirdPerson.World.asmdef",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/World/WhiteboxGameSessionHost.cs",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/RailCraft.ThirdPerson.Domain.EditModeTests.asmdef",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/WhiteboxGameCatalogTests.cs",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/WhiteboxGameSessionTests.cs",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Player/RailCraft.ThirdPerson.Player.EditModeTests.asmdef",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/World/RailCraft.ThirdPerson.World.EditModeTests.asmdef",
-        "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/World/WhiteboxWorldInteractionTests.cs"
+        "railcraft-unity/Packages/manifest.json",
+        "railcraft-unity/Packages/packages-lock.json",
+        "railcraft-unity/ProjectSettings/ProjectVersion.txt",
+        "railcraft-unity/ProjectSettings/EditorBuildSettings.asset",
+        "railcraft-unity/Assets/RailCraft/Scenes/Bootstrap.unity",
+        "railcraft-unity/Assets/RailCraft/Scenes/Factory.unity",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson.meta",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Editor/RailCraft.ThirdPerson.Editor.asmdef",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Editor/WhiteboxSceneBuilder.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Editor/WhiteboxWindowsBuild.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/RailCraft.ThirdPerson.Domain.asmdef",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxGameCatalog.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxGameSession.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxQuestionBank.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Player/RailCraft.ThirdPerson.Player.asmdef",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/UI/RailCraft.ThirdPerson.UI.asmdef",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/UI/WhiteboxAutomatedSmokeRunner.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/World/RailCraft.ThirdPerson.World.asmdef",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/World/WhiteboxGameSessionHost.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/RailCraft.ThirdPerson.Domain.EditModeTests.asmdef",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/WhiteboxGameCatalogTests.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/WhiteboxGameSessionTests.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Player/RailCraft.ThirdPerson.Player.EditModeTests.asmdef",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/World/RailCraft.ThirdPerson.World.EditModeTests.asmdef",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/World/WhiteboxWorldInteractionTests.cs"
     )
     $missingRequiredFiles = @($requiredFiles | Where-Object {
         -not (Test-Path -LiteralPath (Join-Path $repositoryRoot $_) -PathType Leaf)
@@ -83,7 +83,7 @@ try {
         Add-Failure "Missing Unity mainline anchor files: $(Format-PathSample $missingRequiredFiles)."
     }
 
-    $thirdPersonRelativeRoot = "apps/railcraft-unity/Assets/RailCraft/ThirdPerson"
+    $thirdPersonRelativeRoot = "railcraft-unity/Assets/RailCraft/ThirdPerson"
     $thirdPersonRoot = Join-Path $repositoryRoot $thirdPersonRelativeRoot
     $thirdPersonRootMeta = "$thirdPersonRoot.meta"
     $missingMetaFiles = New-Object System.Collections.Generic.List[string]
@@ -144,7 +144,7 @@ try {
         }
     }
 
-    $buildSettingsPath = Join-Path $repositoryRoot "apps/railcraft-unity/ProjectSettings/EditorBuildSettings.asset"
+    $buildSettingsPath = Join-Path $repositoryRoot "railcraft-unity/ProjectSettings/EditorBuildSettings.asset"
     if (Test-Path -LiteralPath $buildSettingsPath -PathType Leaf) {
         $buildSettings = Get-Content -Raw -Encoding utf8 -LiteralPath $buildSettingsPath
         $sceneMatches = [regex]::Matches(
@@ -176,14 +176,14 @@ try {
         }
     }
 
-    $packageManifestPath = Join-Path $repositoryRoot "apps/railcraft-unity/Packages/manifest.json"
-    $packageLockPath = Join-Path $repositoryRoot "apps/railcraft-unity/Packages/packages-lock.json"
-    $qualitySettingsPath = Join-Path $repositoryRoot "apps/railcraft-unity/ProjectSettings/QualitySettings.asset"
+    $packageManifestPath = Join-Path $repositoryRoot "railcraft-unity/Packages/manifest.json"
+    $packageLockPath = Join-Path $repositoryRoot "railcraft-unity/Packages/packages-lock.json"
+    $qualitySettingsPath = Join-Path $repositoryRoot "railcraft-unity/ProjectSettings/QualitySettings.asset"
     $mobileAssetPaths = @(
-        "apps/railcraft-unity/Assets/Settings/Mobile_RPAsset.asset",
-        "apps/railcraft-unity/Assets/Settings/Mobile_RPAsset.asset.meta",
-        "apps/railcraft-unity/Assets/Settings/Mobile_Renderer.asset",
-        "apps/railcraft-unity/Assets/Settings/Mobile_Renderer.asset.meta"
+        "railcraft-unity/Assets/Settings/Mobile_RPAsset.asset",
+        "railcraft-unity/Assets/Settings/Mobile_RPAsset.asset.meta",
+        "railcraft-unity/Assets/Settings/Mobile_Renderer.asset",
+        "railcraft-unity/Assets/Settings/Mobile_Renderer.asset.meta"
     )
     $mobilePipelineGuid = "5e6cbd92db86f4b18aec3ed561671858"
     $desktopPipelineGuid = "4b83569d67af61e458304325a23e5dfd"
@@ -220,7 +220,7 @@ try {
         Add-Failure "Non-Windows release configuration remains: $(Format-PathSample $releaseTargetIssues.ToArray())."
     }
 
-    $questionBankPath = Join-Path $repositoryRoot "apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxQuestionBank.cs"
+    $questionBankPath = Join-Path $repositoryRoot "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxQuestionBank.cs"
     if (Test-Path -LiteralPath $questionBankPath -PathType Leaf) {
         $questionBank = Get-Content -Raw -Encoding utf8 -LiteralPath $questionBankPath
         $definitionMatches = [regex]::Matches(
@@ -260,7 +260,7 @@ try {
         $_.Replace('\', '/')
     })
     $trackedGeneratedFiles = @($trackedPaths | Where-Object {
-        $_ -match '^apps/railcraft-unity/(?:Library|Temp|Obj|Logs|UserSettings|TestResults|Builds|MemoryCaptures|Recordings|\.vs)(?:/|$)'
+        $_ -match '^railcraft-unity/(?:Library|Temp|Obj|Logs|UserSettings|TestResults|Builds|MemoryCaptures|Recordings|\.vs)(?:/|$)'
     })
     if ($trackedGeneratedFiles.Count -eq 0) {
         Add-Pass "No Unity generated directories are tracked."

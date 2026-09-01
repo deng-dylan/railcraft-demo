@@ -16,7 +16,7 @@ v0.1 或 Godot Demo 当作当前开发目标。
 
 ## 决策
 
-1. `apps/railcraft-unity/Assets/RailCraft/ThirdPerson/` 是当前开发主线。
+1. `railcraft-unity/Assets/RailCraft/ThirdPerson/` 是当前开发主线。
 2. 当前内容基线为原文实际存在的58道题、14个答题与零件拾取工位、14个零件、
    6个装配节点，以及调试失败、重新调试、检验、复测和投入使用闭环。
 3. 当前主线场景为
@@ -28,7 +28,7 @@ v0.1 或 Godot Demo 当作当前开发目标。
    迭代改写。
 5. `apps/railcraft-godot/` 保持冻结历史 Demo，用于复核原发布与追溯设计演进；新
    玩法不再在该目录实现。
-6. 当前白盒证据进入 `apps/railcraft-unity/Artifacts/Whitebox/Acceptance/`，与旧
+6. 当前白盒证据进入 `railcraft-unity/Artifacts/Whitebox/Acceptance/`，与旧
    Unity v0.1 证据分开维护。
 7. 每批改动围绕一个可验证目标组织。对应测试、Windows 构建和成品冒烟通过后创建
    独立提交，并及时推送当前功能分支；生成该结论的最终证据与代码同批提交。
@@ -43,7 +43,7 @@ v0.1 或 Godot Demo 当作当前开发目标。
 
 ## 约束
 
-- 当前主线范围以 `apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md` 为准。
+- 当前主线范围以 `railcraft-unity/Documentation/ThirdPersonWhitebox.md` 为准。
 - 冻结基线只接受明确的勘误、安全维护或复现修复，且必须使用独立提交记录影响。
 - 原始题库、流程图、CAD 和研究文件继续按 `deliveries/` 规则登记；未经审核的工程
   数据与临时文件不直接进入运行时资产。

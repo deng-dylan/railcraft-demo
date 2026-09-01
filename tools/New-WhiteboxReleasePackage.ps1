@@ -14,10 +14,10 @@ $ErrorActionPreference = 'Stop'
 
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 if ([string]::IsNullOrWhiteSpace($BuildDirectory)) {
-    $BuildDirectory = Join-Path $repositoryRoot 'apps\railcraft-unity\Builds\Whitebox'
+    $BuildDirectory = Join-Path $repositoryRoot 'railcraft-unity\Builds\Whitebox'
 }
 if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
-    $OutputDirectory = Join-Path $repositoryRoot 'apps\railcraft-unity\ReleasePackages'
+    $OutputDirectory = Join-Path $repositoryRoot 'railcraft-unity\ReleasePackages'
 }
 
 $buildRoot = (Resolve-Path -LiteralPath $BuildDirectory -ErrorAction Stop).Path
@@ -51,13 +51,13 @@ foreach ($target in @($stagingRoot, $archivePath, $checksumsPath)) {
 New-Item -ItemType Directory -Path $stagingRoot | Out-Null
 Get-ChildItem -LiteralPath $buildRoot -Force | Copy-Item -Destination $stagingRoot -Recurse -Force
 
-$releaseNotes = Join-Path $repositoryRoot 'apps\railcraft-unity\Documentation\Release.md'
+$releaseNotes = Join-Path $repositoryRoot 'railcraft-unity\Documentation\Release.md'
 if (Test-Path -LiteralPath $releaseNotes) {
     Copy-Item -LiteralPath $releaseNotes -Destination (
         Join-Path $stagingRoot "ReleaseNotes-$Version.md")
 }
 
-$runtimeGuide = Join-Path $repositoryRoot 'apps\railcraft-unity\Documentation\ThirdPersonWhitebox.md'
+$runtimeGuide = Join-Path $repositoryRoot 'railcraft-unity\Documentation\ThirdPersonWhitebox.md'
 if (Test-Path -LiteralPath $runtimeGuide) {
     Copy-Item -LiteralPath $runtimeGuide -Destination (
         Join-Path $stagingRoot 'ThirdPersonWhitebox.md')

@@ -6,18 +6,18 @@
 
 ## 当前权威入口
 
-- 当前开发主线：[`../../apps/railcraft-unity`](../../apps/railcraft-unity)
+- 当前开发主线：[`../../railcraft-unity`](../../railcraft-unity)
 - 当前白盒规格：
-  [`../../apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md`](../../apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md)
+  [`../../railcraft-unity/Documentation/ThirdPersonWhitebox.md`](../../railcraft-unity/Documentation/ThirdPersonWhitebox.md)
 - 当前与历史 Unity 文档索引：
-  [`../../apps/railcraft-unity/Documentation/README.md`](../../apps/railcraft-unity/Documentation/README.md)
+  [`../../railcraft-unity/Documentation/README.md`](../../railcraft-unity/Documentation/README.md)
 - 当前主线决策：
   [`../decisions/0002-third-person-whitebox-mainline.md`](../decisions/0002-third-person-whitebox-mainline.md)
 - 后续实施计划规则：[`plans/README.md`](plans/README.md)
 
 当前白盒包含58道题、14个零件、6个装配节点和完整调试闭环，本地构建入口为
-`apps/railcraft-unity/Builds/Whitebox/RailCraftWhitebox.exe`。当前验收证据统一写入
-`apps/railcraft-unity/Artifacts/Whitebox/Acceptance/`。
+`railcraft-unity/Builds/Whitebox/RailCraftWhitebox.exe`。当前验收证据统一写入
+`railcraft-unity/Artifacts/Whitebox/Acceptance/`。
 
 ## 历史路径映射
 
