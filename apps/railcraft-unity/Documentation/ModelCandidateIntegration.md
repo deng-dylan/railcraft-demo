@@ -3,6 +3,7 @@
 当前玩法已经在用：
 
 - `Assets/RailCraft/ThirdPerson/Art/Models/AssemblyDemo/BogieAssemblyDemo.fbx`
+- `Assets/RailCraft/ThirdPerson/Art/Models/AssemblyDemo/CW200KReference.fbx`
 - `Assets/RailCraft/ThirdPerson/Art/Models/AssemblyDemo/FuxingCarbodyAssemblyDemo.fbx`
 - `Assets/RailCraft/ThirdPerson/Art/Models/FinalShowcase/FuxingTrain.fbx`
 
@@ -10,14 +11,16 @@
 
 | 模型 | 处理建议 | 玩法位置 |
 |---|---|---|
+| `TRAIN.stp`（顶层产品 `CW-200K`） | 已完成 OpenCascade → GLB → Blender FBX、硬件精简、减面和材质分层 | 构体完成态/落车完成态参考 |
 | `Y25转向架 欧洲货运火车.stp` | 先转成 FBX，再放到 `Assets/RailCraft/ThirdPerson/Art/Models/VariantModels/Y25Freight/Y25FreightBogie.fbx` | 转向架/构体/落车 |
 | `简化铁路转向架（现实无对应）.SLDPRT` | 先导出 FBX，Unity 里重配材质，放到 `VariantModels/TeachingConcept/TeachingConceptBogie.fbx` | 教学版替换件 |
 | `地铁转向架（简化）（上色版）.SLDASM` | 先做 Pack and Go，再导出 FBX | 备用车型 |
 | `地铁转向架（上色版）.stp.SLDASM` | 先确认真实格式，再转换 | 备用车型 |
 
-现在的接法已经留好：
+当前接法：
 
 - 白盒组装：`BogieAssemblyDemoVisualFactory`
+- 完成态参考：`Cw200kReferenceVisualFactory`
 - 白盒场景：`WhiteboxSceneBuilder`
 - 结算展示：继续保留 `FinalShowcase`
 

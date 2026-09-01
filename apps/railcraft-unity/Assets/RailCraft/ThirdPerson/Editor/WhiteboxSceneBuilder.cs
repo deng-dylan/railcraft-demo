@@ -1056,7 +1056,9 @@ namespace RailCraft.ThirdPerson.Editor
             CreateWorldLabel(
                 stations.transform,
                 "AssemblyDemonstrationNotice",
-                "结构示范件｜本轮精装 1 套代表性转向架；同型第 2 套由配套生产线提供",
+                Cw200kReferenceVisualFactory.IsModelAvailable
+                    ? Cw200kReferenceVisualFactory.DemonstrationNotice
+                    : "结构示范件｜本轮精装 1 套代表性转向架；同型第 2 套由配套生产线提供",
                 new Vector3(-6f, 3.9f, -7.2f),
                 Quaternion.Euler(0f, 180f, 0f),
                 palette.Warning.color,
@@ -1201,18 +1203,29 @@ namespace RailCraft.ThirdPerson.Editor
 
             var completedVisual = CreateChild(station.transform, "BogieStructureCompletionVisual");
             completedVisual.transform.localPosition = new Vector3(0f, 0.69f, 0f);
-            BogieAssemblyDemoVisualFactory.TryCreateFixedDriveVisual(
-                completedVisual.transform,
-                "Installed_FixedDrivePackage",
-                palette.Electrical,
-                out _);
+            var usesCompletedReference =
+                Cw200kReferenceVisualFactory.TryCreateCompletedVisual(
+                    completedVisual.transform,
+                    "CW200K_CompletedReference",
+                    out _);
+            if (!usesCompletedReference)
+            {
+                BogieAssemblyDemoVisualFactory.TryCreateFixedDriveVisual(
+                    completedVisual.transform,
+                    "Installed_FixedDrivePackage",
+                    palette.Electrical,
+                    out _);
+            }
 
             var completeBeacon = CreatePrimitive(PrimitiveType.Cylinder, completedVisual.transform,
                 "BogieStructureCompleteBeacon", new Vector3(0f, 1.35f, 1.7f),
                 new Vector3(0.18f, 0.58f, 0.18f), palette.Success);
             RemoveCollider(completeBeacon);
             completedVisual.SetActive(false);
-            CreateWorldLabel(station.transform, "StationLabel", "代表性转向架总成装配台（结构示范）",
+            CreateWorldLabel(station.transform, "StationLabel",
+                usesCompletedReference
+                    ? "CW-200K 客车转向架完成态参考台"
+                    : "代表性转向架总成装配台（结构示范）",
                 new Vector3(0f, 3.15f, -2.1f), Quaternion.identity, palette.Running.color, 0.58f);
 
             var behaviour = station.AddComponent<CompositeAssemblyStation>();
@@ -1224,7 +1237,10 @@ namespace RailCraft.ThirdPerson.Editor
                 slots,
                 visuals,
                 completedVisual,
-                "代表性转向架完成；同型第 2 套由配套生产线提供，继续准备落车输入");
+                usesCompletedReference
+                    ? "CW-200K 客车转向架参考总成完成；继续准备落车输入"
+                    : "代表性转向架完成；同型第 2 套由配套生产线提供，继续准备落车输入",
+                configuredReplaceModulesWhenComplete: usesCompletedReference);
             AddInteractionVisual(station, scanner, behaviour);
             focusBindings?.Add(new AssemblyFocusBinding(
                 ModuleId.BogieStructure,
@@ -1572,7 +1588,11 @@ namespace RailCraft.ThirdPerson.Editor
                     displayLength: 0f,
                     out var carbodyReference))
             {
-                carbodyReference.transform.localPosition = new Vector3(0f, 1.575f, 0f);
+                var bogieTop = Cw200kReferenceVisualFactory.IsModelAvailable
+                    ? Cw200kReferenceVisualFactory.ReferenceHeightMetres
+                    : 1.53f;
+                carbodyReference.transform.localPosition =
+                    new Vector3(0f, bogieTop + 0.045f, 0f);
                 BuildProductCarbodyLivery(carbodyReference.transform, palette);
             }
             else
@@ -1592,11 +1612,17 @@ namespace RailCraft.ThirdPerson.Editor
             {
                 var bogiePlacement = CreateChild(root.transform, $"LandingBogie_{placement.Name}");
                 bogiePlacement.transform.localPosition = new Vector3(0f, 0f, placement.Z);
-                if (!BogieAssemblyDemoVisualFactory.TryCreateCompletedBogieVisual(
+                var createdReference =
+                    Cw200kReferenceVisualFactory.TryCreateCompletedVisual(
                         bogiePlacement.transform,
-                        "CompletedBogieVisual",
-                        palette.Running,
-                        out _))
+                        "CW200K_CompletedReference",
+                        out _);
+                if (!createdReference
+                    && !BogieAssemblyDemoVisualFactory.TryCreateCompletedBogieVisual(
+                            bogiePlacement.transform,
+                            "CompletedBogieVisual",
+                            palette.Running,
+                            out _))
                 {
                     CreateVisualCube(bogiePlacement.transform, "BogieFallback", new Vector3(0f, 0.45f, 0f),
                         new Vector3(2.7f, 0.3f, 1.35f), palette.Running);

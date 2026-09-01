@@ -124,6 +124,36 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         }
 
         [Test]
+        public void Cw200kCompletedReferenceHasPassengerBogieScaleAndBudget()
+        {
+            var model = AssetDatabase.LoadAssetAtPath<GameObject>(
+                Cw200kReferenceVisualFactory.ModelAssetPath);
+
+            Assert.That(model, Is.Not.Null);
+            var names = model.GetComponentsInChildren<Transform>(true)
+                .Select(item => item.name)
+                .ToArray();
+            Assert.That(names, Does.Contain(Cw200kReferenceVisualFactory.ModelRootName));
+            Assert.That(names, Does.Contain(Cw200kReferenceVisualFactory.RailContactAnchorName));
+            Assert.That(names, Does.Contain("VehicleMount"));
+
+            var renderers = model.GetComponentsInChildren<Renderer>(true)
+                .Where(renderer => renderer is MeshRenderer || renderer is SkinnedMeshRenderer)
+                .ToArray();
+            Assert.That(renderers, Is.Not.Empty);
+            var bounds = CombinedRendererBounds(renderers);
+            Assert.That(bounds.size.x, Is.InRange(2.80f, 3.00f));
+            Assert.That(bounds.size.y, Is.InRange(0.94f, 1.08f));
+            Assert.That(bounds.size.z, Is.InRange(3.40f, 3.64f));
+
+            var triangles = model.GetComponentsInChildren<MeshFilter>(true)
+                .Sum(item => item.sharedMesh.triangles.Length / 3);
+            Assert.That(triangles, Is.InRange(300000, 450000));
+            Assert.That(model.GetComponentsInChildren<Collider>(true), Is.Empty);
+            Assert.That(model.GetComponentsInChildren<Animator>(true), Is.Empty);
+        }
+
+        [Test]
         public void CarbodyPartVisualUsesTheExtractedCoachAtPreviewLength()
         {
             var parent = new GameObject("CarbodyDemoPartTestRoot");
@@ -441,7 +471,16 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
 
                 Assert.That(names, Does.Contain("AssemblyDemonstrationNotice"));
                 Assert.That(names, Does.Contain("DemonstrationModelContent"));
-                Assert.That(names, Does.Contain("Installed_FixedDrivePackage"));
+                if (Cw200kReferenceVisualFactory.IsModelAvailable)
+                {
+                    Assert.That(names.Count(item => item == "CW200K_CompletedReference"),
+                        Is.EqualTo(3));
+                    Assert.That(names, Does.Not.Contain("Installed_FixedDrivePackage"));
+                }
+                else
+                {
+                    Assert.That(names, Does.Contain("Installed_FixedDrivePackage"));
+                }
                 Assert.That(names.Count(item => item == "LandingBogie_Front"), Is.EqualTo(1));
                 Assert.That(names.Count(item => item == "LandingBogie_Rear"), Is.EqualTo(1));
                 Assert.That(names, Does.Contain("ProductLiveryStripe_Left"));

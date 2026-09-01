@@ -16,6 +16,7 @@
 装配计时会在主菜单、应用暂停和退出期间停表，继续游戏后从原有效用时接着累计。
 普通主菜单固定进入复兴号标准实训线；地铁简化、Y25 货运和教学概念三项继续保留为
 扩展登记、旧存档兼容和开发者烟测入口，完整复兴号继续作为最终出厂展示。
+转向架构体完成态和落车完成态已经接入 CW-200K 客车转向架参考 FBX；零件与基础子总成继续使用可逐件显隐的语义示范件。该参考模型用于提升视觉可信度，不标注为 CR400AF 或 SWM-400E1 工程模型。
 
 - 主线场景：`Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity`
 - 重新生成：`RailCraft > Third Person Whitebox > Rebuild Scene`

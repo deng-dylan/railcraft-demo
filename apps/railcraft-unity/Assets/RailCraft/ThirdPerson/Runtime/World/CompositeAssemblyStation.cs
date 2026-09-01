@@ -15,6 +15,7 @@ namespace RailCraft.ThirdPerson.World
         [SerializeField] private Transform[] snapSlots = Array.Empty<Transform>();
         [SerializeField] private GameObject[] moduleVisuals = Array.Empty<GameObject>();
         [SerializeField] private GameObject completedVisual;
+        [SerializeField] private bool replaceModulesWhenComplete;
         [SerializeField, TextArea] private string afterCompletionObjective = "前往下一道工序";
 
         private WhiteboxGameSessionHost subscribedHost;
@@ -49,7 +50,8 @@ namespace RailCraft.ThirdPerson.World
             Transform[] configuredSnapSlots,
             GameObject[] configuredModuleVisuals,
             GameObject configuredCompletedVisual,
-            string configuredAfterCompletionObjective)
+            string configuredAfterCompletionObjective,
+            bool configuredReplaceModulesWhenComplete = false)
         {
             ValidateConfiguration(configuredRequiredModules, configuredSnapSlots, configuredModuleVisuals);
             Unsubscribe();
@@ -62,6 +64,7 @@ namespace RailCraft.ThirdPerson.World
             snapSlots = (Transform[])configuredSnapSlots.Clone();
             moduleVisuals = (GameObject[])configuredModuleVisuals.Clone();
             completedVisual = configuredCompletedVisual;
+            replaceModulesWhenComplete = configuredReplaceModulesWhenComplete;
             afterCompletionObjective = configuredAfterCompletionObjective ?? string.Empty;
             Subscribe();
             RefreshVisuals();
@@ -166,6 +169,7 @@ namespace RailCraft.ThirdPerson.World
         {
             if (requiredModules == null)
                 return;
+            var showCompletedReplacement = replaceModulesWhenComplete && IsComplete;
             for (var index = 0; index < requiredModules.Length; index++)
             {
                 var installed = sessionHost != null
@@ -174,7 +178,7 @@ namespace RailCraft.ThirdPerson.World
                 {
                     if (installed)
                         SnapVisual(moduleVisuals[index].transform, snapSlots[index]);
-                    moduleVisuals[index].SetActive(installed);
+                    moduleVisuals[index].SetActive(installed && !showCompletedReplacement);
                 }
             }
             if (completedVisual != null)

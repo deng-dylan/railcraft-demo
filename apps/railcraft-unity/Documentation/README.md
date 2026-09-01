@@ -23,6 +23,7 @@ RailCraft v0.3.0-preview.1 是当前 Unity ThirdPerson 标准实训预发布。W
 - [ModelHandoff.md](ModelHandoff.md)：模型身份、单位、坐标、LOD 和生产资产门禁。
 - [FinalShowcase.md](FinalShowcase.md)：完成后的完整编组出厂展示。
 - [AssemblyDemonstrationBogie.md](AssemblyDemonstrationBogie.md)：转向架结构示范件、语义映射与约束。
+- [CW200KReferenceBogie.md](CW200KReferenceBogie.md)：完成态与落车态的 CW-200K 客车转向架参考模型。
 - [FactoryKitEnvironment.md](FactoryKitEnvironment.md)：Factory Kit 资源、授权和布置规则。
 - [AssemblyVariantModels.md](AssemblyVariantModels.md)：开发者扩展车型登记，不在普通玩家入口展示。
 

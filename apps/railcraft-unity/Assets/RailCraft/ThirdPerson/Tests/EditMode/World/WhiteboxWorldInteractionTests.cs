@@ -252,6 +252,42 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         }
 
         [Test]
+        public void CompositeStationCanReplaceInstalledLayersWithCompletedReference()
+        {
+            var children = new[]
+            {
+                ModuleId.WheelsetAxlebox,
+                ModuleId.Frame,
+                ModuleId.PrimarySuspension
+            };
+            var slots = CreateTransforms("ReplacementSlot", children.Length);
+            var visuals = CreateVisuals("ReplacementLayer", children.Length);
+            var completedVisual = Child("CompletedReference");
+            var station = root.AddComponent<CompositeAssemblyStation>();
+            station.Configure(
+                host,
+                ModuleId.BogieStructure,
+                "转向架构体装配台",
+                children,
+                slots,
+                visuals,
+                completedVisual,
+                "前往落车工位",
+                configuredReplaceModulesWhenComplete: true);
+
+            var context = new InteractionContext(root);
+            foreach (var child in children)
+            {
+                CompleteLeafModule(child);
+                station.Interact(context);
+            }
+
+            Assert.That(station.IsComplete, Is.True);
+            Assert.That(completedVisual.activeSelf, Is.True);
+            Assert.That(visuals.All(visual => !visual.activeSelf), Is.True);
+        }
+
+        [Test]
         public void FinalAssemblyInstallsTwoModulesAndTwoPartsButOnlyUnlocksCommissioning()
         {
             CompleteBogieStructure();

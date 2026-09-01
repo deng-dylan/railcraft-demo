@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "source_file": "TRAIN.stp",
+  "source_sha256": "36f1413e2d04be22d234ba74832a54047a12f6f505202b7e9d55b883be74a3f1",
+  "source_identity": "CW-200K passenger bogie reference",
+  "engineering_identity": "reference_only",
+  "blender_version": "5.2.0 LTS",
+  "input_mesh_objects": 531,
+  "input_triangles": 1361112,
+  "removed_hardware_objects": 428,
+  "output_mesh_objects": 103,
+  "output_triangles": 428388,
+  "bounds_m": {
+    "minimum": [
+      -1.44907,
+      -1.75932,
+      0.0
+    ],
+    "maximum": [
+      1.44907,
+      1.75932,
+      1.006507
+    ],
+    "size": [
+      2.89814,
+      3.518641,
+      1.006507
+    ]
+  },
+  "materials": [
+    "CW200K_Steel",
+    "CW200K_WheelSteel",
+    "CW200K_SpringSteel",
+    "CW200K_Brake",
+    "CW200K_Rubber",
+    "CW200K_Traction"
+  ],
+  "output": "CW200KReference.fbx",
+  "output_sha256": "07ca76d956fe5ec528ece4098600e0d72c4f1c91e9c8444fd6996716e9f194f2"
+}

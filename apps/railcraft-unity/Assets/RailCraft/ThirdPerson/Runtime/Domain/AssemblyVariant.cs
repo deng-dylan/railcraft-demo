@@ -65,8 +65,8 @@ namespace RailCraft.ThirdPerson.Domain
                 "fuxing-demo",
                 "复兴号教学装配",
                 "标准实训线",
-                "沿用现有复兴号车体与队员转向架示范 FBX，作为标准工单完整跑通知识确认、拾取、装配、落车和调试流程。",
-                "Unity 网格已接入",
+                "沿用复兴号车体，子总成使用队员结构示范件，完成态使用 CW-200K 客车转向架参考模型，完整跑通知识确认、拾取、装配、落车和调试流程。",
+                "CW-200K 完成态参考网格已接入",
                 false,
                 true),
             new AssemblyVariantDefinition(
