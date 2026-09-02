@@ -95,8 +95,10 @@ namespace RailCraft.ThirdPerson.Editor
 
             var instance = UnityEngine.Object.Instantiate(model);
             instance.name = $"{variant}_ImportedSourceInstance";
+            var authoredRotation = instance.transform.localRotation;
             instance.transform.SetParent(parent, false);
             ResetTransform(instance.transform);
+            instance.transform.localRotation = authoredRotation;
             StripNonVisualComponents(instance);
             // Keep teammate-authored colors for the colored metro and Y25
             // deliveries. The concept teaching part is intentionally restyled

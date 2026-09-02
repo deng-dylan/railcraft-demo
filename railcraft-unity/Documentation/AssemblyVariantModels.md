@@ -8,12 +8,13 @@
 
 - `FuxingDemo`：标准工单；使用队员转向架 FBX 与截取的一节复兴号车体。
 - `MetroSimplified`：地铁简化上色装配体的扩展示范登记。
-- `Y25Freight`：Y25 欧洲货运转向架 STEP 的导入与轻量化登记。
+- `Y25Freight`：Y25 欧洲货运转向架的真实 STEP 网格已进入 Unity 审模展台。
 - `TeachingConcept`：“简化铁路转向架（现实无对应）”教学概念件登记。
 
-后面三个方案的源文件仍是 SolidWorks/STEP 格式，项目保留统一网格插槽。网格文件放入
-`Assets/RailCraft/ThirdPerson/Art/Models/VariantModels/` 后，还需补齐对应工艺差异、题目目标、
-落车对象和验收说明，之后才能升级为玩家可选扩展关卡。当前主菜单不显示这些登记项。
+Y25 已完成 STEP 网格化；地铁和教学概念件仍等待 SolidWorks Pack and Go 或 FBX/GLB 导出。
+扩展方案还需补齐对应工艺差异、题目目标、落车对象和验收说明，之后才能升级为玩家可选
+关卡。当前主菜单不显示这些登记项，独立审模入口为
+`RailCraft > Models > Open CAD Preview Gallery`。
 
 ## 交付网格最低契约
 

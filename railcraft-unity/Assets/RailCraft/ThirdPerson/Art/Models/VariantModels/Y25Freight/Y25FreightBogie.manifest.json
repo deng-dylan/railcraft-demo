@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "asset_key": "Y25Freight",
+  "display_name": "Y25 European Freight Bogie",
+  "source_file": "Y25转向架 欧洲货运火车.stp",
+  "source_sha256": "450713443569d0d7858338a199e0f8e44f195d6ba4f564a1b6dedaa29bb96aae",
+  "blender_version": "5.2.1 LTS",
+  "orientation": "Y_up_rotated_positive_90_X",
+  "input_mesh_objects": 576,
+  "input_triangles": 651306,
+  "output_mesh_objects": 1,
+  "output_triangles": 582877,
+  "bounds_m": {
+    "minimum": [
+      -1.896795,
+      -1.158001,
+      0.0
+    ],
+    "maximum": [
+      1.896795,
+      1.158,
+      0.982991
+    ],
+    "size": [
+      3.793591,
+      2.316001,
+      0.982991
+    ]
+  },
+  "output": "Y25FreightBogie.fbx",
+  "output_bytes": 14800252,
+  "output_sha256": "3d3c9f82c019031c814506d799a6cb6eef91e115fcca722b696210b7f6e3121e"
+}

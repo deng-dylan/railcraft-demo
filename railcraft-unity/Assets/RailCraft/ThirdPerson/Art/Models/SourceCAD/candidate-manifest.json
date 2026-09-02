@@ -6,21 +6,24 @@
       "sizeBytes": 51592910,
       "sha256": "450713443569D0D7858338A199E0F8E44F195D6BA4F564A1B6DEDAA29BB96AAE",
       "targetVariant": "Y25Freight",
-      "targetMesh": "VariantModels/Y25Freight/Y25FreightBogie.fbx"
+      "targetMesh": "VariantModels/Y25Freight/Y25FreightBogie.fbx",
+      "conversionStatus": "imported_preview"
+    },
+    {
+      "fileName": "地铁转向架（上色版）.stp.SLDASM",
+      "sizeBytes": 16410903,
+      "sha256": "FB6DAB8C02A918DC91736A39CF5038C76EF1CC49ECD0F1169B096B4379A62DF4",
+      "targetVariant": "MetroColored",
+      "targetMesh": "VariantModels/MetroColored/MetroColoredBogie.fbx",
+      "conversionStatus": "awaiting_pack_and_go"
     },
     {
       "fileName": "地铁转向架（简化）（上色版）.SLDASM",
       "sizeBytes": 4102504,
       "sha256": "76FF95FBCF784BDFE2257344B1DA4C32807E1EA353651C8E3D3203A8F9776C2A",
       "targetVariant": "MetroSimplified",
-      "targetMesh": "VariantModels/MetroSimplified/MetroSimplifiedBogie.fbx"
-    },
-    {
-      "fileName": "地铁转向架（上色版）.stp.SLDASM",
-      "sizeBytes": 16410903,
-      "sha256": "FB6DAB8C02A918DC91736A39CF5038C76EF1CC49ECD0F1169B096B4379A62DF4",
-      "targetVariant": "MetroSimplified",
-      "targetMesh": "VariantModels/MetroSimplified/MetroSimplifiedBogie.fbx"
+      "targetMesh": "VariantModels/MetroSimplified/MetroSimplifiedBogie.fbx",
+      "conversionStatus": "awaiting_pack_and_go"
     },
     {
       "fileName": "简化铁路转向架（现实无对应）.SLDPRT",
@@ -28,7 +31,24 @@
       "sha256": "BD27733C1EC93CA7E6F6BA531C4BAD9AC033A1802C15EE642C743D9810B5234E",
       "targetVariant": "TeachingConcept",
       "targetMesh": "VariantModels/TeachingConcept/TeachingConceptBogie.fbx",
+      "conversionStatus": "awaiting_solidworks_export",
       "teachingOnly": true
+    },
+    {
+      "fileName": "贝滕多夫转向架 低速货运列车.STEP",
+      "sizeBytes": 7431503,
+      "sha256": "CF0D461075BA907FCEA31923165DBCAB00C81F09D83B45BEB9154116A6083C34",
+      "targetVariant": "BettendorfFreight",
+      "targetMesh": "VariantModels/BettendorfFreight/BettendorfFreightBogie.fbx",
+      "conversionStatus": "imported_preview"
+    },
+    {
+      "fileName": "铁路机车转向架（上色）.stp.SLDASM",
+      "sizeBytes": 8312271,
+      "sha256": "F62A2B7431A19BFB5F677F17F9B6DC20FFC990FF9822C6CB899C348B1BBB523E",
+      "targetVariant": "LocomotiveColored",
+      "targetMesh": "VariantModels/LocomotiveColored/LocomotiveColoredBogie.fbx",
+      "conversionStatus": "awaiting_pack_and_go"
     }
   ]
 }

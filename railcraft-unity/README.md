@@ -17,10 +17,13 @@
 普通主菜单固定进入复兴号标准实训线；地铁简化、Y25 货运和教学概念三项继续保留为
 扩展登记、旧存档兼容和开发者烟测入口，完整复兴号继续作为最终出厂展示。
 转向架构体完成态和落车完成态已经接入 CW-200K 客车转向架参考 FBX；零件与基础子总成继续使用可逐件显隐的语义示范件。该参考模型用于提升视觉可信度，不标注为 CR400AF 或 SWM-400E1 工程模型。
+Y25 欧洲货运转向架与贝滕多夫低速货运转向架已经从组员 STEP 转换为真实 Unity 网格，
+放入独立审模展台；它们用于模型检查和后续扩展评估，不混入高速动车组标准工单。
 
 - 主线场景：`Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity`
 - 重新生成：`RailCraft > Third Person Whitebox > Rebuild Scene`
 - Windows 构建：`RailCraft > Third Person Whitebox > Build Windows x86_64`（构建前自动重建生成场景）
+- 模型审模：`RailCraft > Models > Open CAD Preview Gallery`
 - 本地入口：`Builds/Whitebox/RailCraftWhitebox.exe`
 - 当前规格：[`Documentation/ThirdPersonWhitebox.md`](Documentation/ThirdPersonWhitebox.md)
 - 当前证据：[`Artifacts/Whitebox/Acceptance`](Artifacts/Whitebox/Acceptance)

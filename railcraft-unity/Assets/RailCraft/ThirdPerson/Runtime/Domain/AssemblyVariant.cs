@@ -83,8 +83,8 @@ namespace RailCraft.ThirdPerson.Domain
                 "y25-freight",
                 "Y25 欧洲货运转向架",
                 "扩展示范件",
-                "作为 STEP 导入与轻量化验证对象使用；适合后续拆成独立示范内容。",
-                "STEP 网格插槽／示范件回退",
+                "真实 STEP 网格已导入 Unity 审模展台；完成独立工艺与题目审校后可升级为扩展关卡。",
+                "真实 STEP 网格已接入",
                 false,
                 false),
             new AssemblyVariantDefinition(

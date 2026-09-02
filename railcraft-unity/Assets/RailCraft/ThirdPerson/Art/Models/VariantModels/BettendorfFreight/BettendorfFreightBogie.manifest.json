@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "asset_key": "BettendorfFreight",
+  "display_name": "Bettendorf Low-Speed Freight Bogie",
+  "source_file": "贝滕多夫转向架 低速货运列车.STEP",
+  "source_sha256": "cf0d461075ba907fcea31923165dbcab00c81f09d83b45beb9154116a6083c34",
+  "blender_version": "5.2.1 LTS",
+  "orientation": "Y_up_rotated_positive_90_X",
+  "input_mesh_objects": 15,
+  "input_triangles": 214268,
+  "output_mesh_objects": 1,
+  "output_triangles": 125514,
+  "bounds_m": {
+    "minimum": [
+      -1.212498,
+      -1.523709,
+      0.0
+    ],
+    "maximum": [
+      1.212498,
+      1.523709,
+      0.950154
+    ],
+    "size": [
+      2.424996,
+      3.047417,
+      0.950154
+    ]
+  },
+  "output": "BettendorfFreightBogie.fbx",
+  "output_bytes": 3463468,
+  "output_sha256": "f867f38ed1779dea2abda9de7e8b7b743ceb645eeb32056580dab76c5d4e00a6"
+}
