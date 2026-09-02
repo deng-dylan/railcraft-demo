@@ -10,6 +10,7 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
     {
         [TestCase(CadModelPreviewGalleryBuilder.Y25ModelPath, 500000)]
         [TestCase(CadModelPreviewGalleryBuilder.BettendorfModelPath, 100000)]
+        [TestCase(CadModelPreviewGalleryBuilder.TeachingConceptModelPath, 60000)]
         public void ConvertedCadPreviewHasDetailedRenderableGeometry(
             string assetPath,
             int minimumTriangleCount)

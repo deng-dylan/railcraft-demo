@@ -134,7 +134,8 @@ def flatten_visual_hierarchy(
         obj.hide_viewport = False
         obj.select_set(True)
     bpy.context.view_layer.objects.active = objects[0]
-    bpy.ops.object.join()
+    if len(objects) > 1:
+        bpy.ops.object.join()
     joined = bpy.context.view_layer.objects.active
     joined.name = f"{asset_key}_CadPreviewMesh"
     world_matrix = joined.matrix_world.copy()

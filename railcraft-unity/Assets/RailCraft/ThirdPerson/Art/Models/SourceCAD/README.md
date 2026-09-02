@@ -6,7 +6,7 @@
 - `贝滕多夫转向架 低速货运列车.STEP`：自包含 STEP，已转换为 `BettendorfFreight/BettendorfFreightBogie.fbx`。
 - `地铁转向架（简化）（上色版）.SLDASM`：需要 Pack and Go 或真正的 FBX/GLB 导出。
 - `地铁转向架（上色版）.stp.SLDASM`：已确认是 SolidWorks 装配体，等待 Pack and Go。
-- `简化铁路转向架（现实无对应）.SLDPRT`：教学版，导出后在 Unity 中重新配材质并保留教学标识。
+- `简化铁路转向架（现实无对应）.SLDPRT`：教学版，已由 SolidWorks 导出 AP214 STEP 并转换为 `TeachingConcept/TeachingConceptBogie.fbx`；Unity 中保留教学标识。
 - `铁路机车转向架（上色）.stp.SLDASM`：已确认是 SolidWorks 装配体，等待 Pack and Go。
 
 源文件保存在队员共享目录；完成授权、单位、原点和导出检查后，再把网格放进

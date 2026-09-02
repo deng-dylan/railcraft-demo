@@ -24,6 +24,9 @@ namespace RailCraft.ThirdPerson.Editor
         public const string BettendorfModelPath =
             "Assets/RailCraft/ThirdPerson/Art/Models/VariantModels/BettendorfFreight/BettendorfFreightBogie.fbx";
 
+        public const string TeachingConceptModelPath =
+            "Assets/RailCraft/ThirdPerson/Art/Models/VariantModels/TeachingConcept/TeachingConceptBogie.fbx";
+
         public const string ScreenshotRelativePath =
             "Artifacts/Whitebox/ModelPreview/CadModelPreviewGallery.png";
 
@@ -80,13 +83,19 @@ namespace RailCraft.ThirdPerson.Editor
                     "Y25Freight",
                     "Y25 EUROPEAN FREIGHT BOGIE\nTRUE STEP / 582,877 TRIANGLES",
                     Y25ModelPath,
-                    new Vector3(-3.4f, 0f, 0f),
+                    new Vector3(-5f, 0f, 0f),
                     17f),
+                new ModelEntry(
+                    "TeachingConcept",
+                    "TEACHING CONCEPT BOGIE\nNO REAL-WORLD MATCH / 64,777 TRIANGLES",
+                    TeachingConceptModelPath,
+                    Vector3.zero,
+                    0f),
                 new ModelEntry(
                     "BettendorfFreight",
                     "BETTENDORF LOW-SPEED FREIGHT BOGIE\nTRUE STEP / 125,514 TRIANGLES",
                     BettendorfModelPath,
-                    new Vector3(3.4f, 0f, 0f),
+                    new Vector3(5f, 0f, 0f),
                     -17f)
             };
 
@@ -122,7 +131,7 @@ namespace RailCraft.ThirdPerson.Editor
             CreateWorldLabel(
                 labels.transform,
                 "PendingStatus",
-                "4 SOLIDWORKS FILES AWAIT PACK-AND-GO OR STEP/FBX EXPORT",
+                "3 SOLIDWORKS ASSEMBLIES AWAIT PACK-AND-GO OR STEP/FBX EXPORT",
                 new Vector3(0f, 3.55f, 4.43f),
                 new Color(1f, 0.72f, 0.22f),
                 0.04f);
@@ -148,14 +157,14 @@ namespace RailCraft.ThirdPerson.Editor
                 "GalleryFloor",
                 PrimitiveType.Cube,
                 new Vector3(0f, -0.24f, 0.6f),
-                new Vector3(14f, 0.4f, 8.5f),
+                new Vector3(20f, 0.4f, 8.5f),
                 asphalt);
             CreatePrimitive(
                 parent,
                 "RearWall",
                 PrimitiveType.Cube,
                 new Vector3(0f, 2.45f, 4.7f),
-                new Vector3(14f, 5.4f, 0.25f),
+                new Vector3(20f, 5.4f, 0.25f),
                 concrete);
         }
 
@@ -215,7 +224,7 @@ namespace RailCraft.ThirdPerson.Editor
         {
             var cameraObject = CreateChild(parent, "PreviewCamera");
             cameraObject.tag = "MainCamera";
-            cameraObject.transform.position = new Vector3(0f, 5.8f, -16.5f);
+            cameraObject.transform.position = new Vector3(0f, 6.5f, -21f);
             var target = new Vector3(0f, 1.15f, 0.4f);
             cameraObject.transform.rotation = Quaternion.LookRotation(
                 target - cameraObject.transform.position,

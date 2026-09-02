@@ -10,7 +10,7 @@
 | 贝滕多夫低速货运转向架 | `BettendorfFreight/BettendorfFreightBogie.fbx` | **真实 STEP 网格已导入** |
 | 地铁上色转向架 | `MetroColored/MetroColoredBogie.fbx` | 等待 Pack and Go 或 FBX/GLB |
 | 地铁简化转向架 | `MetroSimplified/MetroSimplifiedBogie.fbx` | 等待 Pack and Go 或 FBX/GLB |
-| 教学概念转向架 | `TeachingConcept/TeachingConceptBogie.fbx` | SLDPRT 待导出 |
+| 教学概念转向架 | `TeachingConcept/TeachingConceptBogie.fbx` | **SolidWorks AP214 网格已导入** |
 | 铁路机车上色转向架 | `LocomotiveColored/LocomotiveColoredBogie.fbx` | 等待 Pack and Go 或 FBX/GLB |
 
 CAD 源文件不直接进入 Unity 运行时。导入前请保留毫米单位、安装原点、车轮底面基准，

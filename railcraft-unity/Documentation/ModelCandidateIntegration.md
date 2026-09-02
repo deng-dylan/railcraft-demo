@@ -14,7 +14,7 @@
 | `TRAIN.stp`（顶层产品 `CW-200K`） | 已完成 OpenCascade → GLB → Blender FBX、硬件精简、减面和材质分层 | 构体完成态/落车完成态参考 |
 | `Y25转向架 欧洲货运火车.stp` | 已完成 OpenCascade → GLB → Blender FBX，保留 STEP 材质并修正上方向 | Unity 审模/Y25 扩展方案 |
 | `贝滕多夫转向架 低速货运列车.STEP` | 已完成 OpenCascade → GLB → Blender FBX，修正上方向 | Unity 审模/低速货运参考 |
-| `简化铁路转向架（现实无对应）.SLDPRT` | 先导出 FBX，Unity 里重配材质，放到 `VariantModels/TeachingConcept/TeachingConceptBogie.fbx` | 教学版替换件 |
+| `简化铁路转向架（现实无对应）.SLDPRT` | 已由 SolidWorks 导出 AP214 STEP，再完成 OpenCascade → GLB → Blender FBX | Unity 审模/教学概念替换件 |
 | `地铁转向架（简化）（上色版）.SLDASM` | 先做 Pack and Go，再导出 FBX | 备用车型 |
 | `地铁转向架（上色版）.stp.SLDASM` | 已确认是 SolidWorks 装配体；先做 Pack and Go，再导出 FBX | 备用车型 |
 | `铁路机车转向架（上色）.stp.SLDASM` | 先做 Pack and Go，再导出 FBX | 机车转向架参考 |

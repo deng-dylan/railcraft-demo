@@ -31,7 +31,9 @@
       "sha256": "BD27733C1EC93CA7E6F6BA531C4BAD9AC033A1802C15EE642C743D9810B5234E",
       "targetVariant": "TeachingConcept",
       "targetMesh": "VariantModels/TeachingConcept/TeachingConceptBogie.fbx",
-      "conversionStatus": "awaiting_solidworks_export",
+      "conversionStatus": "imported_preview",
+      "exportedStepFile": "简化铁路转向架_教学概念_AP214.step",
+      "exportedStepSha256": "B3C87688C890E40F8DD78B7B83FA5690F1124138101A94743CE8EB3A6A02A339",
       "teachingOnly": true
     },
     {
