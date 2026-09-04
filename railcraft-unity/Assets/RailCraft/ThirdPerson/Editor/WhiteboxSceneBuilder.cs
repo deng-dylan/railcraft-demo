@@ -423,6 +423,14 @@ namespace RailCraft.ThirdPerson.Editor
             ArtStationIndustrialVisualFactory.BuildDefaultVisuals(
                 environment.transform,
                 palette.Steel);
+            FreeAssetExpansionVisualFactory.BuildDefaultVisuals(
+                environment.transform,
+                palette.Steel,
+                palette.Safety,
+                palette.White,
+                palette.Running,
+                palette.Floor,
+                palette.Wall);
         }
 
         private static void BuildZonePad(
@@ -1662,6 +1670,14 @@ namespace RailCraft.ThirdPerson.Editor
             PartId partId,
             Material material)
         {
+            if (FreeAssetExpansionVisualFactory.TryCreatePartVisual(
+                    parent,
+                    name,
+                    partId,
+                    material,
+                    out var freeAssetVisual))
+                return freeAssetVisual;
+
             if (Cw200kReferenceVisualFactory.TryCreatePartVisual(
                     parent,
                     name,

@@ -34,6 +34,11 @@ domain PartIds, assembly anchors and the compatible snapshot schema remain stabl
   concrete barrier and warehouse shelving as visual-only background dressing.
 - Factory clear height increases from 6.4 m to 10 m so the crane and raised work
   lighting remain inside the authored hall envelope.
+- `ART-001` adds curated free assets through `FreeAssetExpansionVisualFactory`:
+  generic spring, sensor-support, positioning-support and stop-valve/pipe visuals;
+  a tool bench, safety barriers, windows, industrial exterior silhouettes and
+  distant trains. These are teaching or presentation assets and do not claim
+  vehicle-specific geometry or dimensions.
 
 All imported art is attached through deterministic factories called by
 `WhiteboxSceneBuilder`. Rebuilding the scene therefore preserves this pass.
@@ -71,6 +76,12 @@ directory and independently staged package reported
 `RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED`. The player-facing progress is 14 steps
 and the material gate uses ten core questions across five packages.
 
+Those results belong to `FLOW-002`. The subsequent `ART-001` asset expansion
+has a rebuilt serialized scene and static source/license audit, but its EditMode,
+Windows build and Player smoke results remain pending because the local Unity
+license currently exits with code 198. See
+`Artifacts/Whitebox/ArtAlpha/art-001-asset-expansion.md`.
+
 ## Known limits
 
 - The factory architecture, stations and semantic part visuals still contain
@@ -89,3 +100,6 @@ and the material gate uses ten core questions across five packages.
   JPEG, WAV and FBX additions, while the Windows build remains larger than v0.3.
 - A new formal 1920×1080 target-machine performance capture remains required after
   the full environment and lighting pass.
+- `ART-001` component meshes are generic teaching stand-ins. Sensor brackets,
+  positioning elements and height-control equipment still require verified
+  engineering sources before they can be described as vehicle-specific parts.
