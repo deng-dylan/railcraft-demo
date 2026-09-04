@@ -51,7 +51,12 @@ foreach ($target in @($stagingRoot, $archivePath, $checksumsPath)) {
 New-Item -ItemType Directory -Path $stagingRoot | Out-Null
 Get-ChildItem -LiteralPath $buildRoot -Force | Copy-Item -Destination $stagingRoot -Recurse -Force
 
-$releaseNotes = Join-Path $repositoryRoot 'railcraft-unity\Documentation\Release.md'
+$releaseNotesFile = if ($Version -match '-art-alpha(?:\.|$)') {
+    'railcraft-unity\Documentation\ArtAlpha.md'
+} else {
+    'railcraft-unity\Documentation\Release.md'
+}
+$releaseNotes = Join-Path $repositoryRoot $releaseNotesFile
 if (Test-Path -LiteralPath $releaseNotes) {
     Copy-Item -LiteralPath $releaseNotes -Destination (
         Join-Path $stagingRoot "ReleaseNotes-$Version.md")

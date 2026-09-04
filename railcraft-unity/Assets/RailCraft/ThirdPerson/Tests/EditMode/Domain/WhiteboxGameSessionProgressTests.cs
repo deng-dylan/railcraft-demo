@@ -290,6 +290,34 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.Domain
         }
 
         [Test]
+        public void SnapshotRecordsIndependentContentVersionsAndRejectsUnknownOnes()
+        {
+            var snapshot = new WhiteboxGameSession().ExportSnapshot();
+
+            Assert.That(snapshot.QuestionBankVersion,
+                Is.EqualTo(WhiteboxContentVersions.QuestionBank));
+            Assert.That(snapshot.CoreQuestionSetVersion,
+                Is.EqualTo(WhiteboxContentVersions.CoreQuestionSet));
+            Assert.That(snapshot.WorkPackageRecipeVersion,
+                Is.EqualTo(WhiteboxContentVersions.WorkPackageRecipe));
+            Assert.That(snapshot.RewardRoutingVersion,
+                Is.EqualTo(WhiteboxContentVersions.RewardRouting));
+
+            snapshot.CoreQuestionSetVersion = "unsupported-core-set";
+            Assert.Throws<ArgumentException>(() =>
+                new WhiteboxGameSession().RestoreSnapshot(snapshot));
+
+            // Empty fields are the explicit compatibility marker for saves
+            // written before content versions were introduced.
+            snapshot.CoreQuestionSetVersion = string.Empty;
+            snapshot.QuestionBankVersion = string.Empty;
+            snapshot.WorkPackageRecipeVersion = string.Empty;
+            snapshot.RewardRoutingVersion = string.Empty;
+            Assert.DoesNotThrow(() =>
+                new WhiteboxGameSession().RestoreSnapshot(snapshot));
+        }
+
+        [Test]
         public void SnapshotRejectsPauseTimestampsThatConflictWithFlowState()
         {
             var pending = new WhiteboxGameSession().ExportSnapshot();

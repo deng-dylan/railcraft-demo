@@ -1,4 +1,7 @@
-# RailCraft v0.1 固定题库交付清单
+# RailCraft v0.1 固定题库交付清单（历史冻结）
+
+> 本清单服务于已退休的固定视角 v0.1。当前题库策略见
+> [`../../../docs/project/CURRENT_BASELINE.md`](../../../docs/project/CURRENT_BASELINE.md)。
 
 - 接收日期：2026-08-01
 - 提供方式：项目成员通过微信发送
@@ -15,7 +18,8 @@
 - 文件名声称包含 50 道选择题和 30 道判断题。
 - 对原件 12 页逐页核验，实际可见内容为 50 道选择题和 8 道判断题，共 58 道。
 - 经确认，v0.1 运行时冻结其后连续的 40 道选择题（从“高速列车中，用于从接触网获取电能的受流装置是？”至“智能运维中，模糊C均值聚类算法可用于？”）与判断题 41–48，共 48 道；文首额外的“转向架基础认知”1–10 题保留在审阅转写中，不进入本版本运行时题库。
-- `review/question-bank.txt` 是原件可见文本的 UTF-8 审阅转写；`railcraft-unity/Assets/RailCraft/Content/V1/questions.v1.json` 是运行时冻结内容，ID 固定为 `q001` 至 `q048`。
+- `review/question-bank.txt` 是原件可见文本的 UTF-8 审阅转写；旧运行时 JSON 曾位于已退休的
+  `railcraft-unity/Assets/RailCraft/Content/V1/questions.v1.json`，ID 固定为 `q001` 至 `q048`。
 - v0.1 保留被冻结题目的原题题干、选项和正确答案；如有技术复核意见，留待新内容版本处理。
 - 运行界面不显示题目来源或引用，也不计算得分、正确率、等级、排名或知识掌握度。
 

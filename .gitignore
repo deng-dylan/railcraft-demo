@@ -63,3 +63,8 @@ desktop.ini
 # Original delivery packages and unlicensed source are retained locally or in
 # approved private storage. Git tracks only their manifests and review notes.
 deliveries/**/release/**
+
+# Local third-party source archives are staging inputs. Curated runtime assets,
+# manifests, source notes and license evidence are tracked under the Unity tree.
+/*.unitypackage
+/*.zip

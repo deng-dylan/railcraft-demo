@@ -50,8 +50,6 @@ try {
         "railcraft-unity/Packages/packages-lock.json",
         "railcraft-unity/ProjectSettings/ProjectVersion.txt",
         "railcraft-unity/ProjectSettings/EditorBuildSettings.asset",
-        "railcraft-unity/Assets/RailCraft/Scenes/Bootstrap.unity",
-        "railcraft-unity/Assets/RailCraft/Scenes/Factory.unity",
         "railcraft-unity/Assets/RailCraft/ThirdPerson.meta",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Editor/RailCraft.ThirdPerson.Editor.asmdef",
@@ -61,6 +59,7 @@ try {
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxGameCatalog.cs",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxGameSession.cs",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WhiteboxQuestionBank.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Domain/WorkPackageDefinition.cs",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/Player/RailCraft.ThirdPerson.Player.asmdef",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/UI/RailCraft.ThirdPerson.UI.asmdef",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/UI/WhiteboxAutomatedSmokeRunner.cs",
@@ -68,16 +67,21 @@ try {
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Runtime/World/WhiteboxGameSessionHost.cs",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/RailCraft.ThirdPerson.Domain.EditModeTests.asmdef",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/WhiteboxGameCatalogTests.cs",
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/WhiteboxWorkPackageCatalogTests.cs",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Domain/WhiteboxGameSessionTests.cs",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/Player/RailCraft.ThirdPerson.Player.EditModeTests.asmdef",
         "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/World/RailCraft.ThirdPerson.World.EditModeTests.asmdef",
-        "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/World/WhiteboxWorldInteractionTests.cs"
+        "railcraft-unity/Assets/RailCraft/ThirdPerson/Tests/EditMode/World/WhiteboxWorldInteractionTests.cs",
+        "docs/project/CURRENT_BASELINE.md",
+        "docs/project/CURRENT_STATUS.md",
+        "docs/project/CONSTRAINT_REVIEW.md",
+        "docs/project/CHANGE_WORKFLOW.md"
     )
     $missingRequiredFiles = @($requiredFiles | Where-Object {
         -not (Test-Path -LiteralPath (Join-Path $repositoryRoot $_) -PathType Leaf)
     })
     if ($missingRequiredFiles.Count -eq 0) {
-        Add-Pass "All $($requiredFiles.Count) Unity mainline anchor files are present."
+        Add-Pass "All $($requiredFiles.Count) current mainline anchor files are present."
     }
     else {
         Add-Failure "Missing Unity mainline anchor files: $(Format-PathSample $missingRequiredFiles)."
@@ -259,6 +263,50 @@ try {
     $trackedPaths = @($trackedPaths | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | ForEach-Object {
         $_.Replace('\', '/')
     })
+
+    $retiredRoots = @(
+        "apps/railcraft-godot/",
+        "prototypes/good2-renpy/",
+        "prototypes/high-speed-rail-factory-godot-4.6.3/",
+        "railcraft-unity/Assets/RailCraft/Art/",
+        "railcraft-unity/Assets/RailCraft/Content/",
+        "railcraft-unity/Assets/RailCraft/Editor/",
+        "railcraft-unity/Assets/RailCraft/Input/",
+        "railcraft-unity/Assets/RailCraft/Scenes/",
+        "railcraft-unity/Assets/RailCraft/Scripts/",
+        "railcraft-unity/Assets/RailCraft/Tests/",
+        "railcraft-unity/Artifacts/Acceptance/"
+    )
+    $presentRetiredRoots = @($retiredRoots | Where-Object {
+        Test-Path -LiteralPath (Join-Path $repositoryRoot $_.TrimEnd('/')) -PathType Container
+    })
+    $retiredTrackedPaths = @($trackedPaths | Where-Object {
+        $candidate = $_
+        @($retiredRoots | Where-Object { $candidate.StartsWith($_, [StringComparison]::OrdinalIgnoreCase) }).Count -gt 0
+    })
+    $trackedRetiredFiles = @($retiredTrackedPaths | Where-Object {
+        Test-Path -LiteralPath (Join-Path $repositoryRoot $_) -PathType Leaf
+    })
+    $pendingRetiredFiles = @($retiredTrackedPaths | Where-Object {
+        -not (Test-Path -LiteralPath (Join-Path $repositoryRoot $_) -PathType Leaf)
+    })
+    if ($presentRetiredRoots.Count -eq 0 -and $trackedRetiredFiles.Count -eq 0) {
+        $pendingDescription = if ($pendingRetiredFiles.Count -gt 0) {
+            " ($($pendingRetiredFiles.Count) tracked paths are pending deletion)"
+        }
+        else {
+            ""
+        }
+        Add-Pass "Pre-Art-Alpha Demo and fixed-view directories are retired from the working tree$pendingDescription."
+    }
+    else {
+        if ($presentRetiredRoots.Count -gt 0) {
+            Add-Failure "Retired directories still exist: $(Format-PathSample $presentRetiredRoots)."
+        }
+        if ($trackedRetiredFiles.Count -gt 0) {
+            Add-Failure "Tracked files remain under retired directories: $(Format-PathSample $trackedRetiredFiles)."
+        }
+    }
     $trackedGeneratedFiles = @($trackedPaths | Where-Object {
         $_ -match '^railcraft-unity/(?:Library|Temp|Obj|Logs|UserSettings|TestResults|Builds|MemoryCaptures|Recordings|\.vs)(?:/|$)'
     })
@@ -277,18 +325,6 @@ try {
     }
     else {
         Add-Failure "Tracked delivery release files: $(Format-PathSample $trackedReleaseFiles)."
-    }
-
-    $quarantinedPrototypeRoot =
-        "prototypes/high-speed-rail-factory-godot-4.6.3/source/"
-    $trackedQuarantinedFiles = @($trackedPaths | Where-Object {
-        $_.StartsWith($quarantinedPrototypeRoot, [StringComparison]::OrdinalIgnoreCase)
-    })
-    if ($trackedQuarantinedFiles.Count -eq 0) {
-        Add-Pass "The unlicensed high-speed-rail Godot source snapshot remains outside Git."
-    }
-    else {
-        Add-Failure "Tracked quarantined prototype files: $(Format-PathSample $trackedQuarantinedFiles)."
     }
 
     $maximumOrdinaryBlobBytes = 95MB

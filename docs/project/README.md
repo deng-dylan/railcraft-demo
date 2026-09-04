@@ -1,38 +1,27 @@
-# 项目基线资料说明
+# RailCraft 项目资料
 
-这里保存项目启动阶段的需求、设计、实施提示词和模块任务，内容保留原始上下文，
-便于追溯决策来源。该批资料以 Godot `v0.1.0-demo` 为目标，现已成为历史项目基线；
-其中的引擎、目录和发布要求不再约束当前 Unity 第三人称白盒。
+本目录同时保存历史需求和当前基线。当前任务只能把标记为“当前权威”的文件当作实施
+依据；早期 Godot/固定视角资料用于追溯决策来源。
 
-## 当前权威入口
+## 当前权威文件
 
-- 当前开发主线：[`../../railcraft-unity`](../../railcraft-unity)
-- 当前白盒规格：
-  [`../../railcraft-unity/Documentation/ThirdPersonWhitebox.md`](../../railcraft-unity/Documentation/ThirdPersonWhitebox.md)
-- 当前与历史 Unity 文档索引：
-  [`../../railcraft-unity/Documentation/README.md`](../../railcraft-unity/Documentation/README.md)
-- 当前主线决策：
-  [`../decisions/0002-third-person-whitebox-mainline.md`](../decisions/0002-third-person-whitebox-mainline.md)
-- 后续实施计划规则：[`plans/README.md`](plans/README.md)
+- [CURRENT_BASELINE.md](CURRENT_BASELINE.md)：阶段、产品身份、模块数量、题库策略和资产缺口。
+- [CURRENT_STATUS.md](CURRENT_STATUS.md)：版本、完成项、风险、证据和下一步。
+- [CONSTRAINT_REVIEW.md](CONSTRAINT_REVIEW.md)：GC-01 至 GC-28 的逐条处理。
+- [CHANGE_WORKFLOW.md](CHANGE_WORKFLOW.md)：新对话、Bug、资产批次和同步清单。
+- [DECISION_PART_GRANULARITY.md](DECISION_PART_GRANULARITY.md)：材料包、子部件和核心题目的粒度决策。
+- [proposal.md](proposal.md)：原始产品方向参考，具体实施以当前基线为准。
 
-当前白盒包含58道题、14个零件、6个装配节点和完整调试闭环，本地构建入口为
-`railcraft-unity/Builds/Whitebox/RailCraftWhitebox.exe`。当前验收证据统一写入
-`railcraft-unity/Artifacts/Whitebox/Acceptance/`。
+## 当前 Unity 入口
 
-## 历史路径映射
+- 工程：[../../railcraft-unity](../../railcraft-unity)
+- 主场景：`railcraft-unity/Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity`
+- 当前规格：[../../railcraft-unity/Documentation/ThirdPersonWhitebox.md](../../railcraft-unity/Documentation/ThirdPersonWhitebox.md)
+- 当前 Art Alpha 证据：[../../railcraft-unity/Artifacts/Whitebox/ArtAlpha/acceptance-report.md](../../railcraft-unity/Artifacts/Whitebox/ArtAlpha/acceptance-report.md)
 
-2026-07-21 起，项目总仓库采用以下映射：
+## 历史资料边界
 
-| 历史文件中的路径 | 当前路径 |
-| --- | --- |
-| `doc/` | `docs/project/`（启动期资料）或 `apps/railcraft-godot/doc/`（Godot 应用交付文档） |
-| `demo/` | `apps/railcraft-godot/` |
-
-历史描述中的“外层仓库不纳入 Demo”反映当时的实施边界。Godot 的独立提交历史后来
-通过 Git 合并历史纳入总仓库，当前 `apps/railcraft-godot/` 是普通受版本控制目录，
-没有使用 Git 子模块。Godot 应用已冻结为历史 Demo，仍保留自身的构建、测试、发布
-资料和原始路径语境。
-
-`proposal.md`、`detailed-design.md`、`prompt.md` 和 `tasks/` 不随 Unity 主线改写。
-需要借鉴其中的需求或交互时，应在当前 Unity 文档或新计划中重新登记适用范围、
-验收方式和来源，避免把历史 Godot 约束直接当作现行要求。
+`detailed-design.md`、`prompt.md`、`tasks/` 和 `plans/archive/` 记录早期实现计划，可能写有
+Godot、固定视角、9/48 题、旧路径或旧限制。第一版白盒之前的 Demo 已从工作树退休，
+恢复方式见 [`../archive/README.md`](../archive/README.md)。这些文件不会自动成为当前
+代码、题库、场景或发布约束。

@@ -1,0 +1,11 @@
+RailCraft v0.4.0-art-alpha.5 EditMode evidence (sanitized excerpt)
+Date: 2026-09-04
+Unity: 6000.3.21f1
+Result: Passed
+Total: 200
+Passed: 200
+Failed: 0
+Skipped: 0
+TEST_RUN_COMPLETED exit=0
+Primary machine-readable evidence: editmode.xml
+Raw local log: TestResults/flow002-editmode-final.log (ignored, reproducible)

@@ -8,8 +8,8 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
 {
     public sealed class InteractionFeedbackRoutingTests
     {
-        // Some repository-wide EditMode tests leave the legacy Factory scene
-        // active. Keep physics fixtures away from that scene so scanner tests
+        // Some repository-wide EditMode tests may leave an active scene.
+        // Keep physics fixtures away from it so scanner tests
         // observe only the colliders they create themselves.
         private static readonly Vector3 TestOrigin = new Vector3(10000f, 10000f, 10000f);
         private GameObject root;

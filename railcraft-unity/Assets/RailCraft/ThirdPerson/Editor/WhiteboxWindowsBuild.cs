@@ -30,6 +30,20 @@ namespace RailCraft.ThirdPerson.Editor
             Build();
         }
 
+        public static void BuildAndExitFromGraphicalEditor()
+        {
+            try
+            {
+                Build();
+                EditorApplication.Exit(0);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+                EditorApplication.Exit(1);
+            }
+        }
+
         public static void Build()
         {
             // The whitebox scene is generated source-of-truth. Rebuild it before every

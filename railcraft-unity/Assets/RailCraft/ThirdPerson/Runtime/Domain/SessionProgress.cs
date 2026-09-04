@@ -70,6 +70,12 @@ namespace RailCraft.ThirdPerson.Domain
         public const long MissingTimestamp = -1L;
 
         public int SchemaVersion = CurrentSchemaVersion;
+        // Empty values identify legacy snapshots created before independent
+        // content versioning. New exports always populate all four fields.
+        public string QuestionBankVersion = string.Empty;
+        public string CoreQuestionSetVersion = string.Empty;
+        public string WorkPackageRecipeVersion = string.Empty;
+        public string RewardRoutingVersion = string.Empty;
         public AssemblyFlowStatus FlowStatus = AssemblyFlowStatus.Pending;
         public long StartedAtUnixMilliseconds = MissingTimestamp;
         public long CompletedAtUnixMilliseconds = MissingTimestamp;

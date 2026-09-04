@@ -1,4 +1,7 @@
-# RailCraft Demo 详细设计文档
+# RailCraft Demo 详细设计文档（历史设计稿）
+
+> 本文是早期 Godot 方案的历史设计稿。当前 Unity ThirdPerson Art Alpha 的实施口径见
+> [`CURRENT_BASELINE.md`](CURRENT_BASELINE.md) 和 [`CONSTRAINT_REVIEW.md`](CONSTRAINT_REVIEW.md)。
 
 > 文档状态：可实施设计  
 > 需求基线：`doc/proposal.md`，最后确认日期 2026-07-18  

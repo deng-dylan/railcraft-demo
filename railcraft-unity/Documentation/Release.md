@@ -1,55 +1,59 @@
-# RailCraft 标准工单实训 v0.3.0-preview.1
+# RailCraft Art Alpha `v0.4.0-art-alpha.5`
 
-- 发行定位：竞赛演示与内测预发布
+- 发行定位：白盒之后的受控视觉生产批次，用于内部评审、竞赛预演和小范围体验
 - 平台：Windows x86_64
 - 运行时：Unity 6000.3.21f1、URP、Input System、uGUI
-- 常规入口：复兴号标准工单 RC-EMU-01
-- 发布页：[GitHub Releases](https://github.com/deng-dylan/railcraft-demo/releases/tag/v0.3.0-preview.1)
+- 常规入口：通用高速动车组标准工单 `RC-EMU-01`
+- 当前证据：[Art Alpha 验收记录](../Artifacts/Whitebox/ArtAlpha/acceptance-report.md)
 
-## 本版主线
+## 本批内容
 
-本版本将 Unity ThirdPerson 标准实训作为唯一的日常体验、开发和验收入口。玩家在第三人称工厂场景中完成答题解锁、零件领取、分级装配、落车、教学故障处理、检验、复测和结算。
+玩家在第三人称工厂中完成知识确认、材料领取、分级装配、落车、教学故障处理、检验、
+复测和结算。当前域模型保留 14 个子部件 ID，界面和工艺区按 5 个材料包工位与 1 个流程模块组织；题库
+保留 58 题，核心流程精选 10 题，其余用于备用题和知识图鉴。
 
-- 58 道题：50 道四选一与 8 道判断题。
-- 14 个答题与零件领取工位、14 个可入库零件。
-- 6 个装配节点与统一的 23 步进度。
-- 主菜单、继续实训、暂停、自动存档、重玩、成绩结算和工程知识图鉴。
-- 完成标准实训后可进入复兴号八编组出厂展示。
+本批已接入工人角色与动画、PBR 桥式起重机、维修轨道、集装箱、变电站、工业背景道具、
+Kenney 模块化工位、CW-200K 参考转向架和牵引拉杆视觉。详细范围见
+[ArtAlpha.md](ArtAlpha.md) 与 [ThirdPersonWhitebox.md](ThirdPersonWhitebox.md)。
 
-完整范围见 [ThirdPersonWhitebox.md](ThirdPersonWhitebox.md)。
+复兴号、和谐号只作为原创外观风格参考。车体和 CW-200K 转向架属于展示/通用教学资产，
+当前版本不宣称 CR400AF、SWM-400E1 或其他具体车型的工程复刻。
 
 ## 下载与运行
 
-从 GitHub 预发布页下载 RailCraft-v0.3.0-preview.1-windows-x64.zip，完整解压后运行 RailCraftWhitebox.exe。请保留 RailCraftWhitebox_Data、MonoBleedingEdge、D3D12、UnityPlayer.dll 和 Unity 生成的全部同级文件。
+完整 Windows Player 由构建入口生成：
 
-应用支持离线运行。推荐使用 Windows 10 或 Windows 11 x64，并确保显卡驱动支持 Unity Windows Player。
+1. 在 Unity 中执行 `RailCraft > Third Person Whitebox > Build Windows x86_64`；
+2. 保留 `Builds/Whitebox/` 的全部文件；
+3. 运行 `RailCraftWhitebox.exe`。
 
-## 构建与打包
+运行时离线工作，不需要浏览器登录或在线下载。推荐 Windows 10/11 x64，并使用支持
+Unity Windows Player 的显卡驱动。
 
-从最终提交执行 Unity 菜单 RailCraft > Third Person Whitebox > Build Windows x86_64，完成后在仓库根目录运行：
+## 构建与验证
 
-~~~powershell
-pwsh -NoProfile -File tools/New-WhiteboxReleasePackage.ps1 -Version v0.3.0-preview.1
-~~~
+```powershell
+pwsh -NoProfile -File tools/New-WhiteboxReleasePackage.ps1 -Version v0.4.0-art-alpha.5
+```
 
-脚本会校验 Unity 运行目录，生成完整 Windows ZIP、离线说明副本和 SHA-256 校验文件；输出位于 railcraft-unity/ReleasePackages/，该目录不进入 Git。
-
-## 预发布验证
-
-2026-08-26 已从本发行分支完成 Windows 构建、EditMode 和内置标准工单烟测：EditMode 199/199 通过，Windows 构建 0 warning / 0 error，Player 输出 RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED。完整记录见 [v0.3.0-preview.1 验证证据](../Artifacts/Whitebox/Releases/v0.3.0-preview.1/acceptance-report.md)。
-
-完整 Windows ZIP、EXE 与 SHA-256 校验文件由发行打包工具生成，并随 GitHub 预发布附件提供。
+打包脚本输出位于 `railcraft-unity/ReleasePackages/`（该目录被 Git 忽略）。正式提交前
+必须同时完成 EditMode、Windows 构建、Player 烟测、目标机性能和异机断网走查。
 
 ## 已知边界
 
-- 内容用于教学流程和结构示范，不用于真实动车组作业指导、扭矩标准、公差、检修结论或安全决策。
-- 自由抓取、零件旋转与距离/角度吸附尚未提供。
-- 部分视觉资产仍为白盒或结构示范资产；正式模型、工程知识来源、来源声明与再分发范围仍需复核。
-- 当前版本尚缺目标机性能采样与异机断网人工走查。
-- 当前普通玩家入口只开放 RC-EMU-01；地铁、Y25 与教学概念件属于开发者扩展登记。
+- 厂房、工位和部分零件仍包含白盒或通用示范几何；正式 LOD、碰撞、材质和纹理仍在完善。
+- 未核验的车型参数、扭矩、公差、绝缘、气密和检修数值不作为作业标准展示。
+- 工人、UI 音效、起重机、变电站和部分背景道具的公开再分发范围仍需逐项核验。
+- 目标机 1920×1080 帧率、1% low、显存、加载时间和异机兼容性尚未形成最终基线。
+- 未授权、盗版、破解或去水印资源不进入项目或提交包。
 
-## 资产与使用说明
+## 资产边界
 
-Factory Kit 的许可信息随资源保留；其它模型、题库、工程资料和第三方资源的来源与再分发范围以项目审核记录为准。在相关复核完成前，请勿单独提取、再分发或将这些资产用于产品化、工程化用途。
+Factory Kit 和 Train Kit 随精选运行时资产保留来源文本。所有其他模型、题库和第三方
+资源的来源、许可证、署名与再分发范围以 [资产审计](ArtAssetAudit.md) 和来源清单为准。
+完成审核前，候选资源只用于本地观察或内部集成。
 
-完整的发布前工作与风险说明保留在 [ReleaseReadiness.md](ReleaseReadiness.md)。历史 Unity v0.1、Godot Demo 和原型资料见 [仓库历史归档](../../../docs/archive/README.md)。
+## 历史版本
+
+旧 Unity 固定视角、Godot 和其他 Demo 已退休。恢复方式见
+[仓库归档索引](../../docs/archive/README.md)；历史版本不属于当前发行入口。

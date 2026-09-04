@@ -1,12 +1,12 @@
 # 车型方案与现有玩法的接入约定
 
-当前主线把 `FuxingDemo` 设为普通玩家唯一可开始的新工单，沿用已有的答题 → 零件领取 →
+当前主线把通用高速动车组标准工单设为普通玩家唯一可开始的新工单，沿用已有的答题 → 零件领取 →
 子总成装配 → 转向架构体装配 → 落车 → 调试/检验流程。车型方案字段继续保留在存档和
-开发者工具中，旧存档可以按原值恢复。最终 `FinalShowcase` 固定展示完整复兴号。
+开发者工具中，旧存档可以按原值恢复。`FinalShowcase` 只承担展示风格层，不代表具体车型工程身份。
 
 ## 标准方案与扩展登记
 
-- `FuxingDemo`：标准工单；使用队员转向架 FBX 与截取的一节复兴号车体。
+- `FuxingDemo`：通用高速动车组标准工单；使用队员车体展示 FBX 与通用转向架示范件。
 - `MetroSimplified`：地铁简化上色装配体的扩展示范登记。
 - `Y25Freight`：Y25 欧洲货运转向架的真实 STEP 网格已进入 Unity 审模展台。
 - `TeachingConcept`：“简化铁路转向架（现实无对应）”教学概念件已进入 Unity 审模展台。
@@ -27,4 +27,4 @@ Y25 与教学概念件已完成 STEP 网格化；地铁和机车装配体仍等�
 导入后应重新执行 EditMode、Windows Player 构建和完整冒烟，确认扩展内容不影响标准工单。
 
 开发者可使用 `-whitebox-smoke-variant=<key>` 指定兼容性烟测方案，当前 key 为
-`fuxing-demo`、`metro-simplified`、`y25-freight`、`teaching-concept`。
+`fuxing-demo`、`metro-simplified`、`y25-freight`、`teaching-concept`；这些 key 是内部构型标识，不代表车型认证。

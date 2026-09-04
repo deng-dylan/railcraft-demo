@@ -1,6 +1,10 @@
-# RailCraft Unity v0.1 验收矩阵
+# RailCraft Unity v0.1 验收矩阵（历史冻结）
 
-本文把 `Documentation/Scope.md` 中的 28 条全局约束映射到可复核证据。矩阵描述验收方法，不提前声明 Task 13 的最终结果；最终测试总数、Build 状态、截图清单和 SHA-256 以 `Artifacts/Acceptance/acceptance-report.md` 为准。
+> 本文记录已退休的固定视角 v0.1。当前 Art Alpha 验收入口为
+> [`../Artifacts/Whitebox/ArtAlpha/acceptance-report.md`](../Artifacts/Whitebox/ArtAlpha/acceptance-report.md)，
+> 当前产品口径见 [`../../docs/project/CURRENT_BASELINE.md`](../../docs/project/CURRENT_BASELINE.md)。
+
+本文把历史 `Documentation/Scope.md` 中的 28 条全局约束映射到可复核证据。矩阵描述当时的验收方法；当前批次的测试总数、Build 状态、截图清单和 SHA-256 以 Art Alpha 证据为准。
 
 ## 证据类型
 

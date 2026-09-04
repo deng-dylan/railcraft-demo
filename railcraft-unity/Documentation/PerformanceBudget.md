@@ -1,4 +1,8 @@
-# RailCraft Unity v0.1 性能预算与实测
+# RailCraft Unity v0.1 性能预算与实测（历史冻结）
+
+> 本文保存固定视角 v0.1 的历史性能目标，引用的旧场景和旧资产已退休。当前 Art Alpha
+> 需要在目标机重新建立 1920×1080 性能、显存和加载时间基线，进度见
+> [`../../docs/project/CURRENT_STATUS.md`](../../docs/project/CURRENT_STATUS.md)。
 
 记录日期：2026-08-01
 

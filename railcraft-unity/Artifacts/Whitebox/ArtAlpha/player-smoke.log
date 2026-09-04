@@ -1,0 +1,6 @@
+RailCraft v0.4.0-art-alpha.5 Windows Player smoke evidence (sanitized excerpt)
+Date: 2026-09-04
+Input: Builds/Whitebox/RailCraftWhitebox.exe
+Scope: 10 gate questions; 5 package pickups; 4 package subassemblies; bogie structure; 3-input landing; commissioning; save; reset
+RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED
+Raw local log: TestResults/flow002-player-smoke-final.log (ignored, reproducible)

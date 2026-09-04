@@ -22,8 +22,15 @@ namespace RailCraft.ThirdPerson.UI
         public const string ScreenshotArgumentPrefix = "-whitebox-smoke-screenshot=";
         public const string BogieScreenshotArgumentPrefix = "-whitebox-smoke-bogie-screenshot=";
         public const string LandingScreenshotArgumentPrefix = "-whitebox-smoke-landing-screenshot=";
+        public const string PlayerScreenshotArgumentPrefix = "-whitebox-smoke-player-screenshot=";
         public const string SuccessLogMarker = "RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED";
         public const string FailureLogMarker = "RAILCRAFT_WHITEBOX_SMOKE_FAILED";
+
+        public static bool IsSmokeRequested(string[] arguments)
+        {
+            return arguments != null && arguments.Any(argument =>
+                string.Equals(argument, SmokeArgument, StringComparison.OrdinalIgnoreCase));
+        }
 
         public static bool TryGetRequestedVariant(
             string[] arguments,
@@ -45,8 +52,7 @@ namespace RailCraft.ThirdPerson.UI
         private IEnumerator Start()
         {
             var arguments = Environment.GetCommandLineArgs();
-            if (!arguments.Any(argument =>
-                string.Equals(argument, SmokeArgument, StringComparison.OrdinalIgnoreCase)))
+            if (!IsSmokeRequested(arguments))
                 yield break;
 
             yield return null;
@@ -55,6 +61,14 @@ namespace RailCraft.ThirdPerson.UI
             try
             {
                 ValidateEscapeMenu();
+                var playerScreenshotPath = FindArgumentPath(
+                    arguments,
+                    PlayerScreenshotArgumentPrefix);
+                if (!string.IsNullOrWhiteSpace(playerScreenshotPath))
+                {
+                    EnsureScreenshotDirectory(playerScreenshotPath);
+                    CapturePlayerPreview(playerScreenshotPath);
+                }
                 DriveToCompletion(arguments);
                 ValidateCompletionState();
             }
@@ -123,6 +137,15 @@ namespace RailCraft.ThirdPerson.UI
             }
         }
 
+        private void Awake()
+        {
+            // Automated delivery checks may launch the standalone player with a
+            // hidden or unfocused window. Opt into background execution before
+            // the first coroutine frame so the smoke path cannot pause forever.
+            if (IsSmokeRequested(Environment.GetCommandLineArgs()))
+                Application.runInBackground = true;
+        }
+
         private static void ValidateEscapeMenu()
         {
             var menu = FindSingle<WhiteboxMainMenuController>();
@@ -156,45 +179,88 @@ namespace RailCraft.ThirdPerson.UI
             var quizStations = FindAll<QuizPartStation>()
                 .OrderBy(station => station.RewardPart)
                 .ToArray();
-            Ensure(quizStations.Length == 14, $"Expected 14 quiz stations, found {quizStations.Length}.");
+            Ensure(quizStations.Length == 5, $"Expected 5 package quiz stations, found {quizStations.Length}.");
+            Ensure(quizStations.All(station => station.UsesWorkPackage),
+                "A quiz station was not configured in package mode.");
+            Ensure(quizStations.Select(station => station.WorkPackageId).Distinct().Count() == 5,
+                "Package quiz stations did not cover five unique material packages.");
+            Ensure(quizStations.All(station =>
+                    station.RewardPartCount == 1 && station.KnowledgeQuestionCount == 2),
+                "Each material package must expose two gate questions and one pickup.");
+            Ensure(quizStations.Sum(station => station.SubPartCount) == 14,
+                "Package quiz stations did not preserve all fourteen semantic child parts.");
 
             foreach (var station in quizStations)
             {
                 FocusStation(station, scanner);
-                Ensure(scanner.TryInteract(), $"Scanner could not open quiz for {station.RewardPart}.");
-                Ensure(station.IsQuizOpen, $"Quiz did not open for {station.RewardPart}.");
-                Ensure(inputLock.InputLocked, "Input was not locked while the quiz was open.");
-
-                var optionButtons = quizPanel.GetComponentsInChildren<Button>(true)
-                    .Where(button => button.name.StartsWith("QuizOption", StringComparison.Ordinal))
-                    .OrderBy(button => button.name)
-                    .ToArray();
-                Ensure(optionButtons.Length == 4, $"Expected 4 quiz option buttons, found {optionButtons.Length}.");
-                var activeOptionButtons = optionButtons
-                    .Where(button => button.gameObject.activeInHierarchy)
-                    .ToArray();
-                Ensure(activeOptionButtons.Length == station.CurrentQuestion.Options.Count,
-                    $"Quiz option count mismatch for {station.RewardPart}.");
-                foreach (var button in activeOptionButtons)
+                var guard = 0;
+                while (!station.IsCollected && guard++ < Math.Max(8, station.KnowledgeQuestionCount * 8))
                 {
-                    button.onClick.Invoke();
-                    if (station.RewardUnlocked)
-                        break;
-                }
+                    if (!station.RewardUnlocked)
+                    {
+                        var answeredBefore = station.AnsweredKnowledgeQuestionCount;
+                        Ensure(scanner.TryInteract(), $"Scanner could not open quiz for {station.RewardPart}.");
+                        Ensure(station.IsQuizOpen, $"Quiz did not open for {station.RewardPart}.");
+                        Ensure(inputLock.InputLocked, "Input was not locked while the quiz was open.");
 
-                Ensure(station.RewardUnlocked, $"No answer unlocked {station.RewardPart}.");
-                Ensure(!inputLock.InputLocked, "Input stayed locked after a correct answer.");
-                scanner.ScanNow();
-                Ensure(scanner.TryInteract(), $"Scanner could not collect {station.RewardPart}.");
-                Ensure(station.IsCollected, $"Reward {station.RewardPart} was not collected.");
+                        var optionButtons = quizPanel.GetComponentsInChildren<Button>(true)
+                            .Where(button => button.name.StartsWith("QuizOption", StringComparison.Ordinal))
+                            .OrderBy(button => button.name)
+                            .ToArray();
+                        Ensure(optionButtons.Length >= station.CurrentQuestion.Options.Count,
+                            $"Quiz option count mismatch for {station.RewardPart}.");
+                        var activeOptionButtons = optionButtons
+                            .Where(button => button.gameObject.activeInHierarchy)
+                            .ToArray();
+                        Ensure(activeOptionButtons.Length == station.CurrentQuestion.Options.Count,
+                            $"Quiz option count mismatch for {station.RewardPart}.");
+                        foreach (var button in activeOptionButtons)
+                        {
+                            button.onClick.Invoke();
+                            if (station.RewardUnlocked)
+                                break;
+                        }
+
+                        Ensure(!station.IsQuizOpen, $"Quiz stayed open after answer for {station.RewardPart}.");
+                        if (!station.RewardUnlocked)
+                        {
+                            Ensure(
+                                station.AnsweredKnowledgeQuestionCount > answeredBefore,
+                                $"No gate question was recorded for {station.RewardPart}.");
+                        }
+                        Ensure(!inputLock.InputLocked, "Input stayed locked after a correct answer.");
+
+                        // A package uses more than one gate question. Re-enter
+                        // the station for the next question until the whole
+                        // package is unlocked; collection only happens once.
+                        if (!station.RewardUnlocked)
+                            continue;
+                    }
+
+                    scanner.ScanNow();
+                    Ensure(scanner.TryInteract(), $"Scanner could not collect {station.RewardPart}.");
+                    Ensure(station.CollectedRewardCount > 0,
+                        $"Reward {station.RewardPart} was not collected.");
+                }
+                Ensure(station.IsCollected,
+                    $"Module station {station.name} did not collect all {station.RewardPartCount} rewards.");
+                Ensure(station.KnowledgeComplete && station.AnsweredKnowledgeQuestionCount == 2,
+                    $"Package station {station.name} did not complete both gate questions.");
             }
 
-            Ensure(host.Session.InventoryParts.Count == 14, "Inventory did not contain all 14 parts.");
+            Ensure(host.Session.InventoryParts.Count == 14,
+                "Package pickups did not preserve all fourteen internal recipe parts.");
 
             var moduleStations = FindAll<ModuleAssemblyStation>()
                 .OrderBy(station => station.ModuleId)
                 .ToArray();
-            Ensure(moduleStations.Length == 4, $"Expected 4 part assembly stations, found {moduleStations.Length}.");
+            Ensure(moduleStations.Length == 4, $"Expected 4 package assembly stations, found {moduleStations.Length}.");
+            Ensure(moduleStations.All(station => station.UsesWorkPackage),
+                "A base assembly station was not configured in package mode.");
+            Ensure(moduleStations.All(station => station.RequiredPartCount == 1),
+                "A package assembly station exposed more than one player-facing install action.");
+            Ensure(moduleStations.Sum(station => station.SubPartCount) == 12,
+                "Base package stations did not preserve their twelve semantic child parts.");
             foreach (var station in moduleStations)
             {
                 FocusStation(station, scanner);
@@ -224,13 +290,18 @@ namespace RailCraft.ThirdPerson.UI
             }
 
             var finalStation = FindSingle<FinalAssemblyStation>();
+            Ensure(finalStation.UsesWorkPackage &&
+                   finalStation.WorkPackageId == WorkPackageId.CarbodyAndLanding,
+                "Landing was not configured with the carbody material package.");
+            Ensure(finalStation.RequiredInputCount == 3 && finalStation.SubPartInputCount == 2,
+                "Landing must expose two child modules and one package action while preserving two child parts.");
             FocusStation(finalStation, scanner);
             for (var index = 0; index < finalStation.RequiredInputCount; index++)
                 Ensure(scanner.TryInteract(), $"Scanner could not install landing input {index + 1}.");
             Ensure(finalStation.IsLandingComplete, "Landing assembly did not complete.");
             Ensure(!finalStation.IsVehicleComplete, "Landing incorrectly skipped commissioning.");
             Ensure(finalStation.InstalledInputCount == finalStation.RequiredInputCount,
-                "Landing did not install all four inputs.");
+                "Landing did not install all three player-facing inputs.");
             Ensure(host.Session.InventoryParts.Count == 0, "Inventory was not consumed by landing.");
 
             var landingScreenshotPath = FindArgumentPath(arguments, LandingScreenshotArgumentPrefix);
@@ -320,9 +391,9 @@ namespace RailCraft.ThirdPerson.UI
             Ensure(host.Session.FlowStatus == AssemblyFlowStatus.Completed,
                 "Assembly state machine did not reach Completed.");
             var progress = FindSingle<WhiteboxAssemblyProgressPresenter>();
-            Ensure(progress.TotalSteps == 23 && progress.CompletedSteps == 23 &&
+            Ensure(progress.TotalSteps == 14 && progress.CompletedSteps == 14 &&
                 progress.CompletionPercent == 100,
-                "Assembly progress presenter did not reach 23/23 and 100 percent.");
+                "Assembly progress presenter did not reach 14/14 and 100 percent.");
             Ensure(FindSingle<WhiteboxKnowledgePresenter>().IsCatalogUnlocked,
                 "Engineering knowledge compendium did not unlock.");
             var save = FindSingle<WhiteboxSaveController>();
@@ -415,6 +486,40 @@ namespace RailCraft.ThirdPerson.UI
                 new Vector3(5.8f, 3.8f, -5.6f),
                 new Vector3(0f, 1.35f, 0f),
                 34f);
+        }
+
+        private static void CapturePlayerPreview(string path)
+        {
+            var motor = FindSingle<ThirdPersonMotor>();
+            var camera = UnityEngine.Camera.main ?? FindSingle<UnityEngine.Camera>();
+            var previousPosition = camera.transform.position;
+            var previousRotation = camera.transform.rotation;
+            var previousFieldOfView = camera.fieldOfView;
+            var canvases = FindAll<Canvas>();
+            var canvasStates = canvases.Select(canvas => canvas.enabled).ToArray();
+
+            try
+            {
+                foreach (var canvas in canvases)
+                    canvas.enabled = false;
+
+                var player = motor.transform;
+                camera.transform.position = player.position + new Vector3(3.8f, 2.45f, -5.2f);
+                var target = player.position + new Vector3(0f, 1.05f, 1.8f);
+                camera.transform.rotation = Quaternion.LookRotation(
+                    target - camera.transform.position,
+                    Vector3.up);
+                camera.fieldOfView = 43f;
+                CaptureRenderedPreview(path);
+            }
+            finally
+            {
+                camera.transform.position = previousPosition;
+                camera.transform.rotation = previousRotation;
+                camera.fieldOfView = previousFieldOfView;
+                for (var index = 0; index < canvases.Length; index++)
+                    canvases[index].enabled = canvasStates[index];
+            }
         }
 
         private static void CaptureLandingPreview(string path, Transform station)
@@ -579,6 +684,13 @@ namespace RailCraft.ThirdPerson.UI
                 Destroy(texture);
                 Destroy(renderTexture);
             }
+        }
+
+        private static void EnsureScreenshotDirectory(string path)
+        {
+            var directory = Path.GetDirectoryName(path);
+            if (!string.IsNullOrWhiteSpace(directory))
+                Directory.CreateDirectory(directory);
         }
 
         private static void Ensure(bool condition, string message)

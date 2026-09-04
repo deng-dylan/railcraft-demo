@@ -346,16 +346,11 @@ namespace RailCraft.ThirdPerson.Domain
 
         private void ValidateQuestionRewards(IEnumerable<QuizQuestionDefinition> definitions)
         {
-            var rewardedParts = new HashSet<PartId>();
             foreach (var definition in definitions)
             {
-                if (!partsById.ContainsKey(definition.RewardPart))
+                if (definition.GrantsPart && !partsById.ContainsKey(definition.RewardPart))
                     throw new ArgumentException($"Question {definition.Id} rewards an unknown part.");
-                rewardedParts.Add(definition.RewardPart);
             }
-
-            if (rewardedParts.Count != partsById.Count)
-                throw new ArgumentException("Every part must be unlockable by at least one question.");
         }
     }
 }

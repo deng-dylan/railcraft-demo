@@ -193,14 +193,14 @@ namespace RailCraft.ThirdPerson.UI
                 if (inventoryText != null)
                     inventoryText.text = "待装配输入：空";
                 if (progressText != null)
-                    progressText.text = "阶段：知识确认\n总成：0/6 · 调试：未解锁";
+                    progressText.text = "阶段：知识确认\n总成：0/6 · 材料包：0/5 · 调试：未解锁";
                 return;
             }
 
             var session = sessionHost.Session;
             var snapshot = sessionHost.ExportSnapshot();
             if (inventoryText != null)
-                inventoryText.text = FormatCarriedInputs(session.InventoryParts);
+                inventoryText.text = FormatCarriedInputs(session);
 
             var completedModules = 0;
             var moduleIds = (ModuleId[])Enum.GetValues(typeof(ModuleId));
@@ -212,14 +212,15 @@ namespace RailCraft.ThirdPerson.UI
 
             if (progressText != null)
             {
-                var stage = ResolveStage(session, completedModules);
+                var stage = GetStageDisplayName(session);
                 var landing = session.IsLandingComplete ? "整车落位完成" : "整车落位未完成";
                 var commissioning = WhiteboxDisplayNames.Commissioning(session.CommissioningPhase);
+                var completedPackages = CountCompletedMaterialPackages(session);
                 var knowledge = snapshot.AnswerAttemptCount <= 0
                     ? "知识：未作答"
                     : $"知识：{snapshot.CorrectAnswerCount}/{snapshot.AnswerAttemptCount}";
                 progressText.text =
-                    $"阶段：{stage}\n总成：{completedModules}/{moduleIds.Length} · {knowledge} · 调试：{commissioning} · {landing}";
+                    $"阶段：{stage}\n总成：{completedModules}/{moduleIds.Length} · 材料包：{completedPackages}/5 · {knowledge} · 调试：{commissioning} · {landing}";
             }
         }
 
@@ -302,15 +303,58 @@ namespace RailCraft.ThirdPerson.UI
             inputLock?.SetInputLocked(false);
         }
 
-        private static string FormatCarriedInputs(IReadOnlyList<PartId> parts)
+        private static string FormatCarriedInputs(IWorldGameSession session)
         {
-            if (parts == null || parts.Count == 0)
+            if (session == null || session.InventoryParts == null || session.InventoryParts.Count == 0)
                 return "待装配输入：空";
 
-            var names = new string[parts.Count];
-            for (var index = 0; index < parts.Count; index++)
-                names[index] = WhiteboxDisplayNames.Part(parts[index]);
-            return $"待装配输入（{parts.Count}）：{string.Join("、", names)}";
+            var names = new List<string>();
+            var represented = new HashSet<PartId>();
+            foreach (var package in WhiteboxWorkPackageCatalog.Definitions)
+            {
+                if (!package.IsMaterialPackage)
+                    continue;
+
+                var packageInventoryCount = 0;
+                foreach (var partId in package.RequiredParts)
+                {
+                    if (!session.InventoryContains(partId))
+                        continue;
+                    packageInventoryCount++;
+                }
+
+                if (packageInventoryCount == package.RequiredParts.Count &&
+                    package.RequiredParts.Count > 0)
+                {
+                    names.Add(WhiteboxDisplayNames.WorkPackage(package.Id));
+                    foreach (var partId in package.RequiredParts)
+                        represented.Add(partId);
+                }
+            }
+
+            foreach (var partId in session.InventoryParts)
+            {
+                if (!represented.Contains(partId))
+                    names.Add(WhiteboxDisplayNames.Part(partId));
+            }
+
+            return $"待装配输入（{names.Count}）：{string.Join("、", names)}";
+        }
+
+        private static int CountCompletedMaterialPackages(IWorldGameSession session)
+        {
+            if (session == null)
+                return 0;
+
+            var completed = 0;
+            foreach (var package in WhiteboxWorkPackageCatalog.Definitions)
+            {
+                if (!package.IsMaterialPackage || !package.AssemblyModule.HasValue)
+                    continue;
+                if (session.IsModuleComplete(package.AssemblyModule.Value))
+                    completed++;
+            }
+            return completed;
         }
 
         public static string FormatSettlement(SessionProgressSummary progress)
@@ -358,7 +402,7 @@ namespace RailCraft.ThirdPerson.UI
             return null;
         }
 
-        private static string ResolveStage(IWorldGameSession session, int completedModules)
+        public static string GetStageDisplayName(IWorldGameSession session)
         {
             if (session == null)
                 return "知识确认";
@@ -366,13 +410,19 @@ namespace RailCraft.ThirdPerson.UI
                 return "实训完成";
             if (session.CommissioningPhase != CommissioningPhase.Locked)
                 return "调试检验";
-            if (session.IsLandingComplete)
-                return "落车完成";
-            if (session.AreAllModulesComplete)
+            if (session.IsModuleComplete(ModuleId.BogieStructure) &&
+                session.IsModuleComplete(ModuleId.SecondarySuspension))
                 return "落车集成";
+
+            var completedModules = 0;
+            foreach (var moduleId in (ModuleId[])Enum.GetValues(typeof(ModuleId)))
+            {
+                if (session.IsModuleComplete(moduleId))
+                    completedModules++;
+            }
             if (completedModules > 0)
                 return "子总成装配";
-            return session.InventoryParts.Count > 0 ? "零件齐套" : "知识确认";
+            return session.InventoryParts.Count > 0 ? "材料齐套" : "知识确认";
         }
     }
 }

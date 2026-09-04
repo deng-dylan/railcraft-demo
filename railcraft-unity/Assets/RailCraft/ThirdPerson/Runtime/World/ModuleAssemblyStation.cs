@@ -16,13 +16,22 @@ namespace RailCraft.ThirdPerson.World
         [SerializeField] private GameObject[] partVisuals = Array.Empty<GameObject>();
         [SerializeField] private GameObject completedModuleVisual;
         [SerializeField, TextArea] private string afterCompletionObjective = "继续收集其他模块零件";
+        [SerializeField] private bool usesWorkPackage;
+        [SerializeField] private WorkPackageId workPackageId;
 
         private WhiteboxGameSessionHost subscribedHost;
 
         public ModuleId ModuleId => moduleId;
         public bool IsComplete => sessionHost != null && sessionHost.Session.IsModuleComplete(moduleId);
-        public int InstalledPartCount => CountInstalledParts();
-        public int RequiredPartCount => requiredParts == null ? 0 : requiredParts.Length;
+        public int InstalledPartCount => usesWorkPackage
+            ? (IsComplete ? 1 : 0)
+            : CountInstalledParts();
+        public int RequiredPartCount => usesWorkPackage
+            ? 1
+            : (requiredParts == null ? 0 : requiredParts.Length);
+        public int SubPartCount => requiredParts == null ? 0 : requiredParts.Length;
+        public bool UsesWorkPackage => usesWorkPackage;
+        public WorkPackageId WorkPackageId => workPackageId;
 
         public string InteractionPrompt
         {
@@ -30,6 +39,15 @@ namespace RailCraft.ThirdPerson.World
             {
                 if (sessionHost == null || IsComplete)
                     return string.Empty;
+
+                if (usesWorkPackage)
+                {
+                    var packageSession = sessionHost.Session as IWorkPackageGameSession;
+                    return packageSession != null &&
+                           packageSession.IsWorkPackageCollected(workPackageId)
+                        ? $"按 E 安装{WhiteboxDisplayNames.WorkPackage(workPackageId)}"
+                        : $"请先领取{WhiteboxDisplayNames.WorkPackage(workPackageId)}";
+                }
 
                 var installableIndex = FindInstallablePartIndex();
                 if (installableIndex >= 0)
@@ -64,7 +82,38 @@ namespace RailCraft.ThirdPerson.World
             partVisuals = (GameObject[])configuredPartVisuals.Clone();
             completedModuleVisual = configuredCompletedModuleVisual;
             afterCompletionObjective = configuredAfterCompletionObjective ?? string.Empty;
+            usesWorkPackage = false;
+            workPackageId = default;
             Subscribe();
+            RefreshVisuals();
+        }
+
+        /// <summary>
+        /// Configures a single package-level assembly action. All semantic
+        /// sub-parts are still snapped and shown together after the action.
+        /// </summary>
+        public void ConfigureWorkPackage(
+            WhiteboxGameSessionHost configuredSessionHost,
+            ModuleId configuredModuleId,
+            WorkPackageId configuredWorkPackageId,
+            string configuredStationDisplayName,
+            PartId[] configuredRequiredParts,
+            Transform[] configuredSnapSlots,
+            GameObject[] configuredPartVisuals,
+            GameObject configuredCompletedModuleVisual,
+            string configuredAfterCompletionObjective)
+        {
+            Configure(
+                configuredSessionHost,
+                configuredModuleId,
+                configuredStationDisplayName,
+                configuredRequiredParts,
+                configuredSnapSlots,
+                configuredPartVisuals,
+                configuredCompletedModuleVisual,
+                configuredAfterCompletionObjective);
+            usesWorkPackage = true;
+            workPackageId = configuredWorkPackageId;
             RefreshVisuals();
         }
 
@@ -77,6 +126,34 @@ namespace RailCraft.ThirdPerson.World
         {
             if (!CanInteract(context))
                 return;
+
+            if (usesWorkPackage)
+            {
+                var packageSession = sessionHost.Session as IWorkPackageGameSession;
+                if (packageSession == null)
+                {
+                    sessionHost.NotifyFeedback("当前会话不支持材料包装配");
+                    return;
+                }
+
+                var packageResult = sessionHost.InstallWorkPackage(moduleId, workPackageId);
+                if (!packageResult.Accepted)
+                {
+                    sessionHost.NotifyFeedback(
+                        $"无法安装{WhiteboxDisplayNames.WorkPackage(workPackageId)}（{packageResult.Status}）");
+                    return;
+                }
+
+                RefreshVisuals();
+                sessionHost.NotifyFeedback(
+                    $"已安装{WhiteboxDisplayNames.WorkPackage(workPackageId)}");
+                if (packageResult.IsModuleComplete || IsComplete)
+                {
+                    sessionHost.NotifyFeedback($"{WhiteboxDisplayNames.Module(moduleId)}组装完成");
+                    sessionHost.SetObjective(afterCompletionObjective);
+                }
+                return;
+            }
 
             var partIndex = FindInstallablePartIndex();
             if (partIndex < 0)

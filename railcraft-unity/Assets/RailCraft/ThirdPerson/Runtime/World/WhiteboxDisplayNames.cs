@@ -15,6 +15,20 @@ namespace RailCraft.ThirdPerson.World
             return Humanize(moduleId.ToString());
         }
 
+        public static string WorkPackage(WorkPackageId workPackageId)
+        {
+            switch (workPackageId)
+            {
+                case WorkPackageId.WheelsetAxlebox: return "轮对轴箱材料包";
+                case WorkPackageId.FrameAndBrakeTraction: return "构架与制动/牵引材料包";
+                case WorkPackageId.PrimarySuspension: return "一系悬挂材料包";
+                case WorkPackageId.SecondarySuspension: return "二系悬挂材料包";
+                case WorkPackageId.CarbodyAndLanding: return "车体落车材料包";
+                case WorkPackageId.Commissioning: return "调试与检验流程";
+                default: return workPackageId.ToString();
+            }
+        }
+
         public static string Commissioning(CommissioningPhase phase)
         {
             switch (phase)

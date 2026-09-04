@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using RailCraft.ThirdPerson.Domain;
 using RailCraft.ThirdPerson.World;
 using UnityEngine;
@@ -79,7 +81,10 @@ namespace RailCraft.ThirdPerson.UI
 
             var total = CommissioningStepCount;
             foreach (var module in configuredCatalog.Modules)
-                total += module.RequiredParts.Count + module.RequiredModules.Count;
+            {
+                total += WorkPackageStepCount(module);
+                total += module.RequiredModules.Count;
+            }
             return total;
         }
 
@@ -95,10 +100,18 @@ namespace RailCraft.ThirdPerson.UI
             var completed = 0;
             foreach (var module in configuredCatalog.Modules)
             {
-                foreach (var partId in module.RequiredParts)
+                if (TryGetMatchingPackage(module, out var package))
                 {
-                    if (session.IsPartInstalled(module.Id, partId))
+                    if (IsPackageInstalled(session, module.Id, package))
                         completed++;
+                }
+                else
+                {
+                    foreach (var partId in module.RequiredParts)
+                    {
+                        if (session.IsPartInstalled(module.Id, partId))
+                            completed++;
+                    }
                 }
 
                 foreach (var childModuleId in module.RequiredModules)
@@ -123,7 +136,22 @@ namespace RailCraft.ThirdPerson.UI
             var completed = 0;
             foreach (var module in snapshot.Modules ?? Array.Empty<ModuleAssemblySnapshot>())
             {
-                completed += (module.InstalledParts ?? Array.Empty<PartId>()).Length;
+                if (!configuredCatalog.TryGetModule(module.ModuleId, out var moduleDefinition))
+                    continue;
+
+                if (TryGetMatchingPackage(moduleDefinition, out var package))
+                {
+                    var installed = new HashSet<PartId>(
+                        module.InstalledParts ?? Array.Empty<PartId>());
+                    var packageComplete = package.RequiredParts.Count > 0 &&
+                        package.RequiredParts.All(installed.Contains);
+                    if (packageComplete)
+                        completed++;
+                }
+                else
+                {
+                    completed += (module.InstalledParts ?? Array.Empty<PartId>()).Length;
+                }
                 completed += (module.InstalledModules ?? Array.Empty<ModuleId>()).Length;
             }
 
@@ -191,6 +219,52 @@ namespace RailCraft.ThirdPerson.UI
             sessionHost.StateChanged -= Refresh;
             sessionHost.SessionReset -= Refresh;
             subscribed = false;
+        }
+
+        private static int WorkPackageStepCount(ModuleDefinition module)
+        {
+            if (module.RequiredParts.Count == 0)
+                return 0;
+
+            return TryGetMatchingPackage(module, out _)
+                ? 1
+                : module.RequiredParts.Count;
+        }
+
+        private static bool TryGetMatchingPackage(
+            ModuleDefinition module,
+            out WorkPackageDefinition package)
+        {
+            package = null;
+            if (module == null ||
+                !WhiteboxWorkPackageCatalog.TryGetForAssemblyModule(module.Id, out var candidate) ||
+                !candidate.IsMaterialPackage ||
+                candidate.RequiredParts.Count != module.RequiredParts.Count)
+                return false;
+
+            var required = new HashSet<PartId>(module.RequiredParts);
+            foreach (var partId in candidate.RequiredParts)
+            {
+                if (!required.Contains(partId))
+                    return false;
+            }
+
+            package = candidate;
+            return true;
+        }
+
+        private static bool IsPackageInstalled(
+            IWorldGameSession session,
+            ModuleId moduleId,
+            WorkPackageDefinition package)
+        {
+            foreach (var partId in package.RequiredParts)
+            {
+                if (!session.IsPartInstalled(moduleId, partId))
+                    return false;
+            }
+
+            return package.RequiredParts.Count > 0;
         }
     }
 }

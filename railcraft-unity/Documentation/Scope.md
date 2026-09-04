@@ -1,4 +1,8 @@
-# RailCraft Unity v0.1 范围基线
+# RailCraft Unity v0.1 范围基线（历史冻结）
+
+> 本文只记录 2026-08-01 的固定视角 v0.1 约束，已退出当前工作树，不作为 Art Alpha 的
+> 实施指令。当前口径见 [`../../docs/project/CURRENT_BASELINE.md`](../../docs/project/CURRENT_BASELINE.md)，
+> 逐条处理结果见 [`../../docs/project/CONSTRAINT_REVIEW.md`](../../docs/project/CONSTRAINT_REVIEW.md)。
 
 - 文档版本：`v0.1`
 - 目标平台：Windows x86_64

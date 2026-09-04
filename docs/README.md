@@ -6,8 +6,11 @@
 
 - [当前发行说明](../railcraft-unity/Documentation/Release.md)：版本、运行方式、限制和交付清单。
 - [ThirdPerson 标准实训规格](../railcraft-unity/Documentation/ThirdPersonWhitebox.md)：流程、题库、资产替换与验收条件。
-- [当前验收报告](../railcraft-unity/Artifacts/Whitebox/Acceptance/acceptance-report.md)：构建、测试、冒烟和截图证据。
-- [发行评估快照](../railcraft-unity/Documentation/ReleaseReadiness.md)：预发布范围和剩余发行工作。
+- [当前基线](project/CURRENT_BASELINE.md)：阶段、产品身份、模块规模和资产缺口。
+- [当前状态](project/CURRENT_STATUS.md)：完成度、风险、证据和下一步。
+- [材料包粒度决策](project/DECISION_PART_GRANULARITY.md)：玩家流程与内部子部件的边界。
+- [当前验收报告](../railcraft-unity/Artifacts/Whitebox/ArtAlpha/acceptance-report.md)：构建、测试、冒烟和截图证据。
+- [发行评估](../railcraft-unity/Documentation/ReleaseReadiness.md)：预发布范围和剩余发行工作。
 - [仓库地图](repository-map.md)：源码、模型、交付与 Git 边界。
 
 ## 开发与治理

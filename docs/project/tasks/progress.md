@@ -1,4 +1,6 @@
-# RailCraft Demo 模块进度
+# RailCraft Demo 模块进度（历史 Godot 任务）
+
+> 本任务已冻结。当前进度、证据和下一步见 `../CURRENT_STATUS.md`。
 
 > 需求基线：[`doc/proposal.md`](../proposal.md)  
 > 详细设计：[`doc/detailed-design.md`](../detailed-design.md)  

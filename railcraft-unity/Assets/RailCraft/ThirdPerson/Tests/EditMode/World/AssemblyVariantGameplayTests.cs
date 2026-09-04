@@ -87,5 +87,18 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
                 Assert.That(parsed, Is.EqualTo(definition.Id), definition.Key);
             }
         }
+
+        [Test]
+        public void SmokeFlagIsRecognizedCaseInsensitivelyForBackgroundRuns()
+        {
+            Assert.That(
+                WhiteboxAutomatedSmokeRunner.IsSmokeRequested(
+                    new[] { "RailCraftWhitebox.exe", "-WHITEBOX-SMOKE" }),
+                Is.True);
+            Assert.That(
+                WhiteboxAutomatedSmokeRunner.IsSmokeRequested(
+                    new[] { "RailCraftWhitebox.exe" }),
+                Is.False);
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace RailCraft.ThirdPerson.World
     /// Production adapter. It keeps MonoBehaviours independent from domain result classes
     /// without duplicating any progression rule.
     /// </summary>
-    public sealed class DomainWorldGameSession : IWorldGameSession
+    public sealed class DomainWorldGameSession : IWorldGameSession, IWorkPackageGameSession
     {
         private readonly WhiteboxGameSession session;
 
@@ -41,6 +41,46 @@ namespace RailCraft.ThirdPerson.World
                 result.CorrectOptionIndex,
                 result.RewardPart,
                 result.Status.ToString());
+        }
+
+        public bool IsWorkPackageKnowledgeComplete(WorkPackageId workPackageId)
+        {
+            return session.IsWorkPackageKnowledgeComplete(workPackageId);
+        }
+
+        public bool IsWorkPackageUnlocked(WorkPackageId workPackageId)
+        {
+            return session.IsWorkPackageUnlocked(workPackageId);
+        }
+
+        public bool IsWorkPackageCollected(WorkPackageId workPackageId)
+        {
+            return session.IsWorkPackageCollected(workPackageId);
+        }
+
+        public int GetWorkPackageAnsweredQuestionCount(WorkPackageId workPackageId)
+        {
+            return session.GetWorkPackageAnsweredQuestionCount(workPackageId);
+        }
+
+        public WorkPackageAnswerResult SubmitWorkPackageAnswer(
+            WorkPackageId workPackageId,
+            string questionId,
+            int selectedOptionIndex)
+        {
+            return session.SubmitWorkPackageAnswer(workPackageId, questionId, selectedOptionIndex);
+        }
+
+        public WorkPackageCollectionResult CollectWorkPackage(WorkPackageId workPackageId)
+        {
+            return session.CollectWorkPackage(workPackageId);
+        }
+
+        public WorkPackageInstallationResult InstallWorkPackage(
+            ModuleId moduleId,
+            WorkPackageId workPackageId)
+        {
+            return session.InstallWorkPackage(moduleId, workPackageId);
         }
 
         public WorldCollectionResult CollectPart(PartId partId)

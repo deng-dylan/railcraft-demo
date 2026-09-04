@@ -11,6 +11,7 @@ namespace RailCraft.ThirdPerson.Player
         [SerializeField] private CharacterController characterController;
         [SerializeField] private Transform movementCamera;
         [SerializeField] private ThirdPersonInputLock inputLock;
+        [SerializeField] private ThirdPersonLocomotionAnimator locomotionAnimator;
 
         [Header("Input")]
         [SerializeField] private InputActionReference moveActionReference;
@@ -31,6 +32,7 @@ namespace RailCraft.ThirdPerson.Player
         public float VerticalVelocity => verticalVelocity;
         public float WalkSpeed => walkSpeed;
         public float SprintSpeed => sprintSpeed;
+        public ThirdPersonLocomotionAnimator LocomotionAnimator => locomotionAnimator;
 
         public void Configure(
             CharacterController controller,
@@ -54,6 +56,15 @@ namespace RailCraft.ThirdPerson.Player
             turnSpeed = Mathf.Max(0f, requestedTurnSpeed);
             gravity = Mathf.Min(0f, requestedGravity);
             groundedVelocity = Mathf.Min(0f, requestedGroundedVelocity);
+            if (locomotionAnimator != null)
+                locomotionAnimator.SetMaximumSpeed(sprintSpeed);
+        }
+
+        public void ConfigureAnimation(ThirdPersonLocomotionAnimator configuredAnimator)
+        {
+            locomotionAnimator = configuredAnimator;
+            if (locomotionAnimator != null)
+                locomotionAnimator.SetMaximumSpeed(sprintSpeed);
         }
 
         public void ConfigureInput(
@@ -103,6 +114,13 @@ namespace RailCraft.ThirdPerson.Player
 
             var velocity = planarVelocity + Vector3.up * verticalVelocity;
             characterController.Move(velocity * deltaTime);
+            if (locomotionAnimator != null)
+            {
+                locomotionAnimator.ApplyMotion(
+                    planarVelocity.magnitude,
+                    characterController.isGrounded,
+                    deltaTime);
+            }
         }
 
         public static Vector3 CalculateCameraRelativeMove(
@@ -129,6 +147,7 @@ namespace RailCraft.ThirdPerson.Player
         private void Reset()
         {
             characterController = GetComponent<CharacterController>();
+            locomotionAnimator = GetComponent<ThirdPersonLocomotionAnimator>();
         }
 
         private void Awake()
@@ -137,6 +156,8 @@ namespace RailCraft.ThirdPerson.Player
                 characterController = GetComponent<CharacterController>();
             if (movementCamera == null && UnityEngine.Camera.main != null)
                 movementCamera = UnityEngine.Camera.main.transform;
+            if (locomotionAnimator == null)
+                locomotionAnimator = GetComponent<ThirdPersonLocomotionAnimator>();
         }
 
         private void OnEnable()

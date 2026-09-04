@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RailCraft.ThirdPerson.Domain;
 using UnityEngine;
 
 namespace RailCraft.ThirdPerson.World
@@ -12,18 +13,35 @@ namespace RailCraft.ThirdPerson.World
         [SerializeField] private string[] options = Array.Empty<string>();
         [SerializeField] private int[] submittedOptionIndices = Array.Empty<int>();
         [SerializeField, TextArea(2, 5)] private string explanation;
+        [SerializeField] private PartId rewardPart;
 
         public QuizQuestionPresentation(
             string configuredQuestionId,
             string configuredPrompt,
             IReadOnlyList<string> configuredOptions,
             string configuredExplanation)
+            : this(
+                configuredQuestionId,
+                configuredPrompt,
+                configuredOptions,
+                configuredExplanation,
+                PartId.Axle)
+        {
+        }
+
+        public QuizQuestionPresentation(
+            string configuredQuestionId,
+            string configuredPrompt,
+            IReadOnlyList<string> configuredOptions,
+            string configuredExplanation,
+            PartId configuredRewardPart)
         {
             questionId = configuredQuestionId ?? string.Empty;
             prompt = configuredPrompt ?? string.Empty;
             options = CopyOptions(configuredOptions);
             submittedOptionIndices = CreateIdentityMap(options.Length);
             explanation = configuredExplanation ?? string.Empty;
+            rewardPart = configuredRewardPart;
         }
 
         public QuizQuestionPresentation(
@@ -32,18 +50,37 @@ namespace RailCraft.ThirdPerson.World
             IReadOnlyList<string> configuredOptions,
             IReadOnlyList<int> configuredSubmittedOptionIndices,
             string configuredExplanation)
+            : this(
+                configuredQuestionId,
+                configuredPrompt,
+                configuredOptions,
+                configuredSubmittedOptionIndices,
+                configuredExplanation,
+                PartId.Axle)
+        {
+        }
+
+        public QuizQuestionPresentation(
+            string configuredQuestionId,
+            string configuredPrompt,
+            IReadOnlyList<string> configuredOptions,
+            IReadOnlyList<int> configuredSubmittedOptionIndices,
+            string configuredExplanation,
+            PartId configuredRewardPart)
         {
             questionId = configuredQuestionId ?? string.Empty;
             prompt = configuredPrompt ?? string.Empty;
             options = CopyOptions(configuredOptions);
             submittedOptionIndices = CopyOptionMap(configuredSubmittedOptionIndices);
             explanation = configuredExplanation ?? string.Empty;
+            rewardPart = configuredRewardPart;
         }
 
         public string QuestionId => questionId ?? string.Empty;
         public string Prompt => prompt ?? string.Empty;
         public IReadOnlyList<string> Options => options ?? Array.Empty<string>();
         public string Explanation => explanation ?? string.Empty;
+        public PartId RewardPart => rewardPart;
 
         public bool IsValid => !string.IsNullOrWhiteSpace(QuestionId)
             && !string.IsNullOrWhiteSpace(Prompt)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using RailCraft.ThirdPerson.Domain;
 using UnityEngine;
 
@@ -92,9 +93,54 @@ namespace RailCraft.ThirdPerson.World
             return result;
         }
 
+        /// <summary>
+        /// Package-level answer entry point used by the current compact
+        /// material flow. The legacy SubmitAnswer method remains available to
+        /// old adapters and save-compatible tests.
+        /// </summary>
+        public WorkPackageAnswerResult SubmitWorkPackageAnswer(
+            WorkPackageId workPackageId,
+            string questionId,
+            int selectedOptionIndex)
+        {
+            var packageSession = Session as IWorkPackageGameSession;
+            if (packageSession == null)
+                throw new InvalidOperationException("The configured session does not support work packages.");
+
+            var result = packageSession.SubmitWorkPackageAnswer(
+                workPackageId,
+                questionId,
+                selectedOptionIndex);
+            StateChanged?.Invoke();
+            if (result.QuizResult != null)
+            {
+                var quizResult = result.QuizResult;
+                var worldResult = new WorldAnswerResult(
+                    quizResult.IsCorrect,
+                    result.PackageUnlocked,
+                    quizResult.CorrectOptionIndex,
+                    null,
+                    quizResult.Status.ToString());
+                AnswerEvaluated?.Invoke(new WhiteboxAnswerEvaluatedEvent(questionId, worldResult));
+            }
+            return result;
+        }
+
         public WorldCollectionResult CollectPart(PartId partId)
         {
             var result = Session.CollectPart(partId);
+            if (result.Changed)
+                StateChanged?.Invoke();
+            return result;
+        }
+
+        public WorkPackageCollectionResult CollectWorkPackage(WorkPackageId workPackageId)
+        {
+            var packageSession = Session as IWorkPackageGameSession;
+            if (packageSession == null)
+                throw new InvalidOperationException("The configured session does not support work packages.");
+
+            var result = packageSession.CollectWorkPackage(workPackageId);
             if (result.Changed)
                 StateChanged?.Invoke();
             return result;
@@ -107,6 +153,38 @@ namespace RailCraft.ThirdPerson.World
             {
                 StateChanged?.Invoke();
                 MilestoneReached?.Invoke(WhiteboxMilestoneEvent.ForPart(partId, moduleId));
+            }
+            return result;
+        }
+
+        public WorkPackageInstallationResult InstallWorkPackage(
+            ModuleId moduleId,
+            WorkPackageId workPackageId)
+        {
+            var packageSession = Session as IWorkPackageGameSession;
+            if (packageSession == null)
+                throw new InvalidOperationException("The configured session does not support work packages.");
+
+            var previouslyInstalled = new HashSet<PartId>();
+            if (WhiteboxWorkPackageCatalog.TryGet(workPackageId, out var package))
+            {
+                foreach (var partId in package.RequiredParts)
+                {
+                    if (Session.IsPartInstalled(moduleId, partId))
+                        previouslyInstalled.Add(partId);
+                }
+            }
+
+            var result = packageSession.InstallWorkPackage(moduleId, workPackageId);
+            if (result.Changed)
+            {
+                StateChanged?.Invoke();
+                foreach (var partId in result.InstalledParts)
+                {
+                    if (previouslyInstalled.Contains(partId))
+                        continue;
+                    MilestoneReached?.Invoke(WhiteboxMilestoneEvent.ForPart(partId, moduleId));
+                }
             }
             return result;
         }
@@ -168,8 +246,11 @@ namespace RailCraft.ThirdPerson.World
         {
             if (snapshot == null)
                 throw new ArgumentNullException(nameof(snapshot));
+            // Validate and apply the domain snapshot before changing any
+            // presentation state. A rejected save must leave the selected
+            // variant and its visual routing untouched.
+            Session.RestoreSnapshot(snapshot);
             SelectAssemblyVariant(snapshot.AssemblyVariant);
-            Session.RestoreSnapshot(snapshot ?? throw new ArgumentNullException(nameof(snapshot)));
             completionAnnounced = Session.IsVehicleComplete;
             currentObjective = Session.IsVehicleComplete
                 ? "标准实训完成，车辆通过调试检验"
@@ -209,5 +290,6 @@ namespace RailCraft.ThirdPerson.World
             AnnounceCompletionIfNeeded();
             return result;
         }
+
     }
 }

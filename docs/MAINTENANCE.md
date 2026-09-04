@@ -1,73 +1,53 @@
 # RailCraft 仓库维护与文件边界
 
-本说明用于保持 RailCraft 总仓库可审计、可构建，并避免将可再生缓存或成员原始交付误纳入版本控制。
-
-当前开发主线是 `railcraft-unity/Assets/RailCraft/ThirdPerson/`。同一 Unity
-工程中的固定视角 v0.1 是冻结验收基线，`apps/railcraft-godot/` 是冻结历史
-Demo。维护时必须区分三者，避免用当前白盒证据覆盖历史证据。
-
-如果需要先判断内容该放在哪，再决定是否入库，优先查看
-`docs/repository-map.md`。
+当前开发主线是 `railcraft-unity/Assets/RailCraft/ThirdPerson/`，当前批次为
+`v0.4.0-art-alpha.5`。旧 Demo 已退出工作树；维护时以
+[`docs/project/CURRENT_BASELINE.md`](project/CURRENT_BASELINE.md) 和
+[`docs/project/CURRENT_STATUS.md`](project/CURRENT_STATUS.md) 为准。
 
 ## 受版本控制的主线内容
 
 | 区域 | 维护规则 |
 | --- | --- |
-| `railcraft-unity/Assets/RailCraft/ThirdPerson/` | 当前第三人称白盒主线。跟踪源码、场景、白盒视觉、测试和稳定替换契约。 |
-| `railcraft-unity/` 的既有 `Bootstrap`/`Factory` | 冻结的 Unity 固定视角 v0.1 验收基线，只接受可追溯勘误或必要维护。 |
-| `apps/railcraft-godot/` | 冻结的 Godot `v0.1.0-demo` 历史 Demo，保留原位以便回溯。 |
-| `prototypes/` | 非主线原型的包装与说明；只有再分发权明确的源码快照可以进入 Git。 |
-| `docs/project/`、`docs/decisions/`、`docs/reviews/` | 项目基线、决策和评审记录。 |
-| `deliveries/*/*/README.md` | 外部资料与成员交付的清单、来源、许可和校验值。 |
+| `railcraft-unity/Assets/RailCraft/ThirdPerson/` | 跟踪运行时、生成器、场景、视觉工厂、测试和稳定替换契约 |
+| `railcraft-unity/Documentation/` | 当前规格、资产审计、模型交接、发行和验收说明 |
+| `railcraft-unity/Artifacts/Whitebox/ArtAlpha/` | 当前批次可复核日志、测试 XML、截图和哈希 |
+| `docs/project/` | 当前产品基线、约束评审、状态和变更工作流 |
+| `docs/decisions/`、`docs/reviews/` | 决策与历史评审记录，需标明适用范围 |
+| `deliveries/**/README.md` | 外部资料来源、许可、校验和隔离说明 |
 
-当前模型网格类文件通过 Git LFS 管理，包括 `*.fbx`、`*.blend`、`*.step`、
-`*.glb`、`*.obj`、`*.stl`、`*.x_t`、`*.psd`、`*.tga`。原始 CAD 候选先登记到
-`railcraft-unity/Assets/RailCraft/ThirdPerson/Art/Models/SourceCAD/`，
-确认授权、单位、原点和导出格式后，再把可运行网格放进 Unity 模型目录。
+## 退休与归档
+
+第一版白盒之前的 Godot、Ren'Py、外部 Godot 和旧 Unity 固定视角目录已移出工作树。日期
+归档位于本机 `.tmp/retired-demos-20260904/`，Git 历史和 tag 仍可恢复。归档内容不参与
+当前构建、题库、资产审计或竞赛提交。
+
+## 资产规则
+
+- 模型网格、贴图和音频必须有来源、许可、哈希和用途记录。
+- 资产身份分为展示风格、通用教学件、车型专用工程件；身份不明时只能留在审模区。
+- 原始 CAD、未经审核的外部包和缺少再分发授权的源码保留在私有/本地存储。
+- 运行时网格进入 Unity 前需记录单位、原点、轴向、LOD、碰撞、材质和纹理预算。
+- 题库与零件数量相互独立；新增题目不自动新增工位或 PartId。
 
 ## 本地可再生内容
 
-以下目录已由 `.gitignore` 排除。关闭相应应用后可以按需清理，重新打开项目时会自动或通过构建流程生成。
+Unity 的 `Library/`、`Temp/`、`Obj/`、`Logs/`、`UserSettings/`、`Builds/`、
+`ReleasePackages/`，以及根目录 `.tmp/`、`tmp/`、`TestResults/`、`Logs/` 都不应提交。
+外部交付 `deliveries/**/release/**` 和根目录 `*.unitypackage`、`*.zip` 同样保持忽略。
 
-| 范围 | 可再生目录 |
-| --- | --- |
-| Unity | `Library/`、`Temp/`、`obj/`、`Logs/`、`UserSettings/`、`TestResults/`、`Builds/` |
-| 本地工作 | `.tmp/`、`tmp/`、`.agents/`、`.superpowers/` |
+清理前关闭 Unity、相关 Player 和资产处理程序；先核对具体路径与当前证据，再采取可恢复
+的移动或删除操作。不要使用 `git clean -fdx`、强制重置或根目录递归删除。
 
-`Builds/Whitebox/` 是当前白盒本地运行包，`Builds/Windows/` 是冻结 v0.1 的本地
-运行包；对外发布时均应作为 GitHub Release 附件或交付包处理。当前白盒证据写入
-`Artifacts/Whitebox/Acceptance/`，冻结 v0.1 证据保存在 `Artifacts/Acceptance/`。
-证据目录只跟踪可复核的最终日志、测试 XML、性能数据、截图和校验值，不跟踪完整
-Build 目录或中间捕获。
+## 批次同步
 
-## 交付与归档规则
+每批改动围绕一个可验证目标组织，并同步：
 
-- `deliveries/**/release/**` 保存未经修改的原始二进制交付，保持忽略状态；对应 README 记录来源与 SHA-256。
-- 缺少许可证或再分发授权的外部源码保持本地隔离；Git 只跟踪交付登记、校验值、评审结论和隔离规则。
-- `deliveries/**/review/**` 中的评审预览仅在完成审核并确认需要版本化时单独暂存，避免把候选模型误当作生产资产。
-- 不使用 `git add -A`、`git clean -fdx` 或根目录递归移动/删除来整理项目；先确认具体路径、归属和可再生性。
-- 需要清理大型缓存前，确认 Unity、Godot 和相关构建进程均已关闭，并保留当前可运行包或交付副本。
+1. 代码/场景/资产；
+2. 针对性测试；
+3. 当前文档与来源清单；
+4. `CURRENT_STATUS.md`、必要时的基线和约束评审；
+5. 同批次的测试、构建、烟测和截图证据。
 
-## 当前开发与冻结基线
-
-- 当前第三人称白盒的规格、流程和验收条件位于
-  `railcraft-unity/Documentation/ThirdPersonWhitebox.md`，当前证据位于
-  `railcraft-unity/Artifacts/Whitebox/Acceptance/`。
-- 冻结 Unity v0.1 的范围、验收条件、性能基线和最终证据位于既有
-  `Documentation/Scope.md`、`Acceptance.md`、`PerformanceBudget.md` 与
-  `Artifacts/Acceptance/`；这些文件的历史结论不随白盒迭代改写。
-- Godot 历史 Demo 的发布、运行和验收资料保留在 `apps/railcraft-godot/`。
-- 当前计划的登记规则见 `docs/project/plans/README.md`。`docs/superpowers/` 和
-  `.superpowers/` 中的工具执行计划不会自动成为项目基线或进入暂存。
-- 公开推送前，复核 `git status --short`，确保候选 CAD、研究原件和本地缓存不会进入提交。
-
-## 批次提交与推送
-
-1. 每批改动围绕一个可验收目标组织，并同步代码、场景、测试、文档和该批最终证据。
-2. 运行与风险相称的自动化测试、Windows 构建和成品冒烟；结果不完整时不标记该批完成。
-3. 提交前逐项检查 `git diff`、`git status --short` 和目标路径，排除缓存、完整 Build、
-   原始 `deliveries/**/release/**`、临时截图和其他成员改动。
-4. 每个通过验证的批次创建独立提交并及时推送当前功能分支。不要把多个无关批次压在
-   一次提交或一次最终推送中，也不要为整理历史而强制推送共享分支。
-5. 证据与产生它的代码保持同批；冻结基线的勘误使用独立提交，并在提交说明中标出
-   影响范围和未改变的历史结论。
+提交前运行 `git diff --check`、`git status --short --untracked-files=all` 和
+`tools/Test-RepositoryLayout.ps1`，确认没有缓存、原始交付或其他成员改动混入。

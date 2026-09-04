@@ -22,12 +22,21 @@ namespace RailCraft.ThirdPerson.World
         [SerializeField] private GameObject[] moduleVisuals = Array.Empty<GameObject>();
         [SerializeField] private GameObject[] partVisuals = Array.Empty<GameObject>();
         [SerializeField] private GameObject completedLandingVisual;
+        [SerializeField] private bool usesWorkPackage;
+        [SerializeField] private WorkPackageId workPackageId;
 
         private WhiteboxGameSessionHost subscribedHost;
 
         public ModuleId TargetModuleId => targetModuleId;
-        public int InstalledInputCount => CountInstalledModules() + CountInstalledParts();
-        public int RequiredInputCount => (requiredModules?.Length ?? 0) + (requiredParts?.Length ?? 0);
+        public int InstalledInputCount => CountInstalledModules() +
+            (usesWorkPackage
+                ? (ArePackagePartsInstalled() ? 1 : 0)
+                : CountInstalledParts());
+        public int RequiredInputCount => (requiredModules?.Length ?? 0) +
+            (usesWorkPackage ? 1 : (requiredParts?.Length ?? 0));
+        public int SubPartInputCount => requiredParts?.Length ?? 0;
+        public bool UsesWorkPackage => usesWorkPackage;
+        public WorkPackageId WorkPackageId => workPackageId;
         public bool IsLandingComplete => sessionHost != null && sessionHost.Session.IsLandingComplete;
         public bool IsVehicleComplete => sessionHost != null && sessionHost.Session.IsVehicleComplete;
 
@@ -45,6 +54,15 @@ namespace RailCraft.ThirdPerson.World
                     return sessionHost.Session.IsModuleComplete(child)
                         ? $"按 E 将{WhiteboxDisplayNames.Module(child)}提交到{stationDisplayName}"
                         : $"请先完成{WhiteboxDisplayNames.Module(child)}";
+                }
+
+                if (usesWorkPackage)
+                {
+                    var packageSession = sessionHost.Session as IWorkPackageGameSession;
+                    return packageSession != null &&
+                           packageSession.IsWorkPackageCollected(workPackageId)
+                        ? $"按 E 将{WhiteboxDisplayNames.WorkPackage(workPackageId)}提交到{stationDisplayName}"
+                        : $"请先领取{WhiteboxDisplayNames.WorkPackage(workPackageId)}";
                 }
 
                 var partIndex = FindNextPartIndex();
@@ -89,7 +107,43 @@ namespace RailCraft.ThirdPerson.World
             moduleVisuals = (GameObject[])configuredModuleVisuals.Clone();
             partVisuals = (GameObject[])configuredPartVisuals.Clone();
             completedLandingVisual = configuredCompletedLandingVisual;
+            usesWorkPackage = false;
+            workPackageId = default;
             Subscribe();
+            RefreshVisuals();
+        }
+
+        /// <summary>
+        /// Configures the compact landing input. The package's child PartIds
+        /// still appear in the landing visual, while one interaction submits
+        /// them atomically to the final module.
+        /// </summary>
+        public void ConfigureWorkPackage(
+            WhiteboxGameSessionHost configuredSessionHost,
+            ModuleId configuredTargetModuleId,
+            WorkPackageId configuredWorkPackageId,
+            string configuredStationDisplayName,
+            ModuleId[] configuredRequiredModules,
+            PartId[] configuredRequiredParts,
+            Transform[] configuredModuleSnapSlots,
+            Transform[] configuredPartSnapSlots,
+            GameObject[] configuredModuleVisuals,
+            GameObject[] configuredPartVisuals,
+            GameObject configuredCompletedLandingVisual)
+        {
+            Configure(
+                configuredSessionHost,
+                configuredTargetModuleId,
+                configuredStationDisplayName,
+                configuredRequiredModules,
+                configuredRequiredParts,
+                configuredModuleSnapSlots,
+                configuredPartSnapSlots,
+                configuredModuleVisuals,
+                configuredPartVisuals,
+                configuredCompletedLandingVisual);
+            usesWorkPackage = true;
+            workPackageId = configuredWorkPackageId;
             RefreshVisuals();
         }
 
@@ -107,6 +161,27 @@ namespace RailCraft.ThirdPerson.World
             if (moduleIndex >= 0)
             {
                 InstallModule(moduleIndex);
+                return;
+            }
+
+            if (usesWorkPackage)
+            {
+                var packageSession = sessionHost.Session as IWorkPackageGameSession;
+                if (packageSession == null)
+                {
+                    sessionHost.NotifyFeedback("当前会话不支持落车材料包");
+                    return;
+                }
+
+                var packageResult = sessionHost.InstallWorkPackage(targetModuleId, workPackageId);
+                if (!packageResult.Accepted)
+                {
+                    sessionHost.NotifyFeedback(
+                        $"无法提交{WhiteboxDisplayNames.WorkPackage(workPackageId)}（{packageResult.Status}）");
+                    return;
+                }
+
+                AfterInputInstalled(WhiteboxDisplayNames.WorkPackage(workPackageId));
                 return;
             }
 
@@ -243,6 +318,22 @@ namespace RailCraft.ThirdPerson.World
                     count++;
             }
             return count;
+        }
+
+        private bool ArePackagePartsInstalled()
+        {
+            if (!usesWorkPackage)
+                return false;
+
+            var package = WhiteboxWorkPackageCatalog.Get(workPackageId);
+            foreach (var partId in package.RequiredParts)
+            {
+                if (sessionHost == null ||
+                    !sessionHost.Session.IsPartInstalled(targetModuleId, partId))
+                    return false;
+            }
+
+            return package.RequiredParts.Count > 0;
         }
 
         private void RefreshVisuals()

@@ -149,47 +149,380 @@ namespace RailCraft.ThirdPerson.Domain
 
         public QuizSubmissionResult SubmitAnswer(string questionId, int selectedOptionIndex)
         {
-            if (!Catalog.TryGetQuestion(questionId, out var question))
+            return SubmitAnswerInternal(questionId, selectedOptionIndex, grantPart: true);
+        }
+
+        /// <summary>
+        /// Answers one of a material package's explicitly configured gate
+        /// questions. Correct answers are recorded in the same answer history
+        /// as the legacy API, while package parts are unlocked together only
+        /// after every gate question has been answered correctly.
+        /// </summary>
+        public WorkPackageAnswerResult SubmitWorkPackageAnswer(
+            WorkPackageId workPackageId,
+            string questionId,
+            int selectedOptionIndex)
+        {
+            if (!WhiteboxWorkPackageCatalog.TryGet(workPackageId, out var package))
             {
-                return new QuizSubmissionResult(
-                    QuizSubmissionStatus.UnknownQuestion,
+                return new WorkPackageAnswerResult(
+                    WorkPackageAnswerStatus.UnknownWorkPackage,
+                    workPackageId,
                     questionId,
                     null,
                     false,
-                    -1);
-            }
-
-            if (!question.IsValidOption(selectedOptionIndex))
-            {
-                return new QuizSubmissionResult(
-                    QuizSubmissionStatus.InvalidOption,
-                    question.Id,
-                    question.RewardPart,
                     false,
-                    question.CorrectOptionIndex);
+                    0,
+                    0,
+                    0,
+                    0);
             }
 
-            var isCorrect = question.IsCorrectOption(selectedOptionIndex);
-            RecordAnswer(isCorrect);
-            if (!isCorrect)
+            if (!package.IsMaterialPackage)
             {
-                return new QuizSubmissionResult(
-                    QuizSubmissionStatus.Incorrect,
-                    question.Id,
-                    question.RewardPart,
+                return new WorkPackageAnswerResult(
+                    WorkPackageAnswerStatus.NotMaterialPackage,
+                    workPackageId,
+                    questionId,
+                    null,
                     false,
-                    question.CorrectOptionIndex);
+                    false,
+                    0,
+                    package.RequiredQuestionCount,
+                    0,
+                    package.RequiredParts.Count);
             }
 
-            var rewardUnlocked = unlockedParts.Add(question.RewardPart);
-            if (FlowStatus != AssemblyFlowStatus.Completed)
-                correctQuestionIds.Add(question.Id);
-            return new QuizSubmissionResult(
-                QuizSubmissionStatus.Correct,
-                question.Id,
-                question.RewardPart,
-                rewardUnlocked,
-                question.CorrectOptionIndex);
+            if (!Catalog.TryGetQuestion(questionId, out _))
+            {
+                return new WorkPackageAnswerResult(
+                    WorkPackageAnswerStatus.UnknownQuestion,
+                    workPackageId,
+                    questionId,
+                    null,
+                    IsWorkPackageKnowledgeComplete(workPackageId),
+                    false,
+                    GetWorkPackageAnsweredQuestionCount(workPackageId),
+                    package.RequiredQuestionCount,
+                    CountPackageParts(package, unlockedParts),
+                    package.RequiredParts.Count);
+            }
+
+            if (!package.ContainsCoreQuestion(questionId))
+            {
+                return new WorkPackageAnswerResult(
+                    WorkPackageAnswerStatus.QuestionNotInPackage,
+                    workPackageId,
+                    questionId,
+                    null,
+                    IsWorkPackageKnowledgeComplete(workPackageId),
+                    false,
+                    GetWorkPackageAnsweredQuestionCount(workPackageId),
+                    package.RequiredQuestionCount,
+                    CountPackageParts(package, unlockedParts),
+                    package.RequiredParts.Count);
+            }
+
+            var quizResult = SubmitAnswerInternal(questionId, selectedOptionIndex, grantPart: false);
+            var status = MapWorkPackageAnswerStatus(quizResult.Status);
+            var knowledgeComplete = IsWorkPackageKnowledgeComplete(workPackageId);
+            var packageUnlocked = false;
+            if (quizResult.IsCorrect && knowledgeComplete && !IsWorkPackageUnlocked(workPackageId))
+                packageUnlocked = UnlockWorkPackageParts(package) > 0;
+
+            return new WorkPackageAnswerResult(
+                status,
+                workPackageId,
+                questionId,
+                quizResult,
+                knowledgeComplete,
+                packageUnlocked,
+                GetWorkPackageAnsweredQuestionCount(workPackageId),
+                package.RequiredQuestionCount,
+                CountPackageParts(package, unlockedParts),
+                package.RequiredParts.Count);
+        }
+
+        public bool IsWorkPackageKnowledgeComplete(WorkPackageId workPackageId)
+        {
+            if (!WhiteboxWorkPackageCatalog.TryGet(workPackageId, out var package)
+                || !package.IsMaterialPackage
+                || package.RequiredQuestionCount == 0)
+                return false;
+
+            foreach (var questionId in package.CoreQuestionIds)
+            {
+                if (!correctQuestionIds.Contains(questionId))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool IsWorkPackageUnlocked(WorkPackageId workPackageId)
+        {
+            if (!WhiteboxWorkPackageCatalog.TryGet(workPackageId, out var package)
+                || !package.IsMaterialPackage
+                || package.RequiredParts.Count == 0)
+                return false;
+
+            return CountPackageParts(package, unlockedParts) == package.RequiredParts.Count;
+        }
+
+        public bool IsWorkPackageCollected(WorkPackageId workPackageId)
+        {
+            if (!WhiteboxWorkPackageCatalog.TryGet(workPackageId, out var package)
+                || !package.IsMaterialPackage
+                || package.RequiredParts.Count == 0)
+                return false;
+
+            return CountPackageParts(package, collectedParts) == package.RequiredParts.Count;
+        }
+
+        public int GetWorkPackageAnsweredQuestionCount(WorkPackageId workPackageId)
+        {
+            if (!WhiteboxWorkPackageCatalog.TryGet(workPackageId, out var package))
+                return 0;
+
+            var count = 0;
+            foreach (var questionId in package.CoreQuestionIds)
+            {
+                if (correctQuestionIds.Contains(questionId))
+                    count++;
+            }
+
+            return count;
+        }
+
+        /// <summary>
+        /// Collects every part represented by a package in one transaction.
+        /// Existing per-part collection remains available for old saves and
+        /// adapters.
+        /// </summary>
+        public WorkPackageCollectionResult CollectWorkPackage(WorkPackageId workPackageId)
+        {
+            if (!WhiteboxWorkPackageCatalog.TryGet(workPackageId, out var package))
+                return new WorkPackageCollectionResult(
+                    WorkPackageCollectionStatus.UnknownWorkPackage,
+                    workPackageId,
+                    Array.Empty<PartId>(),
+                    0,
+                    0);
+
+            if (!package.IsMaterialPackage)
+                return new WorkPackageCollectionResult(
+                    WorkPackageCollectionStatus.NotMaterialPackage,
+                    workPackageId,
+                    Array.Empty<PartId>(),
+                    0,
+                    package.RequiredParts.Count);
+
+            if (!IsWorkPackageUnlocked(workPackageId))
+                return new WorkPackageCollectionResult(
+                    WorkPackageCollectionStatus.Locked,
+                    workPackageId,
+                    SnapshotPackageParts(package, collectedParts),
+                    CountPackageParts(package, collectedParts),
+                    package.RequiredParts.Count);
+
+            var pending = new List<PartId>();
+            foreach (var partId in package.RequiredParts)
+            {
+                if (!collectedParts.Contains(partId))
+                    pending.Add(partId);
+            }
+
+            if (pending.Count == 0)
+            {
+                return new WorkPackageCollectionResult(
+                    WorkPackageCollectionStatus.AlreadyCollected,
+                    workPackageId,
+                    SnapshotPackageParts(package, collectedParts),
+                    package.RequiredParts.Count,
+                    package.RequiredParts.Count);
+            }
+
+            // Preflight inventory so a malformed/incompatible state cannot
+            // leave a package half-collected.
+            foreach (var partId in pending)
+            {
+                if (Inventory.Contains(partId))
+                {
+                    return new WorkPackageCollectionResult(
+                        WorkPackageCollectionStatus.InvalidState,
+                        workPackageId,
+                        SnapshotPackageParts(package, collectedParts),
+                        CountPackageParts(package, collectedParts),
+                        package.RequiredParts.Count);
+                }
+            }
+
+            var changed = new List<PartId>();
+            foreach (var partId in pending)
+            {
+                if (!Inventory.Grant(partId))
+                {
+                    RollbackCollectedParts(changed);
+                    return new WorkPackageCollectionResult(
+                        WorkPackageCollectionStatus.InvalidState,
+                        workPackageId,
+                        SnapshotPackageParts(package, collectedParts),
+                        CountPackageParts(package, collectedParts),
+                        package.RequiredParts.Count);
+                }
+
+                if (!collectedParts.Add(partId))
+                {
+                    // The current grant is not yet in `changed`, so undo it
+                    // explicitly before rolling back earlier items.
+                    Inventory.Consume(partId);
+                    RollbackCollectedParts(changed);
+                    return new WorkPackageCollectionResult(
+                        WorkPackageCollectionStatus.InvalidState,
+                        workPackageId,
+                        SnapshotPackageParts(package, collectedParts),
+                        CountPackageParts(package, collectedParts),
+                        package.RequiredParts.Count);
+                }
+
+                changed.Add(partId);
+            }
+
+            BeginProgress();
+            return new WorkPackageCollectionResult(
+                WorkPackageCollectionStatus.Collected,
+                workPackageId,
+                SnapshotPackageParts(package, collectedParts),
+                package.RequiredParts.Count,
+                package.RequiredParts.Count);
+        }
+
+        /// <summary>
+        /// Installs all parts in a package into its configured assembly module
+        /// as one atomic operation. The legacy InstallPart API is unchanged.
+        /// </summary>
+        public WorkPackageInstallationResult InstallWorkPackage(
+            ModuleId moduleId,
+            WorkPackageId workPackageId)
+        {
+            if (!WhiteboxWorkPackageCatalog.TryGet(workPackageId, out var package))
+                return new WorkPackageInstallationResult(
+                    WorkPackageInstallationStatus.UnknownWorkPackage,
+                    workPackageId,
+                    moduleId,
+                    Array.Empty<PartId>(),
+                    0,
+                    0,
+                    false);
+
+            if (!package.IsMaterialPackage)
+                return new WorkPackageInstallationResult(
+                    WorkPackageInstallationStatus.NotMaterialPackage,
+                    workPackageId,
+                    moduleId,
+                    Array.Empty<PartId>(),
+                    0,
+                    package.RequiredParts.Count,
+                    false);
+
+            if (!moduleStates.TryGetValue(moduleId, out var state))
+                return new WorkPackageInstallationResult(
+                    WorkPackageInstallationStatus.UnknownModule,
+                    workPackageId,
+                    moduleId,
+                    Array.Empty<PartId>(),
+                    0,
+                    package.RequiredParts.Count,
+                    false);
+
+            if (package.AssemblyModule.HasValue && package.AssemblyModule.Value != moduleId)
+            {
+                return new WorkPackageInstallationResult(
+                    WorkPackageInstallationStatus.PackageNotInModule,
+                    workPackageId,
+                    moduleId,
+                    SnapshotPackageParts(package, state.InstalledParts),
+                    CountPackageParts(package, state.InstalledParts),
+                    package.RequiredParts.Count,
+                    state.IsComplete);
+            }
+
+            foreach (var partId in package.RequiredParts)
+            {
+                if (!state.Definition.Requires(partId))
+                {
+                    return new WorkPackageInstallationResult(
+                        WorkPackageInstallationStatus.PackageNotInModule,
+                        workPackageId,
+                        moduleId,
+                        SnapshotPackageParts(package, state.InstalledParts),
+                        CountPackageParts(package, state.InstalledParts),
+                        package.RequiredParts.Count,
+                        state.IsComplete);
+                }
+            }
+
+            var pending = new List<PartId>();
+            foreach (var partId in package.RequiredParts)
+            {
+                if (!state.HasInstalled(partId))
+                    pending.Add(partId);
+            }
+
+            if (pending.Count == 0)
+            {
+                return new WorkPackageInstallationResult(
+                    WorkPackageInstallationStatus.AlreadyInstalled,
+                    workPackageId,
+                    moduleId,
+                    SnapshotPackageParts(package, state.InstalledParts),
+                    package.RequiredParts.Count,
+                    package.RequiredParts.Count,
+                    state.IsComplete);
+            }
+
+            foreach (var partId in pending)
+            {
+                if (!Inventory.Contains(partId))
+                {
+                    return new WorkPackageInstallationResult(
+                        WorkPackageInstallationStatus.MissingFromInventory,
+                        workPackageId,
+                        moduleId,
+                        SnapshotPackageParts(package, state.InstalledParts),
+                        CountPackageParts(package, state.InstalledParts),
+                        package.RequiredParts.Count,
+                        state.IsComplete);
+                }
+            }
+
+            foreach (var partId in pending)
+                Inventory.Consume(partId);
+
+            if (!state.InstallAll(pending))
+            {
+                foreach (var partId in pending)
+                    Inventory.Grant(partId);
+                return new WorkPackageInstallationResult(
+                    WorkPackageInstallationStatus.InvalidState,
+                    workPackageId,
+                    moduleId,
+                    SnapshotPackageParts(package, state.InstalledParts),
+                    CountPackageParts(package, state.InstalledParts),
+                    package.RequiredParts.Count,
+                    state.IsComplete);
+            }
+
+            BeginProgress();
+            UpdateCommissioningAvailability();
+            return new WorkPackageInstallationResult(
+                WorkPackageInstallationStatus.Installed,
+                workPackageId,
+                moduleId,
+                SnapshotPackageParts(package, state.InstalledParts),
+                package.RequiredParts.Count,
+                package.RequiredParts.Count,
+                state.IsComplete);
         }
 
         public PartCollectionResult CollectPart(PartId partId)
@@ -426,6 +759,10 @@ namespace RailCraft.ThirdPerson.Domain
             return new WhiteboxGameSessionSnapshot
             {
                 SchemaVersion = WhiteboxGameSessionSnapshot.CurrentSchemaVersion,
+                QuestionBankVersion = WhiteboxContentVersions.QuestionBank,
+                CoreQuestionSetVersion = WhiteboxContentVersions.CoreQuestionSet,
+                WorkPackageRecipeVersion = WhiteboxContentVersions.WorkPackageRecipe,
+                RewardRoutingVersion = WhiteboxContentVersions.RewardRouting,
                 FlowStatus = FlowStatus,
                 StartedAtUnixMilliseconds = EncodeTimestamp(StartedAtUtc),
                 CompletedAtUnixMilliseconds = EncodeTimestamp(CompletedAtUtc),
@@ -518,6 +855,148 @@ namespace RailCraft.ThirdPerson.Domain
             correctQuestionIds.Clear();
         }
 
+        private QuizSubmissionResult SubmitAnswerInternal(
+            string questionId,
+            int selectedOptionIndex,
+            bool grantPart)
+        {
+            if (!Catalog.TryGetQuestion(questionId, out var question))
+            {
+                return new QuizSubmissionResult(
+                    QuizSubmissionStatus.UnknownQuestion,
+                    questionId,
+                    null,
+                    false,
+                    -1);
+            }
+
+            if (!question.IsValidOption(selectedOptionIndex))
+            {
+                return new QuizSubmissionResult(
+                    QuizSubmissionStatus.InvalidOption,
+                    question.Id,
+                    question.RewardPart,
+                    false,
+                    question.CorrectOptionIndex);
+            }
+
+            var isCorrect = question.IsCorrectOption(selectedOptionIndex);
+            RecordAnswer(isCorrect);
+            if (!isCorrect)
+            {
+                return new QuizSubmissionResult(
+                    QuizSubmissionStatus.Incorrect,
+                    question.Id,
+                    question.RewardPart,
+                    false,
+                    question.CorrectOptionIndex);
+            }
+
+            var rewardUnlocked = grantPart && question.GrantsPart &&
+                                 unlockedParts.Add(question.RewardPart);
+            if (FlowStatus != AssemblyFlowStatus.Completed)
+                correctQuestionIds.Add(question.Id);
+            return new QuizSubmissionResult(
+                QuizSubmissionStatus.Correct,
+                question.Id,
+                question.GrantsPart ? question.RewardPart : (PartId?)null,
+                rewardUnlocked,
+                question.CorrectOptionIndex);
+        }
+
+        private static WorkPackageAnswerStatus MapWorkPackageAnswerStatus(
+            QuizSubmissionStatus status)
+        {
+            switch (status)
+            {
+                case QuizSubmissionStatus.Correct:
+                    return WorkPackageAnswerStatus.Correct;
+                case QuizSubmissionStatus.Incorrect:
+                    return WorkPackageAnswerStatus.Incorrect;
+                case QuizSubmissionStatus.InvalidOption:
+                    return WorkPackageAnswerStatus.InvalidOption;
+                default:
+                    return WorkPackageAnswerStatus.UnknownQuestion;
+            }
+        }
+
+        private int UnlockWorkPackageParts(WorkPackageDefinition package)
+        {
+            // Validate the complete package before mutating the unlock set so
+            // custom catalogs cannot receive only a subset of a package.
+            foreach (var partId in package.RequiredParts)
+            {
+                if (!Catalog.TryGetPart(partId, out _))
+                    return 0;
+            }
+
+            var changed = 0;
+            foreach (var partId in package.RequiredParts)
+            {
+                if (unlockedParts.Add(partId))
+                    changed++;
+            }
+
+            return changed;
+        }
+
+        private static int CountPackageParts(
+            WorkPackageDefinition package,
+            IEnumerable<PartId> source)
+        {
+            if (package == null || source == null)
+                return 0;
+
+            var count = 0;
+            foreach (var partId in package.RequiredParts)
+            {
+                if (ContainsPart(source, partId))
+                    count++;
+            }
+
+            return count;
+        }
+
+        private static PartId[] SnapshotPackageParts(
+            WorkPackageDefinition package,
+            IEnumerable<PartId> source)
+        {
+            if (package == null || source == null)
+                return Array.Empty<PartId>();
+
+            var snapshot = new List<PartId>();
+            foreach (var partId in package.RequiredParts)
+            {
+                if (ContainsPart(source, partId))
+                    snapshot.Add(partId);
+            }
+
+            return snapshot.ToArray();
+        }
+
+        private static bool ContainsPart(IEnumerable<PartId> source, PartId partId)
+        {
+            foreach (var candidate in source)
+            {
+                if (candidate == partId)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void RollbackCollectedParts(IEnumerable<PartId> changedParts)
+        {
+            if (changedParts == null)
+                return;
+
+            foreach (var partId in changedParts)
+            {
+                collectedParts.Remove(partId);
+                Inventory.Consume(partId);
+            }
+        }
+
         private void ApplySnapshot(WhiteboxGameSessionSnapshot snapshot)
         {
             if (snapshot.SchemaVersion != WhiteboxGameSessionSnapshot.CurrentSchemaVersion)
@@ -526,6 +1005,27 @@ namespace RailCraft.ThirdPerson.Domain
                     $"Unsupported session snapshot schema: {snapshot.SchemaVersion}.",
                     nameof(snapshot));
             }
+
+            ValidateContentVersion(
+                snapshot.QuestionBankVersion,
+                WhiteboxContentVersions.QuestionBank,
+                "question bank",
+                snapshot);
+            ValidateContentVersion(
+                snapshot.CoreQuestionSetVersion,
+                WhiteboxContentVersions.CoreQuestionSet,
+                "core question set",
+                snapshot);
+            ValidateContentVersion(
+                snapshot.WorkPackageRecipeVersion,
+                WhiteboxContentVersions.WorkPackageRecipe,
+                "work package recipe",
+                snapshot);
+            ValidateContentVersion(
+                snapshot.RewardRoutingVersion,
+                WhiteboxContentVersions.RewardRouting,
+                "reward routing",
+                snapshot);
 
             if (!Enum.IsDefined(typeof(AssemblyFlowStatus), snapshot.FlowStatus))
                 throw new ArgumentException("Snapshot has an unknown flow status.", nameof(snapshot));
@@ -561,10 +1061,11 @@ namespace RailCraft.ThirdPerson.Domain
             AnswerAttemptCount = snapshot.AnswerAttemptCount;
             CorrectAnswerCount = snapshot.CorrectAnswerCount;
 
-            if (CorrectAnswerCount < unlockedParts.Count)
+            var minimumCorrectAnswerCount = GetMinimumCorrectAnswerCountForUnlockedParts();
+            if (CorrectAnswerCount < minimumCorrectAnswerCount)
             {
                 throw new ArgumentException(
-                    "Snapshot has fewer correct answers than distinct unlocked parts.",
+                    "Snapshot has fewer correct answers than its unlocked material packages.",
                     nameof(snapshot));
             }
             if (CorrectAnswerCount < correctQuestionIds.Count)
@@ -629,12 +1130,10 @@ namespace RailCraft.ThirdPerson.Domain
                         $"Snapshot contains unknown correct question id: {questionId}.",
                         nameof(snapshot));
                 }
-                if (!unlockedParts.Contains(question.RewardPart))
-                {
-                    throw new ArgumentException(
-                        "Recorded correct questions must have an unlocked reward part.",
-                        nameof(snapshot));
-                }
+                // Correct-answer history is intentionally independent from the
+                // current reward route. A package can record its first gate
+                // answer before any material is unlocked, and content updates
+                // may reclassify a legacy question without invalidating saves.
                 if (!correctQuestionIds.Add(question.Id))
                 {
                     throw new ArgumentException(
@@ -642,6 +1141,50 @@ namespace RailCraft.ThirdPerson.Domain
                         nameof(snapshot));
                 }
             }
+        }
+
+        private int GetMinimumCorrectAnswerCountForUnlockedParts()
+        {
+            var packageAccountedParts = new HashSet<PartId>();
+            var minimum = 0;
+
+            foreach (var package in WhiteboxWorkPackageCatalog.Definitions)
+            {
+                if (!package.IsMaterialPackage || package.RequiredParts.Count == 0)
+                    continue;
+
+                var allPartsUnlocked = CountPackageParts(package, unlockedParts) ==
+                                        package.RequiredParts.Count;
+                var allGateQuestionsAnswered = package.RequiredQuestionCount > 0 &&
+                    GetWorkPackageAnsweredQuestionCount(package.Id) == package.RequiredQuestionCount;
+                if (!allPartsUnlocked || !allGateQuestionsAnswered)
+                    continue;
+
+                minimum += package.RequiredQuestionCount;
+                foreach (var partId in package.RequiredParts)
+                    packageAccountedParts.Add(partId);
+                // Legacy routes may have unlocked a question's historical
+                // rewardPart before the package adapter was introduced. Count
+                // that reward as covered by the package gate question too.
+                foreach (var questionId in package.CoreQuestionIds)
+                {
+                    if (Catalog.TryGetQuestion(questionId, out var question) &&
+                        question.GrantsPart)
+                    {
+                        packageAccountedParts.Add(question.RewardPart);
+                    }
+                }
+            }
+
+            // Parts unlocked through the legacy one-question/one-part API keep
+            // the original lower-bound validation rule.
+            foreach (var partId in unlockedParts)
+            {
+                if (!packageAccountedParts.Contains(partId))
+                    minimum++;
+            }
+
+            return minimum;
         }
 
         private void AddInventory(
@@ -968,6 +1511,23 @@ namespace RailCraft.ThirdPerson.Domain
             return timestamp.HasValue
                 ? timestamp.Value.ToUnixTimeMilliseconds()
                 : WhiteboxGameSessionSnapshot.MissingTimestamp;
+        }
+
+        private static void ValidateContentVersion(
+            string snapshotVersion,
+            string currentVersion,
+            string label,
+            WhiteboxGameSessionSnapshot snapshot)
+        {
+            // Empty is the compatibility marker for snapshots written before
+            // independent content versions were introduced.
+            if (string.IsNullOrWhiteSpace(snapshotVersion) ||
+                string.Equals(snapshotVersion, currentVersion, StringComparison.Ordinal))
+                return;
+
+            throw new ArgumentException(
+                $"Unsupported {label} version: {snapshotVersion}.",
+                nameof(snapshot));
         }
 
         private static DateTimeOffset? DecodeTimestamp(

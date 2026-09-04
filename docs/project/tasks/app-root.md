@@ -1,4 +1,7 @@
-# AppRoot 最小任务清单
+# AppRoot 最小任务清单（历史 Godot 任务）
+
+> 本任务已冻结，仅供历史审计；当前 Unity 主线不执行其中的 Godot、`project.godot` 或
+> `quality.yml` 步骤。当前入口见 `../CURRENT_BASELINE.md`。
 
 > 设计依据：`doc/detailed-design.md` 第 2.3、3.2、3.3、14–16、19、22 节  
 > 模块目标：建立可复现工程，创建并连接全部模块，完成启动校验、主场景冒烟、CI、Windows 构建和交付集成。

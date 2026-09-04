@@ -102,6 +102,41 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         }
 
         [Test]
+        public void ContinueKeepsAWorkPackageAfterOnlyItsFirstGateAnswer()
+        {
+            var sourceObject = Child("PackageSource");
+            var sourceHost = CreateHost(sourceObject, out var sourceSession);
+            var sourceSave = sourceObject.AddComponent<WhiteboxSaveController>();
+            sourceSave.Configure(sourceHost, saveKey, true);
+            sourceSave.StartNewGame();
+            var package = WhiteboxWorkPackageCatalog.Get(WorkPackageId.PrimarySuspension);
+            var question = sourceSession.DomainSession.Catalog.GetQuestion(
+                package.CoreQuestionIds[0]);
+
+            var answer = sourceHost.SubmitWorkPackageAnswer(
+                package.Id,
+                question.Id,
+                question.CorrectOptionIndex);
+            Assert.That(answer.IsCorrect, Is.True);
+            Assert.That(answer.KnowledgeComplete, Is.False);
+            Assert.That(sourceSave.HasSave, Is.True);
+
+            var targetObject = Child("PackageTarget");
+            var targetHost = CreateHost(targetObject, out var targetSession);
+            var targetSave = targetObject.AddComponent<WhiteboxSaveController>();
+            targetSave.Configure(targetHost, saveKey, true);
+
+            Assert.That(targetSave.TryContinueGame(), Is.True);
+            Assert.That(targetSave.HasSave, Is.True);
+            Assert.That(
+                targetSession.DomainSession.GetWorkPackageAnsweredQuestionCount(package.Id),
+                Is.EqualTo(1));
+            Assert.That(
+                targetSession.DomainSession.IsWorkPackageUnlocked(package.Id),
+                Is.False);
+        }
+
+        [Test]
         public void ContinueRestoresTheSelectedAssemblyVariant()
         {
             var sourceObject = Child("VariantSource");
@@ -119,6 +154,25 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
             Assert.That(
                 targetHost.SelectedAssemblyVariant,
                 Is.EqualTo(AssemblyVariantId.Y25Freight));
+        }
+
+        [Test]
+        public void RejectedSnapshotDoesNotChangeVariantOrRaisePresentationEvents()
+        {
+            var host = CreateHost(root, out _);
+            var variantEvents = 0;
+            var stateEvents = 0;
+            host.AssemblyVariantChanged += _ => variantEvents++;
+            host.StateChanged += () => stateEvents++;
+            var invalid = host.ExportSnapshot();
+            invalid.AssemblyVariant = AssemblyVariantId.Y25Freight;
+            invalid.SchemaVersion++;
+
+            Assert.Throws<ArgumentException>(() => host.RestoreSession(invalid));
+
+            Assert.That(host.SelectedAssemblyVariant, Is.EqualTo(AssemblyVariantId.FuxingDemo));
+            Assert.That(variantEvents, Is.Zero);
+            Assert.That(stateEvents, Is.Zero);
         }
 
         [Test]

@@ -33,19 +33,19 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
         }
 
         [Test]
-        public void DefaultRecipeHasTwentyThreeStepsAndChineseFsmLabels()
+        public void DefaultRecipeHasFourteenPlayerStepsAndChineseFsmLabels()
         {
             var catalog = WhiteboxGameCatalog.CreateDefault();
 
             Assert.That(
                 WhiteboxAssemblyProgressPresenter.CalculateTotalSteps(catalog),
-                Is.EqualTo(23));
+                Is.EqualTo(14));
             Assert.That(
-                WhiteboxAssemblyProgressPresenter.BuildStepLabel(0, 23),
-                Is.EqualTo("第1步/共23步"));
+                WhiteboxAssemblyProgressPresenter.BuildStepLabel(0, 14),
+                Is.EqualTo("第1步/共14步"));
             Assert.That(
-                WhiteboxAssemblyProgressPresenter.BuildStepLabel(23, 23),
-                Is.EqualTo("第23步/共23步"));
+                WhiteboxAssemblyProgressPresenter.BuildStepLabel(14, 14),
+                Is.EqualTo("第14步/共14步"));
             Assert.That(
                 WhiteboxAssemblyProgressPresenter.GetStatusDisplayName(AssemblyFlowStatus.Pending),
                 Is.EqualTo("待装配"));
@@ -82,7 +82,7 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
                 WhiteboxAssemblyProgressPresenter.CalculateCompletedSteps(
                     snapshot,
                     WhiteboxGameCatalog.CreateDefault()),
-                Is.EqualTo(8));
+                Is.EqualTo(6));
         }
 
         [Test]
@@ -96,12 +96,78 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
 
             presenter.Configure(host, slider, step, percent, status);
 
-            Assert.That(presenter.TotalSteps, Is.EqualTo(23));
+            Assert.That(presenter.TotalSteps, Is.EqualTo(14));
             Assert.That(presenter.CompletedSteps, Is.Zero);
             Assert.That(slider.value, Is.Zero);
-            Assert.That(step.text, Is.EqualTo("第1步/共23步"));
+            Assert.That(step.text, Is.EqualTo("第1步/共14步"));
             Assert.That(percent.text, Is.EqualTo("完成度 0%"));
             Assert.That(status.text, Is.EqualTo("状态：待装配"));
+        }
+
+        [Test]
+        public void StageLabelsFollowMaterialAssemblyLandingAndCommissioningSequence()
+        {
+            Assert.That(
+                WhiteboxHudPresenter.GetStageDisplayName(session),
+                Is.EqualTo("知识确认"));
+
+            PreparePackage(WorkPackageId.WheelsetAxlebox, install: false);
+            Assert.That(
+                WhiteboxHudPresenter.GetStageDisplayName(session),
+                Is.EqualTo("材料齐套"));
+
+            InstallPreparedPackage(WorkPackageId.WheelsetAxlebox);
+            Assert.That(
+                WhiteboxHudPresenter.GetStageDisplayName(session),
+                Is.EqualTo("子总成装配"));
+
+            PreparePackage(WorkPackageId.FrameAndBrakeTraction, install: true);
+            PreparePackage(WorkPackageId.PrimarySuspension, install: true);
+            PreparePackage(WorkPackageId.SecondarySuspension, install: true);
+            Assert.That(
+                session.DomainSession.InstallModule(
+                    ModuleId.BogieStructure,
+                    ModuleId.WheelsetAxlebox).Changed,
+                Is.True);
+            Assert.That(
+                session.DomainSession.InstallModule(
+                    ModuleId.BogieStructure,
+                    ModuleId.Frame).Changed,
+                Is.True);
+            Assert.That(
+                session.DomainSession.InstallModule(
+                    ModuleId.BogieStructure,
+                    ModuleId.PrimarySuspension).Changed,
+                Is.True);
+
+            Assert.That(
+                WhiteboxHudPresenter.GetStageDisplayName(session),
+                Is.EqualTo("落车集成"));
+
+            PreparePackage(WorkPackageId.CarbodyAndLanding, install: false);
+            Assert.That(
+                session.DomainSession.InstallModule(
+                    ModuleId.Landing,
+                    ModuleId.BogieStructure).Changed,
+                Is.True);
+            Assert.That(
+                session.DomainSession.InstallModule(
+                    ModuleId.Landing,
+                    ModuleId.SecondarySuspension).Changed,
+                Is.True);
+            InstallPreparedPackage(WorkPackageId.CarbodyAndLanding);
+
+            Assert.That(
+                WhiteboxHudPresenter.GetStageDisplayName(session),
+                Is.EqualTo("调试检验"));
+
+            session.DomainSession.RunCommissioning();
+            session.DomainSession.PerformRetuning();
+            session.DomainSession.PerformInspection();
+            session.DomainSession.RunCommissioning();
+            Assert.That(
+                WhiteboxHudPresenter.GetStageDisplayName(session),
+                Is.EqualTo("实训完成"));
         }
 
         [Test]
@@ -285,6 +351,36 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.World
                 popupTitle,
                 catalogRoot,
                 catalogBody);
+        }
+
+        private void PreparePackage(WorkPackageId packageId, bool install)
+        {
+            var package = WhiteboxWorkPackageCatalog.Get(packageId);
+            foreach (var questionId in package.CoreQuestionIds)
+            {
+                var question = session.DomainSession.Catalog.GetQuestion(questionId);
+                Assert.That(
+                    session.DomainSession.SubmitWorkPackageAnswer(
+                        packageId,
+                        questionId,
+                        question.CorrectOptionIndex).IsCorrect,
+                    Is.True,
+                    questionId);
+            }
+            Assert.That(session.DomainSession.CollectWorkPackage(packageId).Accepted, Is.True);
+            if (install)
+                InstallPreparedPackage(packageId);
+        }
+
+        private void InstallPreparedPackage(WorkPackageId packageId)
+        {
+            var package = WhiteboxWorkPackageCatalog.Get(packageId);
+            Assert.That(
+                session.DomainSession.InstallWorkPackage(
+                    package.AssemblyModule.Value,
+                    packageId).Accepted,
+                Is.True,
+                package.Key);
         }
 
         private GameObject Child(string name, GameObject parent = null)

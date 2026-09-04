@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RailCraft.ThirdPerson.Domain
 {
@@ -6,7 +8,7 @@ namespace RailCraft.ThirdPerson.Domain
     {
         internal static IReadOnlyList<QuizQuestionDefinition> Create()
         {
-            return new[]
+            var sourceQuestions = new[]
             {
                 new QuizQuestionDefinition(
                     "bank_mc01",
@@ -415,6 +417,236 @@ namespace RailCraft.ThirdPerson.Domain
                     PartId.Wheel,
                     "不同规格、等级、部位的螺栓紧固力矩完全不同，必须严格按工艺文件执行，否则会过载断裂或预紧力不足。")
             };
+
+            // The source document is retained verbatim. Reward routing is a
+            // separate concern so a question can be reused in a module without
+            // forcing a new physical part or station.
+            return sourceQuestions.Select(RebindQuestion).ToArray();
+        }
+
+        private static QuizQuestionDefinition RebindQuestion(QuizQuestionDefinition source)
+        {
+            var rewardPart = RoutedPart(source.Id, source.RewardPart);
+            var relatedWorkPackage = RelatedWorkPackageFor(source.Id, rewardPart);
+            var relatedModule = RelatedModuleFor(relatedWorkPackage);
+            var isCore = IsCoreQuestion(source.Id);
+            var reviewStatus = IsPendingReview(source.Id)
+                ? QuestionReviewStatus.PendingReview
+                : isCore
+                    ? QuestionReviewStatus.ApprovedForCore
+                    : QuestionReviewStatus.BackupOnly;
+
+            return new QuizQuestionDefinition(
+                source.Id,
+                source.Prompt,
+                source.Options,
+                source.CorrectOptionIndex,
+                rewardPart,
+                source.Explanation,
+                relatedModule,
+                relatedWorkPackage,
+                isCore,
+                reviewStatus,
+                grantsPart: true);
+        }
+
+        private static PartId RoutedPart(string id, PartId fallback)
+        {
+            switch (id)
+            {
+                case "bank_mc01": return PartId.Axle;
+                case "bank_mc02": return PartId.Wheel;
+                case "bank_mc03": return PartId.BrakeDevice;
+                case "bank_mc04": return PartId.Wheel;
+                case "bank_mc05": return PartId.Bearing;
+                case "bank_mc06": return PartId.BrakeDevice;
+                case "bank_mc07": return PartId.CentralTractionDevice;
+                case "bank_mc08": return PartId.PrimaryPositioningElement;
+                case "bank_mc09": return PartId.TractionRod;
+                case "bank_mc10": return PartId.PrimaryElasticElement;
+                case "bank_mc11": return PartId.CentralTractionDevice;
+                case "bank_mc12": return PartId.Wheel;
+                case "bank_mc13": return PartId.Carbody;
+                case "bank_mc14": return PartId.CentralTractionDevice;
+                case "bank_mc15": return PartId.BrakeDevice;
+                case "bank_mc16": return PartId.Bearing;
+                case "bank_mc17": return PartId.CentralTractionDevice;
+                case "bank_mc18": return PartId.CentralTractionDevice;
+                case "bank_mc19": return PartId.SecondaryDamper;
+                case "bank_mc20": return PartId.CentralTractionDevice;
+                case "bank_mc21": return PartId.Wheel;
+                case "bank_mc22": return PartId.SecondaryElasticElement;
+                case "bank_mc23": return PartId.BrakeDevice;
+                case "bank_mc24": return PartId.PrimaryDamper;
+                case "bank_mc25": return PartId.HeightControlElement;
+                case "bank_mc26": return PartId.SecondaryDamper;
+                case "bank_mc27": return PartId.CentralTractionDevice;
+                case "bank_mc28": return PartId.CentralTractionDevice;
+                case "bank_mc29": return PartId.Axle;
+                case "bank_mc30": return PartId.CentralTractionDevice;
+                case "bank_mc31": return PartId.BrakeDevice;
+                case "bank_mc32": return PartId.Bearing;
+                case "bank_mc33": return PartId.BrakeDevice;
+                case "bank_mc34": return PartId.HeightControlElement;
+                case "bank_mc35": return PartId.Wheel;
+                case "bank_mc36": return PartId.CentralTractionDevice;
+                case "bank_mc37": return PartId.SecondaryElasticElement;
+                case "bank_mc38": return PartId.BrakeDevice;
+                case "bank_mc39": return PartId.PrimaryPositioningElement;
+                case "bank_mc40": return PartId.BrakeDevice;
+                case "bank_mc41": return PartId.SensorBracket;
+                case "bank_mc42": return PartId.SensorBracket;
+                case "bank_mc43": return PartId.SensorBracket;
+                case "bank_mc44": return PartId.SensorBracket;
+                case "bank_mc45": return PartId.SensorBracket;
+                case "bank_mc46": return PartId.SensorBracket;
+                case "bank_mc47": return PartId.SensorBracket;
+                case "bank_mc48": return PartId.SensorBracket;
+                case "bank_mc49": return PartId.SensorBracket;
+                case "bank_mc50": return PartId.SensorBracket;
+                case "bank_tf01": return PartId.PrimaryDamper;
+                case "bank_tf02": return PartId.PrimaryPositioningElement;
+                case "bank_tf03": return PartId.SecondaryElasticElement;
+                case "bank_tf04": return PartId.BrakeDevice;
+                case "bank_tf05": return PartId.PrimaryDamper;
+                case "bank_tf06": return PartId.SensorBracket;
+                case "bank_tf07": return PartId.SensorBracket;
+                case "bank_tf08": return PartId.BrakeDevice;
+                default: return fallback;
+            }
+        }
+
+        private static WorkPackageId? RelatedWorkPackageFor(string id, PartId rewardPart)
+        {
+            // Package affinity is a content decision, independent from the
+            // legacy reward PartId. Questions that describe digital
+            // operations belong to the commissioning knowledge area and stay
+            // outside the five material gates.
+            switch (id)
+            {
+                case "bank_mc02":
+                case "bank_mc04":
+                case "bank_mc05":
+                case "bank_mc16":
+                case "bank_mc21":
+                case "bank_mc29":
+                case "bank_mc32":
+                case "bank_mc35":
+                    return WorkPackageId.WheelsetAxlebox;
+                case "bank_mc01":
+                case "bank_mc03":
+                case "bank_mc06":
+                case "bank_mc09":
+                case "bank_mc15":
+                case "bank_mc18":
+                case "bank_mc19":
+                case "bank_mc23":
+                case "bank_mc31":
+                case "bank_mc33":
+                case "bank_mc38":
+                case "bank_mc40":
+                case "bank_tf01":
+                case "bank_tf04":
+                case "bank_tf08":
+                    return WorkPackageId.FrameAndBrakeTraction;
+                case "bank_mc08":
+                case "bank_mc10":
+                case "bank_mc24":
+                case "bank_mc39":
+                case "bank_tf02":
+                    return WorkPackageId.PrimarySuspension;
+                case "bank_mc12":
+                case "bank_mc22":
+                case "bank_mc25":
+                case "bank_mc26":
+                case "bank_mc34":
+                case "bank_mc37":
+                case "bank_tf03":
+                case "bank_tf05":
+                    return WorkPackageId.SecondarySuspension;
+                case "bank_mc11":
+                case "bank_mc13":
+                case "bank_mc14":
+                case "bank_mc07":
+                case "bank_mc17":
+                case "bank_mc20":
+                case "bank_mc27":
+                case "bank_mc28":
+                case "bank_mc30":
+                case "bank_mc36":
+                    return WorkPackageId.CarbodyAndLanding;
+                case "bank_mc41":
+                case "bank_mc42":
+                case "bank_mc43":
+                case "bank_mc44":
+                case "bank_mc45":
+                case "bank_mc46":
+                case "bank_mc47":
+                case "bank_mc48":
+                case "bank_mc49":
+                case "bank_mc50":
+                case "bank_tf06":
+                case "bank_tf07":
+                    return WorkPackageId.Commissioning;
+                default:
+                    return null;
+            }
+        }
+
+        private static ModuleId? RelatedModuleFor(WorkPackageId? packageId)
+        {
+            if (!packageId.HasValue)
+                return null;
+
+            switch (packageId.Value)
+            {
+                case WorkPackageId.WheelsetAxlebox:
+                    return ModuleId.WheelsetAxlebox;
+                case WorkPackageId.FrameAndBrakeTraction:
+                    return ModuleId.Frame;
+                case WorkPackageId.PrimarySuspension:
+                    return ModuleId.PrimarySuspension;
+                case WorkPackageId.SecondarySuspension:
+                    return ModuleId.SecondarySuspension;
+                case WorkPackageId.CarbodyAndLanding:
+                    return ModuleId.Landing;
+                default:
+                    return null;
+            }
+        }
+
+        private static bool IsCoreQuestion(string id)
+        {
+            switch (id)
+            {
+                case "bank_mc04":
+                case "bank_mc05":
+                case "bank_mc03":
+                case "bank_mc15":
+                case "bank_mc10":
+                case "bank_mc22":
+                case "bank_mc25":
+                case "bank_tf02":
+                case "bank_mc07":
+                case "bank_mc13":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private static bool IsPendingReview(string id)
+        {
+            switch (id)
+            {
+                case "bank_mc35":
+                case "bank_mc36":
+                case "bank_mc37":
+                case "bank_tf05":
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

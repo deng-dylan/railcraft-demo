@@ -66,6 +66,34 @@ namespace RailCraft.ThirdPerson.Domain
             return installedParts.Add(partId);
         }
 
+        /// <summary>
+        /// Installs a set of part inputs only when every input is valid and
+        /// currently absent. Validation completes before any set mutation so
+        /// callers can use this for package-level atomic assembly.
+        /// </summary>
+        internal bool InstallAll(IEnumerable<PartId> partIds)
+        {
+            if (partIds == null)
+                return false;
+
+            var pending = new List<PartId>(partIds);
+            if (pending.Count == 0)
+                return false;
+
+            var unique = new HashSet<PartId>();
+            foreach (var partId in pending)
+            {
+                if (!unique.Add(partId)
+                    || !Definition.Requires(partId)
+                    || installedParts.Contains(partId))
+                    return false;
+            }
+
+            foreach (var partId in pending)
+                installedParts.Add(partId);
+            return true;
+        }
+
         internal bool Install(ModuleId moduleId)
         {
             return installedModules.Add(moduleId);

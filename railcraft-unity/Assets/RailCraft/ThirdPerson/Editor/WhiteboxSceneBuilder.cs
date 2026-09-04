@@ -95,16 +95,46 @@ namespace RailCraft.ThirdPerson.Editor
 
         private readonly struct PartStationSpec
         {
-            public PartStationSpec(PartId partId, Vector3 position, float facingYaw)
+            public PartStationSpec(WorkPackageId packageId, Vector3 position, float facingYaw)
             {
-                PartId = partId;
+                var package = WhiteboxWorkPackageCatalog.Get(packageId);
+                DisplayName = package.DisplayName;
+                PartIds = package.RequiredParts.ToArray();
                 Position = position;
                 FacingYaw = facingYaw;
+                PackageId = packageId;
+                IsWorkPackage = true;
             }
 
-            public PartId PartId { get; }
+            public PartStationSpec(PartId partId, Vector3 position, float facingYaw)
+                : this(partId.ToString(), new[] { partId }, position, facingYaw)
+            {
+            }
+
+            public PartStationSpec(
+                string displayName,
+                PartId[] partIds,
+                Vector3 position,
+                float facingYaw)
+            {
+                DisplayName = string.IsNullOrWhiteSpace(displayName)
+                    ? "模块"
+                    : displayName;
+                PartIds = partIds == null || partIds.Length == 0
+                    ? throw new ArgumentException("A station needs at least one part.", nameof(partIds))
+                    : partIds.ToArray();
+                Position = position;
+                FacingYaw = facingYaw;
+                PackageId = default;
+                IsWorkPackage = false;
+            }
+
+            public string DisplayName { get; }
+            public PartId[] PartIds { get; }
             public Vector3 Position { get; }
             public float FacingYaw { get; }
+            public WorkPackageId PackageId { get; }
+            public bool IsWorkPackage { get; }
         }
 
         [MenuItem("RailCraft/Third Person Whitebox/Rebuild Scene")]
@@ -116,6 +146,26 @@ namespace RailCraft.ThirdPerson.Editor
         public static void BuildFromCommandLine()
         {
             Build();
+        }
+
+        /// <summary>
+        /// Graphical-editor automation entry used on Unity Personal hosts where
+        /// the headless entitlement is unavailable. The process still opens a
+        /// normal licensed editor, performs the deterministic rebuild, then
+        /// exits with an explicit status code.
+        /// </summary>
+        public static void BuildAndExitFromGraphicalEditor()
+        {
+            try
+            {
+                Build();
+                EditorApplication.Exit(0);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+                EditorApplication.Exit(1);
+            }
         }
 
         public static void Build()
@@ -133,7 +183,7 @@ namespace RailCraft.ThirdPerson.Editor
             var sessionHost = hostObject.AddComponent<WhiteboxGameSessionHost>();
             sessionHost.Configure(
                 new DomainWorldGameSession(),
-                "执行标准工单 RC-EMU-01：前往知识工位确认零件与装配要求");
+                "执行标准工单 RC-EMU-01：前往知识工位完成 5 个材料包确认");
             var saveController = hostObject.AddComponent<WhiteboxSaveController>();
             saveController.Configure(sessionHost);
 
@@ -178,10 +228,14 @@ namespace RailCraft.ThirdPerson.Editor
                 playerRig.Scanner,
                 palette);
 
+            var playerCamera = playerRig.OrbitCamera.GetComponent<UnityEngine.Camera>();
+            foreach (var billboard in root.GetComponentsInChildren<WorldSpaceLabelBillboard>(true))
+                billboard.Configure(playerCamera, true);
+
             var focusDirector = playerRig.OrbitCamera.gameObject.AddComponent<AssemblyCameraFocusDirector>();
             focusDirector.Configure(
                 sessionHost,
-                playerRig.OrbitCamera.GetComponent<UnityEngine.Camera>(),
+                playerCamera,
                 playerRig.OrbitCamera,
                 focusBindings);
             root.AddComponent<WhiteboxAutomatedSmokeRunner>();
@@ -281,22 +335,22 @@ namespace RailCraft.ThirdPerson.Editor
                 PrimitiveType.Cube,
                 architecture.transform,
                 "BackWall",
-                new Vector3(0f, 3.2f, 20.9f),
-                new Vector3(56f, 6.4f, 0.25f),
+                new Vector3(0f, 5f, 20.9f),
+                new Vector3(56f, 10f, 0.25f),
                 palette.Wall));
             MarkStatic(CreatePrimitive(
                 PrimitiveType.Cube,
                 architecture.transform,
                 "LeftWall",
-                new Vector3(-27.9f, 3.2f, 0f),
-                new Vector3(0.25f, 6.4f, 42f),
+                new Vector3(-27.9f, 5f, 0f),
+                new Vector3(0.25f, 10f, 42f),
                 palette.Wall));
             MarkStatic(CreatePrimitive(
                 PrimitiveType.Cube,
                 architecture.transform,
                 "RightWall",
-                new Vector3(27.9f, 3.2f, 0f),
-                new Vector3(0.25f, 6.4f, 42f),
+                new Vector3(27.9f, 5f, 0f),
+                new Vector3(0.25f, 10f, 42f),
                 palette.Wall));
 
             var beams = CreateChild(environment.transform, "RoofBeams");
@@ -306,9 +360,24 @@ namespace RailCraft.ThirdPerson.Editor
                     PrimitiveType.Cube,
                     beams.transform,
                     $"RoofBeam_{z}",
-                    new Vector3(0f, 6.1f, z),
+                    new Vector3(0f, 9.35f, z),
                     new Vector3(55.5f, 0.22f, 0.28f),
                     palette.Steel));
+            }
+
+            var roofPanels = CreateChild(environment.transform, "RoofPanels");
+            for (var x = -24; x <= 24; x += 8)
+            {
+                var panel = CreatePrimitive(
+                    PrimitiveType.Cube,
+                    roofPanels.transform,
+                    $"RoofPanel_{x}",
+                    new Vector3(x, 9.55f, 0f),
+                    new Vector3(7.25f, 0.18f, 41.5f),
+                    palette.Wall);
+                RemoveCollider(panel);
+                panel.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.Off;
+                MarkStatic(panel);
             }
 
             var columns = CreateChild(environment.transform, "Columns");
@@ -336,17 +405,24 @@ namespace RailCraft.ThirdPerson.Editor
 
             BuildSafetyRailings(environment.transform, palette);
             CreateWorldLabel(environment.transform, "MaterialZoneLabel", "01  知识确认与材料准备",
-                new Vector3(-18f, 4.2f, 20.65f), Quaternion.identity, palette.Running.color, 0.78f);
+                new Vector3(-18f, 4.2f, 20.65f), Quaternion.Euler(0f, 180f, 0f), palette.Running.color, 0.78f);
             CreateWorldLabel(environment.transform, "AssemblyZoneLabel", "02  子总成与转向架装配",
-                new Vector3(0f, 4.2f, 20.65f), Quaternion.identity, palette.Electrical.color, 0.78f);
+                new Vector3(0f, 4.2f, 20.65f), Quaternion.Euler(0f, 180f, 0f), palette.Electrical.color, 0.78f);
             CreateWorldLabel(environment.transform, "LandingZoneLabel", "03  落车 · 教学调试 · 检验",
-                new Vector3(18f, 4.2f, 20.65f), Quaternion.identity, palette.Safety.color, 0.78f);
+                new Vector3(18f, 4.2f, 20.65f), Quaternion.Euler(0f, 180f, 0f), palette.Safety.color, 0.78f);
             BuildStandardWorkOrderBoard(environment.transform, palette);
 
             FactoryKitEnvironmentVisualFactory.BuildDefaultDecorations(
                 environment.transform,
                 palette.Steel,
                 palette.Safety);
+            ArtAlphaEnvironmentVisualFactory.BuildDefaultVisuals(
+                environment.transform,
+                palette.Steel,
+                palette.Floor);
+            ArtStationIndustrialVisualFactory.BuildDefaultVisuals(
+                environment.transform,
+                palette.Steel);
         }
 
         private static void BuildZonePad(
@@ -377,7 +453,7 @@ namespace RailCraft.ThirdPerson.Editor
             CreateWorldLabel(
                 board.transform,
                 "WorkOrderTitle",
-                "标准工单  RC-EMU-01\n动力中间车转向架装配 → 落车 → 教学故障调试\n精装 1 套代表性转向架 · 同型第 2 套由配套生产线提供",
+                "标准工单  RC-EMU-01\n通用高速动车组转向架装配 → 落车 → 教学故障调试\n5 个材料包 · 1 套代表性转向架完成态",
                 new Vector3(0f, 2.05f, 0.12f),
                 Quaternion.Euler(0f, 180f, 0f),
                 palette.White.color,
@@ -416,13 +492,13 @@ namespace RailCraft.ThirdPerson.Editor
             var fixtures = CreateChild(lighting.transform, "WorkLights");
             foreach (var position in new[]
             {
-                new Vector3(-18f, 5.5f, -12f),
-                new Vector3(0f, 5.5f, -12f),
-                new Vector3(18f, 5.5f, -12f),
-                new Vector3(-18f, 5.5f, 8f),
-                new Vector3(0f, 5.5f, 8f),
-                new Vector3(18f, 5.5f, 8f),
-                new Vector3(0f, 5.5f, 18f)
+                new Vector3(-18f, 8.6f, -12f),
+                new Vector3(0f, 8.6f, -12f),
+                new Vector3(18f, 8.6f, -12f),
+                new Vector3(-18f, 8.6f, 8f),
+                new Vector3(0f, 8.6f, 8f),
+                new Vector3(18f, 8.6f, 8f),
+                new Vector3(0f, 8.6f, 18f)
             })
             {
                 var fixture = CreatePrimitive(
@@ -457,30 +533,39 @@ namespace RailCraft.ThirdPerson.Editor
             controller.slopeLimit = 48f;
 
             var inputLock = player.AddComponent<ThirdPersonInputLock>();
-            var body = CreatePrimitive(
-                PrimitiveType.Capsule,
-                player.transform,
-                "Body",
-                new Vector3(0f, 0.88f, 0f),
-                new Vector3(0.42f, 0.78f, 0.34f),
-                palette.Station);
-            RemoveCollider(body);
-            var head = CreatePrimitive(
-                PrimitiveType.Sphere,
-                player.transform,
-                "Head",
-                new Vector3(0f, 1.66f, 0f),
-                new Vector3(0.38f, 0.38f, 0.38f),
-                palette.White);
-            RemoveCollider(head);
-            var directionMarker = CreatePrimitive(
-                PrimitiveType.Cube,
-                player.transform,
-                "ForwardMarker",
-                new Vector3(0f, 1.1f, 0.34f),
-                new Vector3(0.18f, 0.16f, 0.08f),
-                palette.Safety);
-            RemoveCollider(directionMarker);
+            var visualRoot = CreateChild(player.transform, "VisualRoot");
+            Animator characterAnimator;
+            if (!ArtAlphaCharacterVisualFactory.TryCreate(
+                    visualRoot.transform,
+                    out _,
+                    out characterAnimator))
+            {
+                characterAnimator = null;
+                var body = CreatePrimitive(
+                    PrimitiveType.Capsule,
+                    visualRoot.transform,
+                    "Body",
+                    new Vector3(0f, 0.88f, 0f),
+                    new Vector3(0.42f, 0.78f, 0.34f),
+                    palette.Station);
+                RemoveCollider(body);
+                var head = CreatePrimitive(
+                    PrimitiveType.Sphere,
+                    visualRoot.transform,
+                    "Head",
+                    new Vector3(0f, 1.66f, 0f),
+                    new Vector3(0.38f, 0.38f, 0.38f),
+                    palette.White);
+                RemoveCollider(head);
+                var directionMarker = CreatePrimitive(
+                    PrimitiveType.Cube,
+                    visualRoot.transform,
+                    "ForwardMarker",
+                    new Vector3(0f, 1.1f, 0.34f),
+                    new Vector3(0.18f, 0.16f, 0.08f),
+                    palette.Safety);
+                RemoveCollider(directionMarker);
+            }
 
             var interactionOrigin = CreateChild(player.transform, "InteractionOrigin");
             interactionOrigin.transform.localPosition = new Vector3(0f, 1.15f, 0f);
@@ -511,6 +596,12 @@ namespace RailCraft.ThirdPerson.Editor
             var motor = player.AddComponent<ThirdPersonMotor>();
             motor.Configure(controller, cameraObject.transform, inputLock);
             motor.ConfigureMovement(4.2f, 7f, 720f, -24f);
+            if (characterAnimator != null)
+            {
+                var locomotionAnimator = player.AddComponent<ThirdPersonLocomotionAnimator>();
+                locomotionAnimator.Configure(characterAnimator, motor.SprintSpeed);
+                motor.ConfigureAnimation(locomotionAnimator);
+            }
 
             return new PlayerRig
             {
@@ -545,7 +636,7 @@ namespace RailCraft.ThirdPerson.Editor
             var header = CreateText(
                 canvasObject.transform,
                 "WhiteboxHeader",
-                "RAILCRAFT · 高速动车组装配实训白盒 v0.3",
+                "RAILCRAFT · 高速动车组装配实训 v0.4 Art Alpha",
                 20,
                 FontStyle.Bold,
                 TextAnchor.MiddleCenter,
@@ -559,7 +650,7 @@ namespace RailCraft.ThirdPerson.Editor
             var workOrderText = CreateText(
                 canvasObject.transform,
                 "WorkOrderHudText",
-                "标准工单 RC-EMU-01 · 动力中间车转向架装配、落车与调试实训",
+                "标准工单 RC-EMU-01 · 材料包装配、落车与调试实训",
                 16,
                 FontStyle.Bold,
                 TextAnchor.MiddleCenter,
@@ -579,7 +670,7 @@ namespace RailCraft.ThirdPerson.Editor
                 new Vector2(0.5f, 1f),
                 new Vector2(0f, -74f),
                 new Vector2(720f, 78f));
-            var stepText = CreateText(progressPanel.transform, "AssemblyStepText", "第1步/共23步", 22,
+            var stepText = CreateText(progressPanel.transform, "AssemblyStepText", "第1步/共14步", 22,
                 FontStyle.Bold, TextAnchor.MiddleLeft, new Color(0.42f, 0.92f, 1f));
             SetAnchoredRect(stepText.rectTransform, new Vector2(0f, 0.5f), new Vector2(22f, 14f),
                 new Vector2(230f, 34f), new Vector2(0f, 0.5f));
@@ -610,7 +701,7 @@ namespace RailCraft.ThirdPerson.Editor
                 "StatePanel",
                 new Color(0.025f, 0.055f, 0.075f, 0.88f));
             SetAnchoredRect((RectTransform)statePanel.transform, new Vector2(1f, 1f), new Vector2(-28f, -126f), new Vector2(650f, 178f), new Vector2(1f, 1f));
-            var progressText = CreateText(statePanel.transform, "ProgressText", "阶段：知识确认\n总成：0/6 · 调试：未解锁", 22,
+            var progressText = CreateText(statePanel.transform, "ProgressText", "阶段：知识确认\n总成：0/6 · 材料包：0/5 · 调试：未解锁", 22,
                 FontStyle.Bold, TextAnchor.UpperLeft, new Color(1f, 0.78f, 0.26f));
             SetTopRect(progressText.rectTransform, new Vector2(24f, -18f), new Vector2(602f, 50f));
             var inventoryText = CreateText(statePanel.transform, "InventoryText", "待装配输入：空", 19,
@@ -735,6 +826,12 @@ namespace RailCraft.ThirdPerson.Editor
                 mainMenuUi.Footnote,
                 knowledgePresenter);
 
+            ArtAlphaAudioFactory.TryAttach(
+                canvasObject,
+                sessionHost,
+                canvasObject.transform,
+                out _);
+
             var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             eventSystem.transform.SetParent(interfaceRoot.transform, false);
             // OnEnable assigns the default action asset. A second assignment
@@ -854,7 +951,7 @@ namespace RailCraft.ThirdPerson.Editor
                 new Color(0.32f, 0.92f, 1f));
             SetTopRect(compendiumTitle.rectTransform, new Vector2(56f, -36f), new Vector2(900f, 58f));
             var compendiumSubtitle = CreateText(compendium.transform, "CompendiumSubtitle",
-                "本次训练已解锁的题目解析、零件、装配节点与调试知识",
+                "本次训练已解锁的题目解析、材料包、装配节点与调试知识",
                 19, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.78f, 0.84f, 0.88f));
             SetTopRect(compendiumSubtitle.rectTransform, new Vector2(56f, -92f), new Vector2(1050f, 38f));
             var scrollText = CreateScrollableText(
@@ -967,71 +1064,135 @@ namespace RailCraft.ThirdPerson.Editor
             var catalog = WhiteboxGameCatalog.CreateDefault();
             var specs = new[]
             {
-                // Materials are grouped by the subassembly they feed. This
-                // restores a short learn -> collect -> assemble loop and keeps
-                // the long landing track clear on the east side of the hall.
-                new PartStationSpec(PartId.Axle, new Vector3(-21f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.Wheel, new Vector3(-17.5f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.Bearing, new Vector3(-14f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.BrakeDevice, new Vector3(-10.5f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.TractionRod, new Vector3(-7f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.SensorBracket, new Vector3(-3.5f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.PrimaryElasticElement, new Vector3(0f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.PrimaryPositioningElement, new Vector3(3.5f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.PrimaryDamper, new Vector3(7f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.SecondaryElasticElement, new Vector3(10.5f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.HeightControlElement, new Vector3(14f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.SecondaryDamper, new Vector3(17.5f, 0f, -16f), 0f),
-                new PartStationSpec(PartId.Carbody, new Vector3(23f, 0f, -7f), 90f),
-                new PartStationSpec(PartId.CentralTractionDevice, new Vector3(23f, 0f, -2f), 90f)
+                new PartStationSpec(
+                    WorkPackageId.WheelsetAxlebox,
+                    new Vector3(-17f, 0f, -16f),
+                    0f),
+                new PartStationSpec(
+                    WorkPackageId.FrameAndBrakeTraction,
+                    new Vector3(-8f, 0f, -16f),
+                    0f),
+                new PartStationSpec(
+                    WorkPackageId.PrimarySuspension,
+                    new Vector3(1f, 0f, -16f),
+                    0f),
+                new PartStationSpec(
+                    WorkPackageId.SecondarySuspension,
+                    new Vector3(10f, 0f, -16f),
+                    0f),
+                new PartStationSpec(
+                    WorkPackageId.CarbodyAndLanding,
+                    new Vector3(19f, 0f, -7f),
+                    90f)
             };
 
             var stations = CreateChild(parent, "QuizPartStations");
             foreach (var spec in specs)
             {
-                var part = catalog.GetPart(spec.PartId);
-                var questions = catalog.Questions
-                    .Where(item => item.RewardPart == spec.PartId)
-                    .Select((item, index) => CreateQuestionPresentation(item, (int)spec.PartId + index))
-                    .ToArray();
+                var parts = spec.PartIds;
+                var package = spec.IsWorkPackage
+                    ? WhiteboxWorkPackageCatalog.Get(spec.PackageId)
+                    : null;
+                var questions = package == null
+                    ? catalog.Questions
+                        .Where(item => parts.Contains(item.RewardPart))
+                        .OrderBy(item => Array.IndexOf(parts, item.RewardPart))
+                        .ThenBy(item => item.Id, StringComparer.Ordinal)
+                        .Select((item, index) => CreateQuestionPresentation(item, (int)parts[0] + index))
+                        .ToArray()
+                    : package.CoreQuestionIds
+                        .Select(questionId => catalog.GetQuestion(questionId))
+                        .Select((item, index) => CreateQuestionPresentation(item, (int)spec.PackageId + index))
+                        .ToArray();
                 if (questions.Length == 0)
-                    throw new InvalidOperationException($"Part {spec.PartId} has no questions.");
-                var station = new GameObject($"QuizStation_{part.Key}");
+                    throw new InvalidOperationException($"Station {spec.DisplayName} has no questions.");
+
+                var station = new GameObject(package == null
+                    ? $"QuizStation_{parts[0]}"
+                    : $"QuizStation_{package.Key}");
                 station.transform.SetParent(stations.transform, false);
                 station.transform.localPosition = spec.Position;
                 station.transform.localRotation = Quaternion.Euler(0f, spec.FacingYaw, 0f);
                 var collider = station.AddComponent<BoxCollider>();
                 collider.center = new Vector3(0f, 1.1f, 0f);
-                collider.size = new Vector3(2.8f, 2.2f, 2.6f);
+                collider.size = new Vector3(4.6f, 2.2f, 3.2f);
                 collider.isTrigger = true;
 
-                var material = PartMaterial(spec.PartId, palette);
-                CreatePrimitive(PrimitiveType.Cube, station.transform, "Pedestal",
-                    new Vector3(0f, 0.42f, 0f), new Vector3(2.4f, 0.84f, 1.65f), palette.Steel);
-                CreatePrimitive(PrimitiveType.Cube, station.transform, "ControlScreen",
-                    new Vector3(0f, 1.28f, -0.46f), new Vector3(1.65f, 0.72f, 0.12f), palette.Station);
-                CreatePrimitive(PrimitiveType.Cube, station.transform, "ColorBand",
-                    new Vector3(0f, 0.9f, -0.57f), new Vector3(2.15f, 0.12f, 0.08f), material);
-                var rewardVisual = BuildPartVisual(
-                    station.transform,
-                    $"Reward_{part.Key}",
-                    spec.PartId,
-                    material);
-                rewardVisual.transform.localPosition = new Vector3(0f, 1.85f, 0.15f);
+                var material = PartMaterial(parts[0], palette);
+                if (!FactoryKitWorkbenchVisualFactory.TryBuildQuizWorkbench(
+                        station.transform,
+                        palette.Steel,
+                        palette.Station,
+                        material,
+                        out _))
+                {
+                    CreatePrimitive(PrimitiveType.Cube, station.transform, "Pedestal",
+                        new Vector3(0f, 0.42f, 0f), new Vector3(2.4f, 0.84f, 1.65f), palette.Steel);
+                    CreatePrimitive(PrimitiveType.Cube, station.transform, "ControlScreen",
+                        new Vector3(0f, 1.28f, -0.46f), new Vector3(1.65f, 0.72f, 0.12f), palette.Station);
+                    CreatePrimitive(PrimitiveType.Cube, station.transform, "ColorBand",
+                        new Vector3(0f, 0.9f, -0.57f), new Vector3(2.15f, 0.12f, 0.08f), material);
+                }
 
-                CreateWorldLabel(station.transform, "StationLabel", part.DisplayName + "工位",
+                GameObject[] rewardVisuals;
+                if (package != null)
+                {
+                    rewardVisuals = new[]
+                    {
+                        BuildWorkPackageVisual(
+                        station.transform,
+                            package,
+                            material,
+                            palette)
+                    };
+                }
+                else
+                {
+                    rewardVisuals = new GameObject[parts.Length];
+                    for (var partIndex = 0; partIndex < parts.Length; partIndex++)
+                    {
+                        var part = catalog.GetPart(parts[partIndex]);
+                        var rewardVisual = BuildPartVisual(
+                            station.transform,
+                            $"Reward_{part.Key}",
+                            parts[partIndex],
+                            material);
+                        rewardVisual.transform.localPosition = new Vector3(
+                            (partIndex - (parts.Length - 1) * 0.5f) * 1.2f,
+                            1.85f,
+                            0.15f);
+                        rewardVisuals[partIndex] = rewardVisual;
+                    }
+                }
+
+                CreateWorldLabel(station.transform, "StationLabel", spec.DisplayName + "知识工位",
                     new Vector3(0f, 2.85f, 0f), Quaternion.Euler(0f, 180f, 0f), material.color, 0.7f);
 
                 var stationBehaviour = station.AddComponent<QuizPartStation>();
-                stationBehaviour.Configure(
-                    sessionHost,
-                    inputLock,
-                    quizPanel,
-                    questions,
-                    spec.PartId,
-                    part.DisplayName + "知识工位",
-                    rewardVisual,
-                    "继续收集零件，或前往流程图对应的装配工位");
+                if (package != null)
+                {
+                    stationBehaviour.ConfigureWorkPackage(
+                        sessionHost,
+                        inputLock,
+                        quizPanel,
+                        spec.PackageId,
+                        questions,
+                        rewardVisuals[0],
+                        spec.DisplayName + "知识工位",
+                        "前往对应装配台安装" + package.DisplayName);
+                }
+                else
+                {
+                    stationBehaviour.Configure(
+                        sessionHost,
+                        inputLock,
+                        quizPanel,
+                        questions,
+                        parts,
+                        spec.DisplayName + "知识工位",
+                        rewardVisuals,
+                        "继续收集零件，或前往流程图对应的装配工位");
+                }
                 AddInteractionVisual(station, scanner, stationBehaviour);
             }
         }
@@ -1058,7 +1219,7 @@ namespace RailCraft.ThirdPerson.Editor
                 "AssemblyDemonstrationNotice",
                 Cw200kReferenceVisualFactory.IsModelAvailable
                     ? Cw200kReferenceVisualFactory.DemonstrationNotice
-                    : "结构示范件｜本轮精装 1 套代表性转向架；同型第 2 套由配套生产线提供",
+                    : "结构示范件｜本轮完成 1 套代表性转向架；同型第 2 套由配套生产线提供",
                 new Vector3(-6f, 3.9f, -7.2f),
                 Quaternion.Euler(0f, 180f, 0f),
                 palette.Warning.color,
@@ -1076,8 +1237,17 @@ namespace RailCraft.ThirdPerson.Editor
                 collider.isTrigger = true;
 
                 var material = ModuleMaterial(definition.Id, palette);
-                CreatePrimitive(PrimitiveType.Cube, station.transform, "AssemblyTable",
-                    new Vector3(0f, 0.55f, 0f), new Vector3(4.5f, 0.32f, 2.7f), palette.Steel);
+                if (!FactoryKitWorkbenchVisualFactory.TryBuildAssemblyTable(
+                        station.transform,
+                        palette.Steel,
+                        palette.Station,
+                        material,
+                        0.82f,
+                        out _))
+                {
+                    CreatePrimitive(PrimitiveType.Cube, station.transform, "AssemblyTable",
+                        new Vector3(0f, 0.55f, 0f), new Vector3(4.5f, 0.32f, 2.7f), palette.Steel);
+                }
                 CreatePrimitive(PrimitiveType.Cube, station.transform, "ModuleColorBand",
                     new Vector3(0f, 0.76f, -1.25f), new Vector3(4.2f, 0.12f, 0.12f), material);
 
@@ -1113,9 +1283,10 @@ namespace RailCraft.ThirdPerson.Editor
                     new Vector3(0f, 2.85f, 0f), Quaternion.Euler(0f, 180f, 0f), material.color, 0.74f);
 
                 var stationBehaviour = station.AddComponent<ModuleAssemblyStation>();
-                stationBehaviour.Configure(
+                stationBehaviour.ConfigureWorkPackage(
                     sessionHost,
                     definition.Id,
+                    PackageForModule(definition.Id),
                     module.DisplayName + "装配台",
                     parts,
                     slots,
@@ -1153,7 +1324,8 @@ namespace RailCraft.ThirdPerson.Editor
                 question.Prompt,
                 displayedOptions,
                 submittedIndices,
-                question.Explanation);
+                question.Explanation,
+                question.RewardPart);
         }
 
         private static void BuildCompositeAssembly(
@@ -1173,8 +1345,17 @@ namespace RailCraft.ThirdPerson.Editor
             collider.size = new Vector3(7f, 2.2f, 5.5f);
             collider.isTrigger = true;
 
-            CreatePrimitive(PrimitiveType.Cube, station.transform, "AssemblyTable",
-                new Vector3(0f, 0.5f, 0f), new Vector3(6.4f, 0.34f, 4.6f), palette.Steel);
+            if (!FactoryKitWorkbenchVisualFactory.TryBuildAssemblyTable(
+                    station.transform,
+                    palette.Steel,
+                    palette.Station,
+                    palette.Running,
+                    1.22f,
+                    out _))
+            {
+                CreatePrimitive(PrimitiveType.Cube, station.transform, "AssemblyTable",
+                    new Vector3(0f, 0.5f, 0f), new Vector3(6.4f, 0.34f, 4.6f), palette.Steel);
+            }
             CreatePrimitive(PrimitiveType.Cube, station.transform, "FlowBand",
                 new Vector3(0f, 0.75f, -2.05f), new Vector3(5.9f, 0.12f, 0.12f), palette.Running);
 
@@ -1338,16 +1519,17 @@ namespace RailCraft.ThirdPerson.Editor
             CreateWorldLabel(
                 station.transform,
                 "SecondBogieSupplyNotice",
-                "本轮精装的代表性转向架已用于整车落位演示\n另一转向架由配套生产线提供，成品按完整落车工况呈现",
+                "本轮完成的代表性转向架已用于整车落位演示\n另一转向架由配套生产线提供，成品按完整落车工况呈现",
                 new Vector3(0f, 3.75f, 13.1f),
                 Quaternion.identity,
                 palette.Warning.color,
                 0.42f);
 
             var behaviour = station.AddComponent<FinalAssemblyStation>();
-            behaviour.Configure(
+            behaviour.ConfigureWorkPackage(
                 sessionHost,
                 ModuleId.Landing,
+                WorkPackageId.CarbodyAndLanding,
                 "落车工位",
                 moduleOrder,
                 partOrder,
@@ -1388,10 +1570,18 @@ namespace RailCraft.ThirdPerson.Editor
                 collider.size = new Vector3(5.8f, 2.2f, 4.5f);
                 collider.isTrigger = true;
 
-                CreatePrimitive(PrimitiveType.Cube, station.transform, "ConsoleBase",
-                    new Vector3(0f, 0.55f, 0f), new Vector3(5.2f, 0.7f, 3.4f), palette.Steel);
-                CreatePrimitive(PrimitiveType.Cube, station.transform, "ConsoleFace",
-                    new Vector3(0f, 1.25f, -0.8f), new Vector3(3.8f, 0.9f, 0.16f), palette.Station);
+                if (!FactoryKitWorkbenchVisualFactory.TryBuildCommissioningConsole(
+                        station.transform,
+                        palette.Steel,
+                        palette.Station,
+                        palette.Safety,
+                        out _))
+                {
+                    CreatePrimitive(PrimitiveType.Cube, station.transform, "ConsoleBase",
+                        new Vector3(0f, 0.55f, 0f), new Vector3(5.2f, 0.7f, 3.4f), palette.Steel);
+                    CreatePrimitive(PrimitiveType.Cube, station.transform, "ConsoleFace",
+                        new Vector3(0f, 1.25f, -0.8f), new Vector3(3.8f, 0.9f, 0.16f), palette.Station);
+                }
                 var ready = CreatePrimitive(PrimitiveType.Cylinder, station.transform, "ReadyBeacon",
                     new Vector3(-0.55f, 2f, 0f), new Vector3(0.18f, 0.5f, 0.18f), palette.Warning);
                 var completed = CreatePrimitive(PrimitiveType.Cylinder, station.transform, "CompletedBeacon",
@@ -1409,7 +1599,61 @@ namespace RailCraft.ThirdPerson.Editor
 
             CreateWorldLabel(root.transform, "LoopGuide",
                 "首次调试判定（教学故障注入） → 重新调试 → 检验 → 复测判定 → 投入使用",
-                new Vector3(0f, 4.7f, 19.9f), Quaternion.identity, palette.Safety.color, 0.58f);
+                new Vector3(0f, 4.7f, 19.9f), Quaternion.Euler(0f, 180f, 0f), palette.Safety.color, 0.58f);
+        }
+
+        private static WorkPackageId PackageForModule(ModuleId moduleId)
+        {
+            switch (moduleId)
+            {
+                case ModuleId.WheelsetAxlebox:
+                    return WorkPackageId.WheelsetAxlebox;
+                case ModuleId.Frame:
+                    return WorkPackageId.FrameAndBrakeTraction;
+                case ModuleId.PrimarySuspension:
+                    return WorkPackageId.PrimarySuspension;
+                case ModuleId.SecondarySuspension:
+                    return WorkPackageId.SecondarySuspension;
+                case ModuleId.Landing:
+                    return WorkPackageId.CarbodyAndLanding;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(moduleId), moduleId, null);
+            }
+        }
+
+        private static GameObject BuildWorkPackageVisual(
+            Transform parent,
+            WorkPackageDefinition package,
+            Material material,
+            Palette palette)
+        {
+            var root = CreateChild(parent, $"RewardPackage_{package.Key}");
+            root.transform.localPosition = new Vector3(0f, 1.85f, 0.15f);
+            CreateVisualCube(
+                root.transform,
+                "PackageCrate",
+                new Vector3(0f, 0.22f, 0f),
+                new Vector3(2.15f, 0.48f, 1.35f),
+                material);
+            foreach (var x in new[] { -0.62f, 0f, 0.62f })
+            {
+                CreateVisualCube(
+                    root.transform,
+                    $"PackageBand_{x}",
+                    new Vector3(x, 0.49f, -0.01f),
+                    new Vector3(0.08f, 0.08f, 1.38f),
+                    palette.Safety);
+            }
+
+            CreateWorldLabel(
+                root.transform,
+                "PackageLabel",
+                package.DisplayName + "\n材料包",
+                new Vector3(0f, 0.72f, 0f),
+                Quaternion.Euler(0f, 180f, 0f),
+                palette.White.color,
+                0.34f);
+            return root;
         }
 
         private static GameObject BuildPartVisual(
@@ -1418,6 +1662,14 @@ namespace RailCraft.ThirdPerson.Editor
             PartId partId,
             Material material)
         {
+            if (Cw200kReferenceVisualFactory.TryCreatePartVisual(
+                    parent,
+                    name,
+                    partId,
+                    material,
+                    out var referenceVisual))
+                return referenceVisual;
+
             if (BogieAssemblyDemoVisualFactory.TryCreatePartVisual(
                     parent,
                     name,
@@ -1853,6 +2105,7 @@ namespace RailCraft.ThirdPerson.Editor
             var renderer = label.GetComponent<MeshRenderer>();
             if (text.font != null)
                 renderer.sharedMaterial = text.font.material;
+            label.AddComponent<WorldSpaceLabelBillboard>();
             return label;
         }
 

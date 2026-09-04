@@ -102,8 +102,11 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.Domain
             Assert.That(twoOptionCount, Is.EqualTo(8));
             Assert.That(rewardsPerPart.Keys,
                 Is.EquivalentTo((PartId[])Enum.GetValues(typeof(PartId))));
-            foreach (var rewardCount in rewardsPerPart.Values)
-                Assert.That(rewardCount, Is.InRange(4, 5));
+            foreach (var partId in (PartId[])Enum.GetValues(typeof(PartId)))
+            {
+                Assert.That(rewardsPerPart.ContainsKey(partId), Is.True, $"No question routes to {partId}.");
+                Assert.That(rewardsPerPart[partId], Is.GreaterThanOrEqualTo(1));
+            }
         }
 
         [Test]
@@ -125,6 +128,26 @@ namespace RailCraft.ThirdPerson.Tests.EditMode.Domain
 
             Assert.That(legacy.Explanation, Is.Empty);
             Assert.That(explained.Explanation, Is.EqualTo("解析内容"));
+        }
+
+        [Test]
+        public void QuestionDefinitionCanBeKnowledgeOnlyWithoutCreatingAnotherPart()
+        {
+            var knowledgeOnly = new QuizQuestionDefinition(
+                "knowledge-only",
+                "题干",
+                new[] { "正确", "错误" },
+                0,
+                PartId.Axle,
+                "解析内容",
+                ModuleId.SecondarySuspension,
+                false,
+                QuestionReviewStatus.PendingReview,
+                false);
+
+            Assert.That(knowledgeOnly.GrantsPart, Is.False);
+            Assert.That(knowledgeOnly.RelatedModule, Is.EqualTo(ModuleId.SecondarySuspension));
+            Assert.That(knowledgeOnly.ReviewStatus, Is.EqualTo(QuestionReviewStatus.PendingReview));
         }
 
         [Test]
