@@ -7,14 +7,14 @@
 
 ## 阶段与结论
 
-- 阶段：白盒之后的首个受控视觉生产批次 `v0.4.0-art-alpha.5`。
+- 阶段：首个受控内测候选 `v0.4.0-internal.1` 已完成自动验收。
 - 主线：`railcraft-unity/Assets/RailCraft/ThirdPerson/`。
 - 产品定位：通用高速动车组工程场景模拟；车型外观采用原创风格表达。
 - 交互规模决策：5 个玩家材料包 + 1 个调试/检验流程模块；14 个内部子部件 ID 只用于配方、视觉分解和旧存档兼容。
 - 旧 Demo：已从工作树移除，日期归档位于本机 `.tmp/retired-demos-20260904/`，Git 历史仍可追溯；`manifest.tsv` SHA-256 为 `8e8a158419ef7d70da6ef9987a35737fcdec7733bcd0288a951f25e41dda2ba9`。
 - 删除前生成的 `Builds/Whitebox` 与 `ReleasePackages` 已移至归档的 `generated-before-retirement/`；当前材料包版 Player 已于 2026-09-04 重新构建。
-- `ART-001` 免费资产扩展已写入生成器并重建场景：传感器座、定位元件、高度控制元件和一系弹性元件使用通用教学视觉；工具、安全隔离、厂区远景和远景车辆使用展示风格资产。该批仍需 Unity 运行门禁，不能替代上一批 FLOW-002 验收结论。
-- `ART-002` 已在生成器中补入项目自有程序化教学件：二系空气弹簧、剪叉升降台、四点吊具、HMI 柜和线缆展示。该层不含车型专用尺寸与性能参数，待 Unity 许可恢复后重建序列化场景并刷新运行证据。
+- `ART-001` 免费资产扩展已写入生成器并重建场景：传感器座、定位元件、高度控制元件和一系弹性元件使用通用教学视觉；工具、安全隔离、厂区远景和远景车辆使用展示风格资产。
+- `ART-002` 已在生成器中补入项目自有程序化教学件：二系空气弹簧、剪叉升降台、四点吊具、HMI 柜和线缆展示。该层不含车型专用尺寸与性能参数，序列化场景和运行证据已刷新。
 - `DEBUG-001` 受控调试模式已接入：启动参数 `-railcraft-internal-debug` 加 `Ctrl+Alt+Shift+F10` 双门禁；解锁后可准备材料、推进落车、完成调试检验和重置进度，并显示持续水印。
 
 ## 已完成
@@ -35,6 +35,7 @@
 | ART-001 静态接入 | `ThirdPerson/Editor/FreeAssetExpansionVisualFactory.cs`、`Artifacts/Whitebox/ArtAlpha/art-001-asset-expansion.md` |
 | ART-002 原创补缺 | `ThirdPerson/Editor/ProjectAuthoredEquipmentVisualFactory.cs`、`Artifacts/Whitebox/ArtAlpha/art-002-authored-gap-fill.md` |
 | DEBUG-001 内测调试 | `Runtime/UI/WhiteboxInternalDebugController.cs`、`Documentation/InternalTest.md` |
+| v0.4.0-internal.1 自动验收 | 212/212 EditMode、构建目录与暂存包烟测均通过（`Artifacts/Whitebox/InternalTest/`） |
 
 ## 仍在处理
 
@@ -54,13 +55,12 @@
 | 部分题目含车型相关数值 | 工程知识可信度不足 | 标记 `pending-review`，核心流程先使用概念性题目 |
 | 变体缺模型时存在回退 | 菜单身份与画面可能不一致 | 变体接入前做资源存在性门禁，禁止静默冒充 |
 | 第三方许可证据不完整 | 无法公开再分发 | 仅限本地/内部集成，提交包前逐项核验 |
-| ART-001 尚未刷新 Unity 自动化结果 | 新资产批次不能直接作为发布候选 | 当前 Unity 许可返回 code 198；恢复许可后重跑 EditMode、构建与 Player 烟测 |
 | 生成器会覆盖手工场景修改 | 美术返工丢失 | 视觉改动进入 Prefab/工厂生成器，并记录批次 |
 
 ## 下一批建议顺序
 
-1. 恢复 Unity 许可并完成 `v0.4.0-internal.1` 的场景重建、EditMode、内测构建和 Player 烟测；
+1. 在目标展示机完成 1920×1080、组合键调试入口和断网解压人工走查；
 2. 为已接入通用教学件建立工程替换清单，并接入可核验工装/HMI 资产；
 3. 完成厂房近景/中景/远景三层美术；
-4. 重建场景、跑测试、构建、烟测并更新本文件和 Art Alpha 证据；
-5. 通过授权与目标机门禁后再命名下一预发布版本。
+4. 复核竞赛提交范围内全部第三方许可证与署名；
+5. 通过人工门禁后再命名下一预发布版本。
