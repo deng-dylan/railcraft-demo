@@ -431,6 +431,13 @@ namespace RailCraft.ThirdPerson.Editor
                 palette.Running,
                 palette.Floor,
                 palette.Wall);
+            ProjectAuthoredEquipmentVisualFactory.BuildDefaultVisuals(
+                environment.transform,
+                palette.Steel,
+                palette.Safety,
+                palette.Electrical,
+                palette.White,
+                palette.Running);
         }
 
         private static void BuildZonePad(
@@ -1670,6 +1677,14 @@ namespace RailCraft.ThirdPerson.Editor
             PartId partId,
             Material material)
         {
+            if (ProjectAuthoredEquipmentVisualFactory.TryCreatePartVisual(
+                    parent,
+                    name,
+                    partId,
+                    material,
+                    out var authoredVisual))
+                return authoredVisual;
+
             if (FreeAssetExpansionVisualFactory.TryCreatePartVisual(
                     parent,
                     name,

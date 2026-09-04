@@ -39,6 +39,10 @@ domain PartIds, assembly anchors and the compatible snapshot schema remain stabl
   a tool bench, safety barriers, windows, industrial exterior silhouettes and
   distant trains. These are teaching or presentation assets and do not claim
   vehicle-specific geometry or dimensions.
+- `ART-002` adds project-authored primitive geometry for a secondary air spring,
+  scissor lift table, four-point lifting spreader, HMI cabinet and cable run.
+  These objects close presentation gaps while remaining explicitly generic,
+  dimension-neutral teaching or display assets.
 
 All imported art is attached through deterministic factories called by
 `WhiteboxSceneBuilder`. Rebuilding the scene therefore preserves this pass.
@@ -103,3 +107,5 @@ license currently exits with code 198. See
 - `ART-001` component meshes are generic teaching stand-ins. Sensor brackets,
   positioning elements and height-control equipment still require verified
   engineering sources before they can be described as vehicle-specific parts.
+- `ART-002` authored equipment does not represent certified lifting capacity,
+  torque, measurement accuracy, electrical design or a vehicle-specific interface.

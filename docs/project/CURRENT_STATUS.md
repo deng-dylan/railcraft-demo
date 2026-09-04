@@ -13,6 +13,7 @@
 - 旧 Demo：已从工作树移除，日期归档位于本机 `.tmp/retired-demos-20260904/`，Git 历史仍可追溯；`manifest.tsv` SHA-256 为 `8e8a158419ef7d70da6ef9987a35737fcdec7733bcd0288a951f25e41dda2ba9`。
 - 删除前生成的 `Builds/Whitebox` 与 `ReleasePackages` 已移至归档的 `generated-before-retirement/`；当前材料包版 Player 已于 2026-09-04 重新构建。
 - `ART-001` 免费资产扩展已写入生成器并重建场景：传感器座、定位元件、高度控制元件和一系弹性元件使用通用教学视觉；工具、安全隔离、厂区远景和远景车辆使用展示风格资产。该批仍需 Unity 运行门禁，不能替代上一批 FLOW-002 验收结论。
+- `ART-002` 已在生成器中补入项目自有程序化教学件：二系空气弹簧、剪叉升降台、四点吊具、HMI 柜和线缆展示。该层不含车型专用尺寸与性能参数，待 Unity 许可恢复后重建序列化场景并刷新运行证据。
 
 ## 已完成
 
@@ -30,13 +31,14 @@
 | Player 成品烟测 | `RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED`（`Artifacts/Whitebox/ArtAlpha/player-smoke.log`） |
 | 独立发布包 | `v0.4.0-art-alpha.5` ZIP 184,285,006 bytes，解包目录烟测通过 |
 | ART-001 静态接入 | `ThirdPerson/Editor/FreeAssetExpansionVisualFactory.cs`、`Artifacts/Whitebox/ArtAlpha/art-001-asset-expansion.md` |
+| ART-002 原创补缺 | `ThirdPerson/Editor/ProjectAuthoredEquipmentVisualFactory.cs`、`Artifacts/Whitebox/ArtAlpha/art-002-authored-gap-fill.md` |
 
 ## 仍在处理
 
 1. 为非核心题补齐更细的主题标签与来源审核记录；
 2. 继续清理历史文档中的 CR400AF/SWM-400E1 锁定表述；
-3. 以工程来源替换 ART-001 的传感器座、定位元件和高度控制通用教学视觉，并补齐明确的二系空气弹簧几何；
-4. 补齐定位夹具、升降台、吊具、扭矩工具、真实 HMI、线缆、地面贴花和雾效；基础手工具、窗体、安全隔离及厂区远景已有展示层；
+3. 以工程来源替换 ART-001/ART-002 的传感器座、定位元件、高度控制和二系空气弹簧通用教学视觉；
+4. 补齐定位夹具、扭矩工具、真实检验仪表、地面贴花和雾效；升降台、吊具、HMI 与线缆已有原创展示层；
 5. 为正式模型建立 LOD、碰撞、材质和纹理验收报告；
 6. 复核所有第三方资产许可证、署名和竞赛提交范围；
 7. 在目标机完成 1920×1080 性能和异机断网走查。
