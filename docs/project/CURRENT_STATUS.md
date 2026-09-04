@@ -2,7 +2,7 @@
 
 更新时间：2026-09-04
 当前分支：`codex/cw200k-model-upgrade`
-当前提交基线：`5bf5988 feat(unity): preview exported teaching bogie`
+本批实现提交：`077fa3b refactor(repo): establish Unity Art Alpha mainline`
 
 ## 阶段与结论
 
