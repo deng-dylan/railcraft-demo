@@ -16,6 +16,8 @@ namespace RailCraft.ThirdPerson.Editor
             "Assets/RailCraft/ThirdPerson/Scenes/FinalShowcase.unity";
         public const string RelativeOutputPath =
             "Builds/Whitebox/RailCraftWhitebox.exe";
+        public const string InternalTestRelativeOutputPath =
+            "Builds/InternalTest/RailCraftInternalTest.exe";
         public const string SuccessLogMarker =
             "RAILCRAFT_WHITEBOX_BUILD_SUCCEEDED";
 
@@ -45,6 +47,43 @@ namespace RailCraft.ThirdPerson.Editor
         }
 
         public static void Build()
+        {
+            BuildPlayer(RelativeOutputPath, "Whitebox", BuildOptions.StrictMode);
+        }
+
+        [MenuItem("RailCraft/Third Person Whitebox/Build Internal Test Windows x86_64")]
+        public static void BuildInternalTestFromMenu()
+        {
+            BuildInternalTest();
+        }
+
+        public static void BuildInternalTestFromCommandLine()
+        {
+            BuildInternalTest();
+        }
+
+        public static void BuildInternalTestAndExitFromGraphicalEditor()
+        {
+            try
+            {
+                BuildInternalTest();
+                EditorApplication.Exit(0);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+                EditorApplication.Exit(1);
+            }
+        }
+
+        public static void BuildInternalTest()
+        {
+            BuildPlayer(InternalTestRelativeOutputPath, "InternalTest",
+                BuildOptions.StrictMode | BuildOptions.Development);
+        }
+
+        private static void BuildPlayer(string relativeOutputPath, string managedDirectoryName,
+            BuildOptions options)
         {
             // The whitebox scene is generated source-of-truth. Rebuild it before every
             // player build so a clean checkout cannot package a stale serialized scene.
@@ -83,14 +122,14 @@ namespace RailCraft.ThirdPerson.Editor
 
             var outputPath = Path.GetFullPath(Path.Combine(
                 projectRoot,
-                RelativeOutputPath.Replace('/', Path.DirectorySeparatorChar)));
+                relativeOutputPath.Replace('/', Path.DirectorySeparatorChar)));
             var outputDirectory = Path.GetDirectoryName(outputPath);
             if (string.IsNullOrWhiteSpace(outputDirectory))
                 throw new BuildFailedException("Could not resolve the whitebox build directory.");
 
             var buildsRoot = Path.GetFullPath(Path.Combine(projectRoot, "Builds"));
-            var stagingDirectory = Path.Combine(buildsRoot, "Whitebox.staging");
-            var previousDirectory = Path.Combine(buildsRoot, "Whitebox.previous");
+            var stagingDirectory = Path.Combine(buildsRoot, managedDirectoryName + ".staging");
+            var previousDirectory = Path.Combine(buildsRoot, managedDirectoryName + ".previous");
             ValidateManagedBuildDirectory(buildsRoot, outputDirectory);
             ValidateManagedBuildDirectory(buildsRoot, stagingDirectory);
             ValidateManagedBuildDirectory(buildsRoot, previousDirectory);
@@ -105,7 +144,7 @@ namespace RailCraft.ThirdPerson.Editor
                 scenes = buildScenes,
                 locationPathName = stagingOutputPath,
                 target = BuildTarget.StandaloneWindows64,
-                options = BuildOptions.StrictMode
+                options = options
             });
 
             if (report == null || report.summary.result != BuildResult.Succeeded)
@@ -124,7 +163,7 @@ namespace RailCraft.ThirdPerson.Editor
                 throw new BuildFailedException($"Promoted whitebox executable is missing: {outputPath}");
 
             Debug.Log(
-                $"{SuccessLogMarker} output={RelativeOutputPath};" +
+                $"{SuccessLogMarker} output={relativeOutputPath};" +
                 $"bytes={report.summary.totalSize};" +
                 $"warnings={report.summary.totalWarnings};" +
                 $"errors={report.summary.totalErrors}");

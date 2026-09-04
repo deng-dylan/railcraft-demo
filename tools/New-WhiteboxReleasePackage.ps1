@@ -6,7 +6,10 @@ param(
 
     [string]$BuildDirectory,
 
-    [string]$OutputDirectory
+    [string]$OutputDirectory,
+
+    [ValidateSet('Standard', 'InternalTest')]
+    [string]$PackageKind = 'Standard'
 )
 
 Set-StrictMode -Version Latest
@@ -14,16 +17,27 @@ $ErrorActionPreference = 'Stop'
 
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 if ([string]::IsNullOrWhiteSpace($BuildDirectory)) {
-    $BuildDirectory = Join-Path $repositoryRoot 'railcraft-unity\Builds\Whitebox'
+    $relativeBuildDirectory = if ($PackageKind -eq 'InternalTest') {
+        'railcraft-unity\Builds\InternalTest'
+    } else {
+        'railcraft-unity\Builds\Whitebox'
+    }
+    $BuildDirectory = Join-Path $repositoryRoot $relativeBuildDirectory
 }
 if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     $OutputDirectory = Join-Path $repositoryRoot 'railcraft-unity\ReleasePackages'
 }
 
 $buildRoot = (Resolve-Path -LiteralPath $BuildDirectory -ErrorAction Stop).Path
+$executableName = if ($PackageKind -eq 'InternalTest') {
+    'RailCraftInternalTest.exe'
+} else {
+    'RailCraftWhitebox.exe'
+}
+$dataDirectoryName = [System.IO.Path]::GetFileNameWithoutExtension($executableName) + '_Data'
 $requiredPaths = @(
-    'RailCraftWhitebox.exe',
-    'RailCraftWhitebox_Data',
+    $executableName,
+    $dataDirectoryName,
     'MonoBleedingEdge',
     'D3D12',
     'UnityPlayer.dll'
@@ -51,7 +65,9 @@ foreach ($target in @($stagingRoot, $archivePath, $checksumsPath)) {
 New-Item -ItemType Directory -Path $stagingRoot | Out-Null
 Get-ChildItem -LiteralPath $buildRoot -Force | Copy-Item -Destination $stagingRoot -Recurse -Force
 
-$releaseNotesFile = if ($Version -match '-art-alpha(?:\.|$)') {
+$releaseNotesFile = if ($PackageKind -eq 'InternalTest') {
+    'railcraft-unity\Documentation\InternalTest.md'
+} elseif ($Version -match '-art-alpha(?:\.|$)') {
     'railcraft-unity\Documentation\ArtAlpha.md'
 } else {
     'railcraft-unity\Documentation\Release.md'
@@ -70,15 +86,16 @@ if (Test-Path -LiteralPath $runtimeGuide) {
 
 Compress-Archive -Path (Join-Path $stagingRoot '*') -DestinationPath $archivePath -CompressionLevel Optimal
 
-$exeHash = (Get-FileHash -LiteralPath (Join-Path $buildRoot 'RailCraftWhitebox.exe') -Algorithm SHA256).Hash.ToLowerInvariant()
+$exeHash = (Get-FileHash -LiteralPath (Join-Path $buildRoot $executableName) -Algorithm SHA256).Hash.ToLowerInvariant()
 $zipHash = (Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash.ToLowerInvariant()
 @(
-    "$exeHash  RailCraftWhitebox.exe"
+    "$exeHash  $executableName"
     "$zipHash  $([System.IO.Path]::GetFileName($archivePath))"
 ) | Set-Content -LiteralPath $checksumsPath -Encoding ascii
 
 [pscustomobject]@{
     Version = $Version
+    PackageKind = $PackageKind
     BuildDirectory = $buildRoot
     StagingDirectory = $stagingRoot
     Archive = $archivePath

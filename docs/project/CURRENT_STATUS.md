@@ -2,6 +2,7 @@
 
 更新时间：2026-09-04
 当前分支：`codex/cw200k-model-upgrade`
+当前内测候选：`v0.4.0-internal.1`
 本批实现提交：`077fa3b refactor(repo): establish Unity Art Alpha mainline`
 
 ## 阶段与结论
@@ -14,6 +15,7 @@
 - 删除前生成的 `Builds/Whitebox` 与 `ReleasePackages` 已移至归档的 `generated-before-retirement/`；当前材料包版 Player 已于 2026-09-04 重新构建。
 - `ART-001` 免费资产扩展已写入生成器并重建场景：传感器座、定位元件、高度控制元件和一系弹性元件使用通用教学视觉；工具、安全隔离、厂区远景和远景车辆使用展示风格资产。该批仍需 Unity 运行门禁，不能替代上一批 FLOW-002 验收结论。
 - `ART-002` 已在生成器中补入项目自有程序化教学件：二系空气弹簧、剪叉升降台、四点吊具、HMI 柜和线缆展示。该层不含车型专用尺寸与性能参数，待 Unity 许可恢复后重建序列化场景并刷新运行证据。
+- `DEBUG-001` 受控调试模式已接入：启动参数 `-railcraft-internal-debug` 加 `Ctrl+Alt+Shift+F10` 双门禁；解锁后可准备材料、推进落车、完成调试检验和重置进度，并显示持续水印。
 
 ## 已完成
 
@@ -32,6 +34,7 @@
 | 独立发布包 | `v0.4.0-art-alpha.5` ZIP 184,285,006 bytes，解包目录烟测通过 |
 | ART-001 静态接入 | `ThirdPerson/Editor/FreeAssetExpansionVisualFactory.cs`、`Artifacts/Whitebox/ArtAlpha/art-001-asset-expansion.md` |
 | ART-002 原创补缺 | `ThirdPerson/Editor/ProjectAuthoredEquipmentVisualFactory.cs`、`Artifacts/Whitebox/ArtAlpha/art-002-authored-gap-fill.md` |
+| DEBUG-001 内测调试 | `Runtime/UI/WhiteboxInternalDebugController.cs`、`Documentation/InternalTest.md` |
 
 ## 仍在处理
 
@@ -56,7 +59,7 @@
 
 ## 下一批建议顺序
 
-1. 恢复 Unity 许可并完成 ART-001 的 EditMode、Windows 构建和 Player 烟测；
+1. 恢复 Unity 许可并完成 `v0.4.0-internal.1` 的场景重建、EditMode、内测构建和 Player 烟测；
 2. 为已接入通用教学件建立工程替换清单，并接入可核验工装/HMI 资产；
 3. 完成厂房近景/中景/远景三层美术；
 4. 重建场景、跑测试、构建、烟测并更新本文件和 Art Alpha 证据；

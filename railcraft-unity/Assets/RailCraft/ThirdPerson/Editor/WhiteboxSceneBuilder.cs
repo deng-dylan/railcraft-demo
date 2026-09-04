@@ -841,6 +841,9 @@ namespace RailCraft.ThirdPerson.Editor
                 mainMenuUi.Footnote,
                 knowledgePresenter);
 
+            var internalDebug = canvasObject.AddComponent<WhiteboxInternalDebugController>();
+            internalDebug.Configure(sessionHost, saveController, playerRig.InputLock);
+
             ArtAlphaAudioFactory.TryAttach(
                 canvasObject,
                 sessionHost,
