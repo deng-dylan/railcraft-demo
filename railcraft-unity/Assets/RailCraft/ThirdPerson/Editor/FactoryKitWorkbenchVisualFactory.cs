@@ -5,8 +5,8 @@ namespace RailCraft.ThirdPerson.Editor
 {
     /// <summary>
     /// Builds the visual layer for knowledge, assembly and commissioning
-    /// stations from small CC0 Factory Kit modules. Gameplay triggers remain on
-    /// the station roots; these objects are presentation-only.
+    /// stations from the imported operation-table model. Gameplay triggers
+    /// remain on station roots; solid workbench colliders are generated here.
     /// </summary>
     public static class FactoryKitWorkbenchVisualFactory
     {
@@ -17,17 +17,14 @@ namespace RailCraft.ThirdPerson.Editor
         public const string ScreenFlatAssetPath = AssetRootPath + "/screen-flat.fbx";
         public const string LeverAssetPath = AssetRootPath + "/lever-single.fbx";
         public const string ButtonAssetPath = AssetRootPath + "/button-floor-square.fbx";
+        public const string OperationTableAssetPath =
+            "Assets/RailCraft/ThirdPerson/Art/ThirdParty/Components/RebelHideoutOperationTable/Models/RebelHideoutOperationTable.dae";
 
         public const string QuizWorkbenchRootName = "QuizWorkbenchVisual";
         public const string AssemblyTableRootName = "AssemblyTableVisual";
         public const string CommissioningConsoleRootName = "CommissioningConsoleVisual";
 
-        public static bool IsAvailable =>
-            HasAsset(MachineBedAssetPath) &&
-            HasAsset(ScreenPanelWideAssetPath) &&
-            HasAsset(ScreenFlatAssetPath) &&
-            HasAsset(LeverAssetPath) &&
-            HasAsset(ButtonAssetPath);
+        public static bool IsAvailable => HasAsset(OperationTableAssetPath);
 
         public static bool TryBuildQuizWorkbench(
             Transform parent,
@@ -40,40 +37,7 @@ namespace RailCraft.ThirdPerson.Editor
             if (root == null || !IsAvailable)
                 return false;
 
-            var created = 0;
-            created += CreatePart(
-                root.transform,
-                "MachineBed",
-                MachineBedAssetPath,
-                new Vector3(0f, 0.42f, 0f),
-                new Vector3(1f, 0.36f, 0.70f),
-                bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "HmiScreen",
-                ScreenPanelWideAssetPath,
-                new Vector3(0f, 1.30f, -0.51f),
-                Quaternion.Euler(0f, 180f, 0f),
-                new Vector3(1.38f, 1.10f, 0.13f),
-                screenMaterial ?? bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "ConfirmButton",
-                ButtonAssetPath,
-                new Vector3(-0.46f, 0.89f, -0.70f),
-                Quaternion.identity,
-                new Vector3(0.26f, 0.18f, 0.26f),
-                accentMaterial ?? bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "ModeLever",
-                LeverAssetPath,
-                new Vector3(0.47f, 0.92f, -0.66f),
-                Quaternion.identity,
-                new Vector3(0.34f, 0.34f, 0.34f),
-                accentMaterial ?? bodyMaterial);
-
-            if (created == 0)
+            if (!CreateOperationTable(root.transform, new Vector3(2.7f, 1.13f, 1.356f)))
             {
                 Object.DestroyImmediate(root);
                 root = null;
@@ -90,56 +54,16 @@ namespace RailCraft.ThirdPerson.Editor
             Material screenMaterial,
             Material accentMaterial,
             float spanMultiplier,
-            out GameObject root)
+            out GameObject root,
+            float surfaceHeight = 0.8f)
         {
             root = CreateRoot(parent, AssemblyTableRootName);
             if (root == null || !IsAvailable)
                 return false;
 
             var span = Mathf.Clamp(spanMultiplier, 0.75f, 1.6f);
-            var created = 0;
-            created += CreatePart(
-                root.transform,
-                "MachineBed_Left",
-                MachineBedAssetPath,
-                new Vector3(-1.65f * span, 0.46f, 0f),
-                Quaternion.identity,
-                new Vector3(1.42f * span, 0.39f, 0.76f),
-                bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "MachineBed_Right",
-                MachineBedAssetPath,
-                new Vector3(1.65f * span, 0.46f, 0f),
-                Quaternion.identity,
-                new Vector3(1.42f * span, 0.39f, 0.76f),
-                bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "AssemblyScreen",
-                ScreenFlatAssetPath,
-                new Vector3(0f, 1.12f, -1.18f),
-                Quaternion.Euler(0f, 180f, 0f),
-                new Vector3(0.80f * span, 0.92f, 0.13f),
-                screenMaterial ?? bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "AssemblyButton",
-                ButtonAssetPath,
-                new Vector3(-0.44f * span, 0.94f, -1.30f),
-                Quaternion.identity,
-                new Vector3(0.24f, 0.16f, 0.24f),
-                accentMaterial ?? bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "AssemblyLever",
-                LeverAssetPath,
-                new Vector3(0.44f * span, 0.94f, -1.27f),
-                Quaternion.identity,
-                new Vector3(0.30f, 0.30f, 0.30f),
-                accentMaterial ?? bodyMaterial);
-
-            if (created == 0)
+            if (!CreateOperationTable(root.transform,
+                    new Vector3(5.4f * span, Mathf.Clamp(surfaceHeight, 0.5f, 1.2f), 3.3f * span)))
             {
                 Object.DestroyImmediate(root);
                 root = null;
@@ -161,41 +85,7 @@ namespace RailCraft.ThirdPerson.Editor
             if (root == null || !IsAvailable)
                 return false;
 
-            var created = 0;
-            created += CreatePart(
-                root.transform,
-                "MachineBed",
-                MachineBedAssetPath,
-                new Vector3(0f, 0.42f, 0f),
-                Quaternion.identity,
-                new Vector3(1.56f, 0.36f, 0.72f),
-                bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "StatusScreen",
-                ScreenFlatAssetPath,
-                new Vector3(0f, 1.20f, -0.56f),
-                Quaternion.Euler(0f, 180f, 0f),
-                new Vector3(1.05f, 0.95f, 0.14f),
-                screenMaterial ?? bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "ConfirmButton",
-                ButtonAssetPath,
-                new Vector3(-0.46f, 0.88f, -0.73f),
-                Quaternion.identity,
-                new Vector3(0.25f, 0.17f, 0.25f),
-                accentMaterial ?? bodyMaterial);
-            created += CreatePart(
-                root.transform,
-                "ServiceLever",
-                LeverAssetPath,
-                new Vector3(0.46f, 0.90f, -0.70f),
-                Quaternion.identity,
-                new Vector3(0.32f, 0.32f, 0.32f),
-                accentMaterial ?? bodyMaterial);
-
-            if (created == 0)
+            if (!CreateOperationTable(root.transform, new Vector3(2.7f, 1.13f, 1.356f)))
             {
                 Object.DestroyImmediate(root);
                 root = null;
@@ -224,42 +114,91 @@ namespace RailCraft.ThirdPerson.Editor
             return root;
         }
 
-        private static int CreatePart(
+        private static bool CreateOperationTable(
             Transform parent,
-            string name,
-            string assetPath,
-            Vector3 localPosition,
-            Vector3 localScale,
-            Material material)
+            Vector3 targetSize)
         {
-            return CreatePart(
-                parent,
-                name,
-                assetPath,
-                localPosition,
-                Quaternion.identity,
-                localScale,
-                material);
+            if (!FactoryKitEnvironmentVisualFactory.TryCreateAsset(
+                    parent,
+                    "OperationTable",
+                    OperationTableAssetPath,
+                    Vector3.zero,
+                    Quaternion.identity,
+                    Vector3.one,
+                    null,
+                    out var visual))
+            {
+                return false;
+            }
+
+            // The source declares meter=0.01 despite a roughly 2-unit wide mesh.
+            // Fit the imported bounds to display dimensions, independently of
+            // importer units. These dimensions are layout choices, not engineering data.
+            var bounds = CalculateLocalMeshBounds(visual, parent);
+            if (bounds.size.x <= 0f || bounds.size.y <= 0f || bounds.size.z <= 0f)
+            {
+                Object.DestroyImmediate(visual);
+                return false;
+            }
+            var scale = new Vector3(targetSize.x / bounds.size.x,
+                targetSize.y / bounds.size.y, targetSize.z / bounds.size.z);
+            visual.transform.localScale = scale;
+            visual.transform.localPosition = Vector3.Scale(
+                new Vector3(-bounds.center.x, -bounds.min.y, -bounds.center.z), scale);
+            AddSolidWorkbenchColliders(parent, targetSize);
+            return true;
         }
 
-        private static int CreatePart(
-            Transform parent,
-            string name,
-            string assetPath,
-            Vector3 localPosition,
-            Quaternion localRotation,
-            Vector3 localScale,
-            Material material)
+        public static Bounds CalculateLocalMeshBounds(GameObject visual, Transform relativeTo)
         {
-            return FactoryKitEnvironmentVisualFactory.TryCreateAsset(
-                       parent,
-                       name,
-                       assetPath,
-                       localPosition,
-                       localRotation,
-                       localScale,
-                       material,
-                       out _) ? 1 : 0;
+            var bounds = new Bounds();
+            var initialized = false;
+            foreach (var filter in visual.GetComponentsInChildren<MeshFilter>(true))
+            {
+                if (filter.sharedMesh == null)
+                    continue;
+                var meshBounds = filter.sharedMesh.bounds;
+                var matrix = relativeTo.worldToLocalMatrix * filter.transform.localToWorldMatrix;
+                for (var corner = 0; corner < 8; corner++)
+                {
+                    var point = matrix.MultiplyPoint3x4(meshBounds.center + Vector3.Scale(
+                        meshBounds.extents, new Vector3((corner & 1) == 0 ? -1 : 1,
+                            (corner & 2) == 0 ? -1 : 1, (corner & 4) == 0 ? -1 : 1)));
+                    if (!initialized)
+                    {
+                        bounds = new Bounds(point, Vector3.zero);
+                        initialized = true;
+                    }
+                    else bounds.Encapsulate(point);
+                }
+            }
+            return bounds;
+        }
+
+        private static void AddSolidWorkbenchColliders(Transform parent, Vector3 size)
+        {
+            var collisionRoot = new GameObject("WorkbenchCollision");
+            collisionRoot.transform.SetParent(parent, false);
+
+            // Tabletop and two pedestal supports follow the supplied mesh silhouette.
+            // A character capsule hits the top from every side; the under-table
+            // gap stays open. No mesh physics or oversized invisible rear wall.
+            AddBoxCollider(collisionRoot.transform, "Top", Vector3.Scale(size, new Vector3(0f, 0.91f, 0f)),
+                Vector3.Scale(size, new Vector3(0.98f, 0.18f, 0.98f)));
+            AddBoxCollider(collisionRoot.transform, "LeftSupport", Vector3.Scale(size, new Vector3(-0.357f, 0.41f, 0f)),
+                Vector3.Scale(size, new Vector3(0.25f, 0.82f, 0.70f)));
+            AddBoxCollider(collisionRoot.transform, "RightSupport", Vector3.Scale(size, new Vector3(0.357f, 0.41f, 0f)),
+                Vector3.Scale(size, new Vector3(0.25f, 0.82f, 0.70f)));
+        }
+
+        private static void AddBoxCollider(Transform parent, string name, Vector3 center, Vector3 size)
+        {
+            var item = new GameObject(name);
+            item.transform.SetParent(parent, false);
+            var collider = item.AddComponent<BoxCollider>();
+            collider.center = center;
+            collider.size = size;
+            collider.isTrigger = false;
         }
 
         private static void MarkStatic(GameObject root)

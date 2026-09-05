@@ -1,0 +1,11 @@
+[PASS] All 32 current mainline anchor files are present.
+[PASS] Unity ThirdPerson assets have complete metadata and 439 unique GUIDs.
+[PASS] EditorBuildSettings uses ThirdPersonWhitebox as the single default scene.
+[PASS] Unity package and render configuration exposes Windows as the only release target.
+[PASS] Question bank has 58 unique IDs: 50 choice and 8 judgment questions.
+[PASS] Pre-Art-Alpha Demo and fixed-view directories are retired from the working tree.
+[PASS] No Unity generated directories are tracked.
+[PASS] No deliveries/**/release/** files are tracked.
+[PASS] No tracked ordinary file exceeds 95 MiB (largest: railcraft-unity/Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity, 2.73 MiB).
+
+REPOSITORY_LAYOUT_CHECK_SUCCEEDED: 9 check(s) passed.

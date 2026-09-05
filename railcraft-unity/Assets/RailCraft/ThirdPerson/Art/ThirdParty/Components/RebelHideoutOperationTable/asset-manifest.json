@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "batch": "ART-004",
+  "assetId": "RebelHideoutOperationTable",
+  "assetIdentity": "展示风格",
+  "title": "Rebel Hideout Part 2: Main Operation Table",
+  "creator": "Adrian Dierigl",
+  "creatorUrl": "https://sketchfab.com/adriandierigl",
+  "sourceUrl": "https://sketchfab.com/3d-models/rebel-hideout-part-2-main-operation-table-e716a56134cf459b897cc9107b14125f",
+  "sourceArchive": {
+    "path": "local-source-archive (not tracked)",
+    "bytes": 29015595,
+    "sha256": "e6f881a2799f45144909adf21ceb4d3df255b0f57e4f63a0090c02b263886c62",
+    "nestedArchive": "source/model.zip",
+    "containsLicenseFile": false
+  },
+  "license": {
+    "id": "CC-BY-4.0",
+    "name": "Creative Commons Attribution 4.0 International",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "legalCode": "https://creativecommons.org/licenses/by/4.0/legalcode.en",
+    "status": "verified-official-api",
+    "verifiedOn": "2026-09-05",
+    "evidenceUrl": "https://api.sketchfab.com/v3/models/e716a56134cf459b897cc9107b14125f",
+    "attributionRequired": true,
+    "modificationNoticeRequired": true,
+    "commercialUseAllowed": true,
+    "redistributionAllowedWithLicenseConditions": true,
+    "notice": "LICENSE.txt"
+  },
+  "officialModelEvidence": {
+    "uid": "e716a56134cf459b897cc9107b14125f",
+    "name": "Rebel Hideout Part 2: Main Operation Table",
+    "publishedAt": "2018-07-25T20:46:09.970283",
+    "author": "Adrian Dierigl",
+    "username": "adriandierigl",
+    "isDownloadable": true,
+    "vertexCount": 6792,
+    "faceCount": 12748,
+    "licenseLabel": "CC Attribution",
+    "licenseUrl": "http://creativecommons.org/licenses/by/4.0/",
+    "licenseRequirements": "Author must be credited. Commercial use is allowed."
+  },
+  "supplementaryEvidence": {
+    "screenshotOriginalPath": "local-temporary-screenshot (not tracked)",
+    "screenshotSha256": "0d9059b3a9451a31b18375dc25a9ce71a0025d8fd56980f29aaa79e59184db23",
+    "screenshotInspectedOn": "2026-09-05",
+    "note": "User screenshot confirms title, Adrian Dierigl and CC Attribution. Official API supplies the exact BY 4.0 version."
+  },
+  "geometry": {
+    "format": "COLLADA",
+    "meshes": 2,
+    "positionRecords": 9170,
+    "triangles": 12748,
+    "meshesDetail": [
+      {
+        "name": "meshId0_name",
+        "positionRecords": 5877,
+        "triangles": 7668
+      },
+      {
+        "name": "meshId1_name",
+        "positionRecords": 3293,
+        "triangles": 5080
+      }
+    ],
+    "declaredUnitName": "meter",
+    "declaredMetersPerUnit": 0.01,
+    "upAxis": "Y_UP",
+    "engineeringDimensionsVerified": false,
+    "sourceGeometryUnmodified": true,
+    "lod0": "source",
+    "lod1": null,
+    "lod2": null,
+    "note": "DAE position records differ from the source site vertex statistic; both are recorded with their measurement scope."
+  },
+  "textures": {
+    "materialGroups": [
+      "1001",
+      "1002"
+    ],
+    "channels": [
+      "albedo",
+      "AO",
+      "metallic",
+      "normal",
+      "roughness"
+    ],
+    "count": 10,
+    "sourceDimensions": "2048x2048",
+    "sourceTextureBytesUnmodified": true,
+    "daeTextureBindingsPresent": false
+  },
+  "integration": {
+    "factory": "Assets/RailCraft/ThirdPerson/Editor/FactoryKitWorkbenchVisualFactory.cs",
+    "purpose": "Materials knowledge, assembly and debug/inspection workstations",
+    "scale": "Display placement determined from imported renderer bounds; no engineering scale claim",
+    "collisionContract": "Separate WorkbenchCollision non-trigger BoxCollider group, root interaction Trigger retained",
+    "materialAdaptation": "URP material binding and roughness-to-smoothness conversion",
+    "runtimeValidation": "See ART-004 batch acceptance evidence; this manifest covers source/license and static file checks"
+  },
+  "files": [
+    {
+      "path": "Models/RebelHideoutOperationTable.dae",
+      "bytes": 1437961,
+      "sha256": "f61008d4744f6cebd47345dd8ad4f829c7f9250e5ff21a46fc0ba1a4df936b53",
+      "sourceNestedEntry": "model/model.dae",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "Textures/1001_albedo.jpg",
+      "bytes": 640724,
+      "sha256": "056653d9e33676655dca1eea7633306c0e721df396ff8a8453eb8ba3b4f01910",
+      "sourceNestedEntry": "model/textures/1001_albedo.jpg",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "path": "Textures/1001_AO.jpg",
+      "bytes": 408369,
+      "sha256": "8b20303cc121941b7e39389cc67eb9779cedb38e42d1247fa054bc169b547985",
+      "sourceNestedEntry": "model/textures/1001_AO.jpg",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "path": "Textures/1001_metallic.jpg",
+      "bytes": 639430,
+      "sha256": "330b665418c70e48d3c341c25f66cf02c75441bdab8754bbbcfcb21a810fe120",
+      "sourceNestedEntry": "model/textures/1001_metallic.jpg",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "path": "Textures/1001_normal.png",
+      "bytes": 4067292,
+      "sha256": "8815810b073dc18ab19288fe40bc22d92ca119e57b08b59bee202a418f0a8004",
+      "sourceNestedEntry": "model/textures/1001_normal.png",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "path": "Textures/1001_roughness.jpg",
+      "bytes": 1136468,
+      "sha256": "c0792ca9f413c4aca30bcfe53befd5761f35f4a81c3a598675a9cca5ad324bb6",
+      "sourceNestedEntry": "model/textures/1001_roughness.jpg",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "path": "Textures/1002_albedo.jpg",
+      "bytes": 589841,
+      "sha256": "ebffbdf5e1a047bb5eed11c06679512f85e9e45cfc8df58583426ee6e1d796e8",
+      "sourceNestedEntry": "model/textures/1002_albedo.jpg",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "path": "Textures/1002_AO.jpg",
+      "bytes": 335811,
+      "sha256": "41e8277418a24568d2088e2390ea93909bcc7541e3fcca3ba88caa78a4cb5a74",
+      "sourceNestedEntry": "model/textures/1002_AO.jpg",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "path": "Textures/1002_metallic.jpg",
+      "bytes": 684429,
+      "sha256": "2b2f559b5368655faa57d4a290479c42b458c3b750432c61320ffe927b9f4902",
+      "sourceNestedEntry": "model/textures/1002_metallic.jpg",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "path": "Textures/1002_normal.png",
+      "bytes": 4337048,
+      "sha256": "abb7fdc0c038ac1ee457346803f952cd8fe22a0d9959fd105b8d45cd01624a22",
+      "sourceNestedEntry": "model/textures/1002_normal.png",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "path": "Textures/1002_roughness.jpg",
+      "bytes": 1710269,
+      "sha256": "cf6e6a5cf09e00e98febaa43940a422b7b9dccd54eabad9b9b7e5178e911512e",
+      "sourceNestedEntry": "model/textures/1002_roughness.jpg",
+      "matchesSourceBytes": true,
+      "width": 2048,
+      "height": 2048
+    }
+  ]
+}

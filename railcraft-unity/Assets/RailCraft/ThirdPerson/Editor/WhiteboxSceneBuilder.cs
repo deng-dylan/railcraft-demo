@@ -171,6 +171,7 @@ namespace RailCraft.ThirdPerson.Editor
         public static void Build()
         {
             EnsureFolders();
+            OperationTableAssetPreparation.Prepare();
             var palette = BuildPalette();
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             scene.name = "ThirdPersonWhitebox";
@@ -1369,7 +1370,8 @@ namespace RailCraft.ThirdPerson.Editor
                     palette.Station,
                     palette.Running,
                     1.22f,
-                    out _))
+                    out _,
+                    surfaceHeight: 0.67f))
             {
                 CreatePrimitive(PrimitiveType.Cube, station.transform, "AssemblyTable",
                     new Vector3(0f, 0.5f, 0f), new Vector3(6.4f, 0.34f, 4.6f), palette.Steel);

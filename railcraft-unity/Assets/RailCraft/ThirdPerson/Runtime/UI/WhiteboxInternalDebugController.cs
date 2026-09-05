@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using RailCraft.ThirdPerson.Domain;
 using RailCraft.ThirdPerson.Player;
 using RailCraft.ThirdPerson.World;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace RailCraft.ThirdPerson.UI
@@ -14,6 +17,7 @@ namespace RailCraft.ThirdPerson.UI
     {
         public const string LaunchArgument = "-railcraft-internal-debug";
         public const string UnlockLogMarker = "RAILCRAFT_INTERNAL_DEBUG_UNLOCKED";
+        public const string CollisionBoxLogMarker = "RAILCRAFT_INTERNAL_DEBUG_COLLISION_BOXES";
 
         [SerializeField] private WhiteboxGameSessionHost sessionHost;
         [SerializeField] private WhiteboxSaveController saveController;
@@ -25,10 +29,25 @@ namespace RailCraft.ThirdPerson.UI
         private GameObject panel;
         private Text watermark;
         private Text statusText;
+        private bool collisionBoxesVisible;
+        private GameObject collisionLines;
+        private Mesh collisionMesh;
+        private Material collisionMaterial;
+        private readonly List<Vector3> collisionVertices = new List<Vector3>();
+        private readonly List<Color> collisionColors = new List<Color>();
+        private readonly List<int> collisionIndices = new List<int>();
+        private static readonly int[] BoxEdgeIndices =
+        {
+            0, 1, 1, 2, 2, 3, 3, 0,
+            4, 5, 5, 6, 6, 7, 7, 4,
+            0, 4, 1, 5, 2, 6, 3, 7
+        };
 
         public bool IsArmed => armed;
         public bool IsUnlocked => unlocked;
         public bool IsPanelVisible => panel != null && panel.activeSelf;
+        public bool AreCollisionBoxesVisible => collisionBoxesVisible;
+        public int VisibleCollisionBoxCount { get; private set; }
 
         public void Configure(WhiteboxGameSessionHost host, WhiteboxSaveController save,
             ThirdPersonInputLock configuredInputLock)
@@ -66,6 +85,26 @@ namespace RailCraft.ThirdPerson.UI
 
             if (unlocked && keyboard.f10Key.wasPressedThisFrame)
                 SetPanelVisible(!IsPanelVisible);
+        }
+
+        private void LateUpdate()
+        {
+            if (collisionBoxesVisible)
+                RefreshCollisionBoxes();
+        }
+
+        private void OnDisable()
+        {
+            collisionBoxesVisible = false;
+            VisibleCollisionBoxCount = 0;
+            if (collisionLines != null) collisionLines.SetActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            DestroyDebugResource(collisionLines);
+            DestroyDebugResource(collisionMesh);
+            DestroyDebugResource(collisionMaterial);
         }
 
         public void UnlockForTests()
@@ -132,6 +171,22 @@ namespace RailCraft.ThirdPerson.UI
             FinishAction("已重置当前内测进度");
         }
 
+        public void ToggleCollisionBoxes()
+        {
+            RequireUnlocked();
+            collisionBoxesVisible = !collisionBoxesVisible;
+            if (collisionBoxesVisible)
+                RefreshCollisionBoxes();
+            else
+            {
+                VisibleCollisionBoxCount = 0;
+                if (collisionLines != null) collisionLines.SetActive(false);
+            }
+            if (statusText != null)
+                statusText.text = collisionBoxesVisible ? "碰撞箱已显示" : "碰撞箱已隐藏";
+            Debug.Log(CollisionBoxLogMarker + " " + (collisionBoxesVisible ? "ON" : "OFF"));
+        }
+
         private void Unlock()
         {
             unlocked = true;
@@ -161,13 +216,14 @@ namespace RailCraft.ThirdPerson.UI
             layout.childControlHeight = true;
             layout.childControlWidth = true;
             layout.childForceExpandHeight = false;
-            SetRect((RectTransform)panel.transform, new Vector2(1f, 0.5f), new Vector2(-20f, 0f), new Vector2(380f, 430f), new Vector2(1f, 0.5f));
+            SetRect((RectTransform)panel.transform, new Vector2(1f, 0.5f), new Vector2(-20f, 0f), new Vector2(380f, 530f), new Vector2(1f, 0.5f));
 
             CreateText(panel.transform, "Title", "内部调试工具", 26, TextAnchor.MiddleCenter, Color.white).gameObject.AddComponent<LayoutElement>().preferredHeight = 48f;
             CreateButton(panel.transform, "PrepareMaterials", "解锁并领取全部材料包", PrepareAllMaterials);
             CreateButton(panel.transform, "AssembleLanding", "推进至落车完成", AssembleToLanding);
             CreateButton(panel.transform, "CompleteTraining", "完成调试检验", CompleteTraining);
             CreateButton(panel.transform, "ResetTraining", "重置当前进度", ResetTraining);
+            CreateButton(panel.transform, "ToggleCollisionBoxes", "显示/隐藏碰撞箱", ToggleCollisionBoxes);
             statusText = CreateText(panel.transform, "Status", "已授权。所有调试操作都会写入日志。", 16, TextAnchor.UpperLeft, new Color(0.75f, 0.86f, 0.92f));
             statusText.gameObject.AddComponent<LayoutElement>().preferredHeight = 80f;
         }
@@ -204,6 +260,90 @@ namespace RailCraft.ThirdPerson.UI
         private void RequireUnlocked()
         {
             if (!unlocked) throw new InvalidOperationException("Internal debug mode has not been unlocked.");
+        }
+
+        public void RefreshCollisionBoxes()
+        {
+            if (!unlocked || !collisionBoxesVisible || !isActiveAndEnabled)
+                return;
+
+            BuildCollisionRendererIfNeeded();
+            collisionVertices.Clear();
+            collisionColors.Clear();
+            collisionIndices.Clear();
+            VisibleCollisionBoxCount = 0;
+            foreach (var collider in FindObjectsByType<Collider>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            {
+                if (collider == null || !collider.enabled || collider.isTrigger ||
+                    !collider.gameObject.activeInHierarchy)
+                    continue;
+
+                var bounds = collider.bounds;
+                var min = bounds.min;
+                var max = bounds.max;
+                var first = collisionVertices.Count;
+                collisionVertices.Add(new Vector3(min.x, min.y, min.z));
+                collisionVertices.Add(new Vector3(max.x, min.y, min.z));
+                collisionVertices.Add(new Vector3(max.x, min.y, max.z));
+                collisionVertices.Add(new Vector3(min.x, min.y, max.z));
+                collisionVertices.Add(new Vector3(min.x, max.y, min.z));
+                collisionVertices.Add(new Vector3(max.x, max.y, min.z));
+                collisionVertices.Add(new Vector3(max.x, max.y, max.z));
+                collisionVertices.Add(new Vector3(min.x, max.y, max.z));
+                var color = collider.attachedRigidbody != null ? Color.yellow : Color.cyan;
+                for (var corner = 0; corner < 8; corner++) collisionColors.Add(color);
+                foreach (var index in BoxEdgeIndices) collisionIndices.Add(first + index);
+                VisibleCollisionBoxCount++;
+            }
+
+            collisionMesh.Clear();
+            collisionMesh.SetVertices(collisionVertices);
+            collisionMesh.SetColors(collisionColors);
+            collisionMesh.SetIndices(collisionIndices, MeshTopology.Lines, 0, true);
+            collisionLines.SetActive(VisibleCollisionBoxCount > 0);
+        }
+
+        private void BuildCollisionRendererIfNeeded()
+        {
+            if (collisionLines != null) return;
+
+            // The Canvas already references this unlit shader in every Player build.
+            // Cloning it avoids an editor-only Gizmo path or a stripped Shader.Find variant.
+            collisionMaterial = new Material(Graphic.defaultGraphicMaterial)
+            {
+                name = "InternalDebugCollisionLines_Runtime",
+                hideFlags = HideFlags.DontSave,
+                renderQueue = (int)RenderQueue.Overlay
+            };
+            collisionMaterial.SetInt("unity_GUIZTestMode", (int)CompareFunction.Always);
+            collisionMesh = new Mesh
+            {
+                name = "InternalDebugCollisionBounds_Runtime",
+                hideFlags = HideFlags.DontSave,
+                indexFormat = IndexFormat.UInt32
+            };
+            collisionMesh.MarkDynamic();
+            // Vertices are world coordinates. Keep this object at the scene root so the
+            // screen-space Canvas transform cannot scale or offset the collision bounds.
+            collisionLines = new GameObject("InternalDebugCollisionBoxes", typeof(MeshFilter), typeof(MeshRenderer))
+            {
+                hideFlags = HideFlags.DontSave
+            };
+            SceneManager.MoveGameObjectToScene(collisionLines, gameObject.scene);
+            collisionLines.GetComponent<MeshFilter>().sharedMesh = collisionMesh;
+            var renderer = collisionLines.GetComponent<MeshRenderer>();
+            renderer.sharedMaterial = collisionMaterial;
+            renderer.shadowCastingMode = ShadowCastingMode.Off;
+            renderer.receiveShadows = false;
+            renderer.lightProbeUsage = LightProbeUsage.Off;
+            renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
+        }
+
+        private static void DestroyDebugResource(UnityEngine.Object resource)
+        {
+            if (resource == null) return;
+            if (Application.isPlaying) Destroy(resource);
+            else DestroyImmediate(resource);
         }
 
         private static Text CreateText(Transform parent, string name, string value, int size, TextAnchor alignment, Color color)

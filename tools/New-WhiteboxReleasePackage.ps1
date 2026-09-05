@@ -84,6 +84,18 @@ if (Test-Path -LiteralPath $runtimeGuide) {
         Join-Path $stagingRoot 'ThirdPersonWhitebox.md')
 }
 
+# ART-004: CC BY attribution must travel with the compiled model in the ZIP.
+$operationTableNotices = Join-Path $repositoryRoot 'railcraft-unity\Assets\RailCraft\ThirdPerson\Art\ThirdParty\Components\RebelHideoutOperationTable'
+$operationTableNoticeTarget = Join-Path $stagingRoot 'ThirdPartyNotices\RebelHideoutOperationTable'
+New-Item -ItemType Directory -Force -Path $operationTableNoticeTarget | Out-Null
+foreach ($noticeName in @('README.md', 'LICENSE.txt', 'asset-manifest.json')) {
+    Copy-Item -LiteralPath (Join-Path $operationTableNotices $noticeName) -Destination $operationTableNoticeTarget
+}
+if ($PackageKind -eq 'InternalTest') {
+    @('@echo off', 'start "" "%~dp0RailCraftInternalTest.exe" -railcraft-internal-debug') |
+        Set-Content -LiteralPath (Join-Path $stagingRoot 'StartInternalDebug.cmd') -Encoding ascii
+}
+
 Compress-Archive -Path (Join-Path $stagingRoot '*') -DestinationPath $archivePath -CompressionLevel Optimal
 
 $exeHash = (Get-FileHash -LiteralPath (Join-Path $buildRoot $executableName) -Algorithm SHA256).Hash.ToLowerInvariant()

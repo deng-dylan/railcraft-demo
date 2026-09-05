@@ -22,8 +22,9 @@ domain PartIds, assembly anchors and the compatible snapshot schema remain stabl
   and barrier silhouettes to the background.
 - Twelve UI sounds are staged; button, correct/success, warning/failure and repair
   clips are wired through one non-spatial `WhiteboxAudioPresenter`.
-- Five package knowledge workbenches, four package assembly tables, the composite
-  table and commissioning consoles use modular Kenney Factory Kit visual assemblies.
+- `ART-004` replaces five package knowledge workbenches, four package assembly tables,
+  the composite table and three commissioning consoles with the supplied Rebel Hideout
+  operation-table model, two URP PBR materials and three solid boxes per table.
 - The explicit `QIANYINLAGAN` traction-rod group from the CW-200K reference is
   available through the part-visual pipeline; unresolved sensor, positioning and
   height-control parts continue to use safe fallbacks.
@@ -43,6 +44,16 @@ domain PartIds, assembly anchors and the compatible snapshot schema remain stabl
   scissor lift table, four-point lifting spreader, HMI cabinet and cable run.
   These objects close presentation gaps while remaining explicitly generic,
   dimension-neutral teaching or display assets.
+- `ART-003` previously upgraded package knowledge and commissioning workstations with generated
+  worktops, lower shelves, side frames, backboards, tool rails and safety strips.
+  The root interaction trigger remains intact; the `WorkbenchStructure` child adds
+  solid BoxCollider volumes for physical blocking without high-poly MeshCollider.
+- `ART-004` supersedes that workbench structure with `OperationTable` and
+  `WorkbenchCollision` children. Imported bounds normalize the source's 0.01 unit
+  marker, center each table and place its base at floor level. Module surfaces remain
+  at 0.8 m and the composite surface at 0.67 m to preserve existing assembly anchors.
+  These sizes are presentation layout choices. CC BY 4.0 attribution and source
+  audit travel in the package under `ThirdPartyNotices/RebelHideoutOperationTable`.
 
 All imported art is attached through deterministic factories called by
 `WhiteboxSceneBuilder`. Rebuilding the scene therefore preserves this pass.
@@ -80,11 +91,10 @@ directory and independently staged package reported
 `RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED`. The player-facing progress is 14 steps
 and the material gate uses ten core questions across five packages.
 
-Those results belong to `FLOW-002`. The subsequent `ART-001` asset expansion
-has a rebuilt serialized scene and static source/license audit, but its EditMode,
-Windows build and Player smoke results remain pending because the local Unity
-license currently exits with code 198. See
-`Artifacts/Whitebox/ArtAlpha/art-001-asset-expansion.md`.
+Those results belong to `FLOW-002`. `v0.4.0-internal.1` subsequently passed 212/212
+EditMode checks, Windows build and Player/package smoke for ART-001/ART-002/DEBUG-001.
+The current ART-004/DEBUG-002 evidence is recorded separately under
+`Artifacts/Whitebox/InternalTest/Internal2/`.
 
 ## Known limits
 

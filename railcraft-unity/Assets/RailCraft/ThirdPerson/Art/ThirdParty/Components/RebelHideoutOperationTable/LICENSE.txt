@@ -1,0 +1,29 @@
+Rebel Hideout Part 2: Main Operation Table
+Creator: Adrian Dierigl
+Creator profile: https://sketchfab.com/adriandierigl
+Source: https://sketchfab.com/3d-models/rebel-hideout-part-2-main-operation-table-e716a56134cf459b897cc9107b14125f
+
+Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
+License: https://creativecommons.org/licenses/by/4.0/
+Legal code: https://creativecommons.org/licenses/by/4.0/legalcode.en
+
+License verification: 2026-09-05, Sketchfab official public model API:
+https://api.sketchfab.com/v3/models/e716a56134cf459b897cc9107b14125f
+The response identifies Adrian Dierigl, CC Attribution, the BY 4.0 license URL,
+and a downloadable model. The original user-supplied archive contains no
+standalone license document; this notice records the verified online license.
+
+Attribution for redistribution:
+"Rebel Hideout Part 2: Main Operation Table" by Adrian Dierigl, available from
+the source URL above, is licensed under CC BY 4.0.
+
+RailCraft adaptation: source model and source texture bytes are retained.
+Files are organized and the DAE filename is changed. The integration layer
+binds URP materials, converts roughness to smoothness, sets display scale and
+placement, and adds separate BoxCollider geometry. These integration changes
+are by RailCraft. No endorsement by the original creator is implied.
+
+When redistributing this asset or an adaptation, retain appropriate credit,
+source and license links, and an indication of changes. Do not impose legal
+or technological restrictions that prevent exercise of the licensed rights.
+This notice is a summary and attribution record; the linked legal code governs.

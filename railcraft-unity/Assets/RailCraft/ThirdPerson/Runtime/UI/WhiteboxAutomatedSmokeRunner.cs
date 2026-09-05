@@ -23,6 +23,9 @@ namespace RailCraft.ThirdPerson.UI
         public const string BogieScreenshotArgumentPrefix = "-whitebox-smoke-bogie-screenshot=";
         public const string LandingScreenshotArgumentPrefix = "-whitebox-smoke-landing-screenshot=";
         public const string PlayerScreenshotArgumentPrefix = "-whitebox-smoke-player-screenshot=";
+        public const string WorkbenchScreenshotDirectoryPrefix = "-whitebox-smoke-workbench-directory=";
+        public const string SmokeSaveKey = "railcraft.whitebox.smoke.session.v2";
+        public const string DebugScreenshotArgumentPrefix = "-whitebox-smoke-debug-screenshot=";
         public const string SuccessLogMarker = "RAILCRAFT_WHITEBOX_SMOKE_SUCCEEDED";
         public const string FailureLogMarker = "RAILCRAFT_WHITEBOX_SMOKE_FAILED";
 
@@ -61,6 +64,7 @@ namespace RailCraft.ThirdPerson.UI
             try
             {
                 ValidateEscapeMenu();
+                ValidateWorkbenchVisuals(arguments);
                 var playerScreenshotPath = FindArgumentPath(
                     arguments,
                     PlayerScreenshotArgumentPrefix);
@@ -118,6 +122,7 @@ namespace RailCraft.ThirdPerson.UI
                 try
                 {
                     ValidateResetState();
+                    ValidateDebugOverlay(arguments);
                 }
                 catch (Exception exception)
                 {
@@ -143,11 +148,18 @@ namespace RailCraft.ThirdPerson.UI
             // hidden or unfocused window. Opt into background execution before
             // the first coroutine frame so the smoke path cannot pause forever.
             if (IsSmokeRequested(Environment.GetCommandLineArgs()))
+            {
                 Application.runInBackground = true;
+                // All Awake calls finish before the menu's StartNewGame in Start.
+                // Delivery checks must never reset the user's normal progress.
+                FindSingle<WhiteboxSaveController>().Configure(FindSingle<WhiteboxGameSessionHost>(), SmokeSaveKey);
+            }
         }
 
         private static void ValidateEscapeMenu()
         {
+            Ensure(FindSingle<WhiteboxSaveController>().EffectiveSaveKey == SmokeSaveKey,
+                "Smoke must use its own save slot before starting a new session.");
             var menu = FindSingle<WhiteboxMainMenuController>();
             var inputLock = FindSingle<ThirdPersonInputLock>();
             Ensure(menu.HasActiveGame, "Smoke session was not active before ESC menu validation.");
@@ -486,6 +498,69 @@ namespace RailCraft.ThirdPerson.UI
                 new Vector3(5.8f, 3.8f, -5.6f),
                 new Vector3(0f, 1.35f, 0f),
                 34f);
+        }
+
+        private static void ValidateWorkbenchVisuals(string[] arguments)
+        {
+            var tables = FindAll<Transform>().Where(item => item.name == "OperationTable").ToArray();
+            Ensure(tables.Length == 13, $"Expected 13 operation tables, found {tables.Length}.");
+            foreach (var table in tables)
+            {
+                var collision = table.parent.Find("WorkbenchCollision");
+                Ensure(collision != null, $"Missing workbench collision: {table.parent.name}.");
+                var boxes = collision.GetComponentsInChildren<BoxCollider>();
+                Ensure(boxes.Length == 3 && boxes.All(box => box.enabled && !box.isTrigger),
+                    $"Workbench solid collision mismatch: {table.parent.name}.");
+                var trigger = table.parent.parent.GetComponent<BoxCollider>();
+                Ensure(trigger != null && trigger.enabled && trigger.isTrigger,
+                    "Workbench interaction trigger was replaced.");
+                var renderers = table.GetComponentsInChildren<Renderer>();
+                Ensure(renderers.Length > 0 && renderers.All(renderer => renderer.sharedMaterials.All(
+                    material => material != null && material.shader.isSupported &&
+                        material.HasProperty("_BaseMap") && material.GetTexture("_BaseMap") != null)),
+                    "Operation table has missing or unsupported textured materials.");
+            }
+            Debug.Log("RAILCRAFT_WORKBENCH_VALIDATED tables=13;solidBoxes=39;triggers=13");
+
+            var directory = FindArgumentPath(arguments, WorkbenchScreenshotDirectoryPrefix);
+            if (string.IsNullOrWhiteSpace(directory))
+                return;
+            Directory.CreateDirectory(directory);
+            foreach (var spec in new[]
+            {
+                (Root: "QuizWorkbenchVisual", File: "knowledge-workbench.png"),
+                (Root: "AssemblyTableVisual", File: "assembly-workbench.png"),
+                (Root: "CommissioningConsoleVisual", File: "commissioning-workbench.png")
+            })
+            {
+                var table = tables.First(item => item.parent.name == spec.Root);
+                CaptureStationPreview(Path.Combine(directory, spec.File), table.parent.parent,
+                    new Vector3(4f, 3.0f, -5f), new Vector3(0f, 0.7f, 0f), 44f);
+            }
+        }
+
+        private static void ValidateDebugOverlay(string[] arguments)
+        {
+            var path = FindArgumentPath(arguments, DebugScreenshotArgumentPrefix);
+            if (string.IsNullOrWhiteSpace(path))
+                return;
+            Ensure(WhiteboxInternalDebugController.IsLaunchAuthorized(arguments),
+                "Debug screenshot smoke requires the internal debug launch argument.");
+            var debug = FindSingle<WhiteboxInternalDebugController>();
+            debug.UnlockForTests();
+            Ensure(debug.IsUnlocked, "Internal debug launch authorization failed.");
+            debug.ToggleCollisionBoxes();
+            Ensure(debug.VisibleCollisionBoxCount >= 39, "Runtime collision lines were not generated.");
+            var lines = Resources.FindObjectsOfTypeAll<MeshRenderer>().Single(renderer =>
+                renderer.gameObject.scene.IsValid() && renderer.name == "InternalDebugCollisionBoxes");
+            Ensure(lines.enabled && lines.sharedMaterial.shader.isSupported,
+                "Collision line shader is unavailable in the built Player.");
+            EnsureScreenshotDirectory(path);
+            var station = FindAll<Transform>().First(item => item.name == "CommissioningConsoleVisual").parent;
+            CaptureStationPreview(path, station, new Vector3(4f, 3f, -5f), new Vector3(0f, 0.7f, 0f), 44f);
+            debug.ToggleCollisionBoxes();
+            Ensure(!lines.gameObject.activeSelf, "Collision lines stayed visible after toggle off.");
+            Debug.Log("RAILCRAFT_INTERNAL_DEBUG_OVERLAY_VALIDATED");
         }
 
         private static void CapturePlayerPreview(string path)
