@@ -7,49 +7,53 @@ TestResults/
 Logs/
 
 # Unity generated files
-apps/railcraft-unity/[Ll]ibrary/
-apps/railcraft-unity/[Tt]emp/
-apps/railcraft-unity/[Oo]bj/
-apps/railcraft-unity/[Bb]uild/
-apps/railcraft-unity/[Ll]ogs/
-apps/railcraft-unity/[Uu]ser[Ss]ettings/
-apps/railcraft-unity/[Mm]emoryCaptures/
-apps/railcraft-unity/[Rr]ecordings/
-apps/railcraft-unity/[Ee]xported[Oo]bj/
-apps/railcraft-unity/TestResults/
-apps/railcraft-unity/Builds/
-apps/railcraft-unity/ReleasePackages/
-apps/railcraft-unity/Assets/AssetStoreTools*
-apps/railcraft-unity/Assets/Plugins/Editor/JetBrains*
+railcraft-unity/[Ll]ibrary/
+railcraft-unity/[Tt]emp/
+railcraft-unity/[Oo]bj/
+railcraft-unity/[Bb]uild/
+railcraft-unity/[Ll]ogs/
+railcraft-unity/[Uu]ser[Ss]ettings/
+railcraft-unity/[Mm]emoryCaptures/
+railcraft-unity/[Rr]ecordings/
+railcraft-unity/[Ee]xported[Oo]bj/
+railcraft-unity/TestResults/
+railcraft-unity/Builds/
+railcraft-unity/ReleasePackages/
+railcraft-unity/Assets/AssetStoreTools*
+railcraft-unity/Assets/Plugins/Editor/JetBrains*
 
 # Unity-generated IDE and debugger files
-apps/railcraft-unity/.vs/
-apps/railcraft-unity/.idea/
-apps/railcraft-unity/.vscode/
-apps/railcraft-unity/.consulo/
-apps/railcraft-unity/*.csproj
-apps/railcraft-unity/*.sln
-apps/railcraft-unity/*.slnx
-apps/railcraft-unity/*.sln.iml
-apps/railcraft-unity/*.unityproj
-apps/railcraft-unity/*.suo
-apps/railcraft-unity/*.tmp
-apps/railcraft-unity/*.user
-apps/railcraft-unity/*.userprefs
-apps/railcraft-unity/*.pidb
-apps/railcraft-unity/*.booproj
-apps/railcraft-unity/*.svd
-apps/railcraft-unity/*.pdb
-apps/railcraft-unity/*.mdb
-apps/railcraft-unity/*.pidb.meta
-apps/railcraft-unity/*.pdb.meta
-apps/railcraft-unity/*.mdb.meta
-apps/railcraft-unity/*.opendb
-apps/railcraft-unity/*.VC.db
-apps/railcraft-unity/*.DotSettings.user
-apps/railcraft-unity/*.unitypackage
-apps/railcraft-unity/sysinfo.txt
-apps/railcraft-unity/crashlytics-build.properties
+railcraft-unity/.vs/
+railcraft-unity/.idea/
+railcraft-unity/.vscode/
+railcraft-unity/.consulo/
+railcraft-unity/*.csproj
+railcraft-unity/*.sln
+railcraft-unity/*.slnx
+railcraft-unity/*.sln.iml
+railcraft-unity/*.unityproj
+railcraft-unity/*.suo
+railcraft-unity/*.tmp
+railcraft-unity/*.user
+railcraft-unity/*.userprefs
+railcraft-unity/*.pidb
+railcraft-unity/*.booproj
+railcraft-unity/*.svd
+railcraft-unity/*.pdb
+railcraft-unity/*.mdb
+railcraft-unity/*.pidb.meta
+railcraft-unity/*.pdb.meta
+railcraft-unity/*.mdb.meta
+railcraft-unity/*.opendb
+railcraft-unity/*.VC.db
+railcraft-unity/*.DotSettings.user
+railcraft-unity/*.unitypackage
+railcraft-unity/sysinfo.txt
+railcraft-unity/crashlytics-build.properties
+
+# Python conversion-tool caches
+__pycache__/
+*.py[cod]
 
 # OS and editor files
 .DS_Store
@@ -59,3 +63,8 @@ desktop.ini
 # Original delivery packages and unlicensed source are retained locally or in
 # approved private storage. Git tracks only their manifests and review notes.
 deliveries/**/release/**
+
+# Local third-party source archives are staging inputs. Curated runtime assets,
+# manifests, source notes and license evidence are tracked under the Unity tree.
+/*.unitypackage
+/*.zip

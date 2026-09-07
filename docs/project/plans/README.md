@@ -1,8 +1,9 @@
-# 项目计划登记规则
+# 项目计划登记规则（历史计划索引）
 
-本目录保存当前 Unity 第三人称白盒及其后续正式化工作的项目计划。Godot 启动期的
-`proposal.md`、`detailed-design.md`、`prompt.md` 和 `tasks/` 已冻结在上级目录，
-继续作为历史项目基线，不迁移为当前计划。
+本目录保存过 Unity 第三人称白盒及其后续正式化工作的计划。当前产品口径、阶段和
+优先级以 [`../CURRENT_BASELINE.md`](../CURRENT_BASELINE.md) 与
+[`../CURRENT_STATUS.md`](../CURRENT_STATUS.md) 为准。Godot 启动期的
+`proposal.md`、`detailed-design.md`、`prompt.md` 和 `tasks/` 已冻结为历史资料。
 
 ## 计划状态
 
@@ -19,11 +20,11 @@
 
 ## 当前计划边界
 
-- 当前开发主线：`apps/railcraft-unity/Assets/RailCraft/ThirdPerson/`
-- 当前范围：58题、14零件、6装配节点、调试闭环和 Blender 视觉替换
-- 当前规格：`apps/railcraft-unity/Documentation/ThirdPersonWhitebox.md`
-- 当前证据：`apps/railcraft-unity/Artifacts/Whitebox/Acceptance/`
-- 冻结 Unity v0.1 与 Godot Demo 的功能扩展不进入本目录的活动计划
+- 当前开发主线：`railcraft-unity/Assets/RailCraft/ThirdPerson/`
+- 当前范围：58 题题库、6 个主交互模块、兼容子部件配方、调试闭环和 Art Alpha 视觉生产
+- 当前规格：`railcraft-unity/Documentation/ThirdPersonWhitebox.md`
+- 当前证据：`railcraft-unity/Artifacts/Whitebox/ArtAlpha/`
+- 退休 Demo 和旧 Unity 固定视角的功能扩展不进入本目录的活动计划
 
 `.superpowers/` 和 `docs/superpowers/` 中的工具执行稿不会自动成为项目计划。需要
 长期保留时，应先核对实际完成状态、去除临时命令和本机路径，再以明确状态迁入本目录。

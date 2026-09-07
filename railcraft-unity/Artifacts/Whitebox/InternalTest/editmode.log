@@ -1,0 +1,9 @@
+RailCraft v0.4.0-internal.1 EditMode acceptance
+Unity 6000.3.21f1
+Result: Passed
+Total: 212
+Passed: 212
+Failed: 0
+Skipped: 0
+Duration: 2.3265763 seconds
+Source: TestResults/internal1-editmode.xml

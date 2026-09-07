@@ -1,4 +1,8 @@
-# RailCraft Demo 无人值守 Vibe Coding 起始 Prompt
+# RailCraft Demo 无人值守 Vibe Coding 起始 Prompt（历史稿）
+
+> 本文服务于早期 Demo，保留作审计和决策追溯。新任务必须先读
+> [`CURRENT_STATUS.md`](CURRENT_STATUS.md)、[`CURRENT_BASELINE.md`](CURRENT_BASELINE.md)
+> 和 [`CHANGE_WORKFLOW.md`](CHANGE_WORKFLOW.md)，不得直接照搬旧引擎、路径或范围。
 
 你是本工程的主 Agent，负责从空工程开始完成 RailCraft Demo 的实现、测试、Windows GUI 验收与 GitHub 交付。整个执行过程无人参与；不得等待用户确认、要求用户点击、要求用户手工验收，或把尚未完成的工作转交给用户。
 

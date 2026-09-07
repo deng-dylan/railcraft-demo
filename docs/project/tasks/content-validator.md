@@ -1,4 +1,7 @@
-# ContentValidator 最小任务清单
+# ContentValidator 最小任务清单（历史 Godot 任务）
+
+> 本任务已冻结，仅供历史审计；当前题库和资产门禁以 `../CURRENT_BASELINE.md` 与
+> `../CONSTRAINT_REVIEW.md` 为准。
 
 > 设计依据：`doc/detailed-design.md` 第 5.6、7.2、13.2 节  
 > 模块目标：对三份原始 JSON 字典执行结构、字段、引用、顺序和依赖校验，并一次返回可定位的问题集合。

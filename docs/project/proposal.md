@@ -1,4 +1,10 @@
-# RailCraft Demo 需求文档
+# RailCraft Demo 需求文档（历史需求来源）
+
+> 本文记录 2026-07 的玩法方向，原文以 Godot Demo 为目标，现作为产品意图和术语来源保存。
+> 当前产品已经进入 Unity ThirdPerson Art Alpha；当前实施以
+> [`CURRENT_BASELINE.md`](CURRENT_BASELINE.md)、[`CURRENT_STATUS.md`](CURRENT_STATUS.md)
+> 和 [`CONSTRAINT_REVIEW.md`](CONSTRAINT_REVIEW.md) 为准。文中的引擎、题数、路径和首版
+> 限制不自动约束当前主线。
 
 > 文档状态：已确认，可交付后续 Coding Agent 实施  
 > 文档用途：内部需求来源，不是直接执行提示词  

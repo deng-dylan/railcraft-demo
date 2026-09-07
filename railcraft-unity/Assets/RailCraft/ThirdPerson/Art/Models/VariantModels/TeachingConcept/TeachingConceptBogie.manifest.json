@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "asset_key": "TeachingConcept",
+  "display_name": "Teaching Concept Bogie (No Real-World Match)",
+  "source_file": "简化铁路转向架_教学概念_AP214.step",
+  "source_sha256": "b3c87688c890e40f8dd78b7b83fa5690f1124138101a94743ce8eb3a6a02a339",
+  "blender_version": "5.2.1 LTS",
+  "orientation": "Y_up_rotated_positive_90_X",
+  "input_mesh_objects": 1,
+  "input_triangles": 231348,
+  "output_mesh_objects": 1,
+  "output_triangles": 64777,
+  "bounds_m": {
+    "minimum": [
+      -1.575125,
+      -1.212817,
+      0.0
+    ],
+    "maximum": [
+      1.575125,
+      1.212817,
+      1.001004
+    ],
+    "size": [
+      3.150251,
+      2.425633,
+      1.001004
+    ]
+  },
+  "output": "TeachingConceptBogie.fbx",
+  "output_bytes": 1912828,
+  "output_sha256": "c7a0cfc28ba46b557f97f10f894317ad06d5f923a8fd73f68e6d4ef6db9aaa41"
+}

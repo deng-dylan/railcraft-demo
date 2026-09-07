@@ -1,61 +1,58 @@
 # RailCraft 仓库地图
 
-本页说明当前发行资产、文件放置位置和 Git 提交边界。
+本页说明当前主线资产、文件放置位置和 Git 提交边界。当前开发入口只有 Unity
+ThirdPerson；旧 Demo 已退休，历史恢复方式见 [归档索引](archive/README.md)。
 
-## 当前发行与主线
+## 当前主线
 
 | 路径 | 内容 | 是否继续迭代 |
 | --- | --- | --- |
-| apps/railcraft-unity/ | Unity ThirdPerson 标准实训当前主线 | 是 |
-| apps/railcraft-unity/Assets/RailCraft/ThirdPerson/ | 当前玩法代码、场景、测试、白盒视觉和模型插槽 | 是 |
-| apps/railcraft-unity/Artifacts/Whitebox/Acceptance/ | 当前构建、测试、冒烟和截图证据 | 是 |
-| apps/railcraft-unity/Documentation/Release.md | 当前预发布的运行、限制与交付说明 | 是 |
+| `railcraft-unity/` | Unity 工程、ThirdPerson 运行时和构建入口 | 是 |
+| `railcraft-unity/Assets/RailCraft/ThirdPerson/` | 流程代码、场景、视觉工厂、模型插槽和测试 | 是 |
+| `railcraft-unity/Artifacts/Whitebox/ArtAlpha/` | 当前 Art Alpha 日志、截图和验收报告 | 是 |
+| `railcraft-unity/Documentation/` | 当前规格、资产审计、发行和模型门禁 | 是 |
+| `docs/project/CURRENT_*.md` | 当前产品、状态、约束和工作流基线 | 是 |
+| `docs/decisions/` | ADR 与范围决策 | 按需更新 |
+| `deliveries/` | 外部资料登记、来源、许可和校验值 | 按需更新 |
 
-## 项目资料与交付
-
-| 路径 | 内容 |
-| --- | --- |
-| docs/decisions/ | 仓库结构、主线切换等 ADR |
-| docs/reviews/ | 外部 Demo、模型候选和技术方案评审 |
-| docs/MAINTENANCE.md | 仓库清理、缓存和交付边界 |
-| deliveries/ | 外部交付登记、来源、许可、校验与审核记录 |
-| README.md | 当前发行入口 |
-
-## 模型与 CAD 放置规则
+## 模型与资产放置
 
 | 类型 | 放置位置 | 说明 |
 | --- | --- | --- |
-| 可运行 Unity 网格 | apps/railcraft-unity/Assets/.../Art/Models/ | FBX、GLB 等按 LFS 跟踪 |
-| CAD 候选登记 | apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Art/Models/SourceCAD/ | 只放清单、备注、占位说明 |
-| 待接入玩法的方案模型插槽 | apps/railcraft-unity/Assets/RailCraft/ThirdPerson/Art/Models/VariantModels/ | 先放 README 或占位，再补正式网格 |
-| 外部原始 STEP、SLDPRT、SLDASM | 队员共享目录或私有交付存储 | 不直接进入运行时仓库 |
+| 可运行 Unity 网格 | `railcraft-unity/Assets/RailCraft/ThirdPerson/Art/Models/` | FBX、GLB 等，需有来源与导入记录 |
+| CAD 候选登记 | `.../ThirdPerson/Art/Models/SourceCAD/` | 清单、备注和占位说明；原始 CAD 不直接进运行时 |
+| 车型/构型候选 | `.../ThirdPerson/Art/Models/VariantModels/` | 先登记身份和门禁，再接入场景 |
+| 第三方运行时子集 | `.../ThirdPerson/Art/ThirdParty/` | 只保留已筛选资源、来源文本和许可证据 |
+| 原始外部交付 | `deliveries/**/release/` 或私有存储 | 被 Git 忽略，不作为运行时输入 |
 
-当前仓库已把 FBX、Blend、STEP、GLB、OBJ、STL 等大模型类型交给 Git LFS。
+资产身份必须写明：`展示风格`、`通用教学件` 或 `车型专用工程件`。后者需要责任人、
+来源、单位、尺寸、接口、LOD、碰撞、材质和授权全部核验。
 
 ## 本地可再生内容
 
-下列目录不应进入提交，删掉后可重新生成：
+- 根目录：`.tmp/`、`tmp/`、`.agents/`、`.superpowers/`、`Logs/`、`TestResults/`
+- Unity：`Library/`、`Temp/`、`Obj/`、`Logs/`、`UserSettings/`、`Builds/`、`ReleasePackages/`
+- 外部原始包：根目录 `*.unitypackage`、`*.zip`，以及 `deliveries/**/release/**`
 
-- 根目录：.agents/、.superpowers/、.tmp/、tmp/、Logs/、TestResults/
-- Unity：Library/、Temp/、Logs/、UserSettings/、TestResults/、Builds/、ReleasePackages/
-- Godot：.godot/、.godot-user/、.uv-cache/、.uv-python/、.venv/、builds/、artifacts/*
+删除前先确认应用关闭，并保留当前批次证据。不要使用宽泛递归删除。
+
+## 已退休目录
+
+以下目录已从工作树移除：
+
+- `apps/railcraft-godot/`
+- `prototypes/good2-renpy/`
+- `prototypes/high-speed-rail-factory-godot-4.6.3/`
+- `railcraft-unity/Assets/RailCraft/{Art,Content,Editor,Input,Scenes,Scripts,Tests}/`
+- `railcraft-unity/Artifacts/Acceptance/`
+
+本机日期归档在 `.tmp/retired-demos-20260904/`，Git tag 和历史提交仍可恢复。归档不进入
+当前构建、提交包或竞赛材料。
 
 ## 提交前检查
 
-1. git status --short
-2. 只暂存本批次路径，不把缓存、Build、原始交付包带进去。
-3. 涉及模型时，确认提交的是 Unity 网格或占位说明，不是未经处理的 CAD 原件。
-4. 涉及发行时，确认代码、场景、文档、校验文件与最终证据来自同一批次。
-
-<details>
-<summary><strong>归档路径（不纳入当前发行）</strong></summary>
-
-| 路径 | 内容 | 说明 |
-| --- | --- | --- |
-| apps/railcraft-unity/Assets/RailCraft/Scenes/ | Unity 固定视角 v0.1 场景 | 仅保留回归和勘误 |
-| apps/railcraft-unity/Artifacts/Acceptance/ | Unity 固定视角 v0.1 验收证据 | 不被当前白盒结果覆盖 |
-| apps/railcraft-godot/ | Godot v0.1.0-demo 历史 Demo | 冻结保留 |
-| prototypes/ | 独立原型源快照与说明 | 参考用途 |
-| docs/project/ | 项目启动期资料、设计和历史计划 | 历史语境 |
-
-</details>
+1. `git status --short --untracked-files=all`
+2. `git diff --check`
+3. 只暂存当前批次路径，排除缓存、Build、原始交付包和临时截图。
+4. 运行 `tools/Test-RepositoryLayout.ps1`。
+5. 涉及 Unity 时，确认代码、场景、测试、文档和 Art Alpha 证据来自同一批次。

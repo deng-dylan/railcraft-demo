@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "archive": "fab_ui_sfx_free_pack.unitypackage",
+    "workspacePath": "fab_ui_sfx_free_pack.unitypackage",
+    "sha256": "614b2317130f328779328075360ac37240abe1ea296cc9d2cee05fa747d28905"
+  },
+  "license": {
+    "status": "pending-verification",
+    "distributionApproved": false,
+    "note": "Verify the publisher/store listing and license or purchase record before public distribution or contest submission."
+  },
+  "import": {
+    "assetCount": 12,
+    "originalAudioMetaPreserved": true,
+    "runtimeBindingAdded": false,
+    "excluded": [
+      "Assets/UI SFX Free Pack/Content_for_Demo_Scene/Content_for_DemoScene.unitypackage",
+      "Assets/UI SFX Free Pack/Content_for_Demo_Scene/Read_Me.txt",
+      "Assets/UI SFX Free Pack/Documentation/UI SFX Free Pack Documentation.pdf",
+      "All unlisted WAV files"
+    ]
+  },
+  "assets": [
+    {
+      "path": "Buttons/button_press_1.wav",
+      "sourceGuid": "41fe389abc552ae4ea67e78dcfbfa9fb",
+      "suggestedRole": "primary-button",
+      "durationSeconds": 0.79,
+      "bytes": 146200,
+      "sha256": "d2f42a547414eb750043c16b2c16fd5227488000ebc22eae380db00cdc22b2d4"
+    },
+    {
+      "path": "Buttons/button_press_299.wav",
+      "sourceGuid": "6d93b0a4d6262184fab88b1840b8af95",
+      "suggestedRole": "standard-button",
+      "durationSeconds": 0.25,
+      "bytes": 44144,
+      "sha256": "06e1b269febc9b042b2cef9b2964555ca1de69e2d38fa3138c371c0e47fda1d2"
+    },
+    {
+      "path": "Buttons/button_press_699.wav",
+      "sourceGuid": "cad11a4481c77fe4aabeb5563cb0bd6c",
+      "suggestedRole": "short-button",
+      "durationSeconds": 0.16,
+      "bytes": 27608,
+      "sha256": "86d4b04fce38b00375dca0a27ff5823e56775de8c6cc230549488785e6a29d14"
+    },
+    {
+      "path": "Ok/ok_1.wav",
+      "sourceGuid": "017d2a65e049f9344a9ed69a54e5bc4c",
+      "suggestedRole": "success-standard",
+      "durationSeconds": 0.56,
+      "bytes": 103468,
+      "sha256": "57372e73b26752ed3fda41c412005c8505185b883d292d2b0fbeb67ba6c29f6a"
+    },
+    {
+      "path": "Ok/ok_100.wav",
+      "sourceGuid": "0854eb2aa90c6584792a55cd01d675aa",
+      "suggestedRole": "success-prominent",
+      "durationSeconds": 0.64,
+      "bytes": 117524,
+      "sha256": "22e48e49761f3c23882869e4c748d41f22a65564422afb6509e4e81f2803825c"
+    },
+    {
+      "path": "Cancel/cancel_1.wav",
+      "sourceGuid": "4b3a1a47776c33e4abac0a24c373fed6",
+      "suggestedRole": "cancel-or-failure",
+      "durationSeconds": 0.60,
+      "bytes": 110496,
+      "sha256": "a9a7cc51c3764858ef404de017f775cc2e189e4e3eb720767703a216fc702d08"
+    },
+    {
+      "path": "Cancel/cancel_200.wav",
+      "sourceGuid": "aac31f63e0a34c343ad5031fa114b070",
+      "suggestedRole": "invalid-action-short",
+      "durationSeconds": 0.16,
+      "bytes": 27608,
+      "sha256": "b10f692bea893e43afa05c4f6fb944af4d3a70ea54d6fc929b39676c662b3a7f"
+    },
+    {
+      "path": "Warning_Popup/warning_1.wav",
+      "sourceGuid": "dfa929ad97756cd4491b468340a5a6f3",
+      "suggestedRole": "warning-toast",
+      "durationSeconds": 0.28,
+      "bytes": 54284,
+      "sha256": "bc161f7d83137588ab805a535f4bbf5a7675afc11972bb8f02b63908171e068d"
+    },
+    {
+      "path": "Warning_Popup/warning_55.wav",
+      "sourceGuid": "08ab2ec7fb4062046adb6e0039239d2e",
+      "suggestedRole": "warning-dialog",
+      "durationSeconds": 0.52,
+      "bytes": 96444,
+      "sha256": "2706264bd065564ec7a161a14ae05013f69e7218be1e79a9e8764aa8cd3394f7"
+    },
+    {
+      "path": "Repair/repair_1.wav",
+      "sourceGuid": "6479967e0dd3033478f930410b5925d1",
+      "suggestedRole": "repair-long",
+      "durationSeconds": 2.22,
+      "bytes": 390868,
+      "sha256": "12808b72ad441908fc0360c569c000ecfa83697d41bc18450389388c38d24e7b"
+    },
+    {
+      "path": "Repair/repair_100.wav",
+      "sourceGuid": "dc6bc5200b389554da7ffe2b6f8569c3",
+      "suggestedRole": "repair-medium",
+      "durationSeconds": 1.50,
+      "bytes": 264644,
+      "sha256": "53dd6391174fa66aad6f27593f543df086dd662aa55f3badcf61460357e90452"
+    },
+    {
+      "path": "Repair/repair_200.wav",
+      "sourceGuid": "8610b5bf30b2e6542b5686b30de25a1e",
+      "suggestedRole": "repair-short",
+      "durationSeconds": 0.70,
+      "bytes": 124016,
+      "sha256": "c848a0b0642b2baeaa6b0fbcf54219906c5cbf193309046b0c35f968a1a7bc1f"
+    }
+  ]
+}

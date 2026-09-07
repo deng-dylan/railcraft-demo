@@ -1,0 +1,8 @@
+RailCraft v0.4.0-art-alpha.5 build evidence (sanitized excerpt)
+Date: 2026-09-04
+Unity: 6000.3.21f1
+Target: Windows x86_64
+Scene: Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity
+RAILCRAFT_WHITEBOX_SCENE_BUILT path=Assets/RailCraft/ThirdPerson/Scenes/ThirdPersonWhitebox.unity
+RAILCRAFT_WHITEBOX_BUILD_SUCCEEDED output=Builds/Whitebox/RailCraftWhitebox.exe;bytes=381660732;warnings=0;errors=0
+Raw local log: TestResults/flow002-build-final.log (ignored, reproducible)
