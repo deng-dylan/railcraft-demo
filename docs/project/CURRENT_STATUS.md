@@ -1,9 +1,10 @@
 # RailCraft 当前状态
 
-更新时间：2026-09-06
-当前分支：`codex/cw200k-model-upgrade`
+更新时间：2026-09-07
+主线分支：`main`
+本批开发分支：`codex/cw200k-model-upgrade`
 当前内测候选：`v0.4.0-internal.2`（ART-004 / DEBUG-002 自动验收完成）
-前序提交：`25cf522 test(unity): validate internal test candidate`；2026-09-06 按用户要求将 ART-004 / DEBUG-002 当前版本脱敏后纳入 Git 并推送当前分支；公开验收证据见 `Artifacts/Whitebox/InternalTest/Internal2/`。
+版本提交：`a541471 feat(unity): ship internal.2 ART-004 workbenches and DEBUG-002 colliders`；2026-09-07 已将本批脱敏版本推送 GitHub，主线合并与 CI 记录见 [PR #11](https://github.com/deng-dylan/railcraft-demo/pull/11)。公开验收证据见 `Artifacts/Whitebox/InternalTest/Internal2/`。
 
 ## 阶段与结论
 
